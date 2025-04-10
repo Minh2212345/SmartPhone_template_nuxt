@@ -1,0 +1,119 @@
+/* static/assets/css/intro-slider.css */
+.intro-slider-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.intro-slider {
+  width: 100%;
+}
+
+.intro-slider .intro-slide {
+  position: relative;
+  height: 500px; /* Điều chỉnh chiều cao của slide */
+  background-size: cover;
+  background-position: center;
+}
+
+.intro-slider .intro-content {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.intro-slider .intro-subtitle {
+  font-size: 1.5rem;
+  color: #ff6f61; /* Màu chữ cho subtitle */
+}
+
+.intro-slider .intro-title {
+  font-size: 3rem;
+  color: #000000 !important; /* Màu chữ cho title */
+}
+
+.intro-slider .intro-price {
+  font-size: 1.2rem;
+}
+
+.intro-slider .intro-price .intro-old-price {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.intro-slider .intro-price .text-third {
+  color: #ff6f61; /* Màu giá mới */
+}
+
+.intro-slider .btn-primary {
+  background-color: #ff6f61;
+  border-color: #ff6f61;
+  transition: background-color 0.3s ease;
+}
+
+.intro-slider .btn-primary:hover {
+  background-color: #e65b50;
+  border-color: #e65b50;
+}
+
+/* Tùy chỉnh nút điều hướng của Owl Carousel */
+.intro-slider .owl-nav {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+}
+
+.intro-slider .owl-nav button.owl-prev,
+.intro-slider .owl-nav button.owl-next {
+  position: absolute;
+  font-size: 2rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.intro-slider .owl-nav button.owl-prev {
+  left: 20px;
+}
+
+.intro-slider .owl-nav button.owl-next {
+  right: 20px;
+}
+
+.intro-slider .owl-nav button.owl-prev:hover,
+.intro-slider .owl-nav button.owl-next:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Tùy chỉnh dots của Owl Carousel */
+.intro-slider .owl-dots {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.intro-slider .owl-dots .owl-dot {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.intro-slider .owl-dots .owl-dot span {
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.intro-slider .owl-dots .owl-dot.active span,
+.intro-slider .owl-dots .owl-dot:hover span {
+  background: #fff;
+}
