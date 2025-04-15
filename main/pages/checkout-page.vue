@@ -213,7 +213,7 @@
 
                   <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
                     <span class="btn-text">Đặt hàng</span>
-                    <span class="btn-hover-text">Tiếp tục đặt hàng</span>
+                    <NuxtLink class="btn-hover-text" to="/qr-page">Tiếp tục đặt hàng</NuxtLink>                    
                   </button>
                 </div>
                 <!-- End .summary -->
