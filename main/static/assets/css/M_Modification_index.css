@@ -338,3 +338,36 @@
   object-fit: fill;
   border-radius: 5px;
 }
+
+/* Navbar */
+.header{  
+  background-color: #5B7C99 !important;
+}
+
+.header-intro-clearance .header-middle .header-right p{
+    font-size: 1.3rem;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.fixed-header[data-v-50bfdba4] {
+  background-color: #5B7C99 !important;  
+}
+
+.fixed-header[data-v-f21397a6] {
+  background-color: #5B7C99 !important;  
+}
+
+/* Footer */
+.footer {
+  background-color: #5B7C99 !important;  
+}
+
+.footer a {
+  color: #ffffff !important; 
+}
+
+.footer .widget-title {
+  color: #000000 !important;
+}
+

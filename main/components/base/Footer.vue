@@ -7,7 +7,7 @@
                             <div class="widget widget-about">
                                 <img src="assets/images/demos/demo-4/logo.png" class="footer-logo"
                                     alt="Footer Logo" width="105" height="25" />
-                                <p>
+                                <p style="color: white;">
                                     Mobile World
                                 </p>
 

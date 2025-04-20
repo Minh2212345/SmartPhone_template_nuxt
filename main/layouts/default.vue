@@ -21,7 +21,6 @@ export default {
 </script>
 
 <style scoped>
-/* Cố định header ở đầu trang */
 .fixed-header {
   position: fixed;
   top: 0;
@@ -33,6 +32,6 @@ export default {
 }
 
 .content-with-navbar {
-  padding-top: 190px; 
+  padding-top: 180px; 
 }
 </style>

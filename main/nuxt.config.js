@@ -25,13 +25,12 @@ export default {
       { rel: 'mask-icon', href: '/assets/images/icons/safari-pinned-tab.svg', color: '#666666' },
       { rel: 'shortcut icon', href: '/assets/images/icons/favicon.ico' },
       { rel: 'stylesheet', href: '/assets/css/line-awesome.min.css' },
-      // { rel: 'stylesheet', href: '/assets/css/font-awesome.min.css' },
       { rel: 'stylesheet', href: '/assets/css/bootstrap.min.css' },
       { rel: 'stylesheet', href: '/assets/css/plugins/magnific-popup/magnific-popup.css' },
       { rel: 'stylesheet', href: '/assets/css/plugins/owl-carousel/owl.carousel.css' },
       { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css' },
-      // Add Google Fonts link for Roboto with Vietnamese subset
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap' },
+      { rel: 'stylesheet', href: '      https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css' },
       { rel: 'stylesheet', href: '/assets/css/M_Modification_index.css' },
       { rel: 'stylesheet', href: '/assets/css/style.css' },
       { rel: 'stylesheet', href: '/assets/css/skins/skin-demo-4.css' },
@@ -52,7 +51,7 @@ export default {
       { src: '/assets/js/demos/demo-4.js', defer: true },
       { src: '/assets/js/demos/price-range.js', defer: true },      
       { src: '/assets/js/nouislider.min.js', defer: true },
-      { src: '/assets/js/wNumb.js', defer: true },
+      { src: '/assets/js/wNumb.js', defer: true },      
     ],
   },
   css: [
