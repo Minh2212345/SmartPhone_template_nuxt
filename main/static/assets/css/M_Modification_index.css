@@ -319,9 +319,14 @@
 }
 
 /* Banner bên phải */
+.img-banner{
+  width: 257.6px; 
+  height: 115.33px
+}
+
 .banner-right {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Mặc định là cột trên màn hình lớn */
   justify-content: center; /* Căn giữa theo chiều dọc */
   height: 100%;
 }
@@ -333,11 +338,51 @@
 .banner-right img {
   width: auto;
   height: auto;
-  min-width: 259px;
-  min-height: 115.33px;
   object-fit: fill;
   border-radius: 5px;
 }
+
+/* Responsive cho màn hình nhỏ hơn (dưới 992px, tương ứng với breakpoint lg của Bootstrap) */
+@media (max-width: 991.98px) {
+  .logo img {
+    max-width: 60% !important;
+  }
+
+  .banner-right {
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    margin-top: 1rem;
+  }
+
+  .banner-right .banner-item {
+    width: 48%; 
+    margin-bottom: 10px; /* Khoảng cách giữa các hàng */
+  }
+
+  .banner-right .banner-item-last {
+    width: 100%; /* Ảnh thứ 3 chiếm toàn bộ chiều rộng */
+    display: flex;
+    justify-content: center; /* Căn giữa ảnh thứ 3 */
+  }
+
+  .banner-right img {
+    width: 100%; 
+    height: auto;
+    max-width: 150px I !important; 
+    min-width: unset; 
+    min-height: unset; 
+    object-fit: cover; 
+    border-radius: 5px;
+  }
+
+  .banner-right .banner-item-last img {
+    max-width: 200px !important; 
+  }
+}
+
+/* Định dạng mặc định cho màn hình lớn */
+
 
 /* Navbar */
 .header{  

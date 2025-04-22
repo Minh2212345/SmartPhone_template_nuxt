@@ -293,7 +293,7 @@
                   <img
                     src="assets/images/banners/banner-1.jpg"
                     alt="Galaxy M55 5G"
-                    style="width: 257.6px; height: 115.33px"
+                    class="img-banner"
                   />
                 </a>
               </div>
@@ -302,16 +302,16 @@
                   <img
                     src="assets/images/banners/banner-2.jpg"
                     alt="iPad Air"
-                    style="width: 257.6px; height: 115.33px"
+                    class="img-banner"
                   />
                 </a>
               </div>
-              <div class="banner-item">
+              <div class="banner-item banner-item-last">
                 <a href="#">
                   <img
                     src="assets/images/banners/banner-3.jpg"
                     alt="Banner 3"
-                    style="width: 257.6px; height: 115.33px"
+                    class="img-banner"
                   />
                 </a>
               </div>
