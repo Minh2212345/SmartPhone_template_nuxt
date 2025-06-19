@@ -1,6 +1,5 @@
 <template>
   <main class="main">
-
     <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
       <div class="container">
         <ol class="breadcrumb">
@@ -18,7 +17,9 @@
           <div class="col-lg-9">
             <div class="toolbox">
               <div class="toolbox-left">
-                <div class="toolbox-info">Hiện <span>{{ products.length }} trên {{ totalItems }}</span> sản phẩm</div>
+                <div class="toolbox-info">
+                  Hiện <span>{{ products.length }} trên {{ totalItems }}</span> sản phẩm
+                </div>
               </div>
               <div class="toolbox-right">
                 <div class="toolbox-sort">
@@ -40,7 +41,11 @@
                   <div class="product product-7 text-center">
                     <figure class="product-media">
                       <NuxtLink :to="`/product-page?sp_id=${product.id}`">
-                        <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image" class="product-image" />
+                        <img
+                          :src="product.imageUrl || '/assets/images/placeholder.jpg'"
+                          alt="Product image"
+                          class="product-image"
+                        />
                       </NuxtLink>
                       <div class="product-action-vertical">
                         <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
@@ -50,16 +55,24 @@
                     </figure>
                     <div class="product-body">
                       <div class="product-cat">
-                        <NuxtLink to="/category-4cols">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</NuxtLink>
+                        <NuxtLink to="/category-4cols">{{
+                          manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown'
+                        }}</NuxtLink>
                       </div>
                       <h3 class="product-title">
                         <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                       </h3>
                       <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
                       <div class="product-nav product-nav-dots">
-                        <a href="#" class="active" style="background: #edd2c8"><span class="sr-only">Color name</span></a>
-                        <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                        <a href="#" style="background: #333333"><span class="sr-only">Color name</span></a>
+                        <a
+                          v-for="(mauSac, index) in product.mauSacList"
+                          :key="index"
+                          :class="{ active: index === 0 }"
+                          :style="{ background: getColorCode(mauSac) }"
+                          href="#"
+                        >
+                          <span class="sr-only">{{ mauSac }}</span>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -70,23 +83,38 @@
             <nav aria-label="Page navigation">
               <ul class="pagination justify-content-center">
                 <li class="page-item" :class="{ disabled: currentPage === 0 }">
-                  <a class="page-link page-link-prev" href="#" @click.prevent="fetchProducts(currentPage - 1)" aria-label="Previous">
+                  <a
+                    class="page-link page-link-prev"
+                    href="#"
+                    @click.prevent="fetchProducts(currentPage - 1)"
+                    aria-label="Previous"
+                  >
                     <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Trang trước
                   </a>
                 </li>
-                <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: currentPage === page - 1 }">
+                <li
+                  class="page-item"
+                  v-for="page in totalPages"
+                  :key="page"
+                  :class="{ active: currentPage === page - 1 }"
+                >
                   <a class="page-link" href="#" @click.prevent="fetchProducts(page - 1)">{{ page }}</a>
                 </li>
                 <li class="page-item-total">của {{ totalPages }}</li>
                 <li class="page-item" :class="{ disabled: currentPage === totalPages - 1 }">
-                  <a class="page-link page-link-next" href="#" @click.prevent="fetchProducts(currentPage + 1)" aria-label="Next">
+                  <a
+                    class="page-link page-link-next"
+                    href="#"
+                    @click.prevent="fetchProducts(currentPage + 1)"
+                    aria-label="Next"
+                  >
                     Trang sau <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
                   </a>
                 </li>
               </ul>
             </nav>
           </div>
-           <aside class="col-lg-3 order-lg-first">
+          <aside class="col-lg-3 order-lg-first">
             <div class="sidebar sidebar-shop">
               <div class="widget widget-clean">
                 <label>Bộ lọc:</label>
@@ -413,21 +441,21 @@
 
               <div class="widget widget-collapsible">
                 <div class="widget-body">
-                <div class="price-filter">
-                  <div class="label">Hoặc nhập khoảng giá phù hợp với bạn:</div>
-                  <div class="range-values">
-                    <span id="min-price">450,000đ</span>
-                    <span id="max-price">50,000,000đ</span>
-                  </div>
-                  <div class="range-slider">
-                    <div class="slider-track"></div>
-                    <div class="slider-range" id="slider-range"></div>
-                    <input type="range" id="min-range" min="450000" max="50000000" value="450000" step="10000" />
-                    <input type="range" id="max-range" min="450000" max="50000000" value="50000000" step="10000" />
+                  <div class="price-filter">
+                    <div class="label">Hoặc nhập khoảng giá phù hợp với bạn:</div>
+                    <div class="range-values">
+                      <span id="min-price">450,000đ</span>
+                      <span id="max-price">50,000,000đ</span>
+                    </div>
+                    <div class="range-slider">
+                      <div class="slider-track"></div>
+                      <div class="slider-range" id="slider-range"></div>
+                      <input type="range" id="min-range" min="450000" max="50000000" value="450000" step="10000" />
+                      <input type="range" id="max-range" min="450000" max="50000000" value="50000000" step="10000" />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
               <!-- End .widget -->
             </div>
             <!-- End .sidebar sidebar-shop -->
@@ -469,80 +497,109 @@ export default {
         6: 'Redmi',
         7: 'Oppo',
       },
-    };
+    }
   },
-async asyncData({ $axios, error }) {
-  try {
-    const response = await $axios.get('/api/products', {
-      params: { page: 0, size: 20, sortBy: 'popularity' },
-    });
-    return {
-      products: Array.isArray(response.data.products)
-        ? response.data.products.map(product => ({
-            ...product,
-            tenNhaSanXuat: product.tenNhaSanXuat || 'Unknown',
-            createdAt: product.createdAt?.timestamp || product.createdAt,
-          }))
-        : [],
-      currentPage: response.data.currentPage || 0,
-      totalPages: response.data.totalPages || 1,
-      totalItems: response.data.totalItems || 0,
-    };
-  } catch (err) {
-    console.error('Error fetching initial products:', err.message);
-    return {
-      products: [],
-      currentPage: 0,
-      totalPages: 1,
-      totalItems: 0,
-    };
-  }
-},
-async mounted() {
-  if (!this.products.length) {
-    await this.fetchProducts(0);
-  }
-},
+  async asyncData({ $axios, error }) {
+    try {
+      const response = await $axios.get('/api/products', {
+        params: { page: 0, size: 20, sortBy: 'popularity' },
+      })
+      return {
+        products: Array.isArray(response.data.products)
+          ? response.data.products.map((product) => ({
+              ...product,
+              tenNhaSanXuat: product.tenNhaSanXuat || 'Unknown',
+              createdAt: product.createdAt?.timestamp || product.createdAt,
+            }))
+          : [],
+        currentPage: response.data.currentPage || 0,
+        totalPages: response.data.totalPages || 1,
+        totalItems: response.data.totalItems || 0,
+      }
+    } catch (err) {
+      console.error('Error fetching initial products:', err.message)
+      return {
+        products: [],
+        currentPage: 0,
+        totalPages: 1,
+        totalItems: 0,
+      }
+    }
+  },
+  async mounted() {
+    if (!this.products.length) {
+      await this.fetchProducts(0)
+    }
+  },
   methods: {
-async fetchProducts(page) {
-  try {
-    const response = await this.$axios.get('/api/products', {
-      params: {
-        page: page,
-        size: 20,
-        sortBy: this.sortBy,
-        cameraFeatures: this.selectedCameraFeatures.join(','),
-      },
-    });
-    this.products = Array.isArray(response.data.products)
-      ? response.data.products.map(product => ({
-          ...product,
-          tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
-          createdAt: product.createdAt?.timestamp || product.createdAt,
-        }))
-      : [];
-    this.currentPage = response.data.currentPage || 0;
-    this.totalPages = response.data.totalPages || 1;
-    this.totalItems = response.data.totalItems || 0;
-  } catch (error) {
-    console.error('Lỗi khi lấy sản phẩm:', {
-      message: error.message,
-      status: error.response?.status,
-      data: error.response?.data,
-      config: error.config,
-    });
-    this.$toast.error('Không thể tải sản phẩm. Vui lòng thử lại sau!'); // Sử dụng plugin toast nếu có
-    this.products = [];
-    this.currentPage = 0;
-    this.totalPages = 1;
-    this.totalItems = 0;
-  }
-},
+    async fetchProducts(page) {
+      try {
+        const response = await this.$axios.get('/api/products', {
+          params: {
+            page: page,
+            size: 20,
+            sortBy: this.sortBy,
+            cameraFeatures: this.selectedCameraFeatures.join(','),
+          },
+        })
+        this.products = Array.isArray(response.data.products)
+          ? response.data.products.map((product) => ({
+              ...product,
+              tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
+              createdAt: product.createdAt?.timestamp || product.createdAt,
+              mauSacList: Array.isArray(product.mauSacList) ? product.mauSacList : [], // Xử lý danh sách màu sắc
+            }))
+          : []
+        this.currentPage = response.data.currentPage || 0
+        this.totalPages = response.data.totalPages || 1
+        this.totalItems = response.data.totalItems || 0
+      } catch (error) {
+        console.error('Lỗi khi lấy sản phẩm:', {
+          message: error.message,
+          status: error.response?.status,
+          data: error.response?.data,
+          config: error.config,
+        })
+        this.$toast.error('Không thể tải sản phẩm. Vui lòng thử lại sau!')
+        this.products = []
+        this.currentPage = 0
+        this.totalPages = 1
+        this.totalItems = 0
+      }
+    },
     formatPrice(price) {
-      return price.toLocaleString('vi-VN');
+      return price.toLocaleString('vi-VN')
+    },
+    getColorCode(mauSac) {
+      const colorMap = {
+        'Xanh Mộng Kết': '#a3d2ca',
+        'Xanh Lưu Ly': '#b3cde0',
+        'Hồng': '#f4c2c2',
+        'Đen': '#333333',
+        'Trắng': '#c1b8b8',
+        'Bạc': '#c0c0c0',
+        'Cam': '#ffa500',
+        'Đỏ': '#ff0000',
+        'Gold': '#ffd700',
+        'Kem': '#fffdd0',
+        'Tím': '#800080',
+        'Tím Đậm': '#4b0082',
+        'Titan tự nhiên': '#8a8987',
+        'Vàng': '#ffff00',
+        'Xám': '#808080',
+        'Xanh Bạc Hà': '#98ff98',
+        'Xanh Dương': '#0000ff',
+        'Xanh Dương Đậm': '#00008b',
+        'Xanh Dương Nhạt': '#add8e6',
+        'Xanh Lá': '#008000',
+        'Vàng đồng': '#b8860b',
+        'Nâu': '#8b4513',
+        'Không xác định': '#cccccc',
+      }
+      return colorMap[mauSac] || '#cccccc'
     },
   },
-};
+}
 </script>
 
 <style scoped>
