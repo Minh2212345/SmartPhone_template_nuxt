@@ -49,7 +49,9 @@
 
               <div class="col-md-6">
                 <div class="product-details">
-                  <h1 class="product-title">{{ product.ten_san_pham }} - {{ selectedVariant.bo_nho_trong_dung_luong }}</h1>
+                  <h1 class="product-title">
+                    {{ product.ten_san_pham }} - {{ selectedVariant.bo_nho_trong_dung_luong }}
+                  </h1>
                   <div class="memory-options">
                     <h5>Chọn bộ nhớ</h5>
                     <div class="d-flex flex-wrap">
@@ -57,7 +59,10 @@
                         v-for="memory in uniqueMemories"
                         :key="memory"
                         class="option-btn"
-                        :class="{ active: selectedVariant.bo_nho_trong_dung_luong === memory, disabled: !isMemoryAvailable(memory) }"
+                        :class="{
+                          active: selectedVariant.bo_nho_trong_dung_luong === memory,
+                          disabled: !isMemoryAvailable(memory),
+                        }"
                         @click="isMemoryAvailable(memory) && selectMemory(memory)"
                       >
                         {{ memory }}<br />{{ formatPrice(getPriceForMemory(memory)) }} đ
@@ -103,7 +108,9 @@
                   </div>
 
                   <div class="product-details-action">
-                    <a href="#" class="btn-product btn-cart" @click.prevent="addToCart"><span>Thêm vào giỏ hàng</span></a>
+                    <a href="#" class="btn-product btn-cart" @click.prevent="addToCart"
+                      ><span>Thêm vào giỏ hàng</span></a
+                    >
                     <div class="details-action-wrapper">
                       <a href="#" class="btn-product btn-compare" title="Compare"><span>So sánh</span></a>
                     </div>
@@ -112,15 +119,22 @@
                   <div class="product-details-footer">
                     <div class="product-cat">
                       <span>Phân loại:</span>
-                      <a href="#">{{ manufacturerMap[product.nha_san_xuat] || product.nha_san_xuat || 'Unknown' }}</a>,
+                      <a href="#">{{ manufacturerMap[product.nha_san_xuat] || product.nha_san_xuat || 'Unknown' }}</a
+                      >,
                       <a href="#">Sản phẩm mới</a>
                     </div>
                     <div class="social-icons social-icons-sm">
                       <span class="social-label">Chia sẻ:</span>
-                      <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                      <a href="#" class="social-icon" title="Facebook" target="_blank"
+                        ><i class="icon-facebook-f"></i
+                      ></a>
                       <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                      <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                      <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
+                      <a href="#" class="social-icon" title="Instagram" target="_blank"
+                        ><i class="icon-instagram"></i
+                      ></a>
+                      <a href="#" class="social-icon" title="Pinterest" target="_blank"
+                        ><i class="icon-pinterest"></i
+                      ></a>
                     </div>
                   </div>
                 </div>
@@ -168,7 +182,12 @@
               </li>
             </ul>
             <div class="tab-content">
-              <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
+              <div
+                class="tab-pane fade show active"
+                id="product-desc-tab"
+                role="tabpanel"
+                aria-labelledby="product-desc-link"
+              >
                 <div class="product-desc-content">
                   <h3>Mô tả sản phẩm</h3>
                   <p>{{ selectedVariant.ghi_chu || 'Không có mô tả chi tiết cho sản phẩm này.' }}</p>
@@ -285,10 +304,18 @@
               }
             }'
           >
-            <div v-for="similarProduct in similarProducts" :key="similarProduct.id" class="product product-7 text-center">
+            <div
+              v-for="similarProduct in similarProducts"
+              :key="similarProduct.id"
+              class="product product-7 text-center"
+            >
               <figure class="product-media">
                 <NuxtLink :to="`/product-page?sp_id=${similarProduct.id}`">
-                  <img :src="similarProduct.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image" class="product-image" />
+                  <img
+                    :src="similarProduct.imageUrl || '/assets/images/placeholder.jpg'"
+                    alt="Product image"
+                    class="product-image"
+                  />
                 </NuxtLink>
                 <div class="product-action-vertical">
                   <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
@@ -298,7 +325,9 @@
               </figure>
               <div class="product-body">
                 <div class="product-cat">
-                  <a href="#">{{ manufacturerMap[similarProduct.tenNhaSanXuat] || similarProduct.tenNhaSanXuat || 'Unknown' }}</a>
+                  <a href="#">{{
+                    manufacturerMap[similarProduct.tenNhaSanXuat] || similarProduct.tenNhaSanXuat || 'Unknown'
+                  }}</a>
                 </div>
                 <h3 class="product-title">
                   <NuxtLink :to="`/product-page?sp_id=${similarProduct.id}`">{{ similarProduct.tenSanPham }}</NuxtLink>
@@ -332,48 +361,65 @@ export default {
       colorMap: {
         'Xanh Mộng Kết': '#a3d2ca',
         'Xanh Lưu Ly': '#b3cde0',
-        'Hồng': '#f4c2c2',
-        'Đen': '#333',
-        'Trắng': '#fff',
+        Hồng: '#f4c2c2',
+        Đen: '#333333',
+        Trắng: '#ffffff',
+        Bạc: '#c0c0c0',
+        Cam: '#ffa500',
+        Đỏ: '#ff0000',
+        Gold: '#ffd700',
+        Kem: '#fffdd0',
+        Tím: '#800080',
+        'Tím Đậm': '#4b0082',
+        'Titan tự nhiên': '#8a8987',
+        Vàng: '#ffff00',
+        Xám: '#808080',
+        'Xanh Bạc Hà': '#98ff98',
+        'Xanh Dương': '#0000ff',
+        'Xanh Dương Đậm': '#00008b',
+        'Xanh Dương Nhạt': '#add8e6',
+        'Xanh Lá': '#008000',
+        'Vàng đồng': '#b8860b',
+        Nâu: '#8b4513',
       },
-    };
+    }
   },
   computed: {
     uniqueMemories() {
-      return [...new Set(this.variants.map(v => v.bo_nho_trong_dung_luong))].sort();
+      return [...new Set(this.variants.map((v) => v.bo_nho_trong_dung_luong))].sort()
     },
     uniqueColors() {
-      return [...new Set(this.variants.map(v => v.mau_sac))].map(name => ({
+      return [...new Set(this.variants.map((v) => v.mau_sac))].map((name) => ({
         name,
         hex: this.colorMap[name] || '#ccc',
-      }));
+      }))
     },
     availableMemories() {
-      return [...new Set(
-        this.variants
-          .filter(v => v.mau_sac === this.selectedVariant.mau_sac)
-          .map(v => v.bo_nho_trong_dung_luong)
-      )].sort();
+      return [
+        ...new Set(
+          this.variants.filter((v) => v.mau_sac === this.selectedVariant.mau_sac).map((v) => v.bo_nho_trong_dung_luong)
+        ),
+      ].sort()
     },
   },
   async mounted() {
-    const sanPhamId = this.$route.query.sp_id;
+    const sanPhamId = this.$route.query.sp_id
     if (sanPhamId) {
-      await this.fetchProductDetails(sanPhamId);
-      await this.fetchSimilarProducts();
+      await this.fetchProductDetails(sanPhamId)
+      await this.fetchSimilarProducts()
     }
     this.$nextTick(() => {
-      this.initializeOwlCarousel();
-    });
+      this.initializeOwlCarousel()
+    })
   },
   methods: {
     async fetchProductDetails(sanPhamId) {
       try {
         const response = await this.$axios.get('/api/chi-tiet-san-pham', {
           params: { sanPhamId },
-        });
+        })
         if (Array.isArray(response.data) && response.data.length > 0) {
-          this.variants = response.data.map(item => ({
+          this.variants = response.data.map((item) => ({
             sp_id: item.sp_id,
             ten_san_pham: item.ten_san_pham,
             sp_ma: item.sp_ma,
@@ -392,7 +438,7 @@ export default {
             bo_nho_trong_dung_luong: item.bo_nho_trong_dung_luong,
             anh_san_pham_url: item.anh_san_pham_url,
             ghi_chu: item.ghi_chu,
-          }));
+          }))
           this.product = {
             sp_id: this.variants[0].sp_id,
             ten_san_pham: this.variants[0].ten_san_pham,
@@ -401,91 +447,91 @@ export default {
             ten_gpu: this.variants[0].ten_gpu,
             thong_so_camera_sau: this.variants[0].thong_so_camera_sau,
             thong_so_camera_truoc: this.variants[0].thong_so_camera_truoc,
-          };
-          this.selectedVariant = this.variants[0];
+          }
+          this.selectedVariant = this.variants[0]
         }
       } catch (error) {
-        console.error('Error fetching product details:', error.message, error.response?.status);
-        this.variants = [];
-        this.product = {};
-        this.selectedVariant = {};
+        console.error('Error fetching product details:', error.message, error.response?.status)
+        this.variants = []
+        this.product = {}
+        this.selectedVariant = {}
       }
     },
     async fetchSimilarProducts() {
       try {
-        const response = await this.$axios.get('/api/suggested-products');
+        const response = await this.$axios.get('/api/suggested-products')
         this.similarProducts = Array.isArray(response.data)
           ? response.data
-              .filter(p => p.id !== this.product.sp_id)
+              .filter((p) => p.id !== this.product.sp_id)
               .slice(0, 5)
-              .map(product => ({
+              .map((product) => ({
                 ...product,
                 tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown',
               }))
-          : [];
+          : []
       } catch (error) {
-        console.error('Error fetching suggested products:', error.message, error.response?.status);
-        this.similarProducts = [];
+        console.error('Error fetching suggested products:', error.message, error.response?.status)
+        this.similarProducts = []
       }
     },
     selectColor(color) {
-      const variant = this.variants.find(
-        v => v.mau_sac === color && this.availableMemories.includes(v.bo_nho_trong_dung_luong)
-      ) || this.variants.find(v => v.mau_sac === color);
+      const variant =
+        this.variants.find((v) => v.mau_sac === color && this.availableMemories.includes(v.bo_nho_trong_dung_luong)) ||
+        this.variants.find((v) => v.mau_sac === color)
       if (variant) {
-        this.selectedVariant = variant;
+        this.selectedVariant = variant
       }
     },
     selectMemory(memory) {
-      const variant = this.variants.find(
-        v => v.bo_nho_trong_dung_luong === memory && v.mau_sac === this.selectedVariant.mau_sac
-      ) || this.variants.find(v => v.bo_nho_trong_dung_luong === memory);
+      const variant =
+        this.variants.find((v) => v.bo_nho_trong_dung_luong === memory && v.mau_sac === this.selectedVariant.mau_sac) ||
+        this.variants.find((v) => v.bo_nho_trong_dung_luong === memory)
       if (variant) {
-        this.selectedVariant = variant;
+        this.selectedVariant = variant
       }
     },
     getImageForColor(color) {
-      const variant = this.variants.find(v => v.mau_sac === color);
-      return variant ? variant.anh_san_pham_url : '/assets/images/placeholder.jpg';
+      const variant = this.variants.find((v) => v.mau_sac === color)
+      return variant ? variant.anh_san_pham_url : '/assets/images/placeholder.jpg'
     },
     getPriceForMemory(memory) {
-      const variant = this.variants.find(
-        v => v.bo_nho_trong_dung_luong === memory && v.mau_sac === this.selectedVariant.mau_sac
-      ) || this.variants.find(v => v.bo_nho_trong_dung_luong === memory);
-      return variant ? variant.gia_ban : 0;
+      const variant =
+        this.variants.find((v) => v.bo_nho_trong_dung_luong === memory && v.mau_sac === this.selectedVariant.mau_sac) ||
+        this.variants.find((v) => v.bo_nho_trong_dung_luong === memory)
+      return variant ? variant.gia_ban : 0
     },
     getPriceForColor(color) {
-      const variant = this.variants.find(v => v.mau_sac === color);
-      return variant ? variant.gia_ban : 0;
+      const variant = this.variants.find((v) => v.mau_sac === color)
+      return variant ? variant.gia_ban : 0
     },
     isMemoryAvailable(memory) {
-      return this.availableMemories.includes(memory);
+      return this.availableMemories.includes(memory)
     },
     formatPrice(price) {
-      return Number(price).toLocaleString('vi-VN');
+      return Number(price).toLocaleString('vi-VN')
     },
     addToCart() {
       console.log('Added:', {
         productId: this.product.sp_id,
         variantId: this.selectedVariant.ctsp_id,
         totalItems: this.quantity,
-      });
+      })
     },
     initializeOwlCarousel() {
       if (process.client) {
         this.$nextTick(() => {
-          const $ = window.jQuery;
+          const $ = window.jQuery
           if ($ && $.fn && $.fn.owlCarousel) {
-            const $carousel = $('.owl-carousel');
+            const $carousel = $('.owl-carousel')
             if ($carousel.length) {
               if ($carousel.hasClass('owl-loaded')) {
                 try {
-                  $carousel.trigger('destroy.owl.carousel');
-                  $carousel.removeClass('owl-loaded owl-drag');
-                  $carousel.find('.owl-stage-outer').children().unwrap();
-                  $carousel.find('.owl-nav, .owl-dots').remove();
+                  $carousel.trigger('destroy.owl.carousel')
+                  $carousel.removeClass('owl-loaded owl-drag')
+                  $carousel.find('.owl-stage-outer').children().unwrap()
+                  $carousel.find('.owl-nav, .owl-dots').remove()
                 } catch (e) {
-                  console.warn('Error destroying Owl Carousel:', e);
+                  console.warn('Error destroying Owl Carousel:', e)
                 }
               }
               const options = $carousel.data('owl-options') || {
@@ -500,19 +546,19 @@ export default {
                   992: { items: 4 },
                   1200: { items: 4, nav: true, dots: false },
                 },
-              };
-              $carousel.owlCarousel(options);
+              }
+              $carousel.owlCarousel(options)
             } else {
-              console.error('No carousel elements found');
+              console.error('No carousel elements found')
             }
           } else {
-            console.error('jQuery or Owl Carousel not loaded');
+            console.error('jQuery or Owl Carousel not loaded')
           }
-        });
+        })
       }
     },
   },
-};
+}
 </script>
 
 <style scoped>
