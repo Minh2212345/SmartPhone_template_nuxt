@@ -110,8 +110,7 @@ export default {
     }
   },
   methods: {
-    updateUserInfo() {
-      // Xử lý cập nhật thông tin người dùng
+    updateUserInfo() {      
       console.log('Thông tin đã cập nhật:', this.userInfo)
       alert('Thông tin đã được cập nhật thành công!')
     },

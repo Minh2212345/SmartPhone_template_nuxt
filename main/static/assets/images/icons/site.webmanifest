@@ -1,0 +1,21 @@
+{
+  "name": "Mobile World",
+  "short_name": "Mobile World",
+  "description": "Shop the latest smartphones and accessories.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/assets/images/icons/favicon-16x16.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/icons/favicon-32x32.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

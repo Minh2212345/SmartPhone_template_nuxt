@@ -9,10 +9,8 @@
               <ul class="nav flex-column">
                 <li class="nav-item">
                   <a href="#" class="nav-link"><i class="las la-mobile"></i> iPhone</a>
-                  <!-- Submenu -->
                   <ul class="submenu">
                     <div class="submenu-sections">
-                      <!-- Dòng iPhone 16 Series -->
                       <li class="submenu-section">
                         <h4 class="submenu-title">iPhone 16 Series <span class="label-hot">HOT</span></h4>
                         <ul class="submenu-items">
@@ -22,7 +20,6 @@
                           <li><a href="#">iPhone 16 Pro Max</a></li>
                         </ul>
                       </li>
-                      <!-- Dòng iPhone 15 Series -->
                       <li class="submenu-section">
                         <h4 class="submenu-title">iPhone 15 Series</h4>
                         <ul class="submenu-items">
@@ -32,7 +29,6 @@
                           <li><a href="#">iPhone 15 Pro Max</a></li>
                         </ul>
                       </li>
-                      <!-- Dòng iPhone 14 Series -->
                       <li class="submenu-section">
                         <h4 class="submenu-title">iPhone 14 Series</h4>
                         <ul class="submenu-items">
@@ -242,7 +238,6 @@
                 data-toggle="owl"
                 :data-owl-options="owlOptions"
               >
-                <!-- Nội dung slider -->
                 <div class="intro-slide" style="background-image: url(assets/images/demos/demo-4/slider/slide-1.png)">
                   <div class="container intro-content">
                     <div class="row justify-content-end">
@@ -252,7 +247,7 @@
                         <div class="intro-price">
                           <sup class="intro-old-price">36.590.000 VND</sup>
                           <br />
-                          <span class="text-primary"> 36.224.000 VND </span>
+                          <span class="text-primary">36.224.000 VND</span>
                         </div>
                         <a href="category.html" class="btn btn-primary btn-round">
                           <span>Xem chi tiết</span>
@@ -262,7 +257,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- Slide thứ hai -->
                 <div class="intro-slide" style="background-image: url(assets/images/demos/demo-4/slider/slide-2.png)">
                   <div class="container intro-content">
                     <div class="row justify-content-end">
@@ -270,7 +264,7 @@
                         <h3 class="intro-subtitle text-primary">Sản phẩm mới</h3>
                         <h2 class="intro-title">BEATS SOLO 4</h2>
                         <div class="intro-price">
-                          <span class="text-primary"> 3.299.000 VNĐ </span>
+                          <span class="text-primary">3.299.000 VNĐ</span>
                         </div>
                         <a href="category.html" class="btn btn-primary btn-round">
                           <span>Xem chi tiết</span>
@@ -290,46 +284,30 @@
             <div class="banner-right">
               <div class="banner-item mb-2">
                 <a href="#">
-                  <img
-                    src="assets/images/banners/banner-1.jpg"
-                    alt="Galaxy M55 5G"
-                    class="img-banner"
-                  />
+                  <img src="assets/images/banners/banner-1.jpg" alt="Galaxy M55 5G" class="img-banner" />
                 </a>
               </div>
               <div class="banner-item mb-2">
                 <a href="#">
-                  <img
-                    src="assets/images/banners/banner-2.jpg"
-                    alt="iPad Air"
-                    class="img-banner"
-                  />
+                  <img src="assets/images/banners/banner-2.jpg" alt="iPad Air" class="img-banner" />
                 </a>
               </div>
               <div class="banner-item banner-item-last">
                 <a href="#">
-                  <img
-                    src="assets/images/banners/banner-3.jpg"
-                    alt="Banner 3"
-                    class="img-banner"
-                  />
+                  <img src="assets/images/banners/banner-3.jpg" alt="Banner 3" class="img-banner" />
                 </a>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="mb-4"></div>
-      <!-- End .mb-4 -->
 
-      <div class="container new-arrivals">
+      <!-- Sản phẩm mới -->
+      <div class="container new-arrivals mb-4">
         <div class="heading heading-flex mb-3">
           <div class="heading-left">
             <h2 class="title">Sản phẩm mới</h2>
-            <!-- End .title -->
           </div>
-          <!-- End .heading-left -->
-
           <div class="heading-right">
             <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
               <li class="nav-item">
@@ -353,7 +331,7 @@
                   role="tab"
                   aria-controls="new-tv-tab"
                   aria-selected="false"
-                  >Iphone</a
+                  >iPhone</a
                 >
               </li>
               <li class="nav-item">
@@ -377,803 +355,199 @@
                   role="tab"
                   aria-controls="new-phones-tab"
                   aria-selected="false"
-                  >Oppo</a
+                  >OPPO</a
                 >
               </li>
             </ul>
           </div>
-          <!-- End .heading-right -->
         </div>
-        <!-- End .heading -->
-
         <div class="tab-content tab-content-carousel just-action-icons-sm">
           <div id="new-all-tab" class="tab-pane p-0 fade show active" role="tabpanel" aria-labelledby="new-all-link">
             <div
-              class="owl-carousel owl-full carousel-equal-height carousel-with-shadow"
+              class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
               data-toggle="owl"
               data-owl-options='{
-                                  "nav": true,
-                                  "dots": true,
-                                  "margin": 20,
-                                  "loop": false,
-                                  "responsive": {
-                                      "0": {
-                                          "items":2
-                                      },
-                                      "480": {
-                                          "items":2
-                                      },
-                                      "768": {
-                                          "items":3
-                                      },
-                                      "992": {
-                                          "items":4
-                                      },
-                                      "1200": {
-                                          "items":5
-                                      }
-                                  }
-                              }'
+                "nav": false,
+                "dots": true,
+                "margin": 20,
+                "loop": false,
+                "responsive": {
+                  "0": { "items": 1 },
+                  "480": { "items": 2 },
+                  "768": { "items": 3 },
+                  "992": { "items": 4 },
+                  "1200": { "items": 4, "nav": true, "dots": false }
+                }
+              }'
             >
-              <div class="product product-2">
+              <div v-for="product in newProducts" :key="product.id" class="product product-7 text-center">
                 <figure class="product-media">
-                  <NuxtLink to="/product-page">
+                  <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
+                  <NuxtLink :to="`/product-page?sp_id=${product.id}`">
                     <img
-                      src="assets/images/demos/demo-4/products/product-1.jpg"
+                      :src="product.imageUrl || '/assets/images/placeholder.jpg'"
                       alt="Product image"
                       class="product-image"
                     />
                   </NuxtLink>
+                  <div class="product-action-vertical">
+                    <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
+                      <span>So sánh</span>
+                    </NuxtLink>
+                  </div>
                 </figure>
-                <!-- End .product-media -->
-
                 <div class="product-body">
                   <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 14 Series</NuxtLink>
+                    <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
-                  <!-- End .product-cat -->
                   <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 14</NuxtLink>
+                    <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">12.990.000 VND</div>
-                  <!-- End .product-price -->
-
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #0099ff"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #9961ce"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #fbff06"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #ff0000"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                    <a href="#" class="active" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
+                  <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
                 </div>
-                <!-- End .product-body -->
               </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-2.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 14 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 14 Pro Max</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">25.590.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #edd2c8"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                    <a href="#" class="active" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-3.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 15 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 15</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">15.590.000 VND</div>
-                  <!-- End .product-price -->
-
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #91e29f"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #ce61c9"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #77c7fc"><span class="sr-only">Color name</span></a>
-                    <a href="#" class="active" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-4.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 15 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 15 Pro Max</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">30.990.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" class="active" style="background: #edd2c8"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-5.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                  <span class="product-label label-new">SP mới</span>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 16 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 16 Pro Max</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">37.490.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" class="active" style="background: #edd2c8"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <span class="product-label label-circle label-top">Top</span>
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-1.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 14 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 14 Plus</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">17.990.000 VND</div>
-                  <!-- End .product-price -->
-
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #91e29f"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #ce61c9"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #77c7fc"><span class="sr-only">Color name</span></a>
-                    <a href="#" class="active" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
             </div>
-            <!-- End .owl-carousel -->
           </div>
-          <!-- .End .tab-pane -->
           <div id="new-tv-tab" class="tab-pane p-0 fade" role="tabpanel" aria-labelledby="new-tv-link">
             <div
-              class="owl-carousel owl-full carousel-equal-height carousel-with-shadow"
+              class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
               data-toggle="owl"
               data-owl-options='{
-                                  "nav": true,
-                                  "dots": true,
-                                  "margin": 20,
-                                  "loop": false,
-                                  "responsive": {
-                                      "0": {
-                                          "items":2
-                                      },
-                                      "480": {
-                                          "items":2
-                                      },
-                                      "768": {
-                                          "items":3
-                                      },
-                                      "992": {
-                                          "items":4
-                                      },
-                                      "1200": {
-                                          "items":5
-                                      }
-                                  }
-                              }'
+                "nav": false,
+                "dots": true,
+                "margin": 20,
+                "loop": false,
+                "responsive": {
+                  "0": { "items": 1 },
+                  "480": { "items": 2 },
+                  "768": { "items": 3 },
+                  "992": { "items": 4 },
+                  "1200": { "items": 4, "nav": true, "dots": false }
+                }
+              }'
             >
-              <div class="product product-2">
+              <div v-for="product in iPhoneProducts" :key="product.id" class="product product-7 text-center">
                 <figure class="product-media">
-                  <NuxtLink to="/product-page">
+                  <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
+                  <NuxtLink :to="`/product-page?sp_id=${product.id}`">
                     <img
-                      src="assets/images/demos/demo-4/products/product-1.jpg"
+                      :src="product.imageUrl || '/assets/images/placeholder.jpg'"
                       alt="Product image"
                       class="product-image"
                     />
                   </NuxtLink>
+                  <div class="product-action-vertical">
+                    <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
+                      <span>So sánh</span>
+                    </NuxtLink>
+                  </div>
                 </figure>
-                <!-- End .product-media -->
-
                 <div class="product-body">
                   <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 14 Series</NuxtLink>
+                    <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
-                  <!-- End .product-cat -->
                   <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 14</NuxtLink>
+                    <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">12.990.000 VND</div>
-                  <!-- End .product-price -->
-
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #0099ff"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #9961ce"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #fbff06"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #ff0000"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                    <a href="#" class="active" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
+                  <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
                 </div>
-                <!-- End .product-body -->
               </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-2.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 14 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 14 Pro Max</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">25.590.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #edd2c8"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                    <a href="#" class="active" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-3.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 15 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 15</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">15.590.000 VND</div>
-                  <!-- End .product-price -->
-
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #91e29f"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #ce61c9"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #77c7fc"><span class="sr-only">Color name</span></a>
-                    <a href="#" class="active" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-4.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 15 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 15 Pro Max</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">30.990.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" class="active" style="background: #edd2c8"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-5.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                  <span class="product-label label-new">SP mới</span>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 16 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 16 Pro Max</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">37.490.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" class="active" style="background: #edd2c8"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <span class="product-label label-circle label-top">Top</span>
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-1.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Iphone 14 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Apple - Iphone 14 Plus</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <br />
-                  <div class="product-price">17.990.000 VND</div>
-                  <!-- End .product-price -->
-
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #91e29f"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #ce61c9"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #77c7fc"><span class="sr-only">Color name</span></a>
-                    <a href="#" class="active" style="background: #333333"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
             </div>
-            <!-- End .owl-carousel -->
           </div>
-          <!-- .End .tab-pane -->
           <div id="new-computers-tab" class="tab-pane p-0 fade" role="tabpanel" aria-labelledby="new-computers-link">
             <div
-              class="owl-carousel owl-full carousel-equal-height carousel-with-shadow"
+              class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
               data-toggle="owl"
               data-owl-options='{
-                                  "nav": true,
-                                  "dots": true,
-                                  "margin": 20,
-                                  "loop": false,
-                                  "responsive": {
-                                      "0": {
-                                          "items":2
-                                      },
-                                      "480": {
-                                          "items":2
-                                      },
-                                      "768": {
-                                          "items":3
-                                      },
-                                      "992": {
-                                          "items":4
-                                      },
-                                      "1200": {
-                                          "items":5
-                                      }
-                                  }
-                              }'
+                "nav": false,
+                "dots": true,
+                "margin": 20,
+                "loop": false,
+                "responsive": {
+                  "0": { "items": 1 },
+                  "480": { "items": 2 },
+                  "768": { "items": 3 },
+                  "992": { "items": 4 },
+                  "1200": { "items": 4, "nav": true, "dots": false }
+                }
+              }'
             >
-              <div class="product product-2">
+              <div v-for="product in samsungProducts" :key="product.id" class="product product-7 text-center">
                 <figure class="product-media">
-                  <NuxtLink to="/product-page">
+                  <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
+                  <NuxtLink :to="`/product-page?sp_id=${product.id}`">
                     <img
-                      src="assets/images/demos/demo-4/products/product-10.jpg"
+                      :src="product.imageUrl || '/assets/images/placeholder.jpg'"
                       alt="Product image"
                       class="product-image"
                     />
                   </NuxtLink>
+                  <div class="product-action-vertical">
+                    <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
+                      <span>So sánh</span>
+                    </NuxtLink>
+                  </div>
                 </figure>
-                <!-- End .product-media -->
-
                 <div class="product-body">
                   <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Samsung S24 Series</NuxtLink>
+                    <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
-                  <!-- End .product-cat -->
                   <h3 class="product-title">
-                    <NuxtLink to="/product-page">Samsung - S24 Plus</NuxtLink>
+                    <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">18.990.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #3a3a3a"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #1a0722"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
+                  <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
                 </div>
-                <!-- End .product-body -->
               </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-11.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Samsung S24 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Samsung - S24 Ultra</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">23.990.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #3a3a3a"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #1a0722"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-12.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Samsung S25 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Samsung - S25</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">19.290.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #3a3a3a"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #318e62"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #100935"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #3d96b6"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-13.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Samsung S25 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Samsung - S25 Ultra</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">28.990.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #3a3a3a"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #1a0722"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
             </div>
-            <!-- End .owl-carousel -->
           </div>
-          <!-- .End .tab-pane -->
           <div id="new-phones-tab" class="tab-pane p-0 fade" role="tabpanel" aria-labelledby="new-phones-link">
             <div
-              class="owl-carousel owl-full carousel-equal-height carousel-with-shadow"
+              class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
               data-toggle="owl"
               data-owl-options='{
-                                  "nav": true,
-                                  "dots": true,
-                                  "margin": 20,
-                                  "loop": false,
-                                  "responsive": {
-                                      "0": {
-                                          "items":2
-                                      },
-                                      "480": {
-                                          "items":2
-                                      },
-                                      "768": {
-                                          "items":3
-                                      },
-                                      "992": {
-                                          "items":4
-                                      },
-                                      "1200": {
-                                          "items":5
-                                      }
-                                  }
-                              }'
+                "nav": false,
+                "dots": true,
+                "margin": 20,
+                "loop": false,
+                "responsive": {
+                  "0": { "items": 1 },
+                  "480": { "items": 2 },
+                  "768": { "items": 3 },
+                  "992": { "items": 4 },
+                  "1200": { "items": 4, "nav": true, "dots": false }
+                }
+              }'
             >
-              <div class="product product-2">
+              <div v-for="product in oppoProducts" :key="product.id" class="product product-7 text-center">
                 <figure class="product-media">
-                  <NuxtLink to="/product-page">
+                  <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
+                  <NuxtLink :to="`/product-page?sp_id=${product.id}`">
                     <img
-                      src="assets/images/demos/demo-4/products/product-17.jpg"
+                      :src="product.imageUrl || '/assets/images/placeholder.jpg'"
                       alt="Product image"
                       class="product-image"
                     />
                   </NuxtLink>
+                  <div class="product-action-vertical">
+                    <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
+                      <span>So sánh</span>
+                    </NuxtLink>
+                  </div>
                 </figure>
-                <!-- End .product-media -->
-
                 <div class="product-body">
                   <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Oppo Find Series</NuxtLink>
+                    <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
-                  <!-- End .product-cat -->
                   <h3 class="product-title">
-                    <NuxtLink to="/product-page">Oppo - Find N3</NuxtLink>
+                    <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">32.490.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #ff1cb3"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
+                  <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
                 </div>
-                <!-- End .product-body -->
               </div>
-              <!-- End .product -->
-
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-16.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Oppo Find Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Oppo - Find X8 Ultra</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">13.499.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #01f151"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #94217f"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #c5c5c5"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
             </div>
-            <!-- End .owl-carousel -->
           </div>
-          <!-- .End .tab-pane -->
         </div>
-        <!-- End .tab-content -->
       </div>
-      <!-- End .container -->
 
       <div class="container text-center">
         <hr class="mb-0" />
@@ -1181,45 +555,31 @@
           class="owl-carousel mt-5 mb-5 owl-simple"
           data-toggle="owl"
           data-owl-options='{
-                          "nav": false,
-                          "dots": false,
-                          "margin": 30,
-                          "loop": false,
-                          "responsive": {
-                              "0": {
-                                  "items": 2
-                              },
-                              "420": {
-                                  "items": 3
-                              },
-                              "600": {
-                                  "items": 4
-                              },
-                              "900": {
-                                  "items": 5
-                              },
-                              "1024": {
-                                  "items": 6
-                              }
-                          }
-                      }'
+            "nav": false,
+            "dots": false,
+            "margin": 30,
+            "loop": false,
+            "responsive": {
+              "0": { "items": 2 },
+              "420": { "items": 3 },
+              "600": { "items": 4 },
+              "900": { "items": 5 },
+              "1024": { "items": 6 }
+            }
+          }'
         >
           <a href="#" class="brand">
             <img src="assets/images/brands/1.png" alt="Brand Name" />
           </a>
-
           <a href="#" class="brand">
             <img src="assets/images/brands/2.png" alt="Brand Name" />
           </a>
-
           <a href="#" class="brand">
             <img src="assets/images/brands/3.png" alt="Brand Name" />
           </a>
-
           <a href="#" class="brand">
             <img src="assets/images/brands/4.png" alt="Brand Name" />
           </a>
-
           <a href="#" class="brand">
             <img src="assets/images/brands/5.png" alt="Brand Name" />
           </a>
@@ -1227,42 +587,26 @@
             <img src="assets/images/brands/6.png" alt="Brand Name" />
           </a>
         </div>
-        <!-- End .owl-carousel -->
       </div>
-      <!-- End .container -->
 
+      <!-- Sản phẩm nổi bật -->
       <div class="bg-light pt-5 pb-6">
         <div class="container trending-products">
           <div class="heading heading-flex mb-3">
             <div class="heading-left">
               <h2 class="title">Sản phẩm nổi bật</h2>
-              <!-- End .title -->
             </div>
-            <!-- End .heading-left -->
-
             <div class="heading-right">
               <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
                 <li class="nav-item">
                   <a
-                    id="trending-top-link"
-                    class="nav-link active"
-                    data-toggle="tab"
-                    href="#trending-top-tab"
-                    role="tab"
-                    aria-controls="trending-top-tab"
-                    aria-selected="true"
-                    >Đánh giá cao</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a
                     id="trending-best-link"
-                    class="nav-link"
+                    class="nav-link active"
                     data-toggle="tab"
                     href="#trending-best-tab"
                     role="tab"
                     aria-controls="trending-best-tab"
-                    aria-selected="false"
+                    aria-selected="true"
                     >Bán chạy</a
                   >
                 </li>
@@ -1280,491 +624,74 @@
                 </li>
               </ul>
             </div>
-            <!-- End .heading-right -->
           </div>
-          <!-- End .heading -->
-
           <div class="row">
             <div class="col-xl-5col d-none d-xl-block">
               <div class="banner">
-                <a href="#" style="background-color: #000000;">
+                <a href="#" style="background-color: #000000">
                   <img src="assets/images/demos/demo-4/banners/banner-4.png" style="max-width: 90%" alt="banner" />
                 </a>
               </div>
-              <!-- End .banner -->
             </div>
-            <!-- End .col-xl-5col -->
-
             <div class="col-xl-4-5col">
               <div class="tab-content tab-content-carousel just-action-icons-sm">
                 <div
-                  id="trending-top-tab"
-                  class="tab-pane p-0 fade show active"
-                  role="tabpanel"
-                  aria-labelledby="trending-top-link"
-                >
-                  <div
-                    class="owl-carousel owl-full carousel-equal-height carousel-with-shadow"
-                    data-toggle="owl"
-                    data-owl-options='{
-                                              "nav": true,
-                                              "dots": false,
-                                              "margin": 20,
-                                              "loop": false,
-                                              "responsive": {
-                                                  "0": {
-                                                      "items":2
-                                                  },
-                                                  "480": {
-                                                      "items":2
-                                                  },
-                                                  "768": {
-                                                      "items":3
-                                                  },
-                                                  "992": {
-                                                      "items":4
-                                                  }
-                                              }
-                                          }'
-                  >
-                    <div class="product product-2">
-                      <figure class="product-media">
-                        <NuxtLink to="/product-page">
-                          <img
-                            src="assets/images/demos/demo-4/products/product-6.jpg"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-                        <span class="product-label label-new">SP mới</span>
-                      </figure>
-                      <!-- End .product-media -->
-
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Iphone 16 Series</NuxtLink>
-                        </div>
-                        <!-- End .product-cat -->
-                        <h3 class="product-title">
-                          <NuxtLink to="/product-page">Iphone 16</NuxtLink>
-                        </h3>
-                        <!-- End .product-title -->
-                        <br />
-                        <div class="product-price">19.190.000 VND</div>
-                        <!-- End .product-price -->
-
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #101010"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #bdbdbd"><span class="sr-only">Color name</span></a>
-                          <a href="#" class="active" style="background: #1aa7ff"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                          <a href="#" class="active" style="background: #5ebc6b"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                          <a href="#" class="active" style="background: #de6dcb"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                        </div>
-                        <!-- End .product-nav -->
-                      </div>
-                      <!-- End .product-body -->
-                    </div>
-                    <!-- End .product -->
-
-                    <div class="product product-2">
-                      <figure class="product-media">
-                        <NuxtLink to="/product-page">
-                          <img
-                            src="assets/images/demos/demo-4/products/product-7.jpg"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-                        <span class="product-label label-new">SP mới</span>
-                      </figure>
-                      <!-- End .product-media -->
-
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Iphone 16 Series</NuxtLink>
-                        </div>
-                        <!-- End .product-cat -->
-                        <h3 class="product-title">
-                          <NuxtLink to="/product-page">Apple - Iphone 16e</NuxtLink>
-                        </h3>
-                        <br />
-                        <!-- End .product-title -->
-                        <div class="product-price">16.290.000 VND</div>
-                        <!-- End .product-price -->
-
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #101010"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #bdbdbd"><span class="sr-only">Color name</span></a>
-                          <a href="#" class="active" style="background: #1aa7ff"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                          <a href="#" class="active" style="background: #5ebc6b"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                          <a href="#" class="active" style="background: #de6dcb"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                        </div>
-                      </div>
-                      <!-- End .product-body -->
-                    </div>
-                    <!-- End .product -->
-
-                    <div class="product product-2">
-                      <figure class="product-media">
-                        <NuxtLink to="/product-page">
-                          <img
-                            src="assets/images/demos/demo-4/products/product-8.jpg"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-                      </figure>
-                      <!-- End .product-media -->
-
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Samsung S23 Series</NuxtLink>
-                        </div>
-                        <!-- End .product-cat -->
-                        <h3 class="product-title">
-                          <NuxtLink to="/product-page">Samsung - S23</NuxtLink>
-                        </h3>
-                        <br />
-                        <!-- End .product-title -->
-                        <div class="product-price">11.990.000 VND</div>
-                        <!-- End .product-price -->
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                          <a href="#" class="active" style="background: #000000"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                          <a href="#" class="active" style="background: #043418"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                          <a href="#" class="active" style="background: #ab34eb"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                        </div>
-                        <!-- End .product-nav -->
-                      </div>
-                      <!-- End .product-body -->
-                    </div>
-                    <!-- End .product -->
-
-                    <div class="product product-2">
-                      <figure class="product-media">
-                        <NuxtLink to="/product-page">
-                          <img
-                            src="assets/images/demos/demo-4/products/product-9.jpg"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-
-                        <div class="product-action-vertical">
-                          <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"></a>
-                        </div>
-                        <!-- End .product-action -->
-
-                        <div class="product-action">
-                          <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                          <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"
-                            ><span>quick view</span></a
-                          >
-                        </div>
-                        <!-- End .product-action -->
-                      </figure>
-                      <!-- End .product-media -->
-
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Nothing Phone</NuxtLink>
-                        </div>
-                        <!-- End .product-cat -->
-                        <h3 class="product-title">
-                          <NuxtLink to="/product-page">Nothing Phone - 2A Pro Plus</NuxtLink>
-                        </h3>
-                        <!-- End .product-title -->
-                        <div class="product-price">8.890.000 VND</div>
-                        <!-- End .product-price -->
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                          <a href="#" class="active" style="background: #000000"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                        </div>
-                      </div>
-                      <!-- End .product-body -->
-                    </div>
-                    <!-- End .product -->
-
-                    <div class="product product-2">
-                      <figure class="product-media">
-                        <NuxtLink to="/product-page">
-                          <img
-                            src="assets/images/demos/demo-4/products/product-3.jpg"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-
-                        <div class="product-action-vertical">
-                          <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"></a>
-                        </div>
-                        <!-- End .product-action -->
-
-                        <div class="product-action">
-                          <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                          <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"
-                            ><span>quick view</span></a
-                          >
-                        </div>
-                        <!-- End .product-action -->
-                      </figure>
-                      <!-- End .product-media -->
-
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Iphone 15 Series</NuxtLink>
-                        </div>
-                        <!-- End .product-cat -->
-                        <h3 class="product-title">
-                          <NuxtLink to="/product-page">Apple - Iphone 15</NuxtLink>
-                        </h3>
-                        <!-- End .product-title -->
-                        <div class="product-price">15.590.000 VND</div>
-                        <!-- End .product-price -->
-
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #91e29f"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #ce61c9"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #77c7fc"><span class="sr-only">Color name</span></a>
-                          <a href="#" class="active" style="background: #333333"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                        </div>
-                        <!-- End .product-nav -->
-                      </div>
-                      <!-- End .product-body -->
-                    </div>
-                    <!-- End .product -->
-                  </div>
-                  <!-- End .owl-carousel -->
-                </div>
-                <!-- .End .tab-pane -->
-                <div
                   id="trending-best-tab"
-                  class="tab-pane p-0 fade"
+                  class="tab-pane p-0 fade show active"
                   role="tabpanel"
                   aria-labelledby="trending-best-link"
                 >
                   <div
-                    class="owl-carousel owl-full carousel-equal-height carousel-with-shadow"
+                    class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
                     data-toggle="owl"
                     data-owl-options='{
-                                              "nav": true,
-                                              "dots": false,
-                                              "margin": 20,
-                                              "loop": false,
-                                              "responsive": {
-                                                  "0": {
-                                                      "items":2
-                                                  },
-                                                  "480": {
-                                                      "items":2
-                                                  },
-                                                  "768": {
-                                                      "items":3
-                                                  },
-                                                  "992": {
-                                                      "items":4
-                                                  }
-                                              }
-                                          }'
+                      "nav": false,
+                      "dots": true,
+                      "margin": 20,
+                      "loop": false,
+                      "responsive": {
+                        "0": { "items": 1 },
+                        "480": { "items": 2 },
+                        "768": { "items": 3 },
+                        "992": { "items": 4 },
+                        "1200": { "items": 4, "nav": true, "dots": false }
+                      }
+                    }'
                   >
-                    <div class="product product-2">
+                    <div
+                      v-for="product in trendingBestProducts"
+                      :key="product.id"
+                      class="product product-7 text-center"
+                    >
                       <figure class="product-media">
-                        <NuxtLink to="/product-page">
+                        <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
+                        <NuxtLink :to="`/product-page?sp_id=${product.id}`">
                           <img
-                            src="assets/images/demos/demo-4/products/product-3.jpg"
+                            :src="product.imageUrl || '/assets/images/placeholder.jpg'"
                             alt="Product image"
                             class="product-image"
                           />
                         </NuxtLink>
-                      </figure>
-                      <!-- End .product-media -->
-
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Iphone 15 Series</NuxtLink>
-                        </div>
-                        <!-- End .product-cat -->
-                        <h3 class="product-title">
-                          <NuxtLink to="/product-page">Apple - Iphone 15</NuxtLink>
-                        </h3>
-                        <!-- End .product-title -->
-                        <div class="product-price">15.590.000 VND</div>
-                        <!-- End .product-price -->
-
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #91e29f"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #ce61c9"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #77c7fc"><span class="sr-only">Color name</span></a>
-                          <a href="#" class="active" style="background: #333333"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                        </div>
-                        <!-- End .product-nav -->
-                      </div>
-                      <!-- End .product-body -->
-                    </div>
-                    <!-- End .product -->
-
-                    <div class="product product-2">
-                      <figure class="product-media">
-                        <NuxtLink to="/product-page">
-                          <img
-                            src="assets/images/demos/demo-4/products/product-2.jpg"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-                      </figure>
-                      <!-- End .product-media -->
-
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <a href="#">Iphone 14 Series</a>
-                        </div>
-                        <!-- End .product-cat -->
-                        <h3 class="product-title">
-                          <NuxtLink to="/product-page">Apple - Iphone 14 Pro Max</NuxtLink>
-                        </h3>
-                        <!-- End .product-title -->
-                        <br />
-                        <div class="product-price">25.590.000 VND</div>
-                        <!-- End .product-price -->
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #edd2c8"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                          <a href="#" class="active" style="background: #333333"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                        </div>
-                        <!-- End .product-nav -->
-                      </div>
-                      <!-- End .product-body -->
-                    </div>
-                    <!-- End .product -->
-
-                    <div class="product product-2">
-                      <figure class="product-media">
-                        <NuxtLink to="/product-page">
-                          <img
-                            src="assets/images/demos/demo-4/products/product-4.jpg"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-
                         <div class="product-action-vertical">
-                          <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"></a>
+                          <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
+                            <span>So sánh</span>
+                          </NuxtLink>
                         </div>
-                        <!-- End .product-action -->
-
-                        <div class="product-action">
-                          <a href="#" class="btn-product btn-cart" title="Thêm vào giỏ hàng"
-                            ><span>Thêm vào giỏ hàng</span></a
-                          >
-                          <a href="popup/quickView.html" class="btn-product btn-quickview" title="Xem chi tiết"
-                            ><span>Xem chi tiết</span></a
-                          >
-                        </div>
-                        <!-- End .product-action -->
                       </figure>
-                      <!-- End .product-media -->
-
                       <div class="product-body">
                         <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Iphone 15 Series</NuxtLink>
+                          <a href="#">{{
+                            manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown'
+                          }}</a>
                         </div>
-                        <!-- End .product-cat -->
                         <h3 class="product-title">
-                          <NuxtLink to="/product-page">Apple - Iphone 15 Pro Max</NuxtLink>
+                          <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                         </h3>
-                        <!-- End .product-title -->
-                        <br />
-                        <div class="product-price">30.990.000 VND</div>
-                        <!-- End .product-price -->
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" class="active" style="background: #edd2c8"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                          <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #333333"><span class="sr-only">Color name</span></a>
-                        </div>
-                        <!-- End .product-nav -->
+                        <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
                       </div>
-                      <!-- End .product-body -->
                     </div>
-                    <!-- End .product -->
-
-                    <div class="product product-2">
-                      <figure class="product-media">
-                        <NuxtLink to="/product-page">
-                          <img
-                            src="assets/images/demos/demo-4/products/product-1.jpg"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-                      </figure>
-                      <!-- End .product-media -->
-
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Iphone 14 Series</NuxtLink>
-                        </div>
-                        <!-- End .product-cat -->
-                        <h3 class="product-title">
-                          <NuxtLink to="/product-page">Apple - Iphone 14</NuxtLink>
-                        </h3>
-                        <!-- End .product-title -->
-                        <br />
-                        <div class="product-price">12.990.000 VND</div>
-                        <!-- End .product-price -->
-
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #0099ff"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #9961ce"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #fbff06"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #ff0000"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                          <a href="#" class="active" style="background: #333333"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                        </div>
-                        <!-- End .product-nav -->
-                      </div>
-                      <!-- End .product-body -->
-                    </div>
-                    <!-- End .product -->
                   </div>
-                  <!-- End .owl-carousel -->
                 </div>
-                <!-- .End .tab-pane -->
                 <div
                   id="trending-sale-tab"
                   class="tab-pane p-0 fade"
@@ -1772,634 +699,333 @@
                   aria-labelledby="trending-sale-link"
                 >
                   <div
-                    class="owl-carousel owl-full carousel-equal-height carousel-with-shadow"
+                    class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
                     data-toggle="owl"
                     data-owl-options='{
-                                              "nav": true,
-                                              "dots": false,
-                                              "margin": 20,
-                                              "loop": false,
-                                              "responsive": {
-                                                  "0": {
-                                                      "items":2
-                                                  },
-                                                  "480": {
-                                                      "items":2
-                                                  },
-                                                  "768": {
-                                                      "items":3
-                                                  },
-                                                  "992": {
-                                                      "items":4
-                                                  }
-                                              }
-                                          }'
+                      "nav": false,
+                      "dots": true,
+                      "margin": 20,
+                      "loop": false,
+                      "responsive": {
+                        "0": { "items": 1 },
+                        "480": { "items": 2 },
+                        "768": { "items": 3 },
+                        "992": { "items": 4 },
+                        "1200": { "items": 4, "nav": true, "dots": false }
+                      }
+                    }'
                   >
-                    <div class="product product-2">
+                    <div
+                      v-for="product in trendingSaleProducts"
+                      :key="product.id"
+                      class="product product-7 text-center"
+                    >
                       <figure class="product-media">
-                        <span class="product-label label-circle label-sale">Sale</span>
-                        <NuxtLink to="/product-page">
+                        <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
+                        <NuxtLink :to="`/product-page?sp_id=${product.id}`">
                           <img
-                            src="assets/images/demos/demo-4/products/product-8.jpg"
+                            :src="product.imageUrl || '/assets/images/placeholder.jpg'"
                             alt="Product image"
                             class="product-image"
                           />
                         </NuxtLink>
-
                         <div class="product-action-vertical">
-                          <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"></a>
+                          <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
+                            <span>So sánh</span>
+                          </NuxtLink>
                         </div>
-                        <!-- End .product-action -->
-
-                        <div class="product-action">
-                          <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                          <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"
-                            ><span>quick view</span></a
-                          >
-                        </div>
-                        <!-- End .product-action -->
                       </figure>
-                      <!-- End .product-media -->
-
                       <div class="product-body">
                         <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Samsung S23 Series</NuxtLink>
+                          <a href="#">{{
+                            manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown'
+                          }}</a>
                         </div>
-                        <!-- End .product-cat -->
                         <h3 class="product-title">
-                          <NuxtLink to="/product-page">Samsung - S23</NuxtLink>
+                          <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                         </h3>
-                        <br />
-                        <!-- End .product-title -->
-                        <div class="product-price">
-                          <span class="old-price">12.990.000 VND</span>
-                          <span class="new-price">11.290.000 VND</span>
-                        </div>
-                        <!-- End .product-price -->
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #eaeaec"><span class="sr-only">Color name</span></a>
-                          <a href="#" class="active" style="background: #000000"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                          <a href="#" class="active" style="background: #043418"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                          <a href="#" class="active" style="background: #ab34eb"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                        </div>
-                        <!-- End .product-nav -->
+                        <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
                       </div>
-                      <!-- End .product-body -->
                     </div>
-                    <!-- End .product -->
-
-                    <div class="product product-2">
-                      <figure class="product-media">
-                        <span class="product-label label-circle label-sale">Sale</span>
-                        <NuxtLink to="/product-page">
-                          <img
-                            src="assets/images/demos/demo-4/products/product-6.jpg"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-                        <span class="product-label label-new">SP mới</span>
-                      </figure>
-                      <!-- End .product-media -->
-
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Iphone 16 Series</NuxtLink>
-                        </div>
-                        <!-- End .product-cat -->
-                        <h3 class="product-title">
-                          <NuxtLink to="/product-page">Apple - Iphone 16</NuxtLink>
-                        </h3>
-                        <!-- End .product-title -->
-                        <br />
-                        <div class="product-price">
-                          <span class="old-price">17.290.000 VND</span>
-                          <span class="new-price">16.290.000 VND</span>
-                        </div>
-                        <!-- End .product-price -->
-
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #101010"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #bdbdbd"><span class="sr-only">Color name</span></a>
-                          <a href="#" class="active" style="background: #1aa7ff"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                          <a href="#" class="active" style="background: #5ebc6b"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                          <a href="#" class="active" style="background: #de6dcb"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                        </div>
-                        <!-- End .product-nav -->
-                      </div>
-                      <!-- End .product-body -->
-                    </div>
-                    <!-- End .product -->
-
-                    <div class="product product-2">
-                      <figure class="product-media">
-                        <span class="product-label label-circle label-sale">Sale</span>
-                        <NuxtLink to="/product-page">
-                          <img
-                            src="assets/images/demos/demo-4/products/product-13.jpg"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-                      </figure>
-                      <!-- End .product-media -->
-
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Samsung S25 Series</NuxtLink>
-                        </div>
-                        <!-- End .product-cat -->
-                        <h3 class="product-title">
-                          <NuxtLink to="/product-page">Samsung - S25 Ultra</NuxtLink>
-                        </h3>
-                        <!-- End .product-title -->
-                        <div class="product-price">28.990.000 VND</div>
-                        <!-- End .product-price -->
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #3a3a3a"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #1a0722"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                        </div>
-                        <!-- End .product-nav -->
-                      </div>
-                      <!-- End .product-body -->
-                    </div>
-                    <!-- End .product -->
-
-                    <div class="product product-2">
-                      <figure class="product-media">
-                        <span class="product-label label-circle label-sale">Sale</span>
-                        <NuxtLink to="/product-page">
-                          <img
-                            src="assets/images/demos/demo-4/products/product-3.jpg"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-
-                        <div class="product-action-vertical">
-                          <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"></a>
-                        </div>
-                        <!-- End .product-action -->
-
-                        <div class="product-action">
-                          <a href="#" class="btn-product btn-cart" title="Thêm vào giỏ hàng"
-                            ><span>Thêm vào giỏ hàng</span></a
-                          >
-                          <a href="popup/quickView.html" class="btn-product btn-quickview" title="Xem chi tiết"
-                            ><span>Xem chi tiết</span></a
-                          >
-                        </div>
-                        <!-- End .product-action -->
-                      </figure>
-                      <!-- End .product-media -->
-
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <NuxtLink to="/category-4cols">Iphone 15 Series</NuxtLink>
-                        </div>
-                        <!-- End .product-cat -->
-                        <h3 class="product-title">
-                          <NuxtLink to="/product-page">Apple - Iphone 15</NuxtLink>
-                        </h3>
-                        <!-- End .product-title -->
-                        <br />
-                        <div class="product-price">
-                          <span class="old-price">16.590.000 VND</span>
-                          <span class="new-price">15.590.000 VND</span>
-                        </div>
-                        <!-- End .product-price -->
-
-                        <div class="product-nav product-nav-dots">
-                          <a href="#" style="background: #91e29f"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #ce61c9"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                          <a href="#" style="background: #77c7fc"><span class="sr-only">Color name</span></a>
-                          <a href="#" class="active" style="background: #333333"
-                            ><span class="sr-only">Color name</span></a
-                          >
-                        </div>
-                        <!-- End .product-nav -->
-                      </div>
-                      <!-- End .product-body -->
-                    </div>
-                    <!-- End .product -->
                   </div>
-                  <!-- End .owl-carousel -->
                 </div>
-                <!-- .End .tab-pane -->
               </div>
-              <!-- End .tab-content -->
             </div>
-            <!-- End .col-xl-4-5col -->
           </div>
-          <!-- End .row -->
         </div>
-        <!-- End .container -->
       </div>
-      <!-- End .bg-light pt-5 pb-6 -->
 
-      <div class="mb-5"></div>
-      <!-- End .mb-5 -->
-
-      <div class="container for-you">
+      <!-- Sản phẩm gợi ý -->
+      <div class="container for-you mb-4">
         <div class="heading heading-flex mb-3">
           <div class="heading-left">
             <h2 class="title">Sản phẩm gợi ý</h2>
-            <!-- End .title -->
           </div>
-          <!-- End .heading-left -->
-
           <div class="heading-right">
-            <a href="category-4cols.html" class="title-link">Xem các sản phẩm</a><i class="icon-long-arrow-right"></i>
+            <a href="category-4cols.html" class="title-link">Xem các sản phẩm</a>
+            <i class="icon-long-arrow-right"></i>
           </div>
-          <!-- End .heading-right -->
         </div>
-        <!-- End .heading -->
-
         <div class="products">
           <div class="row justify-content-center">
-            <div class="col-6 col-md-4 col-lg-3">
+            <div v-for="product in recommendedProducts" :key="product.id" class="col-6 col-md-4 col-lg-3">
               <div class="product product-2">
                 <figure class="product-media">
-                  <NuxtLink to="/product-page">
+                  <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
+                  <NuxtLink :to="`/product-page?sp_id=${product.id}`">
                     <img
-                      src="assets/images/demos/demo-4/products/product-10.jpg"
+                      :src="product.imageUrl || '/assets/images/placeholder.jpg'"
                       alt="Product image"
                       class="product-image"
                     />
                   </NuxtLink>
                 </figure>
-                <!-- End .product-media -->
-
                 <div class="product-body">
                   <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Samsung S24 Series</NuxtLink>
+                    <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
-                  <!-- End .product-cat -->
                   <h3 class="product-title">
-                    <NuxtLink to="/product-page">Samsung - S24 Plus</NuxtLink>
+                    <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">18.990.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #3a3a3a"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #1a0722"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
+                  <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
                 </div>
-                <!-- End .product-body -->
               </div>
-              <!-- End .product -->
             </div>
-            <!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-            <div class="col-6 col-md-4 col-lg-3">
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-11.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Samsung S24 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Samsung - S24 Ultra</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">23.990.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #3a3a3a"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #1a0722"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-            </div>
-            <!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-            <div class="col-6 col-md-4 col-lg-3">
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-12.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Samsung S25 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Samsung - S25</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">19.290.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #3a3a3a"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #318e62"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #100935"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #3d96b6"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-            </div>
-            <!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-            <div class="col-6 col-md-4 col-lg-3">
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-13.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Samsung S25 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Samsung - S25 Ultra</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">28.990.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #3a3a3a"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #1a0722"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-            </div>
-            <!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-            <div class="col-6 col-md-4 col-lg-3">
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-14.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-
-                  <div class="product-action">
-                    <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"
-                      ><span>quick view</span></a
-                    >
-                  </div>
-                  <!-- End .product-action -->
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Xiaomi 14 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Xiaomi - 14 Series</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">17.499.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #1d8e43"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #1a0722"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #ff17d4"><span class="sr-only">Color name</span></a>
-                  </div>
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-            </div>
-            <!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-            <div class="col-6 col-md-4 col-lg-3">
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-15.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-
-                  <div class="product-action">
-                    <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"
-                      ><span>quick view</span></a
-                    >
-                  </div>
-                  <!-- End .product-action -->
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Xiaomi 13 Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Xiaomi - 13 Series</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">16.490.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #1d8e43"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #dbdbdb"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-            </div>
-            <!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-            <div class="col-6 col-md-4 col-lg-3">
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-17.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Oppo Find Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Oppo - Find N3</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">32.490.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #f5f77d"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #ff1cb3"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-            </div>
-            <!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-            <div class="col-6 col-md-4 col-lg-3">
-              <div class="product product-2">
-                <figure class="product-media">
-                  <NuxtLink to="/product-page">
-                    <img
-                      src="assets/images/demos/demo-4/products/product-16.jpg"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                </figure>
-                <!-- End .product-media -->
-
-                <div class="product-body">
-                  <div class="product-cat">
-                    <NuxtLink to="/category-4cols">Oppo Find Series</NuxtLink>
-                  </div>
-                  <!-- End .product-cat -->
-                  <h3 class="product-title">
-                    <NuxtLink to="/product-page">Oppo - Find X8 Ultra</NuxtLink>
-                  </h3>
-                  <!-- End .product-title -->
-                  <div class="product-price">13.499.000 VND</div>
-                  <!-- End .product-price -->
-                  <div class="product-nav product-nav-dots">
-                    <a href="#" style="background: #01f151"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #94217f"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #c5c5c5"><span class="sr-only">Color name</span></a>
-                    <a href="#" style="background: #000000"><span class="sr-only">Color name</span></a>
-                  </div>
-                  <!-- End .product-nav -->
-                </div>
-                <!-- End .product-body -->
-              </div>
-              <!-- End .product -->
-            </div>
-            <!-- End .col-sm-6 col-md-4 col-lg-3 -->
           </div>
-          <!-- End .row -->
         </div>
-        <!-- End .products -->
       </div>
-      <!-- End .container -->
-
-      <div class="mb-4"></div>
-      <!-- End .mb-4 -->
-
-      <div class="container">
-        <hr class="mb-0" />
-      </div>
-      <!-- End .container -->
     </main>
-    <!-- End .main -->
+
+    <button id="scroll-top" title="Back to Top">
+      <i class="icon-arrow-up"></i>
+    </button>
   </div>
-
-  <button id="scroll-top" title="Back to Top">
-    <i class="icon-arrow-up"></i>
-  </button>
-
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/jquery.hoverIntent.min.js"></script>
-  <script src="assets/js/jquery.waypoints.min.js"></script>
-  <script src="assets/js/superfish.min.js"></script>
-  <script src="assets/js/owl.carousel.min.js"></script>
-  <script src="assets/js/bootstrap-input-spinner.js"></script>
-  <script src="assets/js/jquery.plugin.min.js"></script>
-  <script src="assets/js/jquery.magnific-popup.min.js"></script>
-  <script src="assets/js/jquery.countdown.min.js"></script>
 </template>
 
 <script>
 export default {
   name: 'IndexPage',
-  computed: {
-    owlOptions() {
-      // Kiểm tra nếu là trang index thì tắt nav
-      const isIndexPage = this.$route.name === 'index' // Kiểm tra tên route
-      return {
+  data() {
+    return {
+      newProducts: [],
+      iPhoneProducts: [],
+      samsungProducts: [],
+      oppoProducts: [],
+      trendingBestProducts: [],
+      trendingSaleProducts: [],
+      recommendedProducts: [],
+      manufacturerMap: {
+        1: 'Apple',
+        2: 'Samsung',
+        3: 'Xiaomi',
+        4: 'OPPO',
+      },
+      owlOptions: {
+        nav: true,
         dots: true,
-        nav: isIndexPage ? false : true, // Tắt nav trên trang index
+        margin: 20,
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 5000,
         responsive: {
-          1200: {
-            nav: isIndexPage ? false : true, // Tắt nav trên màn hình lớn nếu là trang index
-            dots: false,
-          },
+          0: { items: 1 },
+          480: { items: 1 },
+          768: { items: 1 },
+          992: { items: 1 },
+          1200: { items: 1 },
         },
+      },
+      newProductsOwlOptions: {
+        nav: false,
+        dots: true,
+        margin: 20,
+        loop: false,
+        responsive: {
+          0: { items: 1 },
+          480: { items: 2 },
+          768: { items: 3 },
+          992: { items: 4 },
+          1200: { items: 4, nav: true, dots: false },
+        },
+      },
+      trendingProductsOwlOptions: {
+        nav: false,
+        dots: true,
+        margin: 20,
+        loop: false,
+        responsive: {
+          0: { items: 1 },
+          480: { items: 2 },
+          768: { items: 3 },
+          992: { items: 4 },
+          1200: { items: 4, nav: true, dots: false },
+        },
+      },
+    }
+  },
+  async mounted() {
+    await Promise.all([
+      this.fetchNewProducts(null), // All products
+      this.fetchNewProducts(1), // iPhone
+      this.fetchNewProducts(2), // Samsung
+      this.fetchNewProducts(4), // OPPO
+      this.fetchBestProducts(),
+      this.fetchSaleProducts(),
+      this.fetchRecommendedProducts(),
+    ])
+    this.populateSections()
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.initializeOwlCarousel()
+      }, 100)
+    })
+  },
+  methods: {
+    async fetchNewProducts(idNhaSanXuat) {
+      try {
+        const response = await this.$axios.get('/api/show-new-product', {
+          params: { idNhaSanXuat: idNhaSanXuat },
+        })
+        const mappedProducts = Array.isArray(response.data)
+          ? response.data.map((product) => ({
+              ...product,
+              tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
+            }))
+          : []
+        if (idNhaSanXuat === null) {
+          this.newProducts = mappedProducts
+        } else if (idNhaSanXuat === 1) {
+          this.iPhoneProducts = mappedProducts
+        } else if (idNhaSanXuat === 2) {
+          this.samsungProducts = mappedProducts
+        } else if (idNhaSanXuat === 4) {
+          this.oppoProducts = mappedProducts
+        }
+      } catch (error) {
+        console.error('Error fetching new products:', error.message, error.response?.status)
+        if (idNhaSanXuat === null) this.newProducts = []
+        else if (idNhaSanXuat === 1) this.iPhoneProducts = []
+        else if (idNhaSanXuat === 2) this.samsungProducts = []
+        else if (idNhaSanXuat === 4) this.oppoProducts = []
       }
     },
+    async fetchBestProducts() {
+      try {
+        const response = await this.$axios.get('/api/show-best-product', {
+          params: { sortBy: 'SALES' },
+        })
+        this.trendingBestProducts = Array.isArray(response.data)
+          ? response.data.map((product) => ({
+              ...product,
+              tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
+            }))
+          : []
+      } catch (error) {
+        console.error('Error fetching best products:', error.message, error.response?.status)
+        this.trendingBestProducts = []
+      }
+    },
+    async fetchSaleProducts() {
+      try {
+        const response = await this.$axios.get('/api/show-best-product', {
+          params: { sortBy: 'DISCOUNT' },
+        })
+        this.trendingSaleProducts = Array.isArray(response.data)
+          ? response.data.map((product) => ({
+              ...product,
+              tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
+            }))
+          : []
+      } catch (error) {
+        console.error('Error fetching sale products:', error.message, error.response?.status)
+        this.trendingSaleProducts = []
+      }
+    },
+    async fetchRecommendedProducts() {
+      try {
+        const response = await this.$axios.get('/api/san-pham-with-variants')
+        this.recommendedProducts = Array.isArray(response.data)
+          ? response.data.map((product) => ({
+              ...product,
+              tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
+            }))
+          : []
+      } catch (error) {
+        console.error('Error fetching recommended products:', error.message, error.response?.status)
+        this.recommendedProducts = []
+      }
+    },
+    populateSections() {
+      // No need to filter here since data is fetched separately for each tab
+    },
+    isNewProduct(product) {
+      if (!product.createdAt) return false
+      const createdAt = new Date(product.createdAt)
+      const now = new Date()
+      const diffInDays = (now - createdAt) / (1000 * 60 * 60 * 24)
+      return diffInDays <= 30
+    },
+    formatPrice(price) {
+      return price.toLocaleString('vi-VN')
+    },
+    initializeOwlCarousel() {
+  if (process.client) {
+    this.$nextTick(() => {
+      const $ = window.jQuery;
+      if ($ && $.fn && $.fn.owlCarousel) {
+        const $introSlider = $('.intro-slider');
+        if ($introSlider.length) {
+          if ($introSlider.hasClass('owl-loaded')) {
+            $introSlider.trigger('destroy.owl.carousel');
+            $introSlider.removeClass('owl-loaded owl-drag');
+            $introSlider.find('.owl-stage-outer').children().unwrap();
+            $introSlider.find('.owl-nav, .owl-dots').remove();
+          }
+          $introSlider.owlCarousel(this.owlOptions);
+        }
+        // Khởi tạo các carousel khác nếu cần
+        $('.owl-carousel').not('.intro-slider').each(function () {
+          const $this = $(this);
+          if ($this.hasClass('owl-loaded')) {
+            $this.trigger('destroy.owl.carousel');
+            $this.removeClass('owl-loaded owl-drag');
+            $this.find('.owl-stage-outer').children().unwrap();
+            $this.find('.owl-nav, .owl-dots').remove();
+          }
+          const options = $this.data('owl-options') || {};
+          $this.owlCarousel(options);
+        });
+      } else {
+        console.error('jQuery or Owl Carousel not loaded');
+      }
+    });
+  }
+},
   },
 }
 </script>
+
+<!-- <style scoped>
+.intro-slide {
+  height: 400px; /* Đặt chiều cao cố định để tránh co giãn */
+  background-size: cover;
+  background-position: center;
+  display: flex !important; /* Đảm bảo flex hiển thị đúng */
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.intro-content {
+  width: 100%;
+  max-width: 500px; /* Giới hạn chiều rộng nội dung */
+}
+
+.intro-price {
+  margin: 10px 0;
+}
+
+.btn-round {
+  padding: 10px 20px;
+  display: inline-block;
+}
+</style> -->

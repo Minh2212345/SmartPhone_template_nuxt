@@ -160,10 +160,10 @@
 
               <div class="dropdown-cart-action">
                 <NuxtLink to="/cart-page" class="btn btn-outline-primary-2">
-                  <p>Giỏ hàng</p>
+                  <span>Giỏ hàng</span>
                 </NuxtLink>
                 <NuxtLink to="/checkout-page" class="btn btn-outline-primary-2">
-                  <span>Thanh toán</span><i class="icon-long-arrow-right"></i>
+                  <span>Thanh toán</span>
                 </NuxtLink>
               </div>
               <!-- End .dropdown-cart-total -->
