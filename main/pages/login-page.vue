@@ -1,5 +1,5 @@
 <template>    
-
+<div>
             <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('assets/images/backgrounds/login-bg.jpg')">
      <!-- Sign in / Register Modal -->     
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -169,11 +169,11 @@
         </div>
         <!-- End .modal-dialog -->    
       </div>
-      
-          <script src="assets/js/jquery.min.js"></script>
+      </div>
+          <!-- <script src="assets/js/jquery.min.js"></script>
            <script src="assets/js/bootstrap.bundle.min.js"></script>
            <script src="assets/js/jquery.hoverIntent.min.js"></script>
            <script src="assets/js/jquery.waypoints.min.js"></script>
            <script src="assets/js/superfish.min.js"></script>
-           <script src="assets/js/owl.carousel.min.js"></script>
+           <script src="assets/js/owl.carousel.min.js"></script> -->
 </template>
