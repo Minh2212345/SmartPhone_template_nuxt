@@ -1,9 +1,12 @@
 <template>
   <main class="main">
+    <!-- eslint-disable -->
     <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
       <div class="container">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><NuxtLink to="/">Trang chủ</NuxtLink></li>
+          <li class="breadcrumb-item">
+            <NuxtLink to="/">Trang chủ</NuxtLink>
+          </li>
           <li class="breadcrumb-item active" aria-current="page">
             <NuxtLink to="/category-4cols">Sản phẩm</NuxtLink>
           </li>
@@ -27,8 +30,8 @@
                   <div class="select-custom">
                     <select name="sortby" id="sortby" class="form-control" v-model="sortBy" @change="fetchProducts(0)">
                       <option value="popularity">Liên quan</option>
-                      <option value="rating">Giá cao</option>
-                      <option value="date">Giá thấp</option>
+                      <option value="price-desc">Giá từ cao đến thấp</option>
+                      <option value="price-asc">Giá từ thấp đến cao</option>
                     </select>
                   </div>
                 </div>
@@ -118,124 +121,8 @@
             <div class="sidebar sidebar-shop">
               <div class="widget widget-clean">
                 <label>Bộ lọc:</label>
-                <a href="#" class="sidebar-filter-clear">Làm mới</a>
+                <a href="#" class="sidebar-filter-clear" @click.prevent="clearFilters">Đặt lại</a>
               </div>
-              <!-- End .widget widget-clean -->
-
-              <div class="widget widget-collapsible">
-                <h3 class="widget-title">
-                  <a
-                    data-toggle="collapse"
-                    href="#widget-1"
-                    role="button"
-                    aria-expanded="true"
-                    aria-controls="widget-1"
-                  >
-                    Tính năng camera
-                  </a>
-                </h3>
-                <!-- End .widget-title -->
-
-                <div class="collapse show">
-                  <div class="widget-body">
-                    <div class="filter-items filter-items-count">
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="cat-1" />
-                          <label class="custom-control-label" for="cat-1">Chụp xóa phông</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                        <span class="item-count">3</span>
-                      </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="cat-2" />
-                          <label class="custom-control-label" for="cat-2">Chụp góc rộng</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                        <span class="item-count">0</span>
-                      </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="cat-3" />
-                          <label class="custom-control-label" for="cat-3">Quay video 4K</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                        <span class="item-count">4</span>
-                      </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="cat-4" />
-                          <label class="custom-control-label" for="cat-4">Chụp Zoom za</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                        <span class="item-count">2</span>
-                      </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="cat-5" />
-                          <label class="custom-control-label" for="cat-5">Chụp macro</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                        <span class="item-count">2</span>
-                      </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="cat-6" />
-                          <label class="custom-control-label" for="cat-6">Chống rung</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                        <span class="item-count">1</span>
-                      </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="cat-7" />
-                          <label class="custom-control-label" for="cat-7">Quay video 8K</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                        <span class="item-count">1</span>
-                      </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="cat-8" />
-                          <label class="custom-control-label" for="cat-8">Camera AI</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                        <span class="item-count">0</span>
-                      </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="cat-8" />
-                          <label class="custom-control-label" for="cat-8">Chụp đêm</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                        <span class="item-count">10</span>
-                      </div>
-                      <!-- End .filter-item -->
-                    </div>
-                    <!-- End .filter-items -->
-                  </div>
-                  <!-- End .widget-body -->
-                </div>
-                <!-- End .collapse -->
-              </div>
-              <!-- End .widget -->
 
               <div class="widget widget-collapsible">
                 <h3 class="widget-title">
@@ -249,72 +136,73 @@
                     Nhu cầu sử dụng
                   </a>
                 </h3>
-                <!-- End .widget-title -->
-
                 <div class="collapse show">
                   <div class="widget-body">
                     <div class="filter-items">
                       <div class="filter-item">
                         <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="size-1" />
-                          <label class="custom-control-label" for="size-1">Chơi game</label>
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="use-1"
+                            v-model="selectedUseCases"
+                            value="pin_trau"
+                          />
+                          <label class="custom-control-label" for="use-1">Pin trâu</label>
                         </div>
-                        <!-- End .custom-checkbox -->
                       </div>
-                      <!-- End .filter-item -->
-
                       <div class="filter-item">
                         <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="size-2" />
-                          <label class="custom-control-label" for="size-2">Pin trâu</label>
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="use-2"
+                            v-model="selectedUseCases"
+                            value="bo_nho_lon"
+                          />
+                          <label class="custom-control-label" for="use-2">Dung lượng bộ nhớ lớn</label>
                         </div>
-                        <!-- End .custom-checkbox -->
                       </div>
-                      <!-- End .filter-item -->
-
                       <div class="filter-item">
                         <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" checked id="size-3" />
-                          <label class="custom-control-label" for="size-3">Dung lượng bộ nhớ trong lớn</label>
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="use-3"
+                            v-model="selectedUseCases"
+                            value="ram_lon"
+                          />
+                          <label class="custom-control-label" for="use-3">Dung lượng RAM lớn</label>
                         </div>
-                        <!-- End .custom-checkbox -->
                       </div>
-                      <!-- End .filter-item -->
-
                       <div class="filter-item">
                         <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" checked id="size-4" />
-                          <label class="custom-control-label" for="size-4">Cấu hình cao</label>
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="use-4"
+                            v-model="selectedUseCases"
+                            value="cau_hinh_cao"
+                          />
+                          <label class="custom-control-label" for="use-4">Flagship</label>
                         </div>
-                        <!-- End .custom-checkbox -->
                       </div>
-                      <!-- End .filter-item -->
-
                       <div class="filter-item">
                         <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="size-5" />
-                          <label class="custom-control-label" for="size-5">Mỏng nhẹ</label>
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="use-5"
+                            v-model="selectedUseCases"
+                            value="chup_anh_dep"
+                          />
+                          <label class="custom-control-label" for="use-5">Chụp ảnh đẹp</label>
                         </div>
-                        <!-- End .custom-checkbox -->
                       </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="size-6" />
-                          <label class="custom-control-label" for="size-6">Chụp ảnh đẹp</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                      </div>
-                      <!-- End .filter-item -->
                     </div>
-                    <!-- End .filter-items -->
                   </div>
-                  <!-- End .widget-body -->
                 </div>
-                <!-- End .collapse -->
               </div>
-              <!-- End .widget -->
 
               <div class="widget widget-collapsible">
                 <h3 class="widget-title">
@@ -328,29 +216,22 @@
                     Màu sắc
                   </a>
                 </h3>
-                <!-- End .widget-title -->
-
                 <div class="collapse show">
                   <div class="widget-body">
                     <div class="filter-colors">
-                      <a href="#" style="background: #b87145"><span class="sr-only">Color Name</span></a>
-                      <a href="#" style="background: #f0c04a"><span class="sr-only">Color Name</span></a>
-                      <a href="#" style="background: #333333"><span class="sr-only">Color Name</span></a>
-                      <a href="#" class="selected" style="background: #cc3333"
-                        ><span class="sr-only">Color Name</span></a
+                      <a
+                        v-for="color in uniqueColors"
+                        :key="color"
+                        :style="{ background: getColorCode(color) }"
+                        :class="{ selected: selectedColors.includes(color) }"
+                        @click.prevent="toggleColor(color)"
                       >
-                      <a href="#" style="background: #3399cc"><span class="sr-only">Color Name</span></a>
-                      <a href="#" style="background: #669933"><span class="sr-only">Color Name</span></a>
-                      <a href="#" style="background: #f2719c"><span class="sr-only">Color Name</span></a>
-                      <a href="#" style="background: #ebebeb"><span class="sr-only">Color Name</span></a>
+                        <span class="sr-only">{{ color }}</span>
+                      </a>
                     </div>
-                    <!-- End .filter-colors -->
                   </div>
-                  <!-- End .widget-body -->
                 </div>
-                <!-- End .collapse -->
               </div>
-              <!-- End .widget -->
 
               <div class="widget widget-collapsible">
                 <h3 class="widget-title">
@@ -364,101 +245,112 @@
                     Thương hiệu
                   </a>
                 </h3>
-                <!-- End .widget-title -->
-
                 <div class="collapse show" id="widget-4">
                   <div class="widget-body">
                     <div class="filter-items">
                       <div class="filter-item">
                         <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="brand-1" />
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="brand-1"
+                            v-model="selectedBrands"
+                            value="1"
+                          />
                           <label class="custom-control-label" for="brand-1">Apple</label>
                         </div>
-                        <!-- End .custom-checkbox -->
                       </div>
-                      <!-- End .filter-item -->
-
                       <div class="filter-item">
                         <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="brand-2" />
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="brand-2"
+                            v-model="selectedBrands"
+                            value="2"
+                          />
                           <label class="custom-control-label" for="brand-2">Samsung</label>
                         </div>
-                        <!-- End .custom-checkbox -->
                       </div>
-                      <!-- End .filter-item -->
-
                       <div class="filter-item">
                         <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="brand-3" />
-                          <label class="custom-control-label" for="brand-3">Huawei</label>
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="brand-3"
+                            v-model="selectedBrands"
+                            value="3"
+                          />
+                          <label class="custom-control-label" for="brand-3">Xiaomi</label>
                         </div>
-                        <!-- End .custom-checkbox -->
                       </div>
-                      <!-- End .filter-item -->
-
                       <div class="filter-item">
                         <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="brand-4" />
-                          <label class="custom-control-label" for="brand-4">Xiaomi</label>
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="brand-4"
+                            v-model="selectedBrands"
+                            value="4"
+                          />
+                          <label class="custom-control-label" for="brand-4">Oppo</label>
                         </div>
-                        <!-- End .custom-checkbox -->
                       </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="brand-5" />
-                          <label class="custom-control-label" for="brand-5">Nothing Phone</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                      </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="brand-6" />
-                          <label class="custom-control-label" for="brand-6">Redmi</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                      </div>
-                      <!-- End .filter-item -->
-
-                      <div class="filter-item">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="brand-7" />
-                          <label class="custom-control-label" for="brand-7">Oppo</label>
-                        </div>
-                        <!-- End .custom-checkbox -->
-                      </div>
-                      <!-- End .filter-item -->
                     </div>
-                    <!-- End .filter-items -->
                   </div>
-                  <!-- End .widget-body -->
                 </div>
-                <!-- End .collapse -->
               </div>
 
               <div class="widget widget-collapsible">
-                <div class="widget-body">
-                  <div class="price-filter">
-                    <div class="label">Hoặc nhập khoảng giá phù hợp với bạn:</div>
-                    <div class="range-values">
-                      <span id="min-price">450,000đ</span>
-                      <span id="max-price">50,000,000đ</span>
-                    </div>
-                    <div class="range-slider">
-                      <div class="slider-track"></div>
-                      <div class="slider-range" id="slider-range"></div>
-                      <input type="range" id="min-range" min="450000" max="50000000" value="450000" step="10000" />
-                      <input type="range" id="max-range" min="450000" max="50000000" value="50000000" step="10000" />
+                <h3 class="widget-title">
+                  <a
+                    data-toggle="collapse"
+                    href="#widget-5"
+                    role="button"
+                    aria-expanded="true"
+                    aria-controls="widget-5"
+                  >
+                    Giá
+                  </a>
+                </h3>
+                <div class="collapse show">
+                  <div class="widget-body">
+                    <div class="price-filter">
+                      <div class="label">Hoặc nhập khoảng giá phù hợp với bạn:</div>
+                      <div class="range-values">
+                        <span id="min-price">{{ formatPrice(minPrice) }}đ</span>
+                        <span id="max-price">{{ formatPrice(maxPrice) }}đ</span>
+                      </div>
+                      <div class="range-slider">
+                        <div class="slider-track"></div>
+                        <div
+                          class="slider-range"
+                          :style="{ left: minPricePercent + '%', width: maxPricePercent - minPricePercent + '%' }"
+                        ></div>
+                        <input
+                          type="range"
+                          id="min-range"
+                          :min="minPriceLimit"
+                          :max="maxPriceLimit"
+                          v-model.number="minPrice"
+                          step="10000"
+                          @input="updatePriceRange"
+                        />
+                        <input
+                          type="range"
+                          id="max-range"
+                          :min="minPriceLimit"
+                          :max="maxPriceLimit"
+                          v-model.number="maxPrice"
+                          step="10000"
+                          @input="updatePriceRange"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- End .widget -->
             </div>
-            <!-- End .sidebar sidebar-shop -->
           </aside>
         </div>
       </div>
@@ -467,139 +359,9 @@
 </template>
 
 <script>
-export default {
-  name: 'Category4Cols',
-  data() {
-    return {
-      products: [],
-      currentPage: 0,
-      totalPages: 1,
-      totalItems: 0,
-      sortBy: 'popularity',
-      selectedCameraFeatures: [],
-      cameraFeatures: [
-        { id: 1, name: 'Chụp xóa phông', count: 3 },
-        { id: 2, name: 'Chụp góc rộng', count: 0 },
-        { id: 3, name: 'Quay video 4K', count: 4 },
-        { id: 4, name: 'Chụp Zoom xa', count: 2 },
-        { id: 5, name: 'Chụp macro', count: 2 },
-        { id: 6, name: 'Chống rung', count: 1 },
-        { id: 7, name: 'Quay video 8K', count: 1 },
-        { id: 8, name: 'Camera AI', count: 0 },
-        { id: 9, name: 'Chụp đêm', count: 10 },
-      ],
-      manufacturerMap: {
-        1: 'Apple',
-        2: 'Samsung',
-        3: 'Huawei',
-        4: 'Xiaomi',
-        5: 'Nothing Phone',
-        6: 'Redmi',
-        7: 'Oppo',
-      },
-    }
-  },
-  async asyncData({ $axios, error }) {
-    try {
-      const response = await $axios.get('/api/products', {
-        params: { page: 0, size: 20, sortBy: 'popularity' },
-      })
-      return {
-        products: Array.isArray(response.data.products)
-          ? response.data.products.map((product) => ({
-              ...product,
-              tenNhaSanXuat: product.tenNhaSanXuat || 'Unknown',
-              createdAt: product.createdAt?.timestamp || product.createdAt,
-            }))
-          : [],
-        currentPage: response.data.currentPage || 0,
-        totalPages: response.data.totalPages || 1,
-        totalItems: response.data.totalItems || 0,
-      }
-    } catch (err) {
-      console.error('Error fetching initial products:', err.message)
-      return {
-        products: [],
-        currentPage: 0,
-        totalPages: 1,
-        totalItems: 0,
-      }
-    }
-  },
-  async mounted() {
-    if (!this.products.length) {
-      await this.fetchProducts(0)
-    }
-  },
-  methods: {
-    async fetchProducts(page) {
-      try {
-        const response = await this.$axios.get('/api/products', {
-          params: {
-            page: page,
-            size: 20,
-            sortBy: this.sortBy,
-            cameraFeatures: this.selectedCameraFeatures.join(','),
-          },
-        })
-        this.products = Array.isArray(response.data.products)
-          ? response.data.products.map((product) => ({
-              ...product,
-              tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
-              createdAt: product.createdAt?.timestamp || product.createdAt,
-              mauSacList: Array.isArray(product.mauSacList) ? product.mauSacList : [], // Xử lý danh sách màu sắc
-            }))
-          : []
-        this.currentPage = response.data.currentPage || 0
-        this.totalPages = response.data.totalPages || 1
-        this.totalItems = response.data.totalItems || 0
-      } catch (error) {
-        console.error('Lỗi khi lấy sản phẩm:', {
-          message: error.message,
-          status: error.response?.status,
-          data: error.response?.data,
-          config: error.config,
-        })
-        this.$toast.error('Không thể tải sản phẩm. Vui lòng thử lại sau!')
-        this.products = []
-        this.currentPage = 0
-        this.totalPages = 1
-        this.totalItems = 0
-      }
-    },
-    formatPrice(price) {
-      return price.toLocaleString('vi-VN')
-    },
-    getColorCode(mauSac) {
-      const colorMap = {
-        'Xanh Mộng Kết': '#a3d2ca',
-        'Xanh Lưu Ly': '#b3cde0',
-        'Hồng': '#f4c2c2',
-        'Đen': '#333333',
-        'Trắng': '#c1b8b8',
-        'Bạc': '#c0c0c0',
-        'Cam': '#ffa500',
-        'Đỏ': '#ff0000',
-        'Gold': '#ffd700',
-        'Kem': '#fffdd0',
-        'Tím': '#800080',
-        'Tím Đậm': '#4b0082',
-        'Titan tự nhiên': '#8a8987',
-        'Vàng': '#ffff00',
-        'Xám': '#808080',
-        'Xanh Bạc Hà': '#98ff98',
-        'Xanh Dương': '#0000ff',
-        'Xanh Dương Đậm': '#00008b',
-        'Xanh Dương Nhạt': '#add8e6',
-        'Xanh Lá': '#008000',
-        'Vàng đồng': '#b8860b',
-        'Nâu': '#8b4513',
-        'Không xác định': '#cccccc',
-      }
-      return colorMap[mauSac] || '#cccccc'
-    },
-  },
-}
+import Category4Cols from '../store/category-4cols.js';
+
+export default Category4Cols;
 </script>
 
 <style scoped>
@@ -694,20 +456,38 @@ input[type='range']::-moz-range-thumb {
   font-size: 14px;
 }
 
+.filter-colors a {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin: 3px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.filter-colors a.selected {
+  border-color: #333;
+}
+
 @media (max-width: 768px) {
   .price-filter {
     max-width: 100%;
   }
+
   .range-values {
     font-size: 12px;
   }
+
   .label {
     font-size: 12px;
   }
+
   input[type='range']::-webkit-slider-thumb {
     width: 20px;
     height: 20px;
   }
+
   input[type='range']::-moz-range-thumb {
     width: 20px;
     height: 20px;
@@ -720,9 +500,11 @@ input[type='range']::-moz-range-thumb {
     align-items: flex-start;
     gap: 5px;
   }
+
   .range-values span {
     font-size: 11px;
   }
+
   .label {
     font-size: 11px;
   }

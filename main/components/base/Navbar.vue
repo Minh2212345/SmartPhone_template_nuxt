@@ -29,14 +29,14 @@
         <div class="header-right">
           <div class="login">
             <NuxtLink to="/login-page">
-              <i class="las la-sign-in-alt"></i>
+              <i class="las la-sign-in-alt" style="color: white;"></i>
               <p>Đăng nhập</p>
             </NuxtLink>
           </div>
 
           <div class="wishlist">
             <NuxtLink to="/category-4cols">
-              <i class="las la-mobile"></i>
+              <i class="las la-mobile" style="color: white;"></i>
               <p>Điện thoại</p>
             </NuxtLink>
           </div>
@@ -54,7 +54,7 @@
               aria-label="Compare Products"
             >
               <div class="icon">
-                <i class="icon-random"></i>
+                <i class="icon-random" style="color: white;"></i>
               </div>
               <p>So sánh</p></NuxtLink
             >
@@ -103,7 +103,7 @@
               data-display="static"
             >
               <div class="icon">
-                <i class="icon-shopping-cart"></i>
+                <i class="icon-shopping-cart" style="color: white;"></i>
                 <span class="cart-count">2</span>
               </div>
               <p>Giỏ hàng</p></NuxtLink
