@@ -138,62 +138,83 @@ export default {
     }
   },
   methods: {
-    async fetchProducts(page) {
-      console.log('fetchProducts called with page:', page, 'sortBy:', this.sortBy);
-      try {
-        const response = await this.$axios.get('/api/products', {
-          params: {
-            page,
-            size: 20,
-            sortBy: this.sortBy,
-            useCases: this.selectedUseCases.join(','),
-            colors: this.selectedColors.join(','),
-            brands: this.selectedBrands.join(','),
-            minPrice: this.minPrice,
-            maxPrice: this.maxPrice,
-          },
-        });
+   async fetchProducts(page) {
+  console.log('fetchProducts called with page:', page, 'sortBy:', this.sortBy);
+  try {
+    // Gọi đồng thời các API cần thiết
+    const [productsResponse, priceRangeResponse, colorsResponse] = await Promise.all([
+      this.$axios.get('/api/products', {
+        params: {
+          page,
+          size: 20,
+          sortBy: this.sortBy,
+          useCases: this.selectedUseCases.join(','),
+          colors: this.selectedColors.join(','),
+          brands: this.selectedBrands.join(','),
+          minPrice: this.minPrice,
+          maxPrice: this.maxPrice,
+        },
+      }),
+      this.$axios.get('/api/price-range'),
+      this.$axios.get('/api/colors'),
+    ]);
 
-        this.products = Array.isArray(response.data.products)
-          ? response.data.products
-              .filter((product) => product.imageUrl && product.giaBan > 0)
-              .map((product) => ({
-                ...product,
-                tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
-                createdAt: product.createdAt?.timestamp || product.createdAt,
-                mauSacList: Array.isArray(product.mauSacList) ? product.mauSacList : [],
-              }))
-          : [];
-        this.currentPage = response.data.currentPage || 0;
-        this.totalPages = response.data.totalPages || 1;
-        this.totalItems = response.data.totalItems || 0;
+    // Cập nhật danh sách sản phẩm
+    this.products = Array.isArray(productsResponse.data.products)
+      ? productsResponse.data.products
+          .filter((product) => product.imageUrl && product.giaBan > 0)
+          .map((product) => ({
+            ...product,
+            tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
+            createdAt: product.createdAt?.timestamp || product.createdAt,
+            mauSacList: Array.isArray(product.mauSacList) ? product.mauSacList : [],
+          }))
+      : [];
+    this.currentPage = productsResponse.data.currentPage || 0;
+    this.totalPages = productsResponse.data.totalPages || 1;
+    this.totalItems = productsResponse.data.totalItems || 0;
 
-        this.$router.push({
-          path: '/category-4cols',
-          query: {
-            page: page.toString(),
-            sortBy: this.sortBy,
-            useCases: this.selectedUseCases.join(','),
-            colors: this.selectedColors.join(','),
-            brands: this.selectedBrands.join(','),
-            minPrice: this.minPrice.toString(),
-            maxPrice: this.maxPrice.toString(),
-          },
-        });
-      } catch (error) {
-        console.error('Lỗi khi lấy sản phẩm:', {
-          message: error.message,
-          status: error.response?.status,
-          data: error.response?.data,
-          config: error.config,
-        });
-        this.$toast.error('Không thể tải sản phẩm. Vui lòng thử lại sau!');
-        this.products = [];
-        this.currentPage = 0;
-        this.totalPages = 1;
-        this.totalItems = 0;
-      }
-    },
+    // Cập nhật phạm vi giá
+    this.minPrice = this.minPrice || priceRangeResponse.data.minPrice || 0;
+    this.maxPrice = this.maxPrice || priceRangeResponse.data.maxPrice || 0;
+    this.minPriceLimit = priceRangeResponse.data.minPrice || 0;
+    this.maxPriceLimit = priceRangeResponse.data.maxPrice || 0;
+
+    // Cập nhật danh sách màu sắc
+    this.uniqueColors = colorsResponse.data.colors || [];
+
+    // Cập nhật URL query
+    this.$router.push({
+      path: '/category-4cols',
+      query: {
+        page: page.toString(),
+        sortBy: this.sortBy,
+        useCases: this.selectedUseCases.join(','),
+        colors: this.selectedColors.join(','),
+        brands: this.selectedBrands.join(','),
+        minPrice: this.minPrice.toString(),
+        maxPrice: this.maxPrice.toString(),
+      },
+    });
+  } catch (error) {
+    console.error('Lỗi khi lấy dữ liệu:', {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+      config: error.config,
+    });
+    this.$toast.error('Không thể tải dữ liệu. Vui lòng thử lại sau!');
+    this.products = [];
+    this.currentPage = 0;
+    this.totalPages = 1;
+    this.totalItems = 0;
+    this.uniqueColors = [];
+    this.minPrice = 0;
+    this.maxPrice = 0;
+    this.minPriceLimit = 0;
+    this.maxPriceLimit = 0;
+  }
+},
     debounce(func, wait) {
       let timeout;
       return function executedFunction(...args) {
