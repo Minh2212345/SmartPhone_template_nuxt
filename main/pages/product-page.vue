@@ -346,7 +346,7 @@
 </template>
 
 <script>
-import ProductPage from '../store/product-page.js';
+import ProductPage from '../store/product/product-page.js';
 
 export default ProductPage;
 </script>

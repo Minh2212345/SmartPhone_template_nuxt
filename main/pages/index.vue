@@ -8,7 +8,7 @@
             <div class="category-menu">
               <ul class="nav flex-column">
                 <li class="nav-item">
-                  <a href="#" class="nav-link"><i class="las la-mobile"></i> iPhone</a>
+                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-mobile"></i> iPhone</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -42,7 +42,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link"><i class="las la-laptop"></i> Samsung</a>
+                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-laptop"></i> Samsung</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -62,7 +62,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link"><i class="las la-headphones"></i> Xiaomi</a>
+                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-headphones"></i> Xiaomi</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -82,7 +82,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link"><i class="las la-camera"></i> Huawei</a>
+                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-camera"></i> Huawei</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -107,7 +107,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link"><i class="las la-home"></i> Nothing Phone</a>
+                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-home"></i> Nothing Phone</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -126,7 +126,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link"><i class="las la-headphones"></i> OPPO</a>
+                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-headphones"></i> OPPO</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -151,7 +151,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link"><i class="las la-desktop"></i> Redmi</a>
+                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-desktop"></i> Redmi</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -170,7 +170,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link"><i class="las la-tv"></i> Techno</a>
+                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-tv"></i> Techno</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -189,7 +189,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link"><i class="las la-tags"></i> Sony</a>
+                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-tags"></i> Sony</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -208,7 +208,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link"><i class="las la-store"></i> OnePlus</a>
+                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-store"></i> OnePlus</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -627,9 +627,17 @@
           </div>
           <div class="row">
             <div class="col-xl-5col d-none d-xl-block">
-              <div class="banner">
-                <a href="#" style="background-color: #000000">
-                  <img src="assets/images/demos/demo-4/banners/banner-4.png" style="max-width: 90%" alt="banner" />
+              <div class="banner" style="background-color: black !important; width: 260px;">
+                <a href="#" style="
+  max-width: 96%;
+  display: block;
+  height: 380px;  
+  width: auto;
+  background-image: url('assets/images/demos/demo-4/banners/banner-4.png');
+  background-size: contain;
+  background-position: center;
+">
+                  
                 </a>
               </div>
             </div>
@@ -780,15 +788,15 @@
                     />
                   </NuxtLink>
                 </figure>
-                <div class="product-body">
+                <div class="product-body text-center">
                   <div class="product-cat">
                     <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
                   <h3 class="product-title">
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
-                  <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
-                </div>
+                  <div style="color: #00AEEF;">{{ formatPrice(product.giaBan || 0) }} VND</div>
+                </div>                
               </div>
             </div>
           </div>
@@ -803,7 +811,7 @@
 </template>
 
 <script>
-import IndexPage from '../store/index.js';
+import IndexPage from '../store/main/index.js';
 
 export default IndexPage;
 </script>

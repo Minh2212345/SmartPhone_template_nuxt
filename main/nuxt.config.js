@@ -21,7 +21,7 @@ export default {
       { property: 'og:title', content: 'Mobile World - Buy Smartphones & Accessories' },
       { property: 'og:description', content: 'Shop the latest smartphones and accessories at Mobile World.' },
       { property: 'og:type', content: 'website' },
-      { property: 'og:url', content: 'https://your-domain.com' }, // Replace with your production domain
+      // { property: 'og:url', content: 'https://your-domain.com' }, // Replace with your production domain
       { property: 'og:image', content: '/assets/images/og-image.jpg' }, // Add an OG image
       { name: 'twitter:card', content: 'summary_large_image' },
     ],
@@ -42,7 +42,7 @@ export default {
       { rel: 'stylesheet', href: '/assets/css/style.css' },
       { rel: 'stylesheet', href: '/assets/css/skins/skin-demo-4.css' },
       { rel: 'stylesheet', href: '/assets/css/demos/demo-4.css' },
-      { rel: 'stylesheet', href: '/assets/css/M_Modification_index.css' }, // Moved to end for override priority
+      { rel: 'stylesheet', href: '/assets/css/M_Modification_index.css' },
     ],
     script: [
   { src: '/assets/js/jquery.min.js', defer: true },
@@ -55,7 +55,6 @@ export default {
   { src: '/assets/js/jquery.plugin.min.js', defer: true },
   { src: '/assets/js/jquery.magnific-popup.min.js', defer: true },
   { src: '/assets/js/jquery.countdown.min.js', defer: true }, // Chỉ giữ một nguồn
-  // { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.1.0/jquery.countdown.min.js', defer: true }, // Xóa dòng này
 ],
   },
 
@@ -70,7 +69,6 @@ export default {
     { src: '~/plugins/external-scripts.js', mode: 'client' },
     { src: '~/plugins/smooth-scroll.js', mode: 'client' },
     { src: '~/plugins/mdi.js', mode: 'client' },
-    // { src: '~/plugins/axios.js', mode: 'client' }, // Added for Axios configuration
   ],
 
   // Auto-import components
@@ -84,15 +82,15 @@ export default {
 
   // Nuxt modules
   modules: [
-    '@nuxtjs/axios', // Added for HTTP requests to Backend
-    '@nuxtjs/pwa', // Added for Progressive Web App support
-    '@nuxtjs/sitemap', // Added for SEO
+    '@nuxtjs/axios',
+    '@nuxtjs/pwa', 
+    '@nuxtjs/sitemap',
   ],
 
   // Axios configuration
   axios: {
-    baseURL: 'http://localhost:8081/api', // Backend API base URL
-    credentials: false, // No credentials needed for now
+    baseURL: 'http://localhost:8081/api', 
+    credentials: false, 
     proxy: true, // Enable proxy to avoid CORS issues
   },
 

@@ -30,8 +30,8 @@
                   <div class="select-custom">
                     <select name="sortby" id="sortby" class="form-control" v-model="sortBy" @change="fetchProducts(0)">
                       <option value="popularity">Liên quan</option>
-                      <option value="price-desc">Giá từ cao đến thấp</option>
                       <option value="price-asc">Giá từ thấp đến cao</option>
+                      <option value="price-desc">Giá từ cao đến thấp</option>                      
                     </select>
                   </div>
                 </div>
@@ -359,7 +359,7 @@
 </template>
 
 <script>
-import Category4Cols from '../store/category-4cols.js';
+import Category4Cols from '../store/product/category-4cols.js';
 
 export default Category4Cols;
 </script>
