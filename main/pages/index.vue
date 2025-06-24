@@ -250,6 +250,7 @@
                       <div class="col-auto col-sm-7 col-md-6 col-lg-5">
                         <h3 class="intro-subtitle text-third">Sản phẩm mới</h3>
                         <h2 class="intro-title">Ipad Pro M4</h2>
+                        <br>
                         <div class="intro-price">
                           <sup class="intro-old-price">36.590.000 VND</sup>
                           <br />
@@ -672,7 +673,7 @@
                         product.loaiGiamGiaApDung === 'Tiền mặt' ||
                         (product.loaiGiamGiaApDung === 'Tiền mặt' && product.giamToiDa > 0)
                       "
-                      >Giảm tối đa {{ formatPrice(product.giamToiDa) }} VND</span
+                      >Giảm {{ formatPrice(product.giamToiDa) }} VND</span
                     >
                   </span>
                   <NuxtLink :to="`/product-page?sp_id=${product.id}`">
@@ -747,7 +748,7 @@
                       >Giảm {{ product.giamPhanTram }}%</span
                     >
                     <span v-else-if="product.loaiGiamGiaApDung === 'Tiền mặt' && product.giamToiDa > 0"
-                      >Giảm tối đa {{ formatPrice(product.giamToiDa) }} VND</span
+                      >Giảm {{ formatPrice(product.giamToiDa) }} VND</span
                     >
                   </span>
                   <NuxtLink :to="`/product-page?sp_id=${product.id}`">
@@ -861,7 +862,7 @@
                       >Giảm {{ product.giamPhanTram }}%</span
                     >
                     <span v-else-if="product.loaiGiamGiaApDung === 'Tiền mặt' && product.giamToiDa > 0"
-                      >Giảm tối đa {{ formatPrice(product.giamToiDa) }} VND</span
+                      >Giảm {{ formatPrice(product.giamToiDa) }} VND</span
                     >
                   </span>
                   <NuxtLink :to="`/product-page?sp_id=${product.id}`">

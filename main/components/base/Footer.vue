@@ -9,29 +9,21 @@
                                     alt="Footer Logo" width="105" height="25" />
                                 <p style="color: white;">
                                     Mobile World
-                                </p>
-
-                                <!-- <div class="widget-call">
-                                    <i class="icon-phone"></i>
-                                    Got Question? Call us 24/7
-                                    <a href="tel:#">+0123 456 789</a>
-                                </div> -->
-                                <!-- End .widget-call -->
+                                </p>                             
                             </div>
-                            <!-- End .widget about-widget -->
                         </div>
-                        <!-- End .col-sm-6 col-lg-3 -->
+
 
                         <div class="col-sm-6 col-lg-3">
                             <div class="widget">
-                                <h4 class="widget-title">Useful Links</h4>
+                                <h4 class="widget-title" style="color: #ffffff !important;">Mobile world</h4>
                                 <!-- End .widget-title -->
 
                                 <ul class="widget-list">
-                                    <li><a href="about.html">About Mobile World</a></li>                                    <li><a href="#">Our Services</a></li>
-                                    <li><a href="#">How to shop on Molla</a></li>
+                                    <li><a href="about.html">Về Mobile World</a></li>   
+                                    <li><a href="#">Dịch vụ của chúng tôi</a></li>                                    
                                     <li><a href="faq.html">FAQ</a></li>
-                                    <li><a href="contact.html">Contact us</a></li>
+                                    <li><a href="contact.html">Liên hệ với chúng tôi</a></li>
                                 </ul>
                                 <!-- End .widget-list -->
                             </div>
@@ -41,16 +33,15 @@
 
                         <div class="col-sm-6 col-lg-3">
                             <div class="widget">
-                                <h4 class="widget-title">Customer Service</h4>
+                                <h4 class="widget-title"  style="color: #ffffff !important;">Dịch vụ chăm sóc khách hàng</h4>
                                 <!-- End .widget-title -->
 
                                 <ul class="widget-list">
-                                    <li><a href="#">Payment Methods</a></li>
-                                    <li><a href="#">Money-back guarantee!</a></li>
-                                    <li><a href="#">Returns</a></li>
-                                    <li><a href="#">Shipping</a></li>
-                                    <li><a href="#">Terms and conditions</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
+                                    <li><a href="#">Phương thức thanh toán</a></li>                                    
+                                    <li><a href="#">Trả hàng</a></li>
+                                    <li><a href="#">Vận chuyển</a></li>
+                                    <li><a href="#">Chính sách</a></li>
+                                    <li><a href="#">Chính sách bảo mật</a></li>
                                 </ul>
                                 <!-- End .widget-list -->
                             </div>
@@ -60,7 +51,7 @@
 
                         <div class="col-sm-6 col-lg-3">
                             <div class="widget">
-                                <h4 class="widget-title">Tài khoản</h4>
+                                <h4 class="widget-title"  style="color: #ffffff !important;">Tài khoản</h4>
                                 <!-- End .widget-title -->
 
                                 <ul class="widget-list">

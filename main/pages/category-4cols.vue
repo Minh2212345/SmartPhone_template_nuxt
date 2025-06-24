@@ -31,7 +31,7 @@
                     <select name="sortby" id="sortby" class="form-control" v-model="sortBy" @change="fetchProducts(0)">
                       <option value="popularity">Liên quan</option>
                       <option value="price-asc">Giá từ thấp đến cao</option>
-                      <option value="price-desc">Giá từ cao đến thấp</option>                      
+                      <option value="price-desc">Giá từ cao đến thấp</option>
                     </select>
                   </div>
                 </div>
@@ -55,6 +55,26 @@
                           <span>So sánh</span>
                         </NuxtLink>
                       </div>
+                      <span
+                        v-if="product.hasDiscount"
+                        class="product-label label-discount"
+                        style="
+                          position: absolute;
+                          top: 10px;
+                          left: 10px;
+                          background-color: #ff3333;
+                          color: white;
+                          padding: 2px 6px;
+                          border-radius: 4px;
+                        "
+                      >
+                        <span v-if="product.loaiGiamGiaApDung === 'Phần trăm' && product.giamPhanTram > 0"
+                          >Giảm {{ product.giamPhanTram }}%</span
+                        >
+                        <span v-else-if="product.loaiGiamGiaApDung === 'Tiền mặt' && product.giamToiDa > 0"
+                          >Giảm {{ formatPrice(product.giamToiDa) }} VND</span
+                        >
+                      </span>
                     </figure>
                     <div class="product-body">
                       <div class="product-cat">
@@ -65,7 +85,15 @@
                       <h3 class="product-title">
                         <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                       </h3>
-                      <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
+                      <div v-if="product.hasDiscount" class="product-price">
+                        <span style="text-decoration: line-through; color: #999"
+                          >{{ formatPrice(product.giaBan || 0) }} VND</span
+                        >
+                        <span style="color: red; margin-left: 5px"
+                          >{{ formatPrice(product.giaSauKhiGiam || 0) }} VND</span
+                        >
+                      </div>
+                      <div v-else class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
                       <div class="product-nav product-nav-dots">
                         <a
                           v-for="(mauSac, index) in product.mauSacList"
@@ -359,9 +387,9 @@
 </template>
 
 <script>
-import Category4Cols from '../store/product/category-4cols.js';
+import Category4Cols from '../store/product/category-4cols.js'
 
-export default Category4Cols;
+export default Category4Cols
 </script>
 
 <style scoped>

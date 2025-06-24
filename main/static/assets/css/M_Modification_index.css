@@ -337,7 +337,7 @@
 
 .banner-right img {
   width: auto;
-  height: auto;
+  /* height: auto; */
   object-fit: fill;
   border-radius: 5px;
 }
@@ -410,9 +410,5 @@
 
 .footer a {
   color: #ffffff !important; 
-}
-
-.footer .widget-title {
-  color: #000000 !important;
 }
 

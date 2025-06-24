@@ -141,7 +141,6 @@ export default {
    async fetchProducts(page) {
   console.log('fetchProducts called with page:', page, 'sortBy:', this.sortBy);
   try {
-    // Gọi đồng thời các API cần thiết
     const [productsResponse, priceRangeResponse, colorsResponse] = await Promise.all([
       this.$axios.get('/api/products', {
         params: {
@@ -159,7 +158,6 @@ export default {
       this.$axios.get('/api/colors'),
     ]);
 
-    // Cập nhật danh sách sản phẩm
     this.products = Array.isArray(productsResponse.data.products)
       ? productsResponse.data.products
           .filter((product) => product.imageUrl && product.giaBan > 0)
@@ -174,16 +172,13 @@ export default {
     this.totalPages = productsResponse.data.totalPages || 1;
     this.totalItems = productsResponse.data.totalItems || 0;
 
-    // Cập nhật phạm vi giá
     this.minPrice = this.minPrice || priceRangeResponse.data.minPrice || 0;
     this.maxPrice = this.maxPrice || priceRangeResponse.data.maxPrice || 0;
     this.minPriceLimit = priceRangeResponse.data.minPrice || 0;
     this.maxPriceLimit = priceRangeResponse.data.maxPrice || 0;
 
-    // Cập nhật danh sách màu sắc
     this.uniqueColors = colorsResponse.data.colors || [];
 
-    // Cập nhật URL query
     this.$router.push({
       path: '/category-4cols',
       query: {

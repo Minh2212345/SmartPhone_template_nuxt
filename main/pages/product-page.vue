@@ -1,12 +1,16 @@
 <template>
   <!-- eslint-disable -->
-  <div class="page-wrapper" :key="$route.query.sp_id">
+  <div class="page-wrapper" :key="$route.query.sp_id" v-if="isLoading || (product && selectedVariant)">
     <main class="main">
       <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
         <div class="container d-flex align-items-center">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><NuxtLink to="/">Trang chủ</NuxtLink></li>
-            <li class="breadcrumb-item"><NuxtLink to="/category-4cols">Sản phẩm</NuxtLink></li>
+            <li class="breadcrumb-item">
+              <NuxtLink to="/">Trang chủ</NuxtLink>
+            </li>
+            <li class="breadcrumb-item">
+              <NuxtLink to="/category-4cols">Sản phẩm</NuxtLink>
+            </li>
             <li class="breadcrumb-item active" aria-current="page">{{ product.ten_san_pham || 'Sản phẩm' }}</li>
           </ol>
         </div>
@@ -53,6 +57,29 @@
                   <h1 class="product-title">
                     {{ product.ten_san_pham }} - {{ selectedVariant.bo_nho_trong_dung_luong }}
                   </h1>
+                  <div v-if="selectedVariant.has_discount" class="product-price">
+                    <span style="text-decoration: line-through; color: #999"
+                      >{{ formatPrice(selectedVariant.gia_ban_dau) }} VND</span
+                    >
+                    <span style="color: red; margin-left: 5px"
+                      >{{ formatPrice(selectedVariant.gia_sau_khi_giam) }} VND</span
+                    >
+                    <span
+                      v-if="selectedVariant.loai_giam_gia_ap_dung === 'Phần trăm' && selectedVariant.giam_phan_tram > 0"
+                      class="badge badge-danger ml-2"
+                      >Giảm {{ selectedVariant.giam_phan_tram }}%</span
+                    >
+                    <span
+                      v-else-if="
+                        selectedVariant.loai_giam_gia_ap_dung === 'Tiền mặt' && selectedVariant.giam_toi_da > 0
+                      "
+                      class="badge badge-danger ml-2"
+                      >Giảm tối đa {{ formatPrice(selectedVariant.giam_toi_da) }} VND</span
+                    >
+                  </div>
+                  <div v-else class="product-price" style="color: #00aeef">
+                    {{ formatPrice(selectedVariant.gia_ban) }} VND
+                  </div>
                   <div class="memory-options">
                     <h5>Chọn bộ nhớ</h5>
                     <div class="d-flex flex-wrap">
@@ -66,7 +93,7 @@
                         }"
                         @click="isMemoryAvailable(memory) && selectMemory(memory)"
                       >
-                        {{ memory }}<br />{{ formatPrice(getPriceForMemory(memory)) }} đ
+                        {{ memory }}<br />
                         <span class="check-icon"><i class="fas fa-check"></i></span>
                       </div>
                     </div>
@@ -74,7 +101,7 @@
 
                   <div class="details-filter-row details-row-size">
                     <div class="color-options">
-                      <h5>Chọn màu để xem giá và chi nhánh có hàng</h5>
+                      <h5>Chọn màu để xem giá sản phẩm</h5>
                       <div class="d-flex flex-wrap">
                         <div
                           v-for="color in uniqueColors"
@@ -84,7 +111,7 @@
                           @click="selectColor(color.name)"
                         >
                           <span class="color-circle" :style="{ backgroundColor: color.hex }"></span>
-                          {{ color.name }}<br />{{ formatPrice(getPriceForColor(color.name)) }} đ
+                          {{ color.name }}<br />{{ formatPrice(getPriceForColor(color.name)) }}
                           <span class="check-icon"><i class="fas fa-check"></i></span>
                         </div>
                       </div>
@@ -143,144 +170,142 @@
             </div>
           </div>
 
-          <div class="product-details-tab">
-            <ul class="nav nav-pills justify-content-center" role="tablist">
-              <li class="nav-item">
-                <a
-                  class="nav-link active"
-                  id="product-desc-link"
-                  data-toggle="tab"
-                  href="#product-desc-tab"
-                  role="tab"
-                  aria-controls="product-desc-tab"
-                  aria-selected="true"
-                  >Mô tả</a
-                >
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  id="product-info-link"
-                  data-toggle="tab"
-                  href="#product-info-tab"
-                  role="tab"
-                  aria-controls="product-info-tab"
-                  aria-selected="false"
-                  >Thông tin chi tiết</a
-                >
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  id="product-review-link"
-                  data-toggle="tab"
-                  href="#product-review-tab"
-                  role="tab"
-                  aria-controls="product-review-tab"
-                  aria-selected="false"
-                  >Đánh giá (2)</a
-                >
-              </li>
-            </ul>
-            <div class="tab-content">
-              <div
-                class="tab-pane fade show active"
-                id="product-desc-tab"
-                role="tabpanel"
-                aria-labelledby="product-desc-link"
-              >
-                <div class="product-desc-content">
-                  <h3>Mô tả sản phẩm</h3>
-                  <p>{{ selectedVariant.ghi_chu || 'Không có mô tả chi tiết cho sản phẩm này.' }}</p>
-                </div>
+          
+          <div class="highlight-specs" v-if="product && selectedVariant">
+            <h3>Thông số nổi bật</h3>
+            <div class="row">
+              <div class="col-md-4">
+                <i class="fas fa-microchip mr-2"></i>
+                <strong>CPU:</strong> {{ product.ten_cpu || 'Không có thông tin' }}
               </div>
-              <div class="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
-                <div class="product-desc-content">
-                  <h3>Thông số kỹ thuật</h3>
-                  <div class="specs-table">
-                    <table class="table table-bordered">
-                      <tbody>
-                        <tr>
-                          <td>CPU</td>
-                          <td>{{ product.ten_cpu || 'Không có thông tin' }}</td>
-                        </tr>
-                        <tr>
-                          <td>GPU</td>
-                          <td>{{ product.ten_gpu || 'Không có thông tin' }}</td>
-                        </tr>
-                        <tr>
-                          <td>Camera sau</td>
-                          <td>{{ product.thong_so_camera_sau || 'Không có thông tin' }}</td>
-                        </tr>
-                        <tr>
-                          <td>Camera trước</td>
-                          <td>{{ product.thong_so_camera_truoc || 'Không có thông tin' }}</td>
-                        </tr>
-                        <tr>
-                          <td>RAM</td>
-                          <td>{{ selectedVariant.ram_dung_luong || 'Không có thông tin' }}</td>
-                        </tr>
-                        <tr>
-                          <td>Bộ nhớ trong</td>
-                          <td>{{ selectedVariant.bo_nho_trong_dung_luong || 'Không có thông tin' }}</td>
-                        </tr>
-                        <tr>
-                          <td>Màu sắc</td>
-                          <td>{{ selectedVariant.mau_sac || 'Không có thông tin' }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+              <div class="col-md-4">
+                <i class="fas fa-desktop mr-2"></i>
+                <strong>GPU:</strong> {{ product.ten_gpu || 'Không có thông tin' }}
+              </div>
+              <div class="col-md-4">
+                <i class="fas fa-memory mr-2"></i>
+                <strong>RAM:</strong> {{ selectedVariant.ram_dung_luong || 'Không có thông tin' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="product-desc-content mb-4" v-if="selectedVariant">
+            <button class="btn btn-primary mt-3" @click="toggleSidebar">Xem thông số chi tiết</button>
+          </div>
+
+          
+          <div v-if="showSidebar" class="sidebar-overlay" @click.self="showSidebar = false">
+            <div class="sidebar-panel">
+              <div class="sidebar-header">
+                <h5>Thông số chi tiết</h5>
+                <button class="close-btn" @click="showSidebar = false">×</button>
+              </div>
+              <div class="sidebar-body">
+                <img
+                  :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
+                  alt="Product Image"
+                  class="sidebar-image"
+                />
+                <table class="specs-table">
+                  <tr>
+                    <td><i class="fas fa-shield-alt mr-2"></i>Chỉ số chống bụi và nước</td>
+                    <td>{{ product.chi_so_khang_bui_nuoc || 'Không có thông tin' }}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-network-wired mr-2"></i>Công nghệ mạng</td>
+                    <td>{{ product.ten_cong_nghe_mang || 'Không có thông tin' }}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-cogs mr-2"></i>Hệ điều hành</td>
+                    <td>
+                      {{ product.he_dieu_hanh || 'Không có thông tin' }} (Phiên bản:
+                      {{ product.phien_ban || 'Không có thông tin' }})
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-sd-card mr-2"></i>Hỗ trợ bộ nhớ ngoài</td>
+                    <td>{{ product.ho_tro_bo_nho_ngoai || 'Không có thông tin' }}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-battery-full mr-2"></i>Dung lượng pin</td>
+                    <td>{{ product.dung_luong_pin || 'Không có thông tin' }}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-sim-card mr-2"></i>Loại SIM</td>
+                    <td>{{ product.cac_loai_sim_ho_tro || 'Không có thông tin' }}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-cube mr-2"></i>Chất liệu khung</td>
+                    <td>{{ product.chat_lieu_khung || 'Không có thông tin' }}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-square mr-2"></i>Chất liệu mặt lưng</td>
+                    <td>{{ product.chat_lieu_mat_lung || 'Không có thông tin' }}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-charging-station mr-2"></i>Công nghệ sạc</td>
+                    <td>{{ product.cong_nghe_ho_tro || 'Không có thông tin' }}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-mobile-alt mr-2"></i>Thông tin màn hình</td>
+                    <td>{{ screenInfo }}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="product-desc-content mb-4" v-if="selectedVariant">
+            <h3>Mô tả sản phẩm</h3>
+            <p>{{ selectedVariant.ghi_chu || 'Không có mô tả chi tiết cho sản phẩm này.' }}</p>
+          </div>
+
+          
+          <div class="reviews mb-4" v-if="selectedVariant">
+            <h3>Đánh giá (2)</h3>
+            <div class="review">
+              <div class="row no-gutters">
+                <div class="col-auto">
+                  <h4><a href="#">Chí Dũng</a></h4>
+                  <div class="ratings-container">
+                    <div class="ratings">
+                      <div class="ratings-val" style="width: 80%"></div>
+                    </div>
+                  </div>
+                  <span class="review-date">12/03/2025</span>
+                </div>
+                <div class="col">
+                  <h4>Hiệu năng mạnh mẽ</h4>
+                  <div class="review-content">
+                    <p>Pin trâu tốt - đẹp - sang - mạnh - hơi nóng máy tí thui</p>
+                  </div>
+                  <div class="review-action">
+                    <a href="#"><i class="icon-thumbs-up"></i>Có ích (2)</a>
+                    <a href="#"><i class="icon-thumbs-down"></i>Không có ích (0)</a>
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
-                <div class="reviews">
-                  <h3>Đánh giá (2)</h3>
-                  <div class="review">
-                    <div class="row no-gutters">
-                      <div class="col-auto">
-                        <h4><a href="#">Chí Dũng</a></h4>
-                        <div class="ratings-container">
-                          <div class="ratings">
-                            <div class="ratings-val" style="width: 80%"></div>
-                          </div>
-                        </div>
-                        <span class="review-date">12/03/2025</span>
-                      </div>
-                      <div class="col">
-                        <h4>Hiệu năng mạnh mẽ</h4>
-                        <div class="review-content">
-                          <p>Pin trâu tốt - đẹp - sang - mạnh - hơi nóng máy tí thui</p>
-                        </div>
-                        <div class="review-action">
-                          <a href="#"><i class="icon-thumbs-up"></i>Có ích (2)</a>
-                          <a href="#"><i class="icon-thumbs-down"></i>Không có ích (0)</a>
-                        </div>
-                      </div>
+            </div>
+            <div class="review">
+              <div class="row no-gutters">
+                <div class="col-auto">
+                  <h4><a href="#">Nguyễn Thành Nhân</a></h4>
+                  <div class="ratings-container">
+                    <div class="ratings">
+                      <div class="ratings-val" style="width: 100%"></div>
                     </div>
                   </div>
-                  <div class="review">
-                    <div class="row no-gutters">
-                      <div class="col-auto">
-                        <h4><a href="#">Nguyễn Thành Nhân</a></h4>
-                        <div class="ratings-container">
-                          <div class="ratings">
-                            <div class="ratings-val" style="width: 100%"></div>
-                          </div>
-                        </div>
-                        <span class="review-date">19/2/2025</span>
-                      </div>
-                      <div class="col">
-                        <h4>Thời lượng pin cực khủng</h4>
-                        <div class="review-content">
-                          <p>SVIP nên giữ thời gian lâu hơn 2 năm</p>
-                        </div>
-                        <div class="review-action">
-                          <a href="#"><i class="icon-thumbs-up"></i>Có ích (0)</a>
-                          <a href="#"><i class="icon-thumbs-down"></i>Không có ích (0)</a>
-                        </div>
-                      </div>
-                    </div>
+                  <span class="review-date">19/2/2025</span>
+                </div>
+                <div class="col">
+                  <h4>Thời lượng pin cực khủng</h4>
+                  <div class="review-content">
+                    <p>SVIP nên giữ thời gian lâu hơn 2 năm</p>
+                  </div>
+                  <div class="review-action">
+                    <a href="#"><i class="icon-thumbs-up"></i>Có ích (0)</a>
+                    <a href="#"><i class="icon-thumbs-down"></i>Không có ích (0)</a>
                   </div>
                 </div>
               </div>
@@ -308,7 +333,7 @@
             <div
               v-for="similarProduct in similarProducts"
               :key="similarProduct.id"
-              class="product product-7 text-center"
+              class="product product-7 text-center shadow"
             >
               <figure class="product-media">
                 <NuxtLink :to="`/product-page?sp_id=${similarProduct.id}`">
@@ -346,23 +371,143 @@
 </template>
 
 <script>
-import ProductPage from '../store/product/product-page.js';
+import ProductPage from '../store/product/product-page.js'
 
-export default ProductPage;
+export default {
+  extends: ProductPage,
+  data() {
+    return {
+      showSidebar: false,
+    }
+  },
+  methods: {
+    toggleSidebar() {
+      this.showSidebar = !this.showSidebar
+    },
+  },
+}
 </script>
 
 <style scoped>
+/* Tăng cỡ chữ cho các phần thông tin bên ngoài */
+.product-title,
+.product-price,
+.memory-options h5,
+.color-options h5,
+.product-details-footer,
+.product-desc-content p,
+.reviews h3,
+.reviews h4,
+.review-content p,
+.review-date,
+.highlight-specs {
+  font-size: 1.8rem;
+}
+
+.highlight-specs {
+  border: 1px solid #eee;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.highlight-specs .row div {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sidebar-panel {
+  width: 400px;
+  background: #fff;
+  height: 100%;
+  padding: 20px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-header h5 {
+  font-size: 1.8rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.sidebar-body {
+  font-size: 1.5rem;
+}
+
+.sidebar-image {
+  width: 100%;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.specs-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.specs-table td:first-child {
+  font-weight: bold;
+  width: 40%;
+}
+
+.specs-table td i {
+  margin-right: 8px;
+}
+
+.specs-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.specs-table tr:hover {
+  background-color: #f1f1f1;
+}
+
 .specs-table {
   margin-bottom: 30px;
 }
+
 .spec-btn {
   width: 100%;
   height: auto;
   margin-bottom: 30px;
 }
+
 .product-gallery-item {
   padding-bottom: 10px;
 }
+
 .option-btn {
   position: relative;
   margin-right: 10px;
@@ -374,16 +519,19 @@ export default ProductPage;
   text-align: center;
   min-width: 90px;
 }
+
 .option-btn.active {
   border-color: #007bff;
   background-color: #e7f1ff;
 }
+
 .option-btn.disabled {
   border-color: #cccccc;
   background-color: #f0f0f0;
   color: #999999;
   cursor: not-allowed;
 }
+
 .check-icon {
   position: absolute;
   top: -10px;
@@ -391,14 +539,17 @@ export default ProductPage;
   display: none;
   color: #007bff;
 }
+
 .option-btn.active .check-icon {
   display: block;
 }
+
 .color-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .color-circle {
   width: 20px;
   height: 20px;
