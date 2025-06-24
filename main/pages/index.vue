@@ -8,7 +8,7 @@
             <div class="category-menu">
               <ul class="nav flex-column">
                 <li class="nav-item">
-                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-mobile"></i> iPhone</a>
+                  <a href="#" class="nav-link" style="color: black !important"><i class="las la-mobile"></i> iPhone</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -42,7 +42,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-laptop"></i> Samsung</a>
+                  <a href="#" class="nav-link" style="color: black !important"><i class="las la-laptop"></i> Samsung</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -62,7 +62,9 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-headphones"></i> Xiaomi</a>
+                  <a href="#" class="nav-link" style="color: black !important"
+                    ><i class="las la-headphones"></i> Xiaomi</a
+                  >
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -82,7 +84,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-camera"></i> Huawei</a>
+                  <a href="#" class="nav-link" style="color: black !important"><i class="las la-camera"></i> Huawei</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -107,7 +109,9 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-home"></i> Nothing Phone</a>
+                  <a href="#" class="nav-link" style="color: black !important"
+                    ><i class="las la-home"></i> Nothing Phone</a
+                  >
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -126,7 +130,9 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-headphones"></i> OPPO</a>
+                  <a href="#" class="nav-link" style="color: black !important"
+                    ><i class="las la-headphones"></i> OPPO</a
+                  >
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -151,7 +157,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-desktop"></i> Redmi</a>
+                  <a href="#" class="nav-link" style="color: black !important"><i class="las la-desktop"></i> Redmi</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -170,7 +176,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-tv"></i> Techno</a>
+                  <a href="#" class="nav-link" style="color: black !important"><i class="las la-tv"></i> Techno</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -189,7 +195,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-tags"></i> Sony</a>
+                  <a href="#" class="nav-link" style="color: black !important"><i class="las la-tags"></i> Sony</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -208,7 +214,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" style="color: black !important;"><i class="las la-store"></i> OnePlus</a>
+                  <a href="#" class="nav-link" style="color: black !important"><i class="las la-store"></i> OnePlus</a>
                   <ul class="submenu">
                     <div class="submenu-sections">
                       <li class="submenu-section">
@@ -309,56 +315,49 @@
             <h2 class="title">Sản phẩm mới</h2>
           </div>
           <div class="heading-right">
-            <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
-              <li class="nav-item">
-                <a
-                  id="new-all-link"
-                  class="nav-link active"
-                  data-toggle="tab"
-                  href="#new-all-tab"
-                  role="tab"
-                  aria-controls="new-all-tab"
-                  aria-selected="true"
-                  >All</a
-                >
-              </li>
-              <li class="nav-item">
-                <a
-                  id="new-tv-link"
-                  class="nav-link"
-                  data-toggle="tab"
-                  href="#new-tv-tab"
-                  role="tab"
-                  aria-controls="new-tv-tab"
-                  aria-selected="false"
-                  >iPhone</a
-                >
-              </li>
-              <li class="nav-item">
-                <a
-                  id="new-computers-link"
-                  class="nav-link"
-                  data-toggle="tab"
-                  href="#new-computers-tab"
-                  role="tab"
-                  aria-controls="new-computers-tab"
-                  aria-selected="false"
-                  >Samsung</a
-                >
-              </li>
-              <li class="nav-item">
-                <a
-                  id="new-phones-link"
-                  class="nav-link"
-                  data-toggle="tab"
-                  href="#new-phones-tab"
-                  role="tab"
-                  aria-controls="new-phones-tab"
-                  aria-selected="false"
-                  >OPPO</a
-                >
-              </li>
-            </ul>
+            <div class="btn-group" role="tablist">
+              <a
+                id="new-all-link"
+                class="btn btn-outline-primary rounded-pill m-1"
+                data-toggle="tab"
+                href="#new-all-tab"
+                role="tab"
+                aria-controls="new-all-tab"
+                aria-selected="true"
+                :class="{ active: true }"
+                >All</a
+              >
+              <a
+                id="new-tv-link"
+                class="btn btn-outline-primary rounded-pill m-1"
+                data-toggle="tab"
+                href="#new-tv-tab"
+                role="tab"
+                aria-controls="new-tv-tab"
+                aria-selected="false"
+                >iPhone</a
+              >
+              <a
+                id="new-computers-link"
+                class="btn btn-outline-primary rounded-pill m-1"
+                data-toggle="tab"
+                href="#new-computers-tab"
+                role="tab"
+                aria-controls="new-computers-tab"
+                aria-selected="false"
+                >Samsung</a
+              >
+              <a
+                id="new-phones-link"
+                class="btn btn-outline-primary rounded-pill m-1"
+                data-toggle="tab"
+                href="#new-phones-tab"
+                role="tab"
+                aria-controls="new-phones-tab"
+                aria-selected="false"
+                >OPPO</a
+              >
+            </div>
           </div>
         </div>
         <div class="tab-content tab-content-carousel just-action-icons-sm">
@@ -380,7 +379,7 @@
                 }
               }'
             >
-              <div v-for="product in newProducts" :key="product.id" class="product product-7 text-center">
+              <div v-for="product in newProducts" :key="product.id" class="product product-7 text-center shadow">
                 <figure class="product-media">
                   <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
                   <NuxtLink :to="`/product-page?sp_id=${product.id}`">
@@ -408,6 +407,7 @@
               </div>
             </div>
           </div>
+          <!-- Các tab khác giữ nguyên -->
           <div id="new-tv-tab" class="tab-pane p-0 fade" role="tabpanel" aria-labelledby="new-tv-link">
             <div
               class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
@@ -426,7 +426,7 @@
                 }
               }'
             >
-              <div v-for="product in iPhoneProducts" :key="product.id" class="product product-7 text-center">
+              <div v-for="product in iPhoneProducts" :key="product.id" class="product product-7 text-center shadow">
                 <figure class="product-media">
                   <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
                   <NuxtLink :to="`/product-page?sp_id=${product.id}`">
@@ -472,7 +472,7 @@
                 }
               }'
             >
-              <div v-for="product in samsungProducts" :key="product.id" class="product product-7 text-center">
+              <div v-for="product in samsungProducts" :key="product.id" class="product product-7 text-center shadow">
                 <figure class="product-media">
                   <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
                   <NuxtLink :to="`/product-page?sp_id=${product.id}`">
@@ -518,7 +518,7 @@
                 }
               }'
             >
-              <div v-for="product in oppoProducts" :key="product.id" class="product product-7 text-center">
+              <div v-for="product in oppoProducts" :key="product.id" class="product product-7 text-center shadow">
                 <figure class="product-media">
                   <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
                   <NuxtLink :to="`/product-page?sp_id=${product.id}`">
@@ -587,199 +587,283 @@
             <img src="assets/images/brands/6.png" alt="Brand Name" />
           </a>
         </div>
+        <hr class="mb-0" />
       </div>
 
       <!-- Sản phẩm nổi bật -->
-      <div class="bg-light pt-5 pb-6">
-        <div class="container trending-products">
-          <div class="heading heading-flex mb-3">
-            <div class="heading-left">
-              <h2 class="title">Sản phẩm nổi bật</h2>
-            </div>
-            <div class="heading-right">
-              <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
-                <li class="nav-item">
-                  <a
-                    id="trending-best-link"
-                    class="nav-link active"
-                    data-toggle="tab"
-                    href="#trending-best-tab"
-                    role="tab"
-                    aria-controls="trending-best-tab"
-                    aria-selected="true"
-                    >Bán chạy</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a
-                    id="trending-sale-link"
-                    class="nav-link"
-                    data-toggle="tab"
-                    href="#trending-sale-tab"
-                    role="tab"
-                    aria-controls="trending-sale-tab"
-                    aria-selected="false"
-                    >Đang giảm giá</a
-                  >
-                </li>
-              </ul>
+      <div class="container trending-products mb-4 mt-1">
+        <div class="heading heading-flex mb-3">
+          <div class="heading-left">
+            <h2 class="title">Sản phẩm nổi bật</h2>
+          </div>
+          <div class="heading-right">
+            <div class="btn-group" role="tablist">
+              <a
+                id="trending-best-link"
+                class="btn btn-outline-primary rounded-pill m-1"
+                data-toggle="tab"
+                href="#trending-best-tab"
+                role="tab"
+                aria-controls="trending-best-tab"
+                aria-selected="true"
+                :class="{ active: true }"
+                >Bán chạy</a
+              >
+              <a
+                id="trending-sale-link"
+                class="btn btn-outline-primary rounded-pill m-1"
+                data-toggle="tab"
+                href="#trending-sale-tab"
+                role="tab"
+                aria-controls="trending-sale-tab"
+                aria-selected="false"
+                >Đang giảm giá</a
+              >
             </div>
           </div>
-          <div class="row">
-            <div class="col-xl-5col d-none d-xl-block">
-              <div class="banner" style="background-color: black !important; width: 260px;">
-                <a href="#" style="
-  max-width: 96%;
-  display: block;
-  height: 380px;  
-  width: auto;
-  background-image: url('assets/images/demos/demo-4/banners/banner-4.png');
-  background-size: contain;
-  background-position: center;
-">
-                  
-                </a>
+        </div>
+
+        <div class="tab-content tab-content-carousel just-action-icons-sm">
+          <!-- Bán chạy -->
+          <div
+            id="trending-best-tab"
+            class="tab-pane p-0 fade show active"
+            role="tabpanel"
+            aria-labelledby="trending-best-link"
+          >
+            <div
+              class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
+              data-toggle="owl"
+              data-owl-options='{
+          "nav": false,
+          "dots": true,
+          "margin": 20,
+          "loop": false,
+          "responsive": {
+            "0": { "items": 1 },
+            "480": { "items": 2 },
+            "768": { "items": 3 },
+            "992": { "items": 4 },
+            "1200": { "items": 4, "nav": true, "dots": false }
+          }
+        }'
+            >
+              <div v-for="product in trendingBestProducts" :key="product.id" class="product product-7 text-center shadow">
+                <figure class="product-media">
+                  <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
+                  <span
+                    v-if="product.hasDiscount"
+                    class="product-label label-discount"
+                    style="
+                      position: absolute;
+                      top: 10px;
+                      left: 10px;
+                      background-color: #ff3333;
+                      color: white;
+                      padding: 2px 6px;
+                      border-radius: 4px;
+                    "
+                  >
+                    <span v-if="product.loaiGiamGiaApDung === 'Phần trăm' && product.giamPhanTram > 0"
+                      >Giảm {{ product.giamPhanTram }}%</span
+                    >
+                    <span
+                      v-else-if="
+                        product.loaiGiamGiaApDung === 'Tiền mặt' ||
+                        (product.loaiGiamGiaApDung === 'Tiền mặt' && product.giamToiDa > 0)
+                      "
+                      >Giảm tối đa {{ formatPrice(product.giamToiDa) }} VND</span
+                    >
+                  </span>
+                  <NuxtLink :to="`/product-page?sp_id=${product.id}`">
+                    <img
+                      :src="product.imageUrl || '/assets/images/placeholder.jpg'"
+                      alt="Product image"
+                      class="product-image"
+                    />
+                  </NuxtLink>
+                  <div class="product-action-vertical">
+                    <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
+                      <span>So sánh</span>
+                    </NuxtLink>
+                  </div>
+                </figure>
+                <div class="product-body">
+                  <div class="product-cat">
+                    <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
+                  </div>
+                  <h3 class="product-title">
+                    <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
+                  </h3>
+                  <div v-if="product.hasDiscount" class="product-price">
+                    <span style="text-decoration: line-through; color: #999"
+                      >{{ formatPrice(product.giaBan || 0) }} VND</span
+                    >
+                    <span style="color: red; margin-left: 5px">{{ formatPrice(product.giaSauKhiGiam || 0) }} VND</span>
+                    <!-- Sửa ở đây -->
+                  </div>
+                  <div v-else class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
+                </div>
               </div>
             </div>
-            <div class="col-xl-4-5col">
-              <div class="tab-content tab-content-carousel just-action-icons-sm">
-                <div
-                  id="trending-best-tab"
-                  class="tab-pane p-0 fade show active"
-                  role="tabpanel"
-                  aria-labelledby="trending-best-link"
-                >
-                  <div
-                    class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
-                    data-toggle="owl"
-                    data-owl-options='{
-                      "nav": false,
-                      "dots": true,
-                      "margin": 20,
-                      "loop": false,
-                      "responsive": {
-                        "0": { "items": 1 },
-                        "480": { "items": 2 },
-                        "768": { "items": 3 },
-                        "992": { "items": 4 },
-                        "1200": { "items": 4, "nav": true, "dots": false }
-                      }
-                    }'
+          </div>
+
+          <!-- Đang giảm giá -->
+          <div id="trending-sale-tab" class="tab-pane p-0 fade" role="tabpanel" aria-labelledby="trending-sale-link">
+            <div
+              class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
+              data-toggle="owl"
+              data-owl-options='{
+          "nav": false,
+          "dots": true,
+          "margin": 20,
+          "loop": false,
+          "responsive": {
+            "0": { "items": 1 },
+            "480": { "items": 2 },
+            "768": { "items": 3 },
+            "992": { "items": 4 },
+            "1200": { "items": 4, "nav": true, "dots": false }
+          }
+        }'
+            >
+              <div v-for="product in trendingSaleProducts" :key="product.id" class="product product-7 text-center shadow">
+                <figure class="product-media">
+                  <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
+                  <span
+                    v-if="product.hasDiscount"
+                    class="product-label label-discount"
+                    style="
+                      position: absolute;
+                      top: 10px;
+                      left: 10px;
+                      background-color: #ff3333;
+                      color: white;
+                      padding: 2px 6px;
+                      border-radius: 4px;
+                    "
                   >
-                    <div
-                      v-for="product in trendingBestProducts"
-                      :key="product.id"
-                      class="product product-7 text-center"
+                    <span v-if="product.loaiGiamGiaApDung === 'Phần trăm' && product.giamPhanTram > 0"
+                      >Giảm {{ product.giamPhanTram }}%</span
                     >
-                      <figure class="product-media">
-                        <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
-                        <NuxtLink :to="`/product-page?sp_id=${product.id}`">
-                          <img
-                            :src="product.imageUrl || '/assets/images/placeholder.jpg'"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-                        <div class="product-action-vertical">
-                          <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
-                            <span>So sánh</span>
-                          </NuxtLink>
-                        </div>
-                      </figure>
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <a href="#">{{
-                            manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown'
-                          }}</a>
-                        </div>
-                        <h3 class="product-title">
-                          <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
-                        </h3>
-                        <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  id="trending-sale-tab"
-                  class="tab-pane p-0 fade"
-                  role="tabpanel"
-                  aria-labelledby="trending-sale-link"
-                >
-                  <div
-                    class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
-                    data-toggle="owl"
-                    data-owl-options='{
-                      "nav": false,
-                      "dots": true,
-                      "margin": 20,
-                      "loop": false,
-                      "responsive": {
-                        "0": { "items": 1 },
-                        "480": { "items": 2 },
-                        "768": { "items": 3 },
-                        "992": { "items": 4 },
-                        "1200": { "items": 4, "nav": true, "dots": false }
-                      }
-                    }'
-                  >
-                    <div
-                      v-for="product in trendingSaleProducts"
-                      :key="product.id"
-                      class="product product-7 text-center"
+                    <span v-else-if="product.loaiGiamGiaApDung === 'Tiền mặt' && product.giamToiDa > 0"
+                      >Giảm tối đa {{ formatPrice(product.giamToiDa) }} VND</span
                     >
-                      <figure class="product-media">
-                        <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
-                        <NuxtLink :to="`/product-page?sp_id=${product.id}`">
-                          <img
-                            :src="product.imageUrl || '/assets/images/placeholder.jpg'"
-                            alt="Product image"
-                            class="product-image"
-                          />
-                        </NuxtLink>
-                        <div class="product-action-vertical">
-                          <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
-                            <span>So sánh</span>
-                          </NuxtLink>
-                        </div>
-                      </figure>
-                      <div class="product-body">
-                        <div class="product-cat">
-                          <a href="#">{{
-                            manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown'
-                          }}</a>
-                        </div>
-                        <h3 class="product-title">
-                          <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
-                        </h3>
-                        <div class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
-                      </div>
-                    </div>
+                  </span>
+                  <NuxtLink :to="`/product-page?sp_id=${product.id}`">
+                    <img
+                      :src="product.imageUrl || '/assets/images/placeholder.jpg'"
+                      alt="Product image"
+                      class="product-image"
+                    />
+                  </NuxtLink>
+                  <div class="product-action-vertical">
+                    <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
+                      <span>So sánh</span>
+                    </NuxtLink>
                   </div>
+                </figure>
+                <div class="product-body">
+                  <div class="product-cat">
+                    <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
+                  </div>
+                  <h3 class="product-title">
+                    <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
+                  </h3>
+                                    <div v-if="product.hasDiscount" class="product-price">
+                    <span style="text-decoration: line-through; color: #999"
+                      >{{ formatPrice(product.giaBan || 0) }} VND</span
+                    >
+                    <span style="color: red; margin-left: 5px">{{ formatPrice(product.giaSauKhiGiam || 0) }} VND</span>
+                    <!-- Sửa ở đây -->
+                  </div>
+                  <div v-else class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <hr class="mb-0" />
       </div>
 
       <!-- Sản phẩm gợi ý -->
-      <div class="container for-you mb-4">
-        <div class="heading heading-flex mb-3">
-          <div class="heading-left">
-            <h2 class="title">Sản phẩm gợi ý</h2>
-          </div>
-          <div class="heading-right">            
-            <NuxtLink to="/category-4cols"  class="title-link">Xem các sản phẩm</NuxtLink>
-            <i class="icon-long-arrow-right"></i>
-          </div>
-        </div>
-        <div class="products">
+<div class="container for-you mb-4 mt-1">
+  <div class="heading heading-flex mb-3">
+    <div class="heading-left">
+      <h2 class="title">Sản phẩm gợi ý</h2>
+    </div>
+    <div class="heading-right">
+      <div class="btn-group" role="tablist">
+        <a
+          id="recommended-all-link"
+          class="btn btn-outline-primary rounded-pill m-1"
+          :class="{ active: selectedManufacturer === null }"
+          @click.prevent="filterRecommendedProducts(null)"
+          role="tab"
+          aria-controls="recommended-all-tab"
+          aria-selected="true"
+          >All</a
+        >
+        <a
+          id="recommended-iphone-link"
+          class="btn btn-outline-primary rounded-pill m-1"
+          :class="{ active: selectedManufacturer === 1 }"
+          @click.prevent="filterRecommendedProducts(1)"
+          role="tab"
+          aria-controls="recommended-iphone-tab"
+          aria-selected="false"
+          >iPhone</a
+        >
+        <a
+          id="recommended-samsung-link"
+          class="btn btn-outline-primary rounded-pill m-1"
+          :class="{ active: selectedManufacturer === 2 }"
+          @click.prevent="filterRecommendedProducts(2)"
+          role="tab"
+          aria-controls="recommended-samsung-tab"
+          aria-selected="false"
+          >Samsung</a
+        >
+        <a
+          id="recommended-oppo-link"
+          class="btn btn-outline-primary rounded-pill m-1"
+          :class="{ active: selectedManufacturer === 4 }"
+          @click.prevent="filterRecommendedProducts(4)"
+          role="tab"
+          aria-controls="recommended-oppo-tab"
+          aria-selected="false"
+          >OPPO</a
+        >
+        <NuxtLink to="/category-4cols" class="btn btn-outline-primary rounded-pill m-1">Xem thêm sản phẩm</NuxtLink>              
+      </div>
+    </div>
+  </div>
+  <div class="products">
           <div class="row justify-content-center">
-            <div v-for="product in recommendedProducts" :key="product.id" class="col-6 col-md-4 col-lg-3">
-              <div class="product product-2">
+            <div v-for="product in recommendedProducts" :key="product.id" class="col-6 col-md-3 col-lg-2">
+              <div class="product product-2 shadow">
                 <figure class="product-media">
                   <span v-if="isNewProduct(product)" class="product-label label-new">SP mới</span>
+                  <span
+                    v-if="product.hasDiscount"
+                    class="product-label label-discount"
+                    style="
+                      position: absolute;
+                      top: 10px;
+                      left: 10px;
+                      background-color: #ff3333;
+                      color: white;
+                      padding: 2px 6px;
+                      border-radius: 4px;
+                    "
+                  >
+                    <span v-if="product.loaiGiamGiaApDung === 'Phần trăm' && product.giamPhanTram > 0"
+                      >Giảm {{ product.giamPhanTram }}%</span
+                    >
+                    <span v-else-if="product.loaiGiamGiaApDung === 'Tiền mặt' && product.giamToiDa > 0"
+                      >Giảm tối đa {{ formatPrice(product.giamToiDa) }} VND</span
+                    >
+                  </span>
                   <NuxtLink :to="`/product-page?sp_id=${product.id}`">
                     <img
                       :src="product.imageUrl || '/assets/images/placeholder.jpg'"
@@ -795,13 +879,19 @@
                   <h3 class="product-title">
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
-                  <div style="color: #00AEEF;">{{ formatPrice(product.giaBan || 0) }} VND</div>
-                </div>                
+                  <div v-if="product.hasDiscount" class="product-price" style="display: block !important">
+                    <span style="text-decoration: line-through; color: #999"
+                      >{{ formatPrice(product.giaBan || 0) }} VND</span
+                    >
+                    <span style="color: red; margin-left: 5px">{{ formatPrice(product.giaSauKhiGiam || 0) }} VND</span>
+                  </div>
+                  <div v-else style="color: #00aeef">{{ formatPrice(product.giaSauKhiGiam || 0) }} VND</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+</div>
     </main>
 
     <button id="scroll-top" title="Back to Top">
@@ -811,7 +901,29 @@
 </template>
 
 <script>
-import IndexPage from '../store/main/index.js';
+import IndexPage from '../store/main/index.js'
 
-export default IndexPage;
+export default IndexPage
 </script>
+
+<style scoped>
+/* styles.css */
+.label-discount {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #ff3333;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Thêm CSS tùy chỉnh để điều chỉnh kích thước và khoảng cách */
+.product-2 {
+  transition: transform 0.2s;
+}
+
+.product-2:hover {
+  transform: scale(1.05);
+}
+</style>

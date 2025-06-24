@@ -45,17 +45,20 @@ export default {
       { rel: 'stylesheet', href: '/assets/css/M_Modification_index.css' },
     ],
     script: [
-  { src: '/assets/js/jquery.min.js', defer: true },
-  { src: '/assets/js/bootstrap.bundle.min.js', defer: true },
-  { src: '/assets/js/jquery.hoverIntent.min.js', defer: true },
-  { src: '/assets/js/jquery.waypoints.min.js', defer: true },
-  { src: '/assets/js/superfish.min.js', defer: true },
-  { src: '/assets/js/owl.carousel.min.js', defer: true },
-  { src: '/assets/js/bootstrap-input-spinner.js', defer: true },
-  { src: '/assets/js/jquery.plugin.min.js', defer: true },
-  { src: '/assets/js/jquery.magnific-popup.min.js', defer: true },
-  { src: '/assets/js/jquery.countdown.min.js', defer: true }, // Chỉ giữ một nguồn
-],
+      { src: '/assets/js/jquery.min.js', defer: true },
+      { src: '/assets/js/bootstrap.bundle.min.js', defer: true },
+      { src: '/assets/js/jquery.hoverIntent.min.js', defer: true },
+      { src: '/assets/js/jquery.waypoints.min.js', defer: true },
+      { src: '/assets/js/superfish.min.js', defer: true },
+      { src: '/assets/js/owl.carousel.min.js', defer: true },
+      { src: '/assets/js/bootstrap-input-spinner.js', defer: true },
+      { src: '/assets/js/jquery.plugin.min.js', defer: true },
+      { src: '/assets/js/jquery.magnific-popup.min.js', defer: true },
+      { src: '/assets/js/jquery.countdown.min.js', defer: true }, // Chỉ giữ một nguồn
+    ],
+    eslint: {
+      enabled: false
+    }
   },
 
   // Global CSS
@@ -76,76 +79,76 @@ export default {
 
   // Modules for dev and build
   buildModules: [
-    '@nuxtjs/eslint-module',
+    // '@nuxtjs/eslint-module',
     '@nuxt/postcss8',
   ],
 
   // Nuxt modules
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/pwa', 
+    '@nuxtjs/pwa',
     '@nuxtjs/sitemap',
   ],
 
   // Axios configuration
   axios: {
-    baseURL: 'http://localhost:8081/api', 
-    credentials: false, 
+    baseURL: 'http://localhost:8081/api',
+    credentials: false,
     proxy: true, // Enable proxy to avoid CORS issues
   },
 
   // Proxy configuration to avoid CORS
-proxy: {
-  '/api/': {
-    target: 'http://localhost:8081',
-    changeOrigin: true,    
+  proxy: {
+    '/api/': {
+      target: 'http://localhost:8081',
+      changeOrigin: true,
+    },
   },
-},
 
   // PWA configuration
-pwa: {
-  manifest: {
-    name: 'Mobile World',
-    short_name: 'Mobile World',
-    description: 'Shop the latest smartphones and accessories.',
-    lang: 'vi',
-    theme_color: '#ffffff',
-    background_color: '#ffffff',
-    display: 'standalone',
-    icons: [
-      {
-        src: '/assets/images/icons/favicon-16x16.png',
-        sizes: '192x192',
-        type: 'image/png'
-      },
-      {
-        src: '/assets/images/icons/favicon-32x32.png',
-        sizes: '512x512',
-        type: 'image/png'
-      }
-    ]
+  pwa: {
+    manifest: {
+      name: 'Mobile World',
+      short_name: 'Mobile World',
+      description: 'Shop the latest smartphones and accessories.',
+      lang: 'vi',
+      theme_color: '#ffffff',
+      background_color: '#ffffff',
+      display: 'standalone',
+      icons: [
+        {
+          src: '/assets/images/icons/favicon-16x16.png',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: '/assets/images/icons/favicon-32x32.png',
+          sizes: '512x512',
+          type: 'image/png'
+        }
+      ]
+    },
   },
-},
 
   // Sitemap configuration
-sitemap: {
-  hostname: 'http://localhost:3000',
-  gzip: true,
-  exclude: ['/admin/**'],
-  routes: async () => {
-    const axios = require('axios');
-    try {
-      const response = await axios.get('http://localhost:3000/api/san-pham', {
-        proxy: false, // Đảm bảo sử dụng proxy đã cấu hình
-      });
-      const products = response.data;
-      return products.map((product) => `/product-page?sp_id=${product.id}`);
-    } catch (error) {
-      console.error('Error fetching products for sitemap:', error.message, error.response?.status);
-      return [];
-    }
+  sitemap: {
+    hostname: 'http://localhost:3000',
+    gzip: true,
+    exclude: ['/admin/**'],
+    routes: async () => {
+      const axios = require('axios');
+      try {
+        const response = await axios.get('http://localhost:3000/api/san-pham', {
+          proxy: false, // Đảm bảo sử dụng proxy đã cấu hình
+        });
+        const products = response.data;
+        return products.map((product) => `/product-page?sp_id=${product.id}`);
+      } catch (error) {
+        console.error('Error fetching products for sitemap:', error.message, error.response?.status);
+        return [];
+      }
+    },
   },
-},
 
   // Build configuration
   build: {

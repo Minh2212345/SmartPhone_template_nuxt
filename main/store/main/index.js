@@ -9,6 +9,7 @@ export default {
       trendingBestProducts: [],
       trendingSaleProducts: [],
       recommendedProducts: [],
+      selectedManufacturer: null, // Track the selected manufacturer for recommended products
       manufacturerMap: {
         1: 'Apple',
         2: 'Samsung',
@@ -16,7 +17,7 @@ export default {
         4: 'OPPO',
       },
       owlOptions: {
-        nav: true,
+        nav: false,
         dots: true,
         margin: 20,
         loop: true,
@@ -66,7 +67,7 @@ export default {
       this.fetchNewProducts(4), // OPPO
       this.fetchBestProducts(),
       this.fetchSaleProducts(),
-      this.fetchRecommendedProducts(),
+      this.fetchRecommendedProducts(null), // Initially fetch all recommended products
     ]);
     this.populateSections();
     this.$nextTick(() => {
@@ -104,51 +105,59 @@ export default {
         else if (idNhaSanXuat === 4) this.oppoProducts = [];
       }
     },
-    async fetchBestProducts() {
-      try {
-        const response = await this.$axios.get('/api/show-best-product', {
-          params: { sortBy: 'SALES' },
-        });
-        this.trendingBestProducts = Array.isArray(response.data)
-          ? response.data.map((product) => ({
-              ...product,
-              tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
-            }))
-          : [];
-      } catch (error) {
-        console.error('Error fetching best products:', error.message, error.response?.status);
-        this.trendingBestProducts = [];
-      }
-    },
-    async fetchSaleProducts() {
-      try {
-        const response = await this.$axios.get('/api/show-best-product', {
-          params: { sortBy: 'DISCOUNT' },
-        });
-        this.trendingSaleProducts = Array.isArray(response.data)
-          ? response.data.map((product) => ({
-              ...product,
-              tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
-            }))
-          : [];
-      } catch (error) {
-        console.error('Error fetching sale products:', error.message, error.response?.status);
-        this.trendingSaleProducts = [];
-      }
-    },
-    async fetchRecommendedProducts() {
-      try {
-        const response = await this.$axios.get('/api/san-pham-with-variants');
-        this.recommendedProducts = Array.isArray(response.data)
-          ? response.data.map((product) => ({
-              ...product,
-              tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
-            }))
-          : [];
-      } catch (error) {
-        console.error('Error fetching recommended products:', error.message, error.response?.status);
-        this.recommendedProducts = [];
-      }
+async fetchBestProducts() {
+  try {
+    const response = await this.$axios.get('/api/show-best-product', {
+      params: { sortBy: 'SALES' },
+    });
+    console.log('Best Products Response:', response.data); // Thêm log để debug
+    this.trendingBestProducts = Array.isArray(response.data)
+      ? response.data.map((product) => ({
+          ...product,
+          tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
+        }))
+      : [];
+  } catch (error) {
+    console.error('Error fetching best products:', error.message, error.response?.status);
+    this.trendingBestProducts = [];
+  }
+},
+async fetchSaleProducts() {
+  try {
+    const response = await this.$axios.get('/api/show-best-product', {
+      params: { sortBy: 'DISCOUNT' },
+    });
+    console.log('Sale Products Response:', response.data); // Thêm log để debug
+    this.trendingSaleProducts = Array.isArray(response.data)
+      ? response.data.map((product) => ({
+          ...product,
+          tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
+        }))
+      : [];
+  } catch (error) {
+    console.error('Error fetching sale products:', error.message, error.response?.status);
+    this.trendingSaleProducts = [];
+  }
+},
+async fetchRecommendedProducts(idNhaSanXuat) {
+  try {
+    const response = await this.$axios.get('/api/san-pham-with-variants', {
+      params: { idNhaSanXuat },
+    });    
+    this.recommendedProducts = Array.isArray(response.data)
+      ? response.data.map((product) => ({
+          ...product,
+          tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || 'Unknown',
+        }))
+      : [];
+  } catch (error) {
+    console.error('Error fetching recommended products:', error.message, error.response?.status);
+    this.recommendedProducts = [];
+  }
+},
+    async filterRecommendedProducts(idNhaSanXuat) {
+      this.selectedManufacturer = idNhaSanXuat;
+      await this.fetchRecommendedProducts(idNhaSanXuat);
     },
     populateSections() {
       // No need to filter here since data is fetched separately for each tab
