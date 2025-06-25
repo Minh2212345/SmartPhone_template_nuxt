@@ -333,7 +333,7 @@
             <div
               v-for="similarProduct in similarProducts"
               :key="similarProduct.id"
-              class="product product-7 text-center shadow"
+              class="product product-7 text-center"
             >
               <figure class="product-media">
                 <NuxtLink :to="`/product-page?sp_id=${similarProduct.id}`">
@@ -431,7 +431,7 @@ export default {
 .sidebar-panel {
   width: 400px;
   background: #fff;
-  height: 100%;
+  height: 100vh; /* Sử dụng 100% chiều cao viewport */
   padding: 20px;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   transform: translateX(0);
@@ -458,6 +458,9 @@ export default {
 
 .sidebar-body {
   font-size: 1.5rem;
+  height: calc(100% - 60px); /* Chiều cao còn lại sau header */
+  overflow-y: auto; /* Cho phép cuộn theo chiều dọc */
+  padding-right: 5px; /* Thêm padding để tránh cuộn ngang */
 }
 
 .sidebar-image {
@@ -473,21 +476,16 @@ export default {
 }
 
 .specs-table td {
-  padding: 10px;
-  border: 1px solid #ddd;
+  padding: 10px;  
 }
 
 .specs-table td:first-child {
   font-weight: bold;
-  width: 40%;
+  width:50%;
 }
 
 .specs-table td i {
   margin-right: 8px;
-}
-
-.specs-table tr:nth-child(even) {
-  background-color: #f9f9f9;
 }
 
 .specs-table tr:hover {
