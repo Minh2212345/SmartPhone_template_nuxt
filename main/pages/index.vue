@@ -316,7 +316,7 @@
             <h2 class="title">Sản phẩm mới</h2>
           </div>
           <div class="heading-right">
-            <div class="btn-group" role="tablist">
+            <div class="btn-group d-flex" role="tablist">
               <a
                 id="new-all-link"
                 class="btn btn-outline-primary rounded-pill m-1"
@@ -793,51 +793,51 @@
     <div class="heading-left">
       <h2 class="title">Sản phẩm gợi ý</h2>
     </div>
-    <div class="heading-right">
-      <div class="btn-group" role="tablist">
-        <a
-          id="recommended-all-link"
-          class="btn btn-outline-primary rounded-pill m-1"
-          :class="{ active: selectedManufacturer === null }"
-          @click.prevent="filterRecommendedProducts(null)"
-          role="tab"
-          aria-controls="recommended-all-tab"
-          aria-selected="true"
-          >All</a
-        >
-        <a
-          id="recommended-iphone-link"
-          class="btn btn-outline-primary rounded-pill m-1"
-          :class="{ active: selectedManufacturer === 1 }"
-          @click.prevent="filterRecommendedProducts(1)"
-          role="tab"
-          aria-controls="recommended-iphone-tab"
-          aria-selected="false"
-          >iPhone</a
-        >
-        <a
-          id="recommended-samsung-link"
-          class="btn btn-outline-primary rounded-pill m-1"
-          :class="{ active: selectedManufacturer === 2 }"
-          @click.prevent="filterRecommendedProducts(2)"
-          role="tab"
-          aria-controls="recommended-samsung-tab"
-          aria-selected="false"
-          >Samsung</a
-        >
-        <a
-          id="recommended-oppo-link"
-          class="btn btn-outline-primary rounded-pill m-1"
-          :class="{ active: selectedManufacturer === 4 }"
-          @click.prevent="filterRecommendedProducts(4)"
-          role="tab"
-          aria-controls="recommended-oppo-tab"
-          aria-selected="false"
-          >OPPO</a
-        >
-        <NuxtLink to="/category-4cols" class="btn btn-outline-primary rounded-pill m-1">Xem thêm sản phẩm</NuxtLink>              
-      </div>
-    </div>
+<div class="heading-right">
+  <div class="btn-group d-flex" role="tablist">
+    <a
+      id="recommended-all-link"
+      class="btn btn-outline-primary rounded-pill m-1"
+      :class="{ active: selectedManufacturer === null }"
+      @click.prevent="filterRecommendedProducts(null)"
+      role="tab"
+      aria-controls="recommended-all-tab"
+      aria-selected="true"
+      >All</a
+    >
+    <a
+      id="recommended-iphone-link"
+      class="btn btn-outline-primary rounded-pill m-1"
+      :class="{ active: selectedManufacturer === 1 }"
+      @click.prevent="filterRecommendedProducts(1)"
+      role="tab"
+      aria-controls="recommended-iphone-tab"
+      aria-selected="false"
+      >iPhone</a
+    >
+    <a
+      id="recommended-samsung-link"
+      class="btn btn-outline-primary rounded-pill m-1"
+      :class="{ active: selectedManufacturer === 2 }"
+      @click.prevent="filterRecommendedProducts(2)"
+      role="tab"
+      aria-controls="recommended-samsung-tab"
+      aria-selected="false"
+      >Samsung</a
+    >
+    <a
+      id="recommended-oppo-link"
+      class="btn btn-outline-primary rounded-pill m-1"
+      :class="{ active: selectedManufacturer === 4 }"
+      @click.prevent="filterRecommendedProducts(4)"
+      role="tab"
+      aria-controls="recommended-oppo-tab"
+      aria-selected="false"
+      >OPPO</a
+    >
+    <NuxtLink to="/category-4cols" class="btn btn-outline-primary rounded-pill m-1">Xem thêm sản phẩm</NuxtLink>
+  </div>
+</div>
   </div>
   <div class="products">
           <div class="row justify-content-center">
@@ -1262,5 +1262,48 @@ export default IndexPage
   }
 }
 
+/* Định dạng chung cho tất cả các nút bộ lọc */
+.btn-group {
+  flex-wrap: wrap; /* Cho phép xuống dòng khi cần */
+  justify-content: center; /* Căn giữa các nút */
+  align-items: center; /* Căn thẳng hàng */
+}
 
+.btn-outline-primary {
+  margin: 0.25rem; /* Giữ margin nhỏ */
+  white-space: nowrap; /* Ngăn chữ bị ngắt dòng */
+  text-align: center; /* Căn giữa văn bản trong nút */
+}
+
+/* Responsive cho màn hình nhỏ hơn 768px (điện thoại) */
+@media (max-width: 768px) {
+  .btn-group {
+    flex-direction: row; /* Giữ bố trí ngang */
+    flex-wrap: wrap; /* Cho phép xuống dòng khi cần */
+    justify-content: center; /* Căn giữa các nút */
+  }
+
+  .btn-outline-primary {
+    flex: 0 0 48%; /* Mỗi nút chiếm ~48% chiều rộng để có khoảng cách */
+    font-size: 0.875rem; /* Giảm kích thước chữ */
+    padding: 0.25rem 0.5rem; /* Giảm padding */
+  }
+
+  /* Đảm bảo nút cuối cùng không có margin dưới */
+  .btn-group .btn-outline-primary:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Responsive cho màn hình từ 769px đến 991px (tablet) */
+@media (min-width: 769px) and (max-width: 991px) {
+  .btn-group {
+    flex-wrap: wrap; /* Cho phép xuống dòng */
+    justify-content: center; /* Căn giữa */
+  }
+
+  .btn-outline-primary {
+    margin: 0.25rem; /* Giữ margin nhỏ */
+  }
+}
   </style>
