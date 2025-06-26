@@ -41,7 +41,7 @@
             <div class="products mb-3">
               <div class="row justify-content-center">
                 <div class="col-6 col-md-4 col-lg-4 col-xl-3" v-for="product in products" :key="product.id">
-                  <div class="product product-7 text-center">
+                  <div class="product product-7 text-center shadow">
                     <figure class="product-media">
                       <NuxtLink :to="`/product-page?sp_id=${product.id}`">
                         <img

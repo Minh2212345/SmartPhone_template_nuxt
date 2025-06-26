@@ -93,3 +93,13 @@ export default {
   name: 'BaseFooter',
 }
 </script>
+
+<style scoped>
+footer{
+  background: linear-gradient(100deg, #28a745, #08387B) !important;
+}
+
+.footer-copyright{
+  color: #ffffff;
+}
+</style>

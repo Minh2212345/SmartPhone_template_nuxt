@@ -75,7 +75,7 @@ export default {
       return this.productDetails[productId]?.tenSanPham || '—';
     },
     getProductNameBase(productId) {
-      return this.getProductName(productId); // Hiển thị toàn bộ tenSanPham
+      return this.getProductName(productId);
     },
   },
 };

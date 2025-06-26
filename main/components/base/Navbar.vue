@@ -196,3 +196,31 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+header{
+  background: linear-gradient(100deg, #28a745, #08387B) !important;
+}
+
+.header-intro-clearance .login a {
+  font-size: 2.8rem;
+  color: #fff;
+  line-height: 1;
+}
+
+.header-intro-clearance .account > a,
+.header-intro-clearance .login > a,
+.header-intro-clearance .compare-dropdown > a,
+.header-intro-clearance .cart-dropdown > a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-intro-clearance .header-middle .header-right p{
+    font-size: 0.8rem;
+    color: #ffffff;
+    font-weight: 600;
+}
+</style>

@@ -919,7 +919,6 @@ export default IndexPage
   border-radius: 4px;
 }
 
-/* Thêm CSS tùy chỉnh để điều chỉnh kích thước và khoảng cách */
 .product-2 {
   transition: transform 0.2s;
 }
@@ -927,4 +926,341 @@ export default IndexPage
 .product-2:hover {
   transform: scale(1.05);
 }
-</style>
+
+.brand img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+.owl-carousel .brand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.memory-options,
+.color-options {
+  margin-bottom: 20px;
+}
+.memory-options h5,
+.color-options h5 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.option-btn {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px 15px;
+  text-align: center;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  position: relative;
+  background-color: #fff;
+}
+.option-btn:hover {
+  border-color: #ccc;
+}
+.option-btn.active {
+  border-color: #ff0000; /* Viền đỏ khi được chọn */
+}
+
+.color-btn {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+}
+.color-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+}
+.color-btn.active .color-circle {
+  border-color: #ff0000;
+}
+
+
+/* Định dạng chung cho nhãn */
+.product-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+/* Nhãn giảm giá (màu đỏ) */
+.label-discount {
+  background-color: #ff4d4d;
+}
+
+/* Nhãn "Mới" (màu xanh lá) */
+.label-new {
+  background-color: #1e00ff; 
+}
+
+/* Nhãn "Đã hết hàng" (màu xám) */
+.label-out-of-stock {
+  background-color: #6c757d;
+}
+
+.product-media {
+  position: relative;
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+}
+
+/* Header index */
+/* Container chính */
+.homepage-section {
+  padding: 20px 0;
+}
+
+/* Danh mục bên trái */
+.category-menu {
+    position: relative;
+  }
+  
+  /* Tiêu đề chính */
+  .category-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  
+  .category-title .nav-link {
+    color: #000000;
+    display: flex;
+    align-items: center;
+  }
+  
+  .category-title i {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  
+  /* Mục chính trong menu */
+  .category-menu .nav-item {
+    position: relative;
+  }
+  
+  .category-menu .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    color: #000000;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+  
+  .category-menu .nav-link i {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  
+  .category-menu .nav-link:hover {
+    color: #007bff;
+  }
+  
+  /* Submenu */
+  .category-menu .submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 15px;
+    min-width: 600px;
+    z-index: 1000;
+  }
+  
+  .category-menu .nav-item:hover .submenu {
+    display: block; 
+  }
+  
+  
+  .submenu-sections {
+    display: flex;
+    justify-content: space-between; 
+    gap: 20px;
+  }
+  
+
+  .submenu-section {
+    flex: 1; 
+    min-width: 150px; 
+  }
+  
+  .submenu-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Danh sách sản phẩm con */
+  .submenu-items {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .submenu-items li {
+    list-style: none;
+  }
+  
+  .submenu-items a {
+    display: block;
+    padding: 5px 0;
+    color: #666;
+    font-size: 13px;
+    transition: color 0.3s;
+  }
+  
+  .submenu-items a:hover {
+    color: #007bff;
+  }
+  
+  /* Nhãn HOT và MỚI */
+  .label-hot,
+  .label-new {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-left: 5px;
+  }
+  
+  .label-hot {
+    background-color: #ff4d4d; /* Màu đỏ cho HOT */
+    color: #fff;
+  }
+  
+  .label-new {
+    background-color: #28a745; /* Màu xanh lá cho MỚI */
+    color: #fff;
+  }
+
+
+
+/* Slider chính */
+.intro-slider-container {
+  position: relative;
+}
+
+.intro-slide {
+  background-size: cover;
+  background-position: center;
+  height: 400px; /* Điều chỉnh chiều cao slider */
+  display: flex;
+  align-items: center;
+}
+
+.intro-content {
+  text-align: left;
+}
+
+.intro-subtitle {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.intro-title {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.intro-price {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.intro-price .intro-old-price {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.text-third {
+  color: #ff4d4d; /* Màu đỏ cho giá khuyến mãi */
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 14px;
+}
+
+.btn-primary i {
+  margin-left: 5px;
+}
+
+/* Banner bên phải */
+.img-banner{
+  width: 257.6px !important; 
+  height: 115.33px !important;
+}
+
+.banner-right {
+  display: flex;
+  flex-direction: column; /* Mặc định là cột trên màn hình lớn */
+  justify-content: center; /* Căn giữa theo chiều dọc */
+  height: 100%;
+}
+
+.banner-right .banner-item {
+  display: block;
+}
+
+
+/* Responsive cho màn hình nhỏ hơn (dưới 992px, tương ứng với breakpoint lg của Bootstrap) */
+@media (max-width: 991.98px) {
+  .logo img {
+    max-width: 60% !important;
+  }
+
+  .banner-right {
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    margin-top: 1rem;
+  }
+
+  .banner-right .banner-item {
+    width: 48%; 
+    margin-bottom: 10px;
+  }
+
+  .banner-right .banner-item-last {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .banner-right .banner-item-last img {
+    max-width: 200px !important; 
+  }
+}
+
+
+  </style>

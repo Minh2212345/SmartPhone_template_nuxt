@@ -555,4 +555,21 @@ export default {
   margin-bottom: 5px;
   border: 1px solid #ccc;
 }
+
+.option-btn.active .check-icon {
+  display: block;
+}
+.check-icon {
+  display: none;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: #34d399;
+  color: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+}
 </style>

@@ -44,16 +44,16 @@
         <div class="comparison-row">
           <div class="comparison-label">Độ sáng<hr class="label-line"></div>
           <div class="comparison-value" v-for="(productId, index) in selectedProducts" :key="index">
-            {{ getProductDetail(productId, 'brightnessStandard') }} nit (tiêu chuẩn)<br>
-            {{ getProductDetail(productId, 'brightnessHDR') }} nit (HDR)<br>
-            {{ getProductDetail(productId, 'brightnessOutdoor') ? `${getProductDetail(productId, 'brightnessOutdoor')} nit (ngoài trời)` : '—' }}
+            {{ getProductDetail(productId, 'brightnessStandard') }}<br>
+            {{ getProductDetail(productId, 'brightnessHDR') }} <br>
+            {{ getProductDetail(productId, 'brightnessOutdoor') ? `${getProductDetail(productId, 'brightnessOutdoor')}` : '—' }}
           </div>
         </div>
         <!-- Kích thước và Trọng lượng -->
         <div class="comparison-row">
-          <div class="comparison-label">Kích thước và Trọng lượng<hr class="label-line"></div>
+          <div class="comparison-label">Chiều dài<hr class="label-line"></div>
           <div class="comparison-value" v-for="(productId, index) in selectedProducts" :key="index">
-            Cao: {{ getProductDetail(productId, 'screenSize') }} mm<br>
+            Cao: {{ getProductDetail(productId, 'screenSize') }}<br>
           </div>
         </div>
         <!-- RAM -->
@@ -86,7 +86,7 @@
         </div>
         <!-- Kháng bụi/nước -->
         <div class="comparison-row">
-          <div class="comparison-label">Kháng bụi/nước<hr class="label-line"></div>
+          <div class="comparison-label">Chỉ số kháng bụi/nước<hr class="label-line"></div>
           <div class="comparison-value" v-for="(productId, index) in selectedProducts" :key="index">
             {{ getProductDetail(productId, 'waterResistance') }}
           </div>

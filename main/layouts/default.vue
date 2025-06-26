@@ -1,5 +1,5 @@
 <template>
-  <div class="layout">
+  <div class="layout">    
     <div style="width: 100%">
         <header class="fixed-header">
           <BaseNavbar />
