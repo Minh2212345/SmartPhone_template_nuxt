@@ -1262,48 +1262,47 @@ export default IndexPage
   }
 }
 
-/* Định dạng chung cho tất cả các nút bộ lọc */
 .btn-group {
-  flex-wrap: wrap; /* Cho phép xuống dòng khi cần */
-  justify-content: center; /* Căn giữa các nút */
-  align-items: center; /* Căn thẳng hàng */
+  flex-wrap: wrap; 
+  justify-content: center;
+  align-items: center;
 }
 
 .btn-outline-primary {
-  margin: 0.25rem; /* Giữ margin nhỏ */
-  white-space: nowrap; /* Ngăn chữ bị ngắt dòng */
-  text-align: center; /* Căn giữa văn bản trong nút */
+  margin: 0.25rem; 
+  white-space: nowrap; 
+  text-align: center; 
 }
 
-/* Responsive cho màn hình nhỏ hơn 768px (điện thoại) */
+
 @media (max-width: 768px) {
   .btn-group {
-    flex-direction: row; /* Giữ bố trí ngang */
-    flex-wrap: wrap; /* Cho phép xuống dòng khi cần */
-    justify-content: center; /* Căn giữa các nút */
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    justify-content: center;
   }
 
   .btn-outline-primary {
-    flex: 0 0 48%; /* Mỗi nút chiếm ~48% chiều rộng để có khoảng cách */
-    font-size: 0.875rem; /* Giảm kích thước chữ */
-    padding: 0.25rem 0.5rem; /* Giảm padding */
+    flex: 0 0 48%; 
+    font-size: 0.875rem; 
+    padding: 0.25rem 0.5rem; 
   }
 
-  /* Đảm bảo nút cuối cùng không có margin dưới */
+  
   .btn-group .btn-outline-primary:last-child {
     margin-bottom: 0;
   }
 }
 
-/* Responsive cho màn hình từ 769px đến 991px (tablet) */
+
 @media (min-width: 769px) and (max-width: 991px) {
   .btn-group {
-    flex-wrap: wrap; /* Cho phép xuống dòng */
-    justify-content: center; /* Căn giữa */
+    flex-wrap: wrap; 
+    justify-content: center;
   }
 
   .btn-outline-primary {
-    margin: 0.25rem; /* Giữ margin nhỏ */
+    margin: 0.25rem; 
   }
 }
   </style>
