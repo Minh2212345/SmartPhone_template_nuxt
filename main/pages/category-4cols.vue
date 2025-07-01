@@ -176,7 +176,7 @@
                             v-model="selectedUseCases"
                             value="pin_trau"
                           />
-                          <label class="custom-control-label" for="use-1">Pin trâu</label>
+                          <label class="custom-control-label" for="use-1">Thời lượng pin lớn</label>
                         </div>
                       </div>
                       <div class="filter-item">
@@ -231,6 +231,7 @@
                   </div>
                 </div>
               </div>
+            
 
               <div class="widget widget-collapsible">
                 <h3 class="widget-title">
@@ -377,6 +378,20 @@
                     </div>
                   </div>
                 </div>
+              </div>
+
+
+                <div>
+                <h3 class="widget-title">
+                  <NuxtLink to="/compare-page"
+                    data-toggle="collapse"                    
+                    role="button"
+                    aria-expanded="true"
+                    aria-controls="widget-2"
+                  >
+                    So sánh các sản phẩm
+                  </NuxtLink>
+                </h3>              
               </div>
             </div>
           </aside>

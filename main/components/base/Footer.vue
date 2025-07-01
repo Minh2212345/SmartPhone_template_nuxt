@@ -96,7 +96,11 @@ export default {
 
 <style scoped>
 footer{
-  background: linear-gradient(100deg, #28a745, #08387B) !important;
+  background: #162d63;
+}
+
+footer a{
+    color: #ffffff;
 }
 
 .footer-copyright{

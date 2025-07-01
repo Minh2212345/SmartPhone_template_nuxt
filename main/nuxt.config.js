@@ -3,7 +3,7 @@ export default {
   head: {
     title: 'Mobile World - Buy Smartphones & Accessories',
     htmlAttrs: {
-      lang: 'vi', // Changed to Vietnamese for localization
+      lang: 'vi', 
     },
     meta: [
       { charset: 'utf-8' },
@@ -58,32 +58,26 @@ export default {
     ],
     eslint: {
       enabled: false
-    }
+    },
   },
 
-  // Global CSS
   css: [
     '~/assets/css/main.css',
     'aos/dist/aos.css',
   ],
 
-  // Plugins to run before rendering page
   plugins: [
     { src: '~/plugins/external-scripts.js', mode: 'client' },
     { src: '~/plugins/smooth-scroll.js', mode: 'client' },
     { src: '~/plugins/mdi.js', mode: 'client' },
   ],
 
-  // Auto-import components
   components: true,
 
-  // Modules for dev and build
   buildModules: [
-    // '@nuxtjs/eslint-module',
     '@nuxt/postcss8',
   ],
 
-  // Nuxt modules
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
