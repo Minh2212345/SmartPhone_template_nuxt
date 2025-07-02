@@ -1,10 +1,10 @@
 <template>
-  <header class="header" style="height: 9rem; display: flex; align-items: center">
+  <header class="header" style="height: 11rem; display: flex; align-items: center">
     <div class="container flex items-center justify-between">
       <!-- Logo -->
       <div>
         <NuxtLink to="/">
-          <img src="/assets/images/demos/demo-4/logo.png" alt="Logo" class="h-40" />
+          <img src="/assets/images/demos/demo-4/logo.png" alt="Logo" class="h-48" />
         </NuxtLink>
       </div>
 
