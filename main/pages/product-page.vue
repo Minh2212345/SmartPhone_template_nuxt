@@ -74,7 +74,7 @@
                         selectedVariant.loai_giam_gia_ap_dung === 'Tiền mặt' && selectedVariant.giam_toi_da > 0
                       "
                       class="badge badge-danger ml-2"
-                      >Giảm tối đa {{ formatPrice(selectedVariant.giam_toi_da) }} VND</span
+                      >Giảm {{ formatPrice(selectedVariant.giam_toi_da) }} VND</span
                     >
                   </div>
                   <div v-else class="product-price" style="color: #00aeef">
@@ -139,8 +139,11 @@
                     <a href="#" class="btn-product btn-cart" @click.prevent="addToCart"
                       ><span>Thêm vào giỏ hàng</span></a
                     >
-                    <div class="details-action-wrapper">
-                      <a href="#" class="btn-product btn-compare" title="Compare"><span>So sánh</span></a>
+                    <a href="#" class="btn-product btn-cart ml-2" @click.prevent="showBuyNowModal = true"
+                      ><span>Mua ngay</span></a
+                    >
+                    <div class="details-action-wrapper">                      
+                      <NuxtLink to="/compare-page" class="btn-product btn-compare"  title="Compare"><span>So sánh</span></NuxtLink>
                     </div>
                   </div>
 
@@ -170,7 +173,6 @@
             </div>
           </div>
 
-          
           <div class="highlight-specs" v-if="product && selectedVariant">
             <h3>Thông số nổi bật</h3>
             <div class="row">
@@ -193,7 +195,6 @@
             <button class="btn btn-primary mt-3" @click="toggleSidebar">Xem thông số chi tiết</button>
           </div>
 
-          
           <div v-if="showSidebar" class="sidebar-overlay" @click.self="showSidebar = false">
             <div class="sidebar-panel">
               <div class="sidebar-header">
@@ -255,13 +256,66 @@
             </div>
           </div>
 
-          
+          <!-- Buy Now Modal -->
+          <div v-if="showBuyNowModal" class="modal-overlay" @click.self="showBuyNowModal = false">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5>Thông tin đặt hàng</h5>
+                <button class="close-btn" @click="showBuyNowModal = false">×</button>
+              </div>
+              <div class="modal-body">
+                <form @submit.prevent="submitOrder">
+                  <div class="form-group">
+                    <label for="customerName">Họ và tên *</label>
+                    <input
+                      type="text"
+                      id="customerName"
+                      class="form-control"
+                      v-model="orderInfo.name"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="phoneNumber">Số điện thoại *</label>
+                    <input
+                      type="tel"
+                      id="phoneNumber"
+                      class="form-control"
+                      v-model="orderInfo.phone"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input
+                      type="email"
+                      id="email"
+                      class="form-control"
+                      v-model="orderInfo.email"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="address">Địa chỉ giao hàng *</label>
+                    <textarea
+                      id="address"
+                      class="form-control"
+                      v-model="orderInfo.address"
+                      required
+                    ></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-pay">Thanh toán tiền mặt</button>
+                  <button type="submit" class="btn btn-pay">Thanh toán VNPay</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
           <div class="product-desc-content mb-4" v-if="selectedVariant">
             <h3>Mô tả sản phẩm</h3>
             <p>{{ selectedVariant.ghi_chu || 'Không có mô tả chi tiết cho sản phẩm này.' }}</p>
           </div>
 
-          
           <div class="reviews mb-4" v-if="selectedVariant">
             <h3>Đánh giá (2)</h3>
             <div class="review">
@@ -378,17 +432,85 @@ export default {
   data() {
     return {
       showSidebar: false,
+      showBuyNowModal: false,
+      orderInfo: {
+        name: '',
+        phone: '',
+        email: '',
+        address: ''
+      }
     }
   },
   methods: {
     toggleSidebar() {
       this.showSidebar = !this.showSidebar
     },
-  },
+    submitOrder() {      
+      console.log('Order submitted:', this.orderInfo)
+      this.showBuyNowModal = false
+      
+      this.orderInfo = {
+        name: '',
+        phone: '',
+        email: '',
+        address: ''
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.form-group textarea {
+  min-height: 100px;
+}
+
 /* Tăng cỡ chữ cho các phần thông tin bên ngoài */
 .product-title,
 .product-price,
@@ -454,6 +576,11 @@ export default {
   border: none;
   font-size: 1.8rem;
   cursor: pointer;
+}
+
+.btn.btn-pay {
+  background-color: #2d53ff;
+  color: white;
 }
 
 .sidebar-body {
