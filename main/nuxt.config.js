@@ -178,7 +178,7 @@ export default {
 
   // Environment variables
   env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:8081/api',
+    baseUrl: process.env.BASE_URL || 'http://localhost:8080/api',
   },
 
   // Render options for better performance
