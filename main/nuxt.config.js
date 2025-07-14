@@ -86,7 +86,7 @@ export default {
 
   // Axios configuration
   axios: {
-    baseURL: 'http://localhost:8081/api',
+    baseURL: 'http://localhost:8080/api',
     credentials: false,
     proxy: true, // Enable proxy to avoid CORS issues
   },
@@ -94,7 +94,7 @@ export default {
   // Proxy configuration to avoid CORS
   proxy: {
     '/api/': {
-      target: 'http://localhost:8081',
+      target: 'http://localhost:8080',
       changeOrigin: true,
     },
   },
