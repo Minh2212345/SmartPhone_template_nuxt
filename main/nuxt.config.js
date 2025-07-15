@@ -189,4 +189,5 @@ export default {
       },
     },
   },
+  ssr:false
 };

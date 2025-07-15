@@ -10,12 +10,12 @@
             <ChatComponent style="position: fixed; bottom: 20px; right: 20px" />
           </main>
         </body>
-        <footer style="width: 100%">
+        <footer style="width: 100%" v-if="$route.path !== '/login-page'">
           <BaseFooter />
         </footer>
-         <div>
-        <ChatBoxComponent/>
-      </div>
+        <div>
+          <ChatBoxComponent/>
+        </div>
       </div> 
     <ChatBox />
   </div>

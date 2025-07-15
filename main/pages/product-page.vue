@@ -138,10 +138,9 @@
                   <div class="product-details-action">
                     <a href="#" class="btn-product btn-cart" @click.prevent="addToCart"
                       ><span>Thêm vào giỏ hàng</span></a
-                    >
-                    <a href="#" class="btn-product btn-cart ml-2" @click.prevent="showBuyNowModal = true"
-                      ><span>Mua ngay</span></a
-                    >
+                    >                    
+                    <NuxtLink to="/cart-page" class="btn-product btn-cart ml-2"
+                      ><span>Mua ngay</span></NuxtLink>
                     <div class="details-action-wrapper">                      
                       <NuxtLink to="/compare-page" class="btn-product btn-compare"  title="Compare"><span>So sánh</span></NuxtLink>
                     </div>
