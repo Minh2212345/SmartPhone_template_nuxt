@@ -21,7 +21,7 @@
       <!-- Tổng số đơn hàng -->
       <div class="text-center pl-4 border-l-2 border-[#162d63]">
         <i class="las la-shopping-cart text-2xl mb-1" style="color: #162d63;"></i>
-        <p class="text-xl font-bold" style="color: #162d63;">0</p>
+        <p class="text-xl font-bold" style="color: #162d63;">2</p>
         <p class="text-lg text-gray-600 font-custom">Tổng số đơn hàng đã mua</p>
       </div>
 
@@ -150,12 +150,10 @@
                       <td class="py-2 px-4">{{ order.date }}</td>
                       <td class="py-2 px-4">{{ order.status }}</td>
                       <td class="py-2 px-4">{{ order.total }} VNĐ</td>
-                      <td class="py-2 px-4">
-                        <button
-                          class="px-2 py-1 bg-blue-500 text-white text-lg rounded-lg hover:bg-blue-600 transition duration-200 font-custom"
-                        >
-                          Tra cứu
-                        </button>
+                      <td class="py-2 px-4">                        
+                        <NuxtLink class="px-2 py-1 bg-blue-500 text-white text-lg rounded-lg hover:bg-blue-600 transition duration-200 font-custom" to="/invoice-status">
+                  Tra cứu
+                </NuxtLink>
                       </td>
                     </tr>
                     <!-- Dữ liệu mẫu -->
@@ -166,7 +164,7 @@
                 </table>
               </div>
               <div class="mt-4 text-center text-gray-500 text-lg font-custom">
-                Hiển thị 0 - 0 trong tổng số 0 đơn hàng
+                Hiển thị 2 - 1 trong tổng số 2 đơn hàng
               </div>
             </div>
           </div>
@@ -221,7 +219,7 @@
                   </tbody>
                 </table>
               </div>
-              <div class="mt-4 text-center text-gray-500 text-sm">Hiển thị 0 - 0 trong tổng số 0 bảo hành</div>
+              <div class="mt-4 text-center text-gray-500 text-sm">Hiển thị 2 - 1 trong tổng số 2 bảo hành</div>
             </div>
           </div>
 
@@ -356,7 +354,7 @@ export default {
         { id: 'returned', name: 'Đã trả máy' },
       ],
       orders: [
-        { id: 1, orderId: 'DH123456', date: '01/07/2025', status: 'Đang giao', total: '5,000,000' },
+        { id: 1, orderId: 'DH123456', date: '01/07/2025', status: 'Đang giao', total: '19,190,000' },
         { id: 2, orderId: 'DH123457', date: '30/06/2025', status: 'Đã giao', total: '3,000,000' },
       ],
       warranties: [
