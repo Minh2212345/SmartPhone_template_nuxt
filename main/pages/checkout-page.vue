@@ -140,7 +140,6 @@
               </div>
             </div>
 
-            <!-- Shared Order Summary -->
             <aside class="col-lg-5">
               <div class="summary">
                 <h3 class="summary-title">Đơn hàng của bạn</h3>
@@ -154,16 +153,24 @@
                   </thead>
                   <tbody>
                     <tr v-for="(item, index) in order.items" :key="index">
-                      <td>
-                        <a href="#">{{ item.name }}</a>
-                      </td>
+                      <td><a href="#">{{ item.name }}</a></td>
                       <td>{{ item.quantity }}</td>
                       <td>{{ item.price.toLocaleString() }} VND</td>
                     </tr>
                     <tr class="summary-subtotal">
                       <td>Tổng tiền sản phẩm:</td>
                       <td></td>
-                      <td style="color: red">{{ order.subtotal.toLocaleString() }} VND</td>
+                      <td style="color: red;">{{ order.subtotal.toLocaleString() }} VND</td>
+                    </tr>
+                    <tr class="summary-subtotal">
+                      <td>Tổng tiền giảm:</td>
+                      <td></td>
+                      <td style="color: green;">0 VND</td>
+                    </tr>
+                    <tr>
+                      <td colspan="3" style="font-size: 15px; text-align: left;">
+                        Mua thêm 3.000.000 VND để áp dụng phiếu giảm giá 15%
+                      </td>
                     </tr>
                     <tr>
                       <td>Phí vận chuyển:</td>
@@ -171,9 +178,9 @@
                       <td>{{ order.shipping.toLocaleString() }}</td>
                     </tr>
                     <tr class="summary-total">
-                      <td>Tổng tiền:</td>
+                      <td>Tổng tiền sau giảm:</td>
                       <td></td>
-                      <td style="color: red">{{ order.total.toLocaleString() }} VND</td>
+                      <td style="color: red;">{{ order.total.toLocaleString() }} VND</td>
                     </tr>
                   </tbody>
                 </table>
@@ -182,37 +189,19 @@
                   <div class="card">
                     <div class="card-header" id="heading-1">
                       <h2 class="card-title">
-                        <a
-                          role="button"
-                          data-toggle="collapse"
-                          href="#collapse-1"
-                          aria-expanded="true"
-                          aria-controls="collapse-1"
-                        >
+                        <a role="button" data-toggle="collapse" href="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
                           Thanh toán bằng VNPay
                         </a>
                       </h2>
                     </div>
-                    <div
-                      id="collapse-1"
-                      class="collapse show"
-                      aria-labelledby="heading-1"
-                      data-parent="#accordion-payment"
-                    >
+                    <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion-payment">
                       <div class="card-body">Thanh toán bằng mã QR từ tài khoản ngân hàng</div>
                     </div>
                   </div>
                   <div class="card">
                     <div class="card-header" id="heading-3">
                       <h2 class="card-title">
-                        <a
-                          class="collapsed"
-                          role="button"
-                          data-toggle="collapse"
-                          href="#collapse-3"
-                          aria-expanded="false"
-                          aria-controls="collapse-3"
-                        >
+                        <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
                           Hình thức COD (Cash on delivery)
                         </a>
                       </h2>
@@ -409,6 +398,10 @@ textarea.form-control:focus {
   outline: none;
   border-bottom: 2px solid #007bff;
   box-shadow: none;
+}
+
+select{
+  border: 1px solid black;
 }
 
 .form-control {
