@@ -111,7 +111,9 @@
                           @click="selectColor(color.name)"
                         >
                           <span class="color-circle" :style="{ backgroundColor: color.hex }"></span>
-                          {{ color.name }}<br />{{ formatPrice(getPriceForColor(color.name)) }}
+                          {{ color.name }}<br />
+                          <span v-if="getPriceForColor(color.name) !== null">{{ formatPrice(getPriceForColor(color.name)) }} VND</span>
+                          <span v-else>Không có sẵn</span>
                           <span class="check-icon"><i class="fas fa-check"></i></span>
                         </div>
                       </div>

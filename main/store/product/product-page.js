@@ -229,13 +229,14 @@ export default {
       }
     },
     selectColor(color) {
-      const variant =
-        this.variants.find((v) => v.mau_sac === color && this.availableMemories.includes(v.bo_nho_trong_dung_luong)) ||
-        this.variants.find((v) => v.mau_sac === color)
-      if (variant) {
-        this.selectedVariant = variant
-      }
-    },
+  const variant =
+    this.variants.find(
+      (v) => v.mau_sac === color && v.bo_nho_trong_dung_luong === this.selectedVariant.bo_nho_trong_dung_luong
+    ) || this.variants.find((v) => v.mau_sac === color);
+  if (variant) {
+    this.selectedVariant = variant;
+  }
+},
     selectMemory(memory) {
       const variant =
         this.variants.find((v) => v.bo_nho_trong_dung_luong === memory && v.mau_sac === this.selectedVariant.mau_sac) ||
@@ -254,10 +255,12 @@ export default {
         this.variants.find((v) => v.bo_nho_trong_dung_luong === memory)
       return variant ? variant.gia_ban : 0
     },
-    getPriceForColor(color) {
-  const variant = this.variants.find((v) => v.mau_sac === color);
-  return variant ? (variant.has_discount ? variant.gia_sau_khi_giam : variant.gia_ban) : 0;
-},
+        getPriceForColor(color) {
+      const variant = this.variants.find(
+        (v) => v.mau_sac === color && v.bo_nho_trong_dung_luong === this.selectedVariant.bo_nho_trong_dung_luong
+      );
+      return variant ? (variant.has_discount ? variant.gia_sau_khi_giam : variant.gia_ban) : null;
+    },
     isMemoryAvailable(memory) {
       return this.availableMemories.includes(memory)
     },
