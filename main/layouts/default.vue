@@ -30,3 +30,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.content-with-navbar {
+  min-height: calc(80vh - 60px); /* 60px là chiều cao header, điều chỉnh theo thực tế */
+}
+</style>

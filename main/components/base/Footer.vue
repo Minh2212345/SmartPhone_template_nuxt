@@ -97,6 +97,7 @@ export default {
 <style scoped>
 footer{
   background: #162d63;
+  height: auto;
 }
 
 footer a{
