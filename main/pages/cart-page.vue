@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrapper">
+    <ToastNotification ref="toastNotification" />
     <main class="main">
       <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
@@ -134,51 +135,55 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import ToastNotification from '../components/base/ToastNotification.vue';
 
 export default {
   name: 'CartPage',
+  components: {
+    ToastNotification,
+  },
   data() {
     return {
       cartItems: [],
       invoiceId: null,
       discountCode: '',
-      shippingFee: 30000
-    }
+      shippingFee: 30000,
+    };
   },
   computed: {
     totalPrice() {
-      return this.cartItems.reduce((total, item) => total + (item.tongTien || 0), 0)
-    }
+      return this.cartItems.reduce((total, item) => total + (item.tongTien || 0), 0);
+    },
   },
   async mounted() {
-    await this.initCart()
+    await this.initCart();
   },
   methods: {
     formatPrice(price) {
       return new Intl.NumberFormat('vi-VN', {
         style: 'currency',
-        currency: 'VND'
-      }).format(price)
+        currency: 'VND',
+      }).format(price);
     },
     async initCart() {
       try {
-        this.invoiceId = this.$route.query.invoiceId || localStorage.getItem('invoiceId')
+        this.invoiceId = this.$route.query.invoiceId || localStorage.getItem('invoiceId');
         if (!this.invoiceId) {
           // Nếu không có invoiceId, chỉ hiển thị giỏ hàng trống
-          this.cartItems = []
-          return
+          this.cartItems = [];
+          return;
         }
-        await this.fetchCart()
+        await this.fetchCart();
       } catch (error) {
         // Không hiển thị lỗi, chỉ đặt cartItems về rỗng
-        this.cartItems = []
-        console.error('Khởi tạo giỏ hàng thất bại:', error)
+        this.cartItems = [];
+        console.error('Khởi tạo giỏ hàng thất bại:', error);
       }
     },
     async fetchCart() {
       try {
-        const response = await axios.get(`http://localhost:8080/api/client/gio-hang/${this.invoiceId}`)
+        const response = await axios.get(`http://localhost:8080/api/client/gio-hang/${this.invoiceId}`);
         this.cartItems = response.data.chiTietGioHangDTOS.map(item => ({
           chiTietSanPhamId: item.chiTietSanPhamId,
           maImel: item.maImel,
@@ -190,24 +195,27 @@ export default {
           ghiChuGia: item.ghiChuGia || '',
           soLuong: item.soLuong || 1,
           tongTien: item.tongTien || 0,
-          image: item.image || 'không tải được ảnh',
-          productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`
-        }))
+          image: item.image || '/assets/images/placeholder.jpg',
+          productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`,
+        }));
       } catch (error) {
-        this.handleError(error, 'Lỗi khi tải giỏ hàng')
-        this.cartItems = []
+        this.handleError(error, 'Lỗi khi tải giỏ hàng');
+        this.cartItems = [];
       }
     },
     async updateQuantity(index, newQuantity) {
-      const item = this.cartItems[index]
+      const item = this.cartItems[index];
       try {
         const chiTietGioHangDTO = {
           chiTietSanPhamId: item.chiTietSanPhamId,
           maImel: item.maImel,
           soLuong: newQuantity,
-          idPhieuGiamGia: item.idPhieuGiamGia || null
-        }
-        const response = await axios.post(`http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`, chiTietGioHangDTO)
+          idPhieuGiamGia: item.idPhieuGiamGia || null,
+        };
+        const response = await axios.post(
+          `http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`,
+          chiTietGioHangDTO
+        );
         this.cartItems = response.data.chiTietGioHangDTOS.map(item => ({
           chiTietSanPhamId: item.chiTietSanPhamId,
           maImel: item.maImel,
@@ -220,23 +228,28 @@ export default {
           soLuong: item.soLuong || 1,
           tongTien: item.tongTien || 0,
           image: item.image || '/assets/images/placeholder.jpg',
-          productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`
-        }))
-        this.$toast.success('Cập nhật số lượng thành công!')
+          productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`,
+        }));
+        this.$refs.toastNotification?.addToast({
+          type: 'success',
+          message: 'Cập nhật số lượng thành công!',
+          isLoading: false,
+          duration: 3000,
+        });
       } catch (error) {
-        this.handleError(error, 'Lỗi khi cập nhật số lượng')
+        this.handleError(error, 'Lỗi khi cập nhật số lượng');
       }
     },
     async removeItem(index) {
       try {
-        const item = this.cartItems[index]
+        const item = this.cartItems[index];
         const response = await axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
           params: {
             idHD: this.invoiceId,
             spId: item.chiTietSanPhamId,
-            maImel: item.maImel
-          }
-        })
+            maImel: item.maImel,
+          },
+        });
 
         this.cartItems = response.data.chiTietGioHangDTOS.map(item => ({
           chiTietSanPhamId: item.chiTietSanPhamId,
@@ -250,43 +263,68 @@ export default {
           soLuong: item.soLuong || 1,
           tongTien: item.tongTien || 0,
           image: item.image || '/assets/images/placeholder.jpg',
-          productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`
-        }))
+          productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`,
+        }));
 
         if (this.cartItems.length === 0) {
           try {
-            await axios.delete(`http://localhost:8080/api/client/hoa-don-cho/${this.invoiceId}`)
-            localStorage.removeItem('invoiceId')
-            this.invoiceId = null
-            this.$toast.success('Giỏ hàng trống, hóa đơn chờ đã được xóa!')
+            await axios.delete(`http://localhost:8080/api/client/hoa-don-cho/${this.invoiceId}`);
+            localStorage.removeItem('invoiceId');
+            this.invoiceId = null;
+            this.$refs.toastNotification?.addToast({
+              type: 'success',
+              message: 'Giỏ hàng trống, hóa đơn chờ đã được xóa!',
+              isLoading: false,
+              duration: 3000,
+            });
           } catch (error) {
-            this.handleError(error, 'Lỗi khi xóa hóa đơn chờ')
+            this.handleError(error, 'Lỗi khi xóa hóa đơn chờ');
           }
         } else {
-          this.$toast.success(`Đã xóa sản phẩm "${item.tenSanPham}" khỏi giỏ hàng!`)
+          this.$refs.toastNotification?.addToast({
+            type: 'success',
+            message: `Đã xóa sản phẩm "${item.tenSanPham}" khỏi giỏ hàng!`,
+            isLoading: false,
+            duration: 3000,
+          });
         }
       } catch (error) {
-        this.handleError(error, 'Lỗi khi xóa sản phẩm')
+        this.handleError(error, 'Lỗi khi xóa sản phẩm');
       }
     },
     async applyDiscount() {
       if (!this.discountCode) {
-        this.$toast.error('Vui lòng nhập mã giảm giá!')
-        return
+        this.$refs.toastNotification?.addToast({
+          type: 'error',
+          message: 'Vui lòng nhập mã giảm giá!',
+          isLoading: false,
+          duration: 5000,
+        });
+        return;
       }
       try {
-        this.$toast.info('Chức năng áp dụng mã giảm giá chưa được triển khai.')
+        this.$refs.toastNotification?.addToast({
+          type: 'info',
+          message: 'Chức năng áp dụng mã giảm giá chưa được triển khai.',
+          isLoading: false,
+          duration: 5000,
+        });
       } catch (error) {
-        this.handleError(error, 'Lỗi khi áp dụng mã giảm giá')
+        this.handleError(error, 'Lỗi khi áp dụng mã giảm giá');
       }
     },
     handleError(error, defaultMessage) {
-      const message = error.response?.data?.message || error.message || defaultMessage
-      this.$toast.error(message)
-      console.error(`${defaultMessage}:`, error)
-    }
-  }
-}
+      const message = error.response?.data?.message || error.message || defaultMessage;
+      this.$refs.toastNotification?.addToast({
+        type: 'error',
+        message,
+        isLoading: false,
+        duration: 5000,
+      });
+      console.error(`${defaultMessage}:`, error);
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -408,7 +446,6 @@ export default {
 }
 
 @media (max-width: 768px) {
-
   .table-cart th,
   .table-cart td {
     padding: 10px;
