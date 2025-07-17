@@ -1,6 +1,6 @@
 <template>
-  <!-- eslint-disable -->
-  <div class="page-wrapper" :key="$route.query.sp_id" v-if="isLoading || (product && selectedVariant)">
+  <!-- Template giữ nguyên, không cần thay đổi -->
+  <div v-if="isLoading || (product && selectedVariant)" :key="$route.query.sp_id" class="page-wrapper">
     <main class="main">
       <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
         <div class="container d-flex align-items-center">
@@ -25,26 +25,19 @@
                   <div class="row">
                     <figure class="product-main-image">
                       <img
-                        id="product-zoom"
-                        :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
+id="product-zoom" :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
                         :data-zoom-image="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
-                        alt="product image"
-                      />
-                      <a href="#" id="btn-product-gallery" class="btn-product-gallery">
+                        alt="product image" />
+                      <a id="btn-product-gallery" href="#" class="btn-product-gallery">
                         <i class="icon-arrows"></i>
                       </a>
                     </figure>
                     <div id="product-zoom-gallery" class="product-image-gallery">
                       <a
-                        v-for="color in uniqueColors"
-                        :key="color.name"
-                        class="product-gallery-item"
-                        :class="{ active: selectedVariant.mau_sac === color.name }"
-                        href="#"
-                        :data-image="getImageForColor(color.name)"
-                        :data-zoom-image="getImageForColor(color.name)"
-                        @click.prevent="selectColor(color.name)"
-                      >
+v-for="color in uniqueColors" :key="color.name" class="product-gallery-item"
+                        :class="{ active: selectedVariant.mau_sac === color.name }" href="#"
+                        :data-image="getImageForColor(color.name)" :data-zoom-image="getImageForColor(color.name)"
+                        @click.prevent="selectColor(color.name)">
                         <img :src="getImageForColor(color.name)" alt="product variant" />
                       </a>
                     </div>
@@ -58,24 +51,17 @@
                     {{ product.ten_san_pham }} - {{ selectedVariant.bo_nho_trong_dung_luong }}
                   </h1>
                   <div v-if="selectedVariant.has_discount" class="product-price">
-                    <span style="text-decoration: line-through; color: #999"
-                      >{{ formatPrice(selectedVariant.gia_ban_dau) }} VND</span
-                    >
-                    <span style="color: red; margin-left: 5px"
-                      >{{ formatPrice(selectedVariant.gia_sau_khi_giam) }} VND</span
-                    >
+                    <span style="text-decoration: line-through; color: #999">{{ formatPrice(selectedVariant.gia_ban_dau)
+                      }} VND</span>
+                    <span style="color: red; margin-left: 5px">{{ formatPrice(selectedVariant.gia_sau_khi_giam) }}
+                      VND</span>
                     <span
                       v-if="selectedVariant.loai_giam_gia_ap_dung === 'Phần trăm' && selectedVariant.giam_phan_tram > 0"
-                      class="badge badge-danger ml-2"
-                      >Giảm {{ selectedVariant.giam_phan_tram }}%</span
-                    >
+                      class="badge badge-danger ml-2">Giảm {{ selectedVariant.giam_phan_tram }}%</span>
                     <span
-                      v-else-if="
-                        selectedVariant.loai_giam_gia_ap_dung === 'Tiền mặt' && selectedVariant.giam_toi_da > 0
-                      "
-                      class="badge badge-danger ml-2"
-                      >Giảm {{ formatPrice(selectedVariant.giam_toi_da) }} VND</span
-                    >
+v-else-if="
+                      selectedVariant.loai_giam_gia_ap_dung === 'Tiền mặt' && selectedVariant.giam_toi_da > 0
+                    " class="badge badge-danger ml-2">Giảm {{ formatPrice(selectedVariant.giam_toi_da) }} VND</span>
                   </div>
                   <div v-else class="product-price" style="color: #00aeef">
                     {{ formatPrice(selectedVariant.gia_ban) }} VND
@@ -84,15 +70,10 @@
                     <h5>Chọn bộ nhớ</h5>
                     <div class="d-flex flex-wrap">
                       <div
-                        v-for="memory in uniqueMemories"
-                        :key="memory"
-                        class="option-btn"
-                        :class="{
-                          active: selectedVariant.bo_nho_trong_dung_luong === memory,
-                          disabled: !isMemoryAvailable(memory),
-                        }"
-                        @click="isMemoryAvailable(memory) && selectMemory(memory)"
-                      >
+v-for="memory in uniqueMemories" :key="memory" class="option-btn" :class="{
+                        active: selectedVariant.bo_nho_trong_dung_luong === memory,
+                        disabled: !isMemoryAvailable(memory),
+                      }" @click="isMemoryAvailable(memory) && selectMemory(memory)">
                         {{ memory }}<br />
                         <span class="check-icon"><i class="fas fa-check"></i></span>
                       </div>
@@ -104,15 +85,12 @@
                       <h5>Chọn màu để xem giá sản phẩm</h5>
                       <div class="d-flex flex-wrap">
                         <div
-                          v-for="color in uniqueColors"
-                          :key="color.name"
-                          class="option-btn color-btn"
-                          :class="{ active: selectedVariant.mau_sac === color.name }"
-                          @click="selectColor(color.name)"
-                        >
+v-for="color in uniqueColors" :key="color.name" class="option-btn color-btn"
+                          :class="{ active: selectedVariant.mau_sac === color.name }" @click="selectColor(color.name)">
                           <span class="color-circle" :style="{ backgroundColor: color.hex }"></span>
                           {{ color.name }}<br />
-                          <span v-if="getPriceForColor(color.name) !== null">{{ formatPrice(getPriceForColor(color.name)) }} VND</span>
+                          <span v-if="getPriceForColor(color.name) !== null">{{
+                            formatPrice(getPriceForColor(color.name)) }} VND</span>
                           <span v-else>Không có sẵn</span>
                           <span class="check-icon"><i class="fas fa-check"></i></span>
                         </div>
@@ -124,49 +102,36 @@
                     <label for="qty">Số lượng:</label>
                     <div class="product-details-quantity">
                       <input
-                        type="number"
-                        id="qty"
-                        class="form-control"
-                        v-model="quantity"
-                        min="1"
-                        max="10"
-                        step="1"
-                        data-decimals="0"
-                        required
-                      />
+id="qty" v-model="quantity" type="number" class="form-control" min="1" max="10" step="1"
+                        data-decimals="0" required />
                     </div>
                   </div>
 
                   <div class="product-details-action">
-                    <a href="#" class="btn-product btn-cart" @click.prevent="addToCart"
-                      ><span>Thêm vào giỏ hàng</span></a
-                    >                    
-                    <NuxtLink to="/cart-page" class="btn-product btn-cart ml-2"
-                      ><span>Mua ngay</span></NuxtLink>
-                    <div class="details-action-wrapper">                      
-                      <NuxtLink to="/compare-page" class="btn-product btn-compare"  title="Compare"><span>So sánh</span></NuxtLink>
+                    <a href="#" class="btn-product btn-cart" @click.prevent="addToCart"><span>Thêm vào giỏ
+                        hàng</span></a>
+                    <NuxtLink to="/cart-page" class="btn-product btn-cart ml-2"><span>Mua ngay</span></NuxtLink>
+                    <div class="details-action-wrapper">
+                      <NuxtLink to="/compare-page" class="btn-product btn-compare" title="Compare"><span>So sánh</span>
+                      </NuxtLink>
                     </div>
                   </div>
 
                   <div class="product-details-footer">
                     <div class="product-cat">
                       <span>Phân loại:</span>
-                      <a href="#">{{ manufacturerMap[product.nha_san_xuat] || product.nha_san_xuat || 'Unknown' }}</a
-                      >,
+                      <a href="#">{{ manufacturerMap[product.nha_san_xuat] || product.nha_san_xuat || 'Unknown' }}</a>,
                       <a href="#">Sản phẩm mới</a>
                     </div>
                     <div class="social-icons social-icons-sm">
                       <span class="social-label">Chia sẻ:</span>
-                      <a href="#" class="social-icon" title="Facebook" target="_blank"
-                        ><i class="icon-facebook-f"></i
-                      ></a>
+                      <a href="#" class="social-icon" title="Facebook" target="_blank"><i
+                          class="icon-facebook-f"></i></a>
                       <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                      <a href="#" class="social-icon" title="Instagram" target="_blank"
-                        ><i class="icon-instagram"></i
-                      ></a>
-                      <a href="#" class="social-icon" title="Pinterest" target="_blank"
-                        ><i class="icon-pinterest"></i
-                      ></a>
+                      <a href="#" class="social-icon" title="Instagram" target="_blank"><i
+                          class="icon-instagram"></i></a>
+                      <a href="#" class="social-icon" title="Pinterest" target="_blank"><i
+                          class="icon-pinterest"></i></a>
                     </div>
                   </div>
                 </div>
@@ -174,7 +139,7 @@
             </div>
           </div>
 
-          <div class="highlight-specs" v-if="product && selectedVariant">
+          <div v-if="product && selectedVariant" class="highlight-specs">
             <h3>Thông số nổi bật</h3>
             <div class="row">
               <div class="col-md-4">
@@ -192,7 +157,7 @@
             </div>
           </div>
 
-          <div class="product-desc-content mb-4" v-if="selectedVariant">
+          <div v-if="selectedVariant" class="product-desc-content mb-4">
             <button class="btn btn-primary mt-3" @click="toggleSidebar">Xem thông số chi tiết</button>
           </div>
 
@@ -204,10 +169,8 @@
               </div>
               <div class="sidebar-body">
                 <img
-                  :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
-                  alt="Product Image"
-                  class="sidebar-image"
-                />
+:src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'" alt="Product Image"
+                  class="sidebar-image" />
                 <table class="specs-table">
                   <tr>
                     <td><i class="fas fa-shield-alt mr-2"></i>Chỉ số chống bụi và nước</td>
@@ -268,42 +231,19 @@
                 <form @submit.prevent="submitOrder">
                   <div class="form-group">
                     <label for="customerName">Họ và tên *</label>
-                    <input
-                      type="text"
-                      id="customerName"
-                      class="form-control"
-                      v-model="orderInfo.name"
-                      required
-                    />
+                    <input id="customerName" v-model="orderInfo.name" type="text" class="form-control" required />
                   </div>
                   <div class="form-group">
                     <label for="phoneNumber">Số điện thoại *</label>
-                    <input
-                      type="tel"
-                      id="phoneNumber"
-                      class="form-control"
-                      v-model="orderInfo.phone"
-                      required
-                    />
+                    <input id="phoneNumber" v-model="orderInfo.phone" type="tel" class="form-control" required />
                   </div>
                   <div class="form-group">
                     <label for="email">Email *</label>
-                    <input
-                      type="email"
-                      id="email"
-                      class="form-control"
-                      v-model="orderInfo.email"
-                      required
-                    />
+                    <input id="email" v-model="orderInfo.email" type="email" class="form-control" required />
                   </div>
                   <div class="form-group">
                     <label for="address">Địa chỉ giao hàng *</label>
-                    <textarea
-                      id="address"
-                      class="form-control"
-                      v-model="orderInfo.address"
-                      required
-                    ></textarea>
+                    <textarea id="address" v-model="orderInfo.address" class="form-control" required></textarea>
                   </div>
                   <button type="submit" class="btn btn-pay">Thanh toán tiền mặt</button>
                   <button type="submit" class="btn btn-pay">Thanh toán VNPay</button>
@@ -312,12 +252,12 @@
             </div>
           </div>
 
-          <div class="product-desc-content mb-4" v-if="selectedVariant">
+          <div v-if="selectedVariant" class="product-desc-content mb-4">
             <h3>Mô tả sản phẩm</h3>
             <p>{{ selectedVariant.ghi_chu || 'Không có mô tả chi tiết cho sản phẩm này.' }}</p>
           </div>
 
-          <div class="reviews mb-4" v-if="selectedVariant">
+          <div v-if="selectedVariant" class="reviews mb-4">
             <h3>Đánh giá (2)</h3>
             <div class="review">
               <div class="row no-gutters">
@@ -369,8 +309,7 @@
 
           <h2 class="title text-center mb-4">Những sản phẩm tương tự</h2>
           <div
-            class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
-            data-toggle="owl"
+class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
             data-owl-options='{
               "nav": false,
               "dots": true,
@@ -383,20 +322,15 @@
                 "992": { "items": 4 },
                 "1200": { "items": 4, "nav": true, "dots": false }
               }
-            }'
-          >
+            }'>
             <div
-              v-for="similarProduct in similarProducts"
-              :key="similarProduct.id"
-              class="product product-7 text-center"
-            >
+v-for="similarProduct in similarProducts" :key="similarProduct.id"
+              class="product product-7 text-center">
               <figure class="product-media">
                 <NuxtLink :to="`/product-page?sp_id=${similarProduct.id}`">
                   <img
-                    :src="similarProduct.imageUrl || '/assets/images/placeholder.jpg'"
-                    alt="Product image"
-                    class="product-image"
-                  />
+:src="similarProduct.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
+                    class="product-image" />
                 </NuxtLink>
                 <div class="product-action-vertical">
                   <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
@@ -408,12 +342,12 @@
                 <div class="product-cat">
                   <a href="#">{{
                     manufacturerMap[similarProduct.tenNhaSanXuat] || similarProduct.tenNhaSanXuat || 'Unknown'
-                  }}</a>
+                    }}</a>
                 </div>
                 <h3 class="product-title">
                   <a href="#" @click.prevent="handleProductChange(similarProduct.id)">{{
                     similarProduct.tenSanPham
-                  }}</a>
+                    }}</a>
                 </h3>
                 <div class="product-price">{{ formatPrice(similarProduct.giaBan || 0) }} VND</div>
               </div>
@@ -426,6 +360,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import ProductPage from '../store/product/product-page.js'
 
 export default {
@@ -439,22 +374,71 @@ export default {
         phone: '',
         email: '',
         address: ''
-      }
+      },
+      invoiceId: null // Lưu ID hóa đơn chờ
     }
+  },
+  mounted() {
+    // Kiểm tra và lấy invoiceId từ localStorage khi tải trang
+    this.invoiceId = localStorage.getItem('invoiceId')
   },
   methods: {
     toggleSidebar() {
       this.showSidebar = !this.showSidebar
     },
-    submitOrder() {      
+    async submitOrder() {
       console.log('Order submitted:', this.orderInfo)
       this.showBuyNowModal = false
-      
       this.orderInfo = {
         name: '',
         phone: '',
         email: '',
         address: ''
+      }
+    },
+    async createInvoice() {
+      try {
+        const response = await axios.post('http://localhost:8080/api/client/hoa-don-cho', null, {
+          params: { khachHangId: null }
+        })
+        this.invoiceId = response.data.id
+        if (!this.invoiceId) {
+          throw new Error('Invoice ID is undefined')
+        }
+        localStorage.setItem('invoiceId', this.invoiceId)
+        return this.invoiceId
+      } catch (error) {
+        console.error('Error creating invoice:', error)
+        this.$toast.error('Không thể tạo hóa đơn chờ.')
+        throw error
+      }
+    },
+    async addToCart() {
+      try {
+        if (!this.selectedVariant || !this.selectedVariant.ctsp_id) {
+          this.$toast.error('Vui lòng chọn sản phẩm hợp lệ!')
+          return
+        }
+
+        // Sử dụng invoiceId hiện có nếu tồn tại, nếu không thì tạo mới
+        if (!this.invoiceId) {
+          await this.createInvoice()
+        }
+
+        const chiTietGioHangDTO = {
+          chiTietSanPhamId: this.selectedVariant.ctsp_id,
+          maImel: this.selectedVariant.imel || null,
+          soLuong: this.quantity,
+          idPhieuGiamGia: null
+        }
+
+        const response = await axios.post(`http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`, chiTietGioHangDTO)
+
+        this.$toast.success(`Sản phẩm "${this.product.ten_san_pham}" đã được thêm vào giỏ hàng!`)
+        this.$router.push(`/cart-page`)
+      } catch (error) {
+        console.error('Error adding to cart:', error)
+        this.$toast.error('Lỗi khi thêm sản phẩm vào giỏ hàng: ' + (error.response?.data?.message || error.message))
       }
     }
   }
@@ -474,6 +458,7 @@ export default {
   align-items: center;
   z-index: 1000;
 }
+
 .modal-content {
   background: white;
   padding: 20px;
@@ -482,25 +467,30 @@ export default {
   max-width: 500px;
   position: relative;
 }
+
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
+
 .close-btn {
   background: none;
   border: none;
   font-size: 20px;
   cursor: pointer;
 }
+
 .form-group {
   margin-bottom: 15px;
 }
+
 .form-group label {
   display: block;
   margin-bottom: 5px;
 }
+
 .form-group input,
 .form-group textarea {
   width: 100%;
@@ -508,6 +498,7 @@ export default {
   border: 1px solid #ddd;
   border-radius: 4px;
 }
+
 .form-group textarea {
   min-height: 100px;
 }
@@ -554,7 +545,8 @@ export default {
 .sidebar-panel {
   width: 400px;
   background: #fff;
-  height: 100vh; /* Sử dụng 100% chiều cao viewport */
+  height: 100vh;
+  /* Sử dụng 100% chiều cao viewport */
   padding: 20px;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   transform: translateX(0);
@@ -586,9 +578,12 @@ export default {
 
 .sidebar-body {
   font-size: 1.5rem;
-  height: calc(100% - 60px); /* Chiều cao còn lại sau header */
-  overflow-y: auto; /* Cho phép cuộn theo chiều dọc */
-  padding-right: 5px; /* Thêm padding để tránh cuộn ngang */
+  height: calc(100% - 60px);
+  /* Chiều cao còn lại sau header */
+  overflow-y: auto;
+  /* Cho phép cuộn theo chiều dọc */
+  padding-right: 5px;
+  /* Thêm padding để tránh cuộn ngang */
 }
 
 .sidebar-image {
@@ -604,12 +599,12 @@ export default {
 }
 
 .specs-table td {
-  padding: 10px;  
+  padding: 10px;
 }
 
 .specs-table td:first-child {
   font-weight: bold;
-  width:50%;
+  width: 50%;
 }
 
 .specs-table td i {
@@ -687,6 +682,7 @@ export default {
 .option-btn.active .check-icon {
   display: block;
 }
+
 .check-icon {
   display: none;
   position: absolute;

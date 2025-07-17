@@ -4,21 +4,25 @@
       <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><NuxtLink to="/">Trang chủ</NuxtLink></li>
-            <li class="breadcrumb-item"><NuxtLink to="/category-4cols">Iphone 16 Series</NuxtLink></li>
-            <li class="breadcrumb-item active" aria-current="page"><NuxtLink to="/cart-page">Giỏ hàng</NuxtLink></li>
+            <li class="breadcrumb-item">
+              <NuxtLink to="/">Trang chủ</NuxtLink>
+            </li>
+            <li class="breadcrumb-item">
+              <NuxtLink to="/category-4cols">Iphone 16 Series</NuxtLink>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              <NuxtLink to="/cart-page">Giỏ hàng</NuxtLink>
+            </li>
           </ol>
         </div>
-        <!-- End .container -->
       </nav>
-      <!-- End .breadcrumb-nav -->
 
       <div class="page-content">
         <div class="cart">
           <div class="container">
             <div class="row">
               <div class="col-lg-9">
-                <table class="table table-cart table-mobile">
+                <table v-if="cartItems.length > 0" class="table table-cart table-mobile">
                   <thead>
                     <tr>
                       <th>Sản phẩm</th>
@@ -30,48 +34,54 @@
                   </thead>
 
                   <tbody>
-                    <tr v-for="(item, index) in cartItems" :key="index">
+                    <tr v-for="(item, index) in cartItems" :key="item.maImel">
                       <td class="product-col">
                         <div class="product d-flex align-items-center">
                           <figure class="product-media mr-3">
                             <NuxtLink :to="item.productLink">
-                              <img :src="item.image" alt="Product image" />
+                              <img :src="item.image || '/assets/images/placeholder.jpg'" alt="Product image" />
                             </NuxtLink>
                           </figure>
                           <div class="product-details">
                             <h3 class="product-title">
-                              <NuxtLink :to="item.productLink">{{ item.name }}</NuxtLink>
+                              <NuxtLink :to="item.productLink">{{ item.tenSanPham || 'Sản phẩm không xác định' }} - {{
+                                item.mauSac || 'Không xác định' }} - {{ item.ram || 'Không xác định' }} - {{
+                                  item.boNhoTrong || 'Không xác định' }}</NuxtLink>
                             </h3>
                           </div>
                         </div>
                       </td>
                       <td class="price-col">
                         <div class="price-wrapper">
-                          <span class="current-price">{{ formatPrice(item.currentPrice) }}</span>
-                          <span class="old-price">{{ formatPrice(item.oldPrice) }}</span>
+                          <span class="current-price">{{ formatPrice(item.giaBan) }}</span>
+                          <span v-if="item.ghiChuGia" class="old-price">{{ item.ghiChuGia }}</span>
                         </div>
                       </td>
                       <td class="quantity-col">
                         <div class="cart-product-quantity">
-                          <button class="btn-decrease" @click="decreaseQuantity(index)">-</button>
-                          <span class="quantity-display">{{ item.quantity }}</span>
-                          <button class="btn-increase" @click="increaseQuantity(index)">+</button>
+                          <button class="btn-decrease" :disabled="item.soLuong <= 1"
+                            @click="updateQuantity(index, item.soLuong - 1)">-</button>
+                          <span class="quantity-display">{{ item.soLuong }}</span>
+                          <button class="btn-increase" @click="updateQuantity(index, item.soLuong + 1)">+</button>
                         </div>
                       </td>
-                      <td class="total-col">{{ formatPrice(item.currentPrice * item.quantity) }}</td>
+                      <td class="total-col">{{ formatPrice(item.tongTien) }}</td>
                       <td class="remove-col">
                         <button class="btn-remove" @click="removeItem(index)"><i class="fas fa-trash-alt"></i></button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
+                <div v-else class="text-center p-5">
+                  <p>Giỏ hàng của bạn đang trống.</p>
+                  <NuxtLink to="/" class="btn btn-outline-primary-2">Tiếp tục mua sắm</NuxtLink>
+                </div>
 
-                <!-- Giữ nguyên phần cart-bottom -->
                 <div class="cart-bottom">
                   <div class="cart-discount">
-                    <form action="#">
+                    <form @submit.prevent="applyDiscount">
                       <div class="input-group">
-                        <input type="text" class="form-control" required placeholder="Mã giảm giá" />
+                        <input v-model="discountCode" type="text" class="form-control" placeholder="Mã giảm giá" />
                         <div class="input-group-append">
                           <button class="btn btn-outline-primary-2" type="submit">
                             <i class="icon-long-arrow-right"></i>
@@ -84,7 +94,7 @@
               </div>
 
               <aside class="col-lg-3">
-                <div class="summary summary-cart">
+                <div v-if="cartItems.length > 0" class="summary summary-cart">
                   <h3 class="summary-title">Tổng đơn hàng</h3>
                   <table class="table table-summary">
                     <tbody>
@@ -95,60 +105,54 @@
                       <tr class="summary-shipping-row">
                         <td>
                           <div>
-                            <input type="text" id="free-shipping" name="shipping" class="custom-control-input" />
+                            <input id="free-shipping" type="text" name="shipping" class="custom-control-input"
+                              disabled />
                             <label class="custom-control-label" for="free-shipping">Phí vận chuyển</label>
                           </div>
                         </td>
-                        <td>0.00</td>
+                        <td>{{ formatPrice(shippingFee) }}</td>
                       </tr>
                       <tr class="summary-total">
                         <td>Tổng tiền:</td>
-                        <td>{{ formatPrice(totalPrice) }}</td>
+                        <td>{{ formatPrice(totalPrice + shippingFee) }}</td>
                       </tr>
                     </tbody>
                   </table>
-                  <NuxtLink to="/checkout-page" class="btn btn-outline-primary-2 btn-order btn-block">Thanh toán</NuxtLink>
+                  <NuxtLink to="/checkout-page" class="btn btn-outline-primary-2 btn-order btn-block"
+                    :disabled="cartItems.length === 0">Thanh toán</NuxtLink>
+                </div>
+                <div v-else class="text-center p-5">
+                  <p>Không có sản phẩm để hiển thị tổng.</p>
                 </div>
               </aside>
             </div>
           </div>
         </div>
       </div>
-      <!-- End .page-content -->
     </main>
-    <!-- End .main -->
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
-  name: 'cartPage',
+  name: 'CartPage',
   data() {
     return {
-      cartItems: [
-        {
-          name: 'Iphone 16 128GB - Trắng',
-          currentPrice: 19190000,
-          oldPrice: 22490000,
-          quantity: 1,
-          image: 'assets/images/products/table/product-1.jpg',
-          productLink: '/product-page'
-        },
-        {
-          name: 'Iphone 16e 128GB - Đen',
-          currentPrice: 16290000,
-          oldPrice: 18990000,
-          quantity: 1,
-          image: 'assets/images/products/table/product-2.jpg',
-          productLink: '/product-page'
-        }
-      ]
+      cartItems: [],
+      invoiceId: null,
+      discountCode: '',
+      shippingFee: 30000
     }
   },
   computed: {
     totalPrice() {
-      return this.cartItems.reduce((total, item) => total + (item.currentPrice * item.quantity), 0)
+      return this.cartItems.reduce((total, item) => total + (item.tongTien || 0), 0)
     }
+  },
+  async mounted() {
+    await this.initCart()
   },
   methods: {
     formatPrice(price) {
@@ -157,26 +161,135 @@ export default {
         currency: 'VND'
       }).format(price)
     },
-    increaseQuantity(index) {
-      if (this.cartItems[index].quantity < 10) {
-        // Sử dụng $set để đảm bảo reactivity
-        this.$set(this.cartItems[index], 'quantity', this.cartItems[index].quantity + 1)
+    async initCart() {
+      try {
+        this.invoiceId = this.$route.query.invoiceId || localStorage.getItem('invoiceId')
+        if (!this.invoiceId) {
+          // Nếu không có invoiceId, chỉ hiển thị giỏ hàng trống
+          this.cartItems = []
+          return
+        }
+        await this.fetchCart()
+      } catch (error) {
+        // Không hiển thị lỗi, chỉ đặt cartItems về rỗng
+        this.cartItems = []
+        console.error('Khởi tạo giỏ hàng thất bại:', error)
       }
     },
-    decreaseQuantity(index) {
-      if (this.cartItems[index].quantity > 1) {
-        // Sử dụng $set để đảm bảo reactivity
-        this.$set(this.cartItems[index], 'quantity', this.cartItems[index].quantity - 1)
+    async fetchCart() {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/client/gio-hang/${this.invoiceId}`)
+        this.cartItems = response.data.chiTietGioHangDTOS.map(item => ({
+          chiTietSanPhamId: item.chiTietSanPhamId,
+          maImel: item.maImel,
+          tenSanPham: item.tenSanPham || 'Sản phẩm không xác định',
+          mauSac: item.mauSac || 'Không xác định',
+          ram: item.ram || 'Không xác định',
+          boNhoTrong: item.boNhoTrong || 'Không xác định',
+          giaBan: item.giaBan || 0,
+          ghiChuGia: item.ghiChuGia || '',
+          soLuong: item.soLuong || 1,
+          tongTien: item.tongTien || 0,
+          image: item.image || 'không tải được ảnh',
+          productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`
+        }))
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi tải giỏ hàng')
+        this.cartItems = []
       }
     },
-    removeItem(index) {
-      this.cartItems.splice(index, 1)
+    async updateQuantity(index, newQuantity) {
+      const item = this.cartItems[index]
+      try {
+        const chiTietGioHangDTO = {
+          chiTietSanPhamId: item.chiTietSanPhamId,
+          maImel: item.maImel,
+          soLuong: newQuantity,
+          idPhieuGiamGia: item.idPhieuGiamGia || null
+        }
+        const response = await axios.post(`http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`, chiTietGioHangDTO)
+        this.cartItems = response.data.chiTietGioHangDTOS.map(item => ({
+          chiTietSanPhamId: item.chiTietSanPhamId,
+          maImel: item.maImel,
+          tenSanPham: item.tenSanPham || 'Sản phẩm không xác định',
+          mauSac: item.mauSac || 'Không xác định',
+          ram: item.ram || 'Không xác định',
+          boNhoTrong: item.boNhoTrong || 'Không xác định',
+          giaBan: item.giaBan || 0,
+          ghiChuGia: item.ghiChuGia || '',
+          soLuong: item.soLuong || 1,
+          tongTien: item.tongTien || 0,
+          image: item.image || '/assets/images/placeholder.jpg',
+          productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`
+        }))
+        this.$toast.success('Cập nhật số lượng thành công!')
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi cập nhật số lượng')
+      }
+    },
+    async removeItem(index) {
+      try {
+        const item = this.cartItems[index]
+        const response = await axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
+          params: {
+            idHD: this.invoiceId,
+            spId: item.chiTietSanPhamId,
+            maImel: item.maImel
+          }
+        })
+
+        this.cartItems = response.data.chiTietGioHangDTOS.map(item => ({
+          chiTietSanPhamId: item.chiTietSanPhamId,
+          maImel: item.maImel,
+          tenSanPham: item.tenSanPham || 'Sản phẩm không xác định',
+          mauSac: item.mauSac || 'Không xác định',
+          ram: item.ram || 'Không xác định',
+          boNhoTrong: item.boNhoTrong || 'Không xác định',
+          giaBan: item.giaBan || 0,
+          ghiChuGia: item.ghiChuGia || '',
+          soLuong: item.soLuong || 1,
+          tongTien: item.tongTien || 0,
+          image: item.image || '/assets/images/placeholder.jpg',
+          productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`
+        }))
+
+        if (this.cartItems.length === 0) {
+          try {
+            await axios.delete(`http://localhost:8080/api/client/hoa-don-cho/${this.invoiceId}`)
+            localStorage.removeItem('invoiceId')
+            this.invoiceId = null
+            this.$toast.success('Giỏ hàng trống, hóa đơn chờ đã được xóa!')
+          } catch (error) {
+            this.handleError(error, 'Lỗi khi xóa hóa đơn chờ')
+          }
+        } else {
+          this.$toast.success(`Đã xóa sản phẩm "${item.tenSanPham}" khỏi giỏ hàng!`)
+        }
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi xóa sản phẩm')
+      }
+    },
+    async applyDiscount() {
+      if (!this.discountCode) {
+        this.$toast.error('Vui lòng nhập mã giảm giá!')
+        return
+      }
+      try {
+        this.$toast.info('Chức năng áp dụng mã giảm giá chưa được triển khai.')
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi áp dụng mã giảm giá')
+      }
+    },
+    handleError(error, defaultMessage) {
+      const message = error.response?.data?.message || error.message || defaultMessage
+      this.$toast.error(message)
+      console.error(`${defaultMessage}:`, error)
     }
   }
 }
 </script>
+
 <style scoped>
-/* Định dạng chung cho bảng giỏ hàng */
 .table-cart {
   width: 100%;
   border-collapse: collapse;
@@ -189,7 +302,6 @@ export default {
   vertical-align: middle;
 }
 
-/* Định dạng cột sản phẩm */
 .product-col .product {
   display: flex;
   align-items: center;
@@ -219,7 +331,6 @@ export default {
   color: #007bff;
 }
 
-/* Định dạng cột giá */
 .price-col .price-wrapper {
   display: flex;
   flex-direction: column;
@@ -238,26 +349,6 @@ export default {
   text-decoration: line-through;
 }
 
-.price-col .discount-info {
-  display: flex;
-  gap: 10px;
-  margin-top: 5px;
-}
-
-.price-col .discount-amount {
-  font-size: 12px;
-  color: #e74c3c;
-}
-
-.price-col .discount-label {
-  font-size: 12px;
-  color: #e74c3c;
-  background-color: #ffe6e6;
-  padding: 2px 5px;
-  border-radius: 3px;
-}
-
-/* Định dạng cột số lượng */
 .quantity-col .cart-product-quantity {
   display: flex;
   align-items: center;
@@ -293,14 +384,12 @@ export default {
   color: #333;
 }
 
-/* Định dạng cột tổng tiền */
 .total-col {
   font-size: 16px;
   font-weight: 600;
   color: #333;
 }
 
-/* Định dạng nút xóa */
 .remove-col .btn-remove {
   background: none;
   border: none;
@@ -313,8 +402,13 @@ export default {
   color: #e74c3c;
 }
 
-/* Responsive */
+.summary-cart .btn-order:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
+
   .table-cart th,
   .table-cart td {
     padding: 10px;
@@ -334,11 +428,6 @@ export default {
 
   .price-col .old-price {
     font-size: 12px;
-  }
-
-  .price-col .discount-amount,
-  .price-col .discount-label {
-    font-size: 10px;
   }
 
   .quantity-col .btn-decrease,
