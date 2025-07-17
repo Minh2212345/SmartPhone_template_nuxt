@@ -30,3 +30,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.content-with-navbar {
+  min-height: calc(80vh - 60px);
+}
+</style>
