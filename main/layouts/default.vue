@@ -33,6 +33,6 @@ export default {
 
 <style scoped>
 .content-with-navbar {
-  min-height: calc(80vh - 60px); /* 60px là chiều cao header, điều chỉnh theo thực tế */
+  min-height: calc(80vh - 60px);
 }
 </style>
