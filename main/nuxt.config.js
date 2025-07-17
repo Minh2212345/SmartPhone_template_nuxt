@@ -66,11 +66,12 @@ export default {
     'aos/dist/aos.css',
   ],
 
-  plugins: [
-    { src: '~/plugins/external-scripts.js', mode: 'client' },
-    { src: '~/plugins/smooth-scroll.js', mode: 'client' },
-    { src: '~/plugins/mdi.js', mode: 'client' },
-  ],
+plugins: [
+  { src: '~/plugins/external-scripts.js', mode: 'client' },
+  { src: '~/plugins/smooth-scroll.js', mode: 'client' },
+  { src: '~/plugins/mdi.js', mode: 'client' },  
+  { src: '~/plugins/vue-composition-api.js', mode: 'client' },
+],
 
   components: true,
 
