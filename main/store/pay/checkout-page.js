@@ -22,27 +22,55 @@ export default {
       },
       stores: [{ name: 'Cửa hàng 1', address: 'Số 13 phố Trịnh Văn Bô, Phường Nam Từ Liêm, Hà Nội' }],
       order: {
-        items: [
-          { name: 'Iphone 16 - Trắng - 128GB', quantity: 1, price: 19190000 },
-          { name: 'Iphone 16e - Trắng - 128GB', quantity: 1, price: 16290000 },
-        ],
-        subtotal: 35480000,
-        shipping: 0,
-        total: 35480000,
+        items: [],
+        subtotal: 0,
+        shipping: 30000, // Phí vận chuyển mặc định cho giao hàng
+        total: 0,
       },
+      invoiceId: null,
+      paymentMethod: 'Tiền mặt', // Mặc định là COD
     }
   },
   async asyncData({ $axios }) {
     try {
       const response = await $axios.get('https://provinces.open-api.vn/api/p/')
-      console.log('Dữ liệu tỉnh/thành phố:', response.data)
       return { provinces: response.data }
     } catch (error) {
       console.error('Lỗi khi tải danh sách tỉnh/thành phố:', error)
       return { provinces: [] }
     }
   },
+  async mounted() {
+    try {
+      this.invoiceId = this.$route.query.invoiceId || localStorage.getItem('invoiceId')
+      if (this.invoiceId) {
+        await this.fetchCart()
+      } else {
+        this.$toast.error('Không tìm thấy hóa đơn để thanh toán!')
+        this.$router.push('/cart-page')
+      }
+    } catch (error) {
+      this.handleError(error, 'Lỗi khi tải thông tin giỏ hàng')
+    }
+  },
   methods: {
+    async fetchCart() {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/client/gio-hang/${this.invoiceId}`)
+        this.order.items = response.data.chiTietGioHangDTOS.map(item => ({
+          name: `${item.tenSanPham} - ${item.mauSac} - ${item.ram} - ${item.boNhoTrong}`,
+          quantity: item.soLuong || 1,
+          price: item.giaBan || 0
+        }))
+        this.order.subtotal = response.data.tongTien || 0
+        this.order.total = this.order.subtotal + this.order.shipping
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi tải giỏ hàng')
+        this.order.items = []
+        this.order.subtotal = 0
+        this.order.total = this.order.shipping
+      }
+    },
     async fetchDistricts() {
       this.districts = []
       this.wards = []
@@ -53,10 +81,8 @@ export default {
         try {
           const response = await axios.get(`https://provinces.open-api.vn/api/p/${selectedProvince.code}?depth=2`)
           this.districts = response.data.districts
-          console.log('Quận/huyện:', this.districts)
         } catch (error) {
-          console.error('Lỗi khi tải danh sách quận/huyện:', error)
-          alert('Không thể tải danh sách quận/huyện!')
+          this.handleError(error, 'Lỗi khi tải danh sách quận/huyện')
         }
       }
     },
@@ -68,59 +94,112 @@ export default {
         try {
           const response = await axios.get(`https://provinces.open-api.vn/api/d/${selectedDistrict.code}?depth=2`)
           this.wards = response.data.wards
-          console.log('Xã/phường:', this.wards)
         } catch (error) {
-          console.error('Lỗi khi tải danh sách xã/phường:', error)
-          alert('Không thể tải danh sách xã/phường!')
+          this.handleError(error, 'Lỗi khi tải danh sách xã/phường')
         }
       }
     },
-    submitForm() {
-      if (document.querySelector('#delivery-tab').classList.contains('active')) {
-        if (!this.delivery.ten) {
-          alert('Vui lòng nhập tên!')
-          return
+    async submitForm() {
+      try {
+        let hoaDonRequest = {}
+        let loaiDon = 'online'
+
+        if (document.querySelector('#delivery-tab').classList.contains('active')) {
+          if (!this.validateDelivery()) return
+          hoaDonRequest = {
+            tenKhachHang: this.delivery.ten,
+            soDienThoaiKhachHang: this.delivery.soDienThoai,
+            email: this.delivery.email,
+            diaChiKhachHang: {
+              diaChiCuThe: `${this.delivery.soNha}, ${this.delivery.phuong}, ${this.delivery.quan}, ${this.delivery.thanhPho}`
+            },
+            loaiDon: 'online',
+          }
+        } else {
+          if (!this.validatePickup()) return
+          loaiDon = 'offline'
+          hoaDonRequest = {
+            tenKhachHang: this.pickup.store.split(' - ')[0],
+            soDienThoaiKhachHang: this.pickup.soDienThoai,
+            email: this.pickup.email,
+            diaChiKhachHang: {
+              diaChiCuThe: this.pickup.store.split(' - ')[1]
+            },
+            loaiDon: 'offline',
+          }
         }
-        if (!this.delivery.soDienThoai) {
-          alert('Vui lòng nhập số điện thoại!')
-          return
-        }
-        if (!this.delivery.email) {
-          alert('Vui lòng nhập email!')
-          return
-        }
-        if (!this.delivery.thanhPho) {
-          alert('Vui lòng chọn tỉnh/thành phố!')
-          return
-        }
-        if (!this.delivery.quan) {
-          alert('Vui lòng chọn quận/huyện!')
-          return
-        }
-        if (!this.delivery.phuong) {
-          alert('Vui lòng chọn xã/phường!')
-          return
-        }
-        if (!this.delivery.soNha) {
-          alert('Vui lòng nhập số nhà, tên đường!')
-          return
-        }
-        console.log('Gửi dữ liệu giao hàng:', this.delivery)
-      } else {
-        if (!this.pickup.soDienThoai) {
-          alert('Vui lòng nhập số điện thoại!')
-          return
-        }
-        if (!this.pickup.email) {
-          alert('Vui lòng nhập email!')
-          return
-        }
-        if (!this.pickup.store) {
-          alert('Vui lòng chọn cửa hàng!')
-          return
-        }
-        console.log('Gửi dữ liệu nhận tại cửa hàng:', this.pickup)
+
+        // Gọi API thanh toán
+        const response = await axios.post(`http://localhost:8080/api/client/thanh-toan/${this.invoiceId}`, hoaDonRequest)
+
+        // Xóa invoiceId khỏi localStorage
+        localStorage.removeItem('invoiceId')
+
+        // Hiển thị thông báo thành công
+        this.$toast.success(`Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Bạn sẽ nhận được email thông báo chi tiết.`)
+
+        // Chuyển hướng đến trang tra cứu đơn hàng
+        this.$router.push({
+          path: '/invoice-status',
+          query: { maHoaDon: response.data.maHoaDon }
+        })
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi thực hiện thanh toán')
       }
     },
-  },
+    validateDelivery() {
+      if (!this.delivery.ten) {
+        this.$toast.error('Vui lòng nhập tên!')
+        return false
+      }
+      if (!this.delivery.soDienThoai) {
+        this.$toast.error('Vui lòng nhập số điện thoại!')
+        return false
+      }
+      if (!this.delivery.email) {
+        this.$toast.error('Vui lòng nhập email!')
+        return false
+      }
+      if (!this.delivery.thanhPho) {
+        this.$toast.error('Vui lòng chọn tỉnh/thành phố!')
+        return false
+      }
+      if (!this.delivery.quan) {
+        this.$toast.error('Vui lòng chọn quận/huyện!')
+        return false
+      }
+      if (!this.delivery.phuong) {
+        this.$toast.error('Vui lòng chọn xã/phường!')
+        return false
+      }
+      if (!this.delivery.soNha) {
+        this.$toast.error('Vui lòng nhập số nhà, tên đường!')
+        return false
+      }
+      return true
+    },
+    validatePickup() {
+      if (!this.pickup.soDienThoai) {
+        this.$toast.error('Vui lòng nhập số điện thoại!')
+        return false
+      }
+      if (!this.pickup.email) {
+        this.$toast.error('Vui lòng nhập email!')
+        return false
+      }
+      if (!this.pickup.store) {
+        this.$toast.error('Vui lòng chọn cửa hàng!')
+        return false
+      }
+      return true
+    },
+    handleError(error, defaultMessage) {
+      const message = error.response?.data?.message || error.message || defaultMessage
+      this.$toast.error(message)
+      console.error(`${defaultMessage}:`, error)
+    },
+    setPaymentMethod(method) {
+      this.paymentMethod = method
+    }
+  }
 }
