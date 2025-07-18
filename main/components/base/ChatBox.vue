@@ -48,7 +48,7 @@
   bottom: 20px;
   right: 20px;
   padding: 10px 20px;
-  background: linear-gradient(335deg, #28a745, #08387B);
+  background: linear-gradient(335deg, #002c69, #13ad75);
   color: white;
   border: none;
   border-radius: 5px;
@@ -79,7 +79,7 @@
 }
 
 .chat-header {
-  background: linear-gradient(335deg, #28a745, #08387B);
+  background: linear-gradient(335deg, #002c69, #13ad75);
   color: white;
   padding: 10px;
   text-align: center;
@@ -106,7 +106,7 @@
 
 .option-button {
   padding: 10px;
-  background-color: #16a34a;
+  background-color: #13ad75;
   color: white;
   border: none;
   border-radius: 5px;
@@ -115,7 +115,7 @@
 }
 
 .option-button:hover {
-  background-color: #34d399;
+  background-color: #0f9765;
 }
 
 .chat-messages {
@@ -158,7 +158,7 @@
 .chat-input button {
   padding: 5px 10px;
   margin-left: 5px;
-  background-color: #16a34a;
+  background-color: #13ad75;
   color: white;
   border: none;
   border-radius: 3px;
