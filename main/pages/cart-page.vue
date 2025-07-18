@@ -1,108 +1,236 @@
 <template>
-  <div class="page-wrapper bg-gray-50 py-4">
+  <div>
     <ToastNotification ref="toastNotification" />
-    <main class="main container mx-auto px-4">
-      <nav aria-label="breadcrumb" class="breadcrumb-nav mb-6">
-        <ol class="breadcrumb flex items-center space-x-2 text-sm text-gray-600">
-          <li class="breadcrumb-item">
-            <NuxtLink to="/" class="text-blue-600 hover:text-blue-800">Trang chủ</NuxtLink>
-          </li>
-          <li class="text-gray-400">/</li>
-          <li class="breadcrumb-item">
-            <NuxtLink to="/category-4cols" class="text-blue-600 hover:text-blue-800">Iphone 16 Series</NuxtLink>
-          </li>
-          <li class="text-gray-400">/</li>
-          <li class="breadcrumb-item active" aria-current="page">
-            <span class="text-gray-900">Giỏ hàng</span>
-          </li>
+    <main class="p-16">
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="flex items-center space-x-3 text-lg text-gray-600">
+          <li><NuxtLink to="/" class="text-blue-600 hover:text-blue-800 font-medium">Trang chủ</NuxtLink></li>
+          <li class="text-gray-400 text-xl">/</li>
+          <li><NuxtLink to="/category-4cols" class="text-blue-600 hover:text-blue-800 font-medium">iPhone 16 Series</NuxtLink></li>
+          <li class="text-gray-400 text-xl">/</li>
+          <li class="text-gray-800 font-semibold">Giỏ hàng</li>
         </ol>
       </nav>
 
-      <div class="page-content">
-        <div class="cart">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Danh sách sản phẩm -->
-            <div class="col-span-1 lg:col-span-2">
-              <div v-if="cartItems.length > 0" class="space-y-6">
-                <div v-for="(item, index) in cartItems" :key="item.maImel"
-                  class="card bg-white rounded-lg shadow-md p-5 flex flex-col md:flex-row items-center justify-between gap-5 transition-all hover:shadow-lg">
-                  <div class="flex items-center space-x-5 flex-1">
-                    <figure class="product-media">
-                      <NuxtLink :to="item.productLink">
-                        <img :src="item.image || '/assets/images/placeholder.jpg'" alt="Product image"
-                          class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-md" />
+      <!-- Page Title -->
+      <div class="mb-4">
+        <h1 class="text-3xl font-bold text-gray-900 mb-1">Giỏ hàng của bạn</h1>
+        <p class="text-lg text-gray-600" style="font-family: 'Inter', sans-serif !important;">Xem lại các sản phẩm đã chọn và tiến hành thanh toán</p>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+        <!-- Cart Items -->
+        <div class="xl:col-span-3">
+          <div v-if="cartItems.length > 0" class="space-y-6">
+            <!-- Select All -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div class="flex items-center justify-between">
+                <label class="flex items-center space-x-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    v-model="selectAll"
+                    @change="toggleSelectAll"
+                    class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 focus:ring-2"
+                  />
+                  <span class="text-lg font-semibold text-gray-800">
+                    Chọn tất cả ({{ cartItems.length }} sản phẩm)
+                  </span>
+                </label>
+                <button
+                  @click="removeSelected"
+                  :disabled="selectedItems.length === 0"
+                  class="text-lg text-red-600 hover:text-red-800 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                >
+                  Xóa đã chọn
+                </button>
+              </div>
+            </div>
+
+            <!-- Cart Item List -->
+            <div class="space-y-4">
+              <div
+                v-for="(item, index) in cartItems"
+                :key="item.maImel"
+                class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
+              >
+                <div class="flex items-start space-x-4">
+                  <!-- Checkbox -->
+                  <div class="flex-shrink-0 pt-2">
+                    <input
+                      type="checkbox"
+                      v-model="item.selected"
+                      @change="updateSelectedItems"
+                      class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 focus:ring-2"
+                    />
+                  </div>
+
+                  <!-- Product Image -->
+                  <div class="flex-shrink-0">
+                    <NuxtLink :to="item.productLink">
+                      <img
+                        :src="item.image || '/assets/images/placeholder.jpg'"
+                        alt="Product image"
+                        class="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg border border-gray-200"
+                      />
+                    </NuxtLink>
+                  </div>
+
+                  <!-- Product Info -->
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3 leading-tight">
+                      <NuxtLink :to="item.productLink" class="hover:text-blue-600 transition-colors">
+                        Điện thoại {{ item.tenSanPham || 'Sản phẩm không xác định' }}
                       </NuxtLink>
-                    </figure>
-                    <div class="product-details">
-                      <h3 class="text-lg md:text-xl lg:text-2xl font-semibold text-gray-900 line-clamp-2">
-                        <NuxtLink :to="item.productLink" class="hover:text-blue-600 transition-colors">
-                          Điện thoại {{ item.tenSanPham || 'Sản phẩm không xác định' }} - {{ item.mauSac || 'Không xác định' }} - {{ item.ram || 'Không xác định' }} - {{ item.boNhoTrong || 'Không xác định' }}
-                        </NuxtLink>
-                      </h3>
-                      <div class="text-base md:text-lg lg:text-xl text-gray-500 mt-2">
-                        <span class="font-medium">Giá: </span>{{ formatPrice(item.giaBan) }}
-                        <span v-if="item.ghiChuGia" class="line-through text-gray-400 ml-2">{{ item.ghiChuGia }}</span>
+                    </h3>
+                    <div class="space-y-2 text-lg text-gray-600">
+                      <div class="flex flex-wrap gap-x-6 gap-y-1">
+                        <span><strong>Màu sắc:</strong> {{ item.mauSac || 'Không xác định' }}</span>
+                        <span><strong>RAM:</strong> {{ item.ram || 'Không xác định' }}</span>
+                        <span><strong>Bộ nhớ:</strong> {{ item.boNhoTrong || 'Không xác định' }}</span>
+                      </div>
+                      <div class="flex items-center space-x-3">
+                        <span class="text-xl font-bold text-red-600">{{ formatPrice(item.giaBan) }}</span>
+                        <span v-if="item.ghiChuGia" class="text-lg line-through text-gray-400">{{ item.ghiChuGia }}</span>
                       </div>
                     </div>
                   </div>
-                  <div class="flex items-center space-x-5">
-                    <div class="flex items-center border rounded-md">
-                      <button class="btn-decrease px-3 py-2 text-gray-600 hover:bg-gray-100 disabled:opacity-50"
-                        :disabled="item.soLuong <= 1" @click="updateQuantity(index, item.soLuong - 1)">-</button>
-                      <span class="quantity-display px-4 py-2 text-gray-900 font-medium text-lg md:text-xl">{{
-                        item.soLuong }}</span>
-                      <button class="btn-increase px-3 py-2 text-gray-600 hover:bg-gray-100"
-                        @click="updateQuantity(index, item.soLuong + 1)">+</button>
+
+                  <!-- Quantity and Actions -->
+                  <div class="flex flex-col sm:flex-row items-end sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                    <!-- Quantity Controls -->
+                    <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                      <button
+                        class="px-4 py-3 text-lg text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                        :disabled="item.soLuong <= 1"
+                        @click="updateQuantity(index, item.soLuong - 1)"
+                      >
+                        −
+                      </button>
+                      <span class="px-4 py-3 text-lg font-semibold text-gray-900 bg-gray-50 min-w-[30px] text-center">
+                        {{ item.soLuong }}
+                      </span>
+                      <button
+                        class="px-4 py-3 text-lg text-gray-600 hover:bg-gray-100"
+                        @click="updateQuantity(index, item.soLuong + 1)"
+                      >
+                        +
+                      </button>
                     </div>
-                    <div class="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900">{{
-                      formatPrice(item.tongTien) }}</div>
-                    <button class="btn-remove text-red-500 hover:text-red-700 transition-colors text-xl md:text-2xl"
-                      @click="removeItem(index)">
-                      <i class="fas fa-trash-alt"></i>
+
+                    <!-- Total Price -->
+                    <div class="text-right">
+                      <div class="text-xl font-bold text-gray-900">{{ formatPrice(item.tongTien) }}</div>
+                    </div>
+
+                    <!-- Remove Button -->
+                    <button
+                      class="text-red-600 hover:text-red-800 transition-colors p-2"
+                      @click="removeItem(index)"
+                      title="Xóa sản phẩm"
+                    >
+                      <i class="fas fa-trash-alt text-lg"></i>
                     </button>
                   </div>
                 </div>
               </div>
-              <div v-else class="text-center p-6 bg-white rounded-lg shadow-md">
-                <p class="text-gray-600 text-lg md:text-xl">Giỏ hàng của bạn đang trống.</p>
-                <NuxtLink to="/"
-                  class="mt-4 inline-block bg-blue-600 text-white px-5 py-3 rounded-md hover:bg-blue-700 transition-colors text-lg md:text-xl">
-                  Tiếp tục mua sắm
-                </NuxtLink>
+            </div>
+          </div>
+
+          <!-- Empty Cart -->
+          <div v-else class="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="max-w-md mx-auto">
+              <div class="text-gray-400 mb-6">
+                <i class="fas fa-shopping-cart text-6xl"></i>
+              </div>
+              <h3 class="text-2xl font-semibold text-gray-900 mb-4">Giỏ hàng trống</h3>
+              <p class="text-lg text-gray-600 mb-8">Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm</p>
+              <NuxtLink
+                to="/"
+                class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors text-lg font-medium"
+              >
+                Tiếp tục mua sắm
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <aside class="xl:col-span-1">
+          <div v-if="cartItems.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-6">
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Tổng đơn hàng</h3>
+            
+            <div class="space-y-4 mb-3">
+              <div class="flex justify-between items-center text-lg">
+                <span class="text-gray-600">Số lượng sản phẩm:</span>
+                <span class="font-semibold text-gray-900">{{ selectedItems.length }} / {{ cartItems.length }}</span>
+              </div>
+              
+              <div class="flex justify-between items-center text-lg">
+                <span class="text-gray-600">Tổng tiền sản phẩm:</span>
+                <span class="font-semibold text-gray-900">{{ formatPrice(selectedTotalPrice) }}</span>
+              </div>
+              
+              <div class="flex justify-between items-center text-lg">
+                <span class="text-gray-600">Phí vận chuyển:</span>
+                <span class="font-semibold text-gray-900">{{ formatPrice(shippingFee) }}</span>
+              </div>
+              
+              <div v-if="discount > 0" class="flex justify-between items-center text-lg">
+                <span class="text-green-600">Giảm giá:</span>
+                <span class="font-semibold text-green-600">-{{ formatPrice(discount) }}</span>
+              </div>
+              
+              <div class="border-t pt-4">
+                <div class="flex justify-between items-center">
+                  <span class="text-xl font-bold text-gray-900">Tổng cộng:</span>
+                  <span class="text-2xl font-bold text-red-600">{{ formatPrice(selectedTotalPrice + shippingFee - discount) }}</span>
+                </div>
               </div>
             </div>
 
-            <!-- Tổng đơn hàng -->
-            <aside class="col-span-1">
-              <div v-if="cartItems.length > 0" class="summary summary-cart bg-white rounded-lg shadow-md p-4 md:p-5">
-                <h3 class="summary-title text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-5">Tổng đơn hàng
-                </h3>
-                <div class="space-y-4">
-                  <div class="flex justify-between text-gray-600 text-base md:text-lg lg:text-xl">
-                    <span>Tổng tiền sản phẩm:</span>
-                    <span>{{ formatPrice(totalPrice) }}</span>
-                  </div>
-                  <div class="flex justify-between text-gray-600 text-base md:text-lg lg:text-xl">
-                    <span>Phí vận chuyển:</span>
-                    <span>{{ formatPrice(shippingFee) }}</span>
-                  </div>
-                  <div
-                    class="flex justify-between text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 border-t pt-4">
-                    <span>Tổng cộng:</span>
-                    <span>{{ formatPrice(totalPrice + shippingFee) }}</span>
-                  </div>
+            <!-- Discount Info -->
+            <div class="mb-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <div class="flex items-start space-x-3">
+                <i class="fas fa-info-circle text-blue-600 text-lg mt-1"></i>
+                <div>
+                  <p class="text-base text-gray-700 leading-relaxed">
+                    <span v-if="cartItems.length >= 3" class="font-semibold text-green-600">
+                      Chúc mừng! Bạn được giảm {{ formatPrice(500000) }} khi mua từ 3 sản phẩm trở lên.
+                    </span>
+                    <span v-else-if="totalPrice >= 20000000" class="font-semibold text-green-600">
+                      Chúc mừng! Bạn được giảm {{ formatPrice(300000) }} khi tổng đơn hàng trên 20,000,000 VNĐ.
+                    </span>
+                    <span v-else>
+                      Mua thêm <strong>{{ 3 - cartItems.length }} sản phẩm</strong> để được giảm <strong>500,000 VNĐ</strong> 
+                      hoặc đạt tổng đơn <strong>20,000,000 VNĐ</strong> để được giảm <strong>300,000 VNĐ</strong>!
+                    </span>
+                  </p>
                 </div>
-                <NuxtLink to="/checkout-page"
-                  class="btn btn-order mt-6 w-full bg-blue-600 text-white py-3 md:py-4 rounded-md hover:bg-blue-700 transition-colors text-lg md:text-xl">
-                  Thanh toán
-                </NuxtLink>
               </div>
-              <div v-else class="text-center p-6 bg-white rounded-lg shadow-md">
-                <p class="text-gray-600 text-lg md:text-xl">Không có sản phẩm để hiển thị tổng.</p>
-              </div>
-            </aside>
+            </div>
+
+            <!-- Checkout Button -->
+            <NuxtLink
+              to="/checkout-page"
+              :class="[
+                'block w-full text-center py-4 rounded-lg font-semibold text-lg transition-colors',
+                selectedItems.length > 0 
+                  ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              ]"
+              :style="selectedItems.length === 0 ? 'pointer-events: none;' : ''"
+            >
+              Thanh toán ({{ selectedItems.length }} sản phẩm)
+            </NuxtLink>
           </div>
-        </div>
+
+          <!-- Empty Summary -->
+          <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Tổng đơn hàng</h3>
+            <p class="text-lg text-gray-600">Không có sản phẩm để hiển thị tổng.</p>
+          </div>
+        </aside>
       </div>
     </main>
   </div>
@@ -121,13 +249,30 @@ export default {
     return {
       cartItems: [],
       invoiceId: null,
-      discountCode: '',
       shippingFee: 30000,
+      selectAll: false,
+      selectedItems: [],
     };
   },
   computed: {
     totalPrice() {
       return this.cartItems.reduce((total, item) => total + (item.tongTien || 0), 0);
+    },
+    selectedTotalPrice() {
+      return this.selectedItems.reduce((total, item) => total + (item.tongTien || 0), 0);
+    },
+    discount() {
+      if (this.selectedItems.length >= 3) return 500000;
+      if (this.selectedTotalPrice >= 20000000) return 300000;
+      return 0;
+    },
+  },
+  watch: {
+    cartItems: {
+      handler() {
+        this.updateSelectedItems();
+      },
+      deep: true,
     },
   },
   async mounted() {
@@ -144,13 +289,11 @@ export default {
       try {
         this.invoiceId = this.$route.query.invoiceId || localStorage.getItem('invoiceId');
         if (!this.invoiceId) {
-          // Nếu không có invoiceId, chỉ hiển thị giỏ hàng trống
           this.cartItems = [];
           return;
         }
         await this.fetchCart();
       } catch (error) {
-        // Không hiển thị lỗi, chỉ đặt cartItems về rỗng
         this.cartItems = [];
         console.error('Khởi tạo giỏ hàng thất bại:', error);
       }
@@ -171,7 +314,9 @@ export default {
           tongTien: item.tongTien || 0,
           image: item.image || '/assets/images/placeholder.jpg',
           productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`,
+          selected: true,
         }));
+        this.updateSelectedItems();
       } catch (error) {
         this.handleError(error, 'Lỗi khi tải giỏ hàng');
         this.cartItems = [];
@@ -203,6 +348,7 @@ export default {
           tongTien: item.tongTien || 0,
           image: item.image || '/assets/images/placeholder.jpg',
           productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`,
+          selected: this.cartItems.find(i => i.maImel === item.maImel)?.selected || true,
         }));
         this.$refs.toastNotification?.addToast({
           type: 'success',
@@ -238,22 +384,19 @@ export default {
           tongTien: item.tongTien || 0,
           image: item.image || '/assets/images/placeholder.jpg',
           productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`,
+          selected: true,
         }));
 
         if (this.cartItems.length === 0) {
-          try {
-            await axios.delete(`http://localhost:8080/api/client/hoa-don-cho/${this.invoiceId}`);
-            localStorage.removeItem('invoiceId');
-            this.invoiceId = null;
-            this.$refs.toastNotification?.addToast({
-              type: 'success',
-              message: 'Giỏ hàng trống, hóa đơn chờ đã được xóa!',
-              isLoading: false,
-              duration: 3000,
-            });
-          } catch (error) {
-            this.handleError(error, 'Lỗi khi xóa hóa đơn chờ');
-          }
+          await axios.delete(`http://localhost:8080/api/client/hoa-don-cho/${this.invoiceId}`);
+          localStorage.removeItem('invoiceId');
+          this.invoiceId = null;
+          this.$refs.toastNotification?.addToast({
+            type: 'success',
+            message: 'Giỏ hàng trống, hóa đơn chờ đã được xóa!',
+            isLoading: false,
+            duration: 3000,
+          });
         } else {
           this.$refs.toastNotification?.addToast({
             type: 'success',
@@ -262,30 +405,41 @@ export default {
             duration: 3000,
           });
         }
+        this.updateSelectedItems();
       } catch (error) {
         this.handleError(error, 'Lỗi khi xóa sản phẩm');
       }
     },
-    async applyDiscount() {
-      if (!this.discountCode) {
-        this.$refs.toastNotification?.addToast({
-          type: 'error',
-          message: 'Vui lòng nhập mã giảm giá!',
-          isLoading: false,
-          duration: 5000,
-        });
-        return;
-      }
+    async removeSelected() {
       try {
+        const promises = this.selectedItems.map(item =>
+          axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
+            params: {
+              idHD: this.invoiceId,
+              spId: item.chiTietSanPhamId,
+              maImel: item.maImel,
+            },
+          })
+        );
+        await Promise.all(promises);
+        await this.fetchCart();
         this.$refs.toastNotification?.addToast({
-          type: 'info',
-          message: 'Chức năng áp dụng mã giảm giá chưa được triển khai.',
+          type: 'success',
+          message: 'Đã xóa các sản phẩm đã chọn!',
           isLoading: false,
-          duration: 5000,
+          duration: 3000,
         });
       } catch (error) {
-        this.handleError(error, 'Lỗi khi áp dụng mã giảm giá');
+        this.handleError(error, 'Lỗi khi xóa các sản phẩm đã chọn');
       }
+    },
+    toggleSelectAll() {
+      this.cartItems.forEach(item => (item.selected = this.selectAll));
+      this.updateSelectedItems();
+    },
+    updateSelectedItems() {
+      this.selectedItems = this.cartItems.filter(item => item.selected);
+      this.selectAll = this.cartItems.length > 0 && this.cartItems.every(item => item.selected);
     },
     handleError(error, defaultMessage) {
       const message = error.response?.data?.message || error.message || defaultMessage;
@@ -302,171 +456,30 @@ export default {
 </script>
 
 <style scoped>
-/* Định nghĩa font cho cart-page.vue */
-.roboto-cart {
-  font-family: "Roboto", sans-serif !important;
-  font-optical-sizing: auto !important;
-  font-weight: 400 !important;
-  /* Thay <weight> bằng 400, có thể điều chỉnh (ví dụ: 700) */
-  font-style: normal !important;
-  font-variation-settings: "wdth" 100 !important;
+/* Custom styles for better visual hierarchy */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Các style hiện có */
-.table-cart {
-  width: 100%;
-  border-collapse: collapse;
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease;
 }
 
-.table-cart th,
-.table-cart td {
-  padding: 15px;
-  border-bottom: 1px solid #e5e5e5;
-  vertical-align: middle;
+/* Better focus styles */
+input:focus, button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.product-col .product {
-  display: flex;
-  align-items: center;
-}
-
-.product-col .product-media img {
-  width: 80px;
-  height: auto;
-}
-
-.product-col .product-details {
-  margin-left: 10px;
-}
-
-.product-col .product-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.product-col .product-title a {
-  color: #333;
-  text-decoration: none;
-}
-
-.product-col .product-title a:hover {
-  color: #007bff;
-}
-
-.price-col .price-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-.price-col .current-price {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin-right: 10px;
-}
-
-.price-col .old-price {
-  font-size: 14px;
-  color: #999;
-  text-decoration: line-through;
-}
-
-.quantity-col .cart-product-quantity {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-
-.quantity-col .btn-decrease,
-.quantity-col .btn-increase {
-  width: 24px;
-  height: 24px;
-  background-color: #fff;
-  border: 1px solid #e5e5e5;
-  border-radius: 3px;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #333;
-}
-
-.quantity-col .btn-decrease:hover,
-.quantity-col .btn-increase:hover {
-  background-color: #f5f5f5;
-}
-
-.quantity-col .quantity-display {
-  font-size: 16px;
-  font-weight: 600;
-  width: 30px;
-  text-align: center;
-  color: #333;
-}
-
-.total-col {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-}
-
-.remove-col .btn-remove {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #999;
-  font-size: 16px;
-}
-
-.remove-col .btn-remove:hover {
-  color: #e74c3c;
-}
-
-.summary-cart .btn-order:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-@media (max-width: 768px) {
-
-  .table-cart th,
-  .table-cart td {
-    padding: 10px;
-  }
-
-  .product-col .product-media img {
-    width: 60px;
-  }
-
-  .product-col .product-title {
-    font-size: 14px;
-  }
-
-  .price-col .current-price {
-    font-size: 14px;
-  }
-
-  .price-col .old-price {
-    font-size: 12px;
-  }
-
-  .quantity-col .btn-decrease,
-  .quantity-col .btn-increase {
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
-  }
-
-  .quantity-col .quantity-display {
-    font-size: 14px;
-    width: 25px;
-  }
-
-  .total-col {
-    font-size: 14px;
-  }
+/* Responsive font sizes */
+@media (max-width: 640px) {
+  .text-3xl { font-size: 2rem; }
+  .text-2xl { font-size: 1.5rem; }
+  .text-xl { font-size: 1.25rem; }
+  .text-lg { font-size: 1.125rem; }
 }
 </style>
