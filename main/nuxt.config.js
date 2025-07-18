@@ -3,7 +3,7 @@ export default {
   head: {
     title: 'Mobile World - Buy Smartphones & Accessories',
     htmlAttrs: {
-      lang: 'vi', 
+      lang: 'vi',
     },
     meta: [
       { charset: 'utf-8' },
@@ -69,7 +69,7 @@ export default {
 plugins: [
   { src: '~/plugins/external-scripts.js', mode: 'client' },
   { src: '~/plugins/smooth-scroll.js', mode: 'client' },
-  { src: '~/plugins/mdi.js', mode: 'client' },  
+  { src: '~/plugins/mdi.js', mode: 'client' },
   { src: '~/plugins/vue-composition-api.js', mode: 'client' },
 ],
 

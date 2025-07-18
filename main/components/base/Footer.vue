@@ -1,5 +1,5 @@
 <template>
-        <footer class="footer">          
+        <footer class="footer">
             <div class="footer-middle">
                 <div class="container">
                     <div class="row">
@@ -9,7 +9,7 @@
                                     alt="Footer Logo" width="105" height="25" />
                                 <p style="color: white;">
                                     Mobile World
-                                </p>                             
+                                </p>
                             </div>
                         </div>
 
@@ -20,8 +20,8 @@
                                 <!-- End .widget-title -->
 
                                 <ul class="widget-list">
-                                    <li><a href="about.html">Về Mobile World</a></li>   
-                                    <li><a href="#">Dịch vụ của chúng tôi</a></li>                                    
+                                    <li><a href="about.html">Về Mobile World</a></li>
+                                    <li><a href="#">Dịch vụ của chúng tôi</a></li>
                                     <li><a href="faq.html">FAQ</a></li>
                                     <li><a href="contact.html">Liên hệ với chúng tôi</a></li>
                                 </ul>
@@ -37,7 +37,7 @@
                                 <!-- End .widget-title -->
 
                                 <ul class="widget-list">
-                                    <li><a href="#">Phương thức thanh toán</a></li>                                    
+                                    <li><a href="#">Phương thức thanh toán</a></li>
                                     <li><a href="#">Trả hàng</a></li>
                                     <li><a href="#">Vận chuyển</a></li>
                                     <li><a href="#">Chính sách</a></li>
@@ -56,8 +56,8 @@
 
                                 <ul class="widget-list">
                                     <li><a href="login.html">Đăng nhập</a></li>
-                                    <li><a href="cart.html">Xem giỏ hàng</a></li>                                    
-                                    <li><a href="#">Theo dõi đơn hàng</a></li>                                    
+                                    <li><a href="cart.html">Xem giỏ hàng</a></li>
+                                    <li><a href="#">Theo dõi đơn hàng</a></li>
                                 </ul>
                                 <!-- End .widget-list -->
                             </div>
@@ -95,6 +95,10 @@ export default {
 </script>
 
 <style scoped>
+.container{
+width: auto;
+height: auto;
+}
 footer{
   background: #162d63;
 }

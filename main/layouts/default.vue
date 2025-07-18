@@ -1,6 +1,6 @@
 <!-- layouts/default.vue -->
 <template>
-  <div class="layout">    
+  <div class="layout">
     <!-- Header -->
     <header class="fixed-header">
       <BaseNavbar />
@@ -13,7 +13,7 @@
     </main>
 
     <!-- Footer -->
-    <footer v-if="$route.path !== '/login-page'" style="width: 100%">
+    <footer v-if="$route.path !== '/login-page'" style="width: 100%; height: 100%;">
       <BaseFooter />
     </footer>
 
@@ -35,6 +35,6 @@ export default {
 
 <style scoped>
 .content-with-navbar {
-  min-height: calc(80vh - 60px);
+  min-height: 60vh;
 }
 </style>
