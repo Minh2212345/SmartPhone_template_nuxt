@@ -1,132 +1,106 @@
 <template>
-  <div class="page-wrapper">
+  <div class="page-wrapper bg-gray-50 py-4">
     <ToastNotification ref="toastNotification" />
-    <main class="main">
-      <nav aria-label="breadcrumb" class="breadcrumb-nav">
-        <div class="container">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <NuxtLink to="/">Trang chủ</NuxtLink>
-            </li>
-            <li class="breadcrumb-item">
-              <NuxtLink to="/category-4cols">Iphone 16 Series</NuxtLink>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-              <NuxtLink to="/cart-page">Giỏ hàng</NuxtLink>
-            </li>
-          </ol>
-        </div>
+    <main class="main container mx-auto px-4">
+      <nav aria-label="breadcrumb" class="breadcrumb-nav mb-6">
+        <ol class="breadcrumb flex items-center space-x-2 text-sm text-gray-600">
+          <li class="breadcrumb-item">
+            <NuxtLink to="/" class="text-blue-600 hover:text-blue-800">Trang chủ</NuxtLink>
+          </li>
+          <li class="text-gray-400">/</li>
+          <li class="breadcrumb-item">
+            <NuxtLink to="/category-4cols" class="text-blue-600 hover:text-blue-800">Iphone 16 Series</NuxtLink>
+          </li>
+          <li class="text-gray-400">/</li>
+          <li class="breadcrumb-item active" aria-current="page">
+            <span class="text-gray-900">Giỏ hàng</span>
+          </li>
+        </ol>
       </nav>
 
       <div class="page-content">
         <div class="cart">
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-9">
-                <table v-if="cartItems.length > 0" class="table table-cart table-mobile">
-                  <thead>
-                    <tr>
-                      <th>Sản phẩm</th>
-                      <th>Giá</th>
-                      <th>Số lượng</th>
-                      <th>Tổng tiền</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <tr v-for="(item, index) in cartItems" :key="item.maImel">
-                      <td class="product-col">
-                        <div class="product d-flex align-items-center">
-                          <figure class="product-media mr-3">
-                            <NuxtLink :to="item.productLink">
-                              <img :src="item.image || '/assets/images/placeholder.jpg'" alt="Product image" />
-                            </NuxtLink>
-                          </figure>
-                          <div class="product-details">
-                            <h3 class="product-title">
-                              <NuxtLink :to="item.productLink">{{ item.tenSanPham || 'Sản phẩm không xác định' }} - {{
-                                item.mauSac || 'Không xác định' }} - {{ item.ram || 'Không xác định' }} - {{
-                                  item.boNhoTrong || 'Không xác định' }}</NuxtLink>
-                            </h3>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="price-col">
-                        <div class="price-wrapper">
-                          <span class="current-price">{{ formatPrice(item.giaBan) }}</span>
-                          <span v-if="item.ghiChuGia" class="old-price">{{ item.ghiChuGia }}</span>
-                        </div>
-                      </td>
-                      <td class="quantity-col">
-                        <div class="cart-product-quantity">
-                          <button class="btn-decrease" :disabled="item.soLuong <= 1"
-                            @click="updateQuantity(index, item.soLuong - 1)">-</button>
-                          <span class="quantity-display">{{ item.soLuong }}</span>
-                          <button class="btn-increase" @click="updateQuantity(index, item.soLuong + 1)">+</button>
-                        </div>
-                      </td>
-                      <td class="total-col">{{ formatPrice(item.tongTien) }}</td>
-                      <td class="remove-col">
-                        <button class="btn-remove" @click="removeItem(index)"><i class="fas fa-trash-alt"></i></button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div v-else class="text-center p-5">
-                  <p>Giỏ hàng của bạn đang trống.</p>
-                  <NuxtLink to="/" class="btn btn-outline-primary-2">Tiếp tục mua sắm</NuxtLink>
-                </div>
-
-                <div class="cart-bottom">
-                  <div class="cart-discount">
-                    <form @submit.prevent="applyDiscount">
-                      <div class="input-group">
-                        <input v-model="discountCode" type="text" class="form-control" placeholder="Mã giảm giá" />
-                        <div class="input-group-append">
-                          <button class="btn btn-outline-primary-2" type="submit">
-                            <i class="icon-long-arrow-right"></i>
-                          </button>
-                        </div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Danh sách sản phẩm -->
+            <div class="col-span-1 lg:col-span-2">
+              <div v-if="cartItems.length > 0" class="space-y-6">
+                <div v-for="(item, index) in cartItems" :key="item.maImel"
+                  class="card bg-white rounded-lg shadow-md p-5 flex flex-col md:flex-row items-center justify-between gap-5 transition-all hover:shadow-lg">
+                  <div class="flex items-center space-x-5 flex-1">
+                    <figure class="product-media">
+                      <NuxtLink :to="item.productLink">
+                        <img :src="item.image || '/assets/images/placeholder.jpg'" alt="Product image"
+                          class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-md" />
+                      </NuxtLink>
+                    </figure>
+                    <div class="product-details">
+                      <h3 class="text-lg md:text-xl lg:text-2xl font-semibold text-gray-900 line-clamp-2">
+                        <NuxtLink :to="item.productLink" class="hover:text-blue-600 transition-colors">
+                          Điện thoại {{ item.tenSanPham || 'Sản phẩm không xác định' }} - {{ item.mauSac || 'Không xác định' }} - {{ item.ram || 'Không xác định' }} - {{ item.boNhoTrong || 'Không xác định' }}
+                        </NuxtLink>
+                      </h3>
+                      <div class="text-base md:text-lg lg:text-xl text-gray-500 mt-2">
+                        <span class="font-medium">Giá: </span>{{ formatPrice(item.giaBan) }}
+                        <span v-if="item.ghiChuGia" class="line-through text-gray-400 ml-2">{{ item.ghiChuGia }}</span>
                       </div>
-                    </form>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-5">
+                    <div class="flex items-center border rounded-md">
+                      <button class="btn-decrease px-3 py-2 text-gray-600 hover:bg-gray-100 disabled:opacity-50"
+                        :disabled="item.soLuong <= 1" @click="updateQuantity(index, item.soLuong - 1)">-</button>
+                      <span class="quantity-display px-4 py-2 text-gray-900 font-medium text-lg md:text-xl">{{
+                        item.soLuong }}</span>
+                      <button class="btn-increase px-3 py-2 text-gray-600 hover:bg-gray-100"
+                        @click="updateQuantity(index, item.soLuong + 1)">+</button>
+                    </div>
+                    <div class="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900">{{
+                      formatPrice(item.tongTien) }}</div>
+                    <button class="btn-remove text-red-500 hover:text-red-700 transition-colors text-xl md:text-2xl"
+                      @click="removeItem(index)">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
                   </div>
                 </div>
               </div>
-
-              <aside class="col-lg-3">
-                <div v-if="cartItems.length > 0" class="summary summary-cart">
-                  <h3 class="summary-title">Tổng đơn hàng</h3>
-                  <table class="table table-summary">
-                    <tbody>
-                      <tr class="summary-subtotal">
-                        <td>Tổng tiền:</td>
-                        <td>{{ formatPrice(totalPrice) }}</td>
-                      </tr>
-                      <tr class="summary-shipping-row">
-                        <td>
-                          <div>
-                            <input id="free-shipping" type="text" name="shipping" class="custom-control-input"
-                              disabled />
-                            <label class="custom-control-label" for="free-shipping">Phí vận chuyển</label>
-                          </div>
-                        </td>
-                        <td>{{ formatPrice(shippingFee) }}</td>
-                      </tr>
-                      <tr class="summary-total">
-                        <td>Tổng tiền:</td>
-                        <td>{{ formatPrice(totalPrice + shippingFee) }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <NuxtLink to="/checkout-page" class="btn btn-outline-primary-2 btn-order btn-block"
-                    :disabled="cartItems.length === 0">Thanh toán</NuxtLink>
-                </div>
-                <div v-else class="text-center p-5">
-                  <p>Không có sản phẩm để hiển thị tổng.</p>
-                </div>
-              </aside>
+              <div v-else class="text-center p-6 bg-white rounded-lg shadow-md">
+                <p class="text-gray-600 text-lg md:text-xl">Giỏ hàng của bạn đang trống.</p>
+                <NuxtLink to="/"
+                  class="mt-4 inline-block bg-blue-600 text-white px-5 py-3 rounded-md hover:bg-blue-700 transition-colors text-lg md:text-xl">
+                  Tiếp tục mua sắm
+                </NuxtLink>
+              </div>
             </div>
+
+            <!-- Tổng đơn hàng -->
+            <aside class="col-span-1">
+              <div v-if="cartItems.length > 0" class="summary summary-cart bg-white rounded-lg shadow-md p-4 md:p-5">
+                <h3 class="summary-title text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-5">Tổng đơn hàng
+                </h3>
+                <div class="space-y-4">
+                  <div class="flex justify-between text-gray-600 text-base md:text-lg lg:text-xl">
+                    <span>Tổng tiền sản phẩm:</span>
+                    <span>{{ formatPrice(totalPrice) }}</span>
+                  </div>
+                  <div class="flex justify-between text-gray-600 text-base md:text-lg lg:text-xl">
+                    <span>Phí vận chuyển:</span>
+                    <span>{{ formatPrice(shippingFee) }}</span>
+                  </div>
+                  <div
+                    class="flex justify-between text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 border-t pt-4">
+                    <span>Tổng cộng:</span>
+                    <span>{{ formatPrice(totalPrice + shippingFee) }}</span>
+                  </div>
+                </div>
+                <NuxtLink to="/checkout-page"
+                  class="btn btn-order mt-6 w-full bg-blue-600 text-white py-3 md:py-4 rounded-md hover:bg-blue-700 transition-colors text-lg md:text-xl">
+                  Thanh toán
+                </NuxtLink>
+              </div>
+              <div v-else class="text-center p-6 bg-white rounded-lg shadow-md">
+                <p class="text-gray-600 text-lg md:text-xl">Không có sản phẩm để hiển thị tổng.</p>
+              </div>
+            </aside>
           </div>
         </div>
       </div>
@@ -328,6 +302,17 @@ export default {
 </script>
 
 <style scoped>
+/* Định nghĩa font cho cart-page.vue */
+.roboto-cart {
+  font-family: "Roboto", sans-serif !important;
+  font-optical-sizing: auto !important;
+  font-weight: 400 !important;
+  /* Thay <weight> bằng 400, có thể điều chỉnh (ví dụ: 700) */
+  font-style: normal !important;
+  font-variation-settings: "wdth" 100 !important;
+}
+
+/* Các style hiện có */
 .table-cart {
   width: 100%;
   border-collapse: collapse;
@@ -446,6 +431,7 @@ export default {
 }
 
 @media (max-width: 768px) {
+
   .table-cart th,
   .table-cart td {
     padding: 10px;
