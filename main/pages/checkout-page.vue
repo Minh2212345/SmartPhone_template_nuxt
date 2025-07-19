@@ -147,7 +147,8 @@
                       </div>
                       <div class="col-md-6">
                         <div class="form-floating">
-                          <select class="form-select" id="district" v-model="delivery.quan" @change="fetchWards" required>
+                          <select class="form-select" id="district" v-model="delivery.quan" @change="fetchWards"
+                            required>
                             <option value="" disabled selected>Chọn quận/huyện</option>
                             <option v-for="district in districts" :key="district.name" :value="district.name">
                               {{ district.name }}
@@ -1127,6 +1128,7 @@ export default {
 }
 
 @media (max-width: 576px) {
+
   .delivery-option,
   .payment-option {
     flex-direction: column;
