@@ -1,16 +1,16 @@
 <template>
   <div class="chat-container">
-    <button v-if="!showOptions && !showChat" @click="showOptions = true" class="chat-button">Chat ngay</button>
-    
+    <button v-if="!showOptions && !showChat" class="chat-button" @click="showOptions = true">Chat ngay</button>
+
     <!-- Options panel -->
     <div v-if="showOptions && !showChat" class="options-box">
       <div class="chat-header">
         <h2 style="color: white;">Mobile World</h2>
-        <button @click="showOptions = false" class="close-button">×</button>
+        <button class="close-button" @click="showOptions = false">×</button>
       </div>
       <div class="options-buttons">
-        <button @click="startAIChat" class="option-button">Chat với AI</button>
-        <button @click="startStaffChat" class="option-button">Chat với Nhân viên</button>
+        <button class="option-button" @click="startAIChat">Chat với AI</button>
+        <button class="option-button" @click="startStaffChat">Chat với Nhân viên</button>
       </div>
     </div>
 
@@ -18,24 +18,105 @@
     <div v-if="showChat" class="chat-box">
       <div class="chat-header">
         <h2 style="color: white;">{{ chatMode === 'ai' ? 'AI Assistant' : 'Nhân viên Mobile World' }}</h2>
-        <button @click="closeChat" class="close-button">×</button>
+        <button class="close-button" @click="closeChat">×</button>
       </div>
       <div class="chat-messages">
-        <template v-if="chatMode === 'ai'">
-          <div class="message received">Bạn cần tìm sản phẩm như nào?</div>
-        </template>
-        <template v-else>
-          <div class="message received">Xin chào Anh/Chị! Em là nhân viên của Mobile World</div>
-          <div class="message received">Em có thể giúp gì Anh/Chị?</div>
-        </template>
+        <div v-for="(message, index) in messages" :key="index" :class="['message', message.sender]">
+          {{ message.text }}
+        </div>
       </div>
       <div class="chat-input">
-        <input type="text" placeholder="Nhập tin nhắn..." />
-        <button>→</button>
+        <input
+          type="text"
+          v-model="inputMessage"
+          placeholder="Nhập tin nhắn..."
+          @keyup.enter="sendMessage"
+        />
+        <button @click="sendMessage">→</button>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'ChatBoxComponent',
+  data() {
+    return {
+      showOptions: false,
+      showChat: false,
+      chatMode: null, // 'ai' or 'staff'
+      messages: [],
+      inputMessage: '',
+    };
+  },
+  methods: {
+    startAIChat() {
+      this.chatMode = 'ai';
+      this.showOptions = false;
+      this.showChat = true;
+      this.messages = [{ sender: 'received', text: 'Bạn cần tìm sản phẩm như nào?' }];
+    },
+    startStaffChat() {
+      this.chatMode = 'staff';
+      this.showOptions = false;
+      this.showChat = true;
+      this.messages = [
+        { sender: 'received', text: 'Xin chào Anh/Chị! Em là nhân viên của Mobile World' },
+        { sender: 'received', text: 'Em có thể giúp gì Anh/Chị?' },
+      ];
+    },
+    closeChat() {
+      this.showChat = false;
+      this.showOptions = false;
+      this.chatMode = null;
+      this.messages = [];
+      this.inputMessage = '';
+    },
+    async sendMessage() {
+      if (!this.inputMessage.trim()) return;
+
+      // Thêm tin nhắn của người dùng vào danh sách
+      this.messages.push({ sender: 'sent', text: this.inputMessage });
+
+      if (this.chatMode === 'ai') {
+        try {
+          // Gửi yêu cầu tới backend
+          const response = await axios.post('/api/chatbot', {
+            message: this.inputMessage,
+          });
+
+          // Thêm phản hồi từ AI vào danh sách tin nhắn
+          this.messages.push({ sender: 'received', text: response.data.reply });
+        } catch (error) {
+          console.error('Lỗi khi gọi API:', error);
+          this.messages.push({
+            sender: 'received',
+            text: 'Có lỗi xảy ra, vui lòng thử lại sau!',
+          });
+        }
+      } else {
+        // Xử lý chat với nhân viên (giả lập hoặc tích hợp hệ thống chat khác)
+        this.messages.push({
+          sender: 'received',
+          text: 'Nhân viên sẽ trả lời bạn sớm. Cảm ơn bạn đã chờ đợi!',
+        });
+      }
+
+      // Xóa nội dung ô nhập liệu
+      this.inputMessage = '';
+
+      // Tự động cuộn xuống tin nhắn mới nhất
+      this.$nextTick(() => {
+        const chatMessages = this.$el.querySelector('.chat-messages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
+    },
+  },
+};
+</script>
 
 <style scoped>
 .chat-container {
@@ -165,33 +246,3 @@
   cursor: pointer;
 }
 </style>
-
-<script>
-export default {
-  name: 'ChatBoxComponent',
-  data() {
-    return {
-      showOptions: false,
-      showChat: false,
-      chatMode: null // 'ai' or 'staff'
-    }
-  },
-  methods: {
-    startAIChat() {
-      this.chatMode = 'ai';
-      this.showOptions = false;
-      this.showChat = true;
-    },
-    startStaffChat() {
-      this.chatMode = 'staff';
-      this.showOptions = false;
-      this.showChat = true;
-    },
-    closeChat() {
-      this.showChat = false;
-      this.showOptions = false;
-      this.chatMode = null;
-    }
-  }
-}
-</script>
