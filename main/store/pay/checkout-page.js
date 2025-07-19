@@ -100,53 +100,53 @@ export default {
       }
     },
     async submitForm() {
-      try {
-        let hoaDonRequest = {}
-        let loaiDon = 'online'
+  try {
+    let hoaDonRequest = {}
+    let loaiDon = 'online'
 
-        if (document.querySelector('#delivery-tab').classList.contains('active')) {
-          if (!this.validateDelivery()) return
-          hoaDonRequest = {
-            tenKhachHang: this.delivery.ten,
-            soDienThoaiKhachHang: this.delivery.soDienThoai,
-            email: this.delivery.email,
-            diaChiKhachHang: {
-              diaChiCuThe: `${this.delivery.soNha}, ${this.delivery.phuong}, ${this.delivery.quan}, ${this.delivery.thanhPho}`
-            },
-            loaiDon: 'online',
-          }
-        } else {
-          if (!this.validatePickup()) return
-          loaiDon = 'offline'
-          hoaDonRequest = {
-            tenKhachHang: this.pickup.store.split(' - ')[0],
-            soDienThoaiKhachHang: this.pickup.soDienThoai,
-            email: this.pickup.email,
-            diaChiKhachHang: {
-              diaChiCuThe: this.pickup.store.split(' - ')[1]
-            },
-            loaiDon: 'offline',
-          }
-        }
-
-        // Gọi API thanh toán
-        const response = await axios.post(`http://localhost:8080/api/client/thanh-toan/${this.invoiceId}`, hoaDonRequest)
-
-        // Xóa invoiceId khỏi localStorage
-        localStorage.removeItem('invoiceId')
-
-        // Hiển thị thông báo thành công
-        this.$toast.success(`Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Bạn sẽ nhận được email thông báo chi tiết.`)
-
-        // Chuyển hướng đến trang tra cứu đơn hàng
-        this.$router.push({
-          path: '/invoice-status',
-          query: { maHoaDon: response.data.maHoaDon }
-        })
-      } catch (error) {
-        this.handleError(error, 'Lỗi khi thực hiện thanh toán')
+    if (this.deliveryMethod === 'delivery') {
+      if (!this.validateDelivery()) return
+      hoaDonRequest = {
+        tenKhachHang: this.delivery.ten,
+        soDienThoaiKhachHang: this.delivery.soDienThoai,
+        email: this.delivery.email,
+        diaChiKhachHang: {
+          diaChiCuThe: `${this.delivery.soNha}, ${this.delivery.phuong}, ${this.delivery.quan}, ${this.delivery.thanhPho}`
+        },
+        loaiDon: 'online',
       }
-    },
+    } else {
+      if (!this.validatePickup()) return
+      loaiDon = 'offline'
+      hoaDonRequest = {
+        tenKhachHang: this.delivery.ten || this.stores[this.selectedStoreIndex]?.name || 'Khách hàng nhận tại cửa hàng',
+        soDienThoaiKhachHang: this.pickup.soDienThoai,
+        email: this.pickup.email,
+        diaChiKhachHang: {
+          diaChiCuThe: this.pickup.store
+        },
+        loaiDon: 'offline',
+      }
+    }
+
+    // Gọi API thanh toán
+    const response = await axios.post(`http://localhost:8080/api/client/thanh-toan/${this.invoiceId}`, hoaDonRequest)
+
+    // Xóa invoiceId khỏi localStorage
+    localStorage.removeItem('invoiceId')
+
+    // Hiển thị thông báo thành công
+    this.$toast.success(`Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Bạn sẽ nhận được email thông báo chi tiết.`)
+
+    // Chuyển hướng đến trang tra cứu đơn hàng
+    this.$router.push({
+      path: '/invoice-status',
+      query: { maHoaDon: response.data.maHoaDon }
+    })
+  } catch (error) {
+    this.handleError(error, 'Lỗi khi thực hiện thanh toán')
+  }
+},
     validateDelivery() {
       if (!this.delivery.ten) {
         this.$toast.error('Vui lòng nhập tên!')
