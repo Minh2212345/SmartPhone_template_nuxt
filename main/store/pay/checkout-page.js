@@ -28,7 +28,12 @@ export default {
         total: 0,
       },
       invoiceId: null,
-      paymentMethod: 'Tiền mặt', // Mặc định là COD
+      paymentMethod: '',
+      cardDetails: {
+        cardNumber: '',
+        expiryDate: '',
+        cvv: ''
+      }
     }
   },
   async asyncData({ $axios }) {
@@ -46,7 +51,7 @@ export default {
       if (this.invoiceId) {
         await this.fetchCart()
       } else {
-        this.$toast.error('Không tìm thấy hóa đơn để thanh toán!')
+        this.showToast('error', 'Không tìm thấy hóa đơn để thanh toán!')
         this.$router.push('/cart-page')
       }
     } catch (error) {
@@ -100,103 +105,105 @@ export default {
       }
     },
     async submitForm() {
-  try {
-    let hoaDonRequest = {}
-    let loaiDon = 'online'
+      try {
+        if (this.paymentMethod === 'VNPay') {
+          // VNPAY payment is handled in confirmOrder, skip here
+          return
+        }
+        let hoaDonRequest = {}
+        let loaiDon = 'online'
 
-    if (this.deliveryMethod === 'delivery') {
-      if (!this.validateDelivery()) return
-      hoaDonRequest = {
-        tenKhachHang: this.delivery.ten,
-        soDienThoaiKhachHang: this.delivery.soDienThoai,
-        email: this.delivery.email,
-        diaChiKhachHang: {
-          diaChiCuThe: `${this.delivery.soNha}, ${this.delivery.phuong}, ${this.delivery.quan}, ${this.delivery.thanhPho}`
-        },
-        loaiDon: 'online',
+        if (this.deliveryMethod === 'delivery') {
+          if (!this.validateDelivery()) return
+          hoaDonRequest = {
+            tenKhachHang: this.delivery.ten,
+            soDienThoaiKhachHang: this.delivery.soDienThoai,
+            email: this.delivery.email,
+            diaChiKhachHang: {
+              diaChiCuThe: `${this.delivery.soNha}, ${this.delivery.phuong}, ${this.delivery.quan}, ${this.delivery.thanhPho}`
+            },
+            loaiDon: 'online',
+            idPhieuGiamGia: this.appliedDiscount ? this.appliedDiscount.id : null
+          }
+        } else {
+          if (!this.validatePickup()) return
+          loaiDon = 'offline'
+          hoaDonRequest = {
+            tenKhachHang: this.delivery.ten || this.stores[this.selectedStoreIndex]?.name || 'Khách hàng nhận tại cửa hàng',
+            soDienThoaiKhachHang: this.pickup.soDienThoai,
+            email: this.pickup.email,
+            diaChiKhachHang: {
+              diaChiCuThe: this.pickup.store
+            },
+            loaiDon: 'offline',
+            idPhieuGiamGia: this.appliedDiscount ? this.appliedDiscount.id : null
+          }
+        }
+
+        // Gọi API thanh toán COD
+        const response = await axios.post(`http://localhost:8080/api/client/thanh-toan/${this.invoiceId}`, hoaDonRequest)
+
+        // Xóa invoiceId khỏi localStorage
+        localStorage.removeItem('invoiceId')
+
+        // Hiển thị thông báo thành công
+        this.showToast('success', `Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Bạn sẽ nhận được email thông báo chi tiết.`)
+
+        // Chuyển hướng đến trang giỏ hàng
+        this.$router.push('/cart-page')
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi thực hiện thanh toán')
       }
-    } else {
-      if (!this.validatePickup()) return
-      loaiDon = 'offline'
-      hoaDonRequest = {
-        tenKhachHang: this.delivery.ten || this.stores[this.selectedStoreIndex]?.name || 'Khách hàng nhận tại cửa hàng',
-        soDienThoaiKhachHang: this.pickup.soDienThoai,
-        email: this.pickup.email,
-        diaChiKhachHang: {
-          diaChiCuThe: this.pickup.store
-        },
-        loaiDon: 'offline',
-      }
-    }
-
-    // Gọi API thanh toán
-    const response = await axios.post(`http://localhost:8080/api/client/thanh-toan/${this.invoiceId}`, hoaDonRequest)
-
-    // Xóa invoiceId khỏi localStorage
-    localStorage.removeItem('invoiceId')
-
-    // Hiển thị thông báo thành công
-    this.$toast.success(`Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Bạn sẽ nhận được email thông báo chi tiết.`)
-
-    // Chuyển hướng đến trang tra cứu đơn hàng
-    this.$router.push({
-      path: '/invoice-status',
-      query: { maHoaDon: response.data.maHoaDon }
-    })
-  } catch (error) {
-    this.handleError(error, 'Lỗi khi thực hiện thanh toán')
-  }
-},
+    },
     validateDelivery() {
       if (!this.delivery.ten) {
-        this.$toast.error('Vui lòng nhập tên!')
+        this.showToast('error', 'Vui lòng nhập tên!')
         return false
       }
       if (!this.delivery.soDienThoai) {
-        this.$toast.error('Vui lòng nhập số điện thoại!')
+        this.showToast('error', 'Vui lòng nhập số điện thoại!')
         return false
       }
       if (!this.delivery.email) {
-        this.$toast.error('Vui lòng nhập email!')
+        this.showToast('error', 'Vui lòng nhập email!')
         return false
       }
       if (!this.delivery.thanhPho) {
-        this.$toast.error('Vui lòng chọn tỉnh/thành phố!')
+        this.showToast('error', 'Vui lòng chọn tỉnh/thành phố!')
         return false
       }
       if (!this.delivery.quan) {
-        this.$toast.error('Vui lòng chọn quận/huyện!')
+        this.showToast('error', 'Vui lòng chọn quận/huyện!')
         return false
       }
       if (!this.delivery.phuong) {
-        this.$toast.error('Vui lòng chọn xã/phường!')
+        this.showToast('error', 'Vui lòng chọn xã/phường!')
         return false
       }
       if (!this.delivery.soNha) {
-        this.$toast.error('Vui lòng nhập số nhà, tên đường!')
+        this.showToast('error', 'Vui lòng nhập số nhà, tên đường!')
         return false
       }
       return true
     },
     validatePickup() {
       if (!this.pickup.soDienThoai) {
-        this.$toast.error('Vui lòng nhập số điện thoại!')
+        this.showToast('error', 'Vui lòng nhập số điện thoại!')
         return false
       }
       if (!this.pickup.email) {
-        this.$toast.error('Vui lòng nhập email!')
+        this.showToast('error', 'Vui lòng nhập email!')
         return false
       }
       if (!this.pickup.store) {
-        this.$toast.error('Vui lòng chọn cửa hàng!')
+        this.showToast('error', 'Vui lòng chọn cửa hàng!')
         return false
       }
       return true
     },
     handleError(error, defaultMessage) {
-      const message = error.response?.data?.message || error.message || defaultMessage
-      this.$toast.error(message)
-      console.error(`${defaultMessage}:`, error)
+      const message = error.response?.data?.message || error.message || defaultMessage || 'Đã xảy ra lỗi không xác định';
+      this.showToast('error', message);
     },
     setPaymentMethod(method) {
       this.paymentMethod = method
