@@ -37,7 +37,7 @@ export default {
       { rel: 'stylesheet', href: '/assets/css/plugins/magnific-popup/magnific-popup.css' },
       { rel: 'stylesheet', href: '/assets/css/plugins/owl-carousel/owl.carousel.css' },
       { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'},
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap' },
       { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css' },
       { rel: 'stylesheet', href: '/assets/css/style.css' },
       { rel: 'stylesheet', href: '/assets/css/skins/skin-demo-4.css' },
@@ -66,12 +66,12 @@ export default {
     'aos/dist/aos.css',
   ],
 
-plugins: [
-  { src: '~/plugins/external-scripts.js', mode: 'client' },
-  { src: '~/plugins/smooth-scroll.js', mode: 'client' },
-  { src: '~/plugins/mdi.js', mode: 'client' },
-  { src: '~/plugins/vue-composition-api.js', mode: 'client' },
-],
+  plugins: [
+    { src: '~/plugins/external-scripts.js', mode: 'client' },
+    { src: '~/plugins/smooth-scroll.js', mode: 'client' },
+    { src: '~/plugins/mdi.js', mode: 'client' },
+    { src: '~/plugins/vue-composition-api.js', mode: 'client' },
+  ],
 
   components: true,
 
@@ -190,5 +190,5 @@ plugins: [
       },
     },
   },
-  ssr:false
+  ssr: false
 };

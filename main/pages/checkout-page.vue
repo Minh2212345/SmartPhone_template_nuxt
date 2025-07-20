@@ -272,6 +272,10 @@
                         Áp dụng
                       </button>
                     </div>
+                    <p v-if="appliedDiscount" class="text-success mt-2">
+                      Mã giảm giá {{ appliedDiscount.code }} đã được áp dụng (-{{
+                        appliedDiscount.amount.toLocaleString() }}đ)
+                    </p>
                   </form>
                 </div>
 
@@ -307,7 +311,7 @@
                         </div>
                         <div class="payment-content">
                           <h4>VNPay</h4>
-                          <p>Thanh toán qua thẻ ATM, Internet Banking, QR Code</p>
+                          <p>Thanh toán qua thẻ ATM, Internet Banking, QR Code hoặc thẻ tín dụng</p>
                         </div>
                         <div class="payment-radio">
                           <input type="radio" :checked="paymentMethod === 'VNPay'" />
@@ -331,17 +335,62 @@
                     </div>
                   </div>
 
-                  <!-- VNPay QR Code -->
-                  <div v-if="paymentMethod === 'VNPay'" class="vnpay-qr-section mt-4">
-                    <div class="vnpay-logo">
-                      <img src="/main/static/assets/images/Logo-VNPAY-QR-1.jpg" alt="VNPay Logo"
-                        class="vnpay-logo-img" />
+                  <!-- VNPay Payment Options -->
+                  <div v-if="paymentMethod === 'VNPay'" class="vnpay-options mt-4">
+                    <div class="row g-3">
+                      <div class="col-md-12">
+                        <div class="form-floating mb-3">
+                          <select class="form-select" id="bank" v-model="selectedBank" required>
+                            <option value="" disabled selected>Chọn ngân hàng</option>
+                            <option v-for="bank in banks" :key="bank.code" :value="bank.code">
+                              {{ bank.name }}
+                            </option>
+                          </select>
+                          <label for="bank">Ngân hàng *</label>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="vnpay-qr-section">
+                          <div class="vnpay-logo">
+                            <img src="/main/static/assets/images/Logo-VNPAY-QR-1.jpg" alt="VNPay Logo"
+                              class="vnpay-logo-img" />
+                          </div>
+                          <div class="qr-code text-center">
+                            <img :src="qrCodeUrl" alt="VNPay QR Code" class="qr-code-img" v-if="qrCodeUrl" />
+                            <p v-else>Đang tạo mã QR...</p>
+                          </div>
+                          <p class="text-center mt-2">Quét mã QR để thanh toán qua VNPay</p>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="vnpay-card-section">
+                          <h4>Thanh toán bằng thẻ tín dụng</h4>
+                          <form @submit.prevent="submitForm">
+                            <div class="form-floating mb-3">
+                              <input type="text" class="form-control" id="cardNumber" v-model="cardDetails.cardNumber"
+                                placeholder="Số thẻ" />
+                              <label for="cardNumber">Số thẻ *</label>
+                            </div>
+                            <div class="row g-3">
+                              <div class="col-6">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="expiryDate"
+                                    v-model="cardDetails.expiryDate" placeholder="MM/YY" />
+                                  <label for="expiryDate">Ngày hết hạn (MM/YY) *</label>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="cvv" v-model="cardDetails.cvv"
+                                    placeholder="CVV" />
+                                  <label for="cvv">Mã CVV *</label>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
                     </div>
-                    <div class="qr-code text-center">
-                      <img :src="qrCodeUrl" alt="VNPay QR Code" class="qr-code-img" v-if="qrCodeUrl" />
-                      <p v-else>Đang tạo mã QR...</p>
-                    </div>
-                    <p class="text-center mt-2">Quét mã QR để thanh toán qua VNPay</p>
                   </div>
                 </div>
 
@@ -349,7 +398,7 @@
                   <button class="btn-outline-secondary btn-prev" @click="prevStep">
                     <i class="bi bi-arrow-left me-2"></i> Quay lại
                   </button>
-                  <button class="btn-success btn-submit" @click="submitForm">
+                  <button class="btn-success btn-submit" @click="openConfirmationModal">
                     <i class="bi bi-check-circle me-2"></i> Đặt hàng
                   </button>
                 </div>
@@ -414,14 +463,51 @@
           </div>
         </div>
       </div>
+
+      <!-- Confirmation Modal -->
+      <div v-if="showConfirmationModal" class="modal-overlay" @click.self="closeConfirmationModal">
+        <div class="modal-content" @click.stop>
+          <div class="modal-header">
+            <h3 class="modal-title">Xác nhận đặt hàng</h3>
+            <button class="modal-close" @click="closeConfirmationModal">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Bạn có chắc chắn muốn đặt hàng với tổng cộng <strong>{{ order.total.toLocaleString() }}đ</strong>?</p>
+            <p v-if="paymentMethod === 'VNPay' && selectedBank">Bạn sẽ được chuyển hướng đến cổng thanh toán VNPay với
+              ngân hàng {{ getBankName(selectedBank) }} để quét mã QR.</p>
+            <p v-else-if="paymentMethod === 'VNPay' && cardDetails.cardNumber">Bạn sẽ được chuyển hướng đến cổng thanh
+              toán
+              VNPay để hoàn tất thanh toán bằng thẻ.</p>
+            <p v-else-if="paymentMethod === 'VNPay'">Bạn sẽ được chuyển hướng đến cổng thanh toán VNPay để quét mã QR.
+            </p>
+            <p v-else>Đơn hàng sẽ được xử lý ngay sau khi xác nhận (Thanh toán khi nhận hàng).</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-secondary btn-cancel" @click="closeConfirmationModal">
+              Hủy
+            </button>
+            <button class="btn-success btn-confirm" @click="confirmOrder">
+              Xác nhận đặt hàng
+            </button>
+          </div>
+        </div>
+      </div>
+      <ToastNotification ref="toast" />
     </div>
   </main>
 </template>
 
 <script>
 import checkoutPage from '../store/pay/checkout-page'
+import ToastNotification from '../components/base/ToastNotification.vue'
+import axios from 'axios'
 
 export default {
+  components: {
+    ToastNotification,
+  },
   ...checkoutPage,
   data() {
     return {
@@ -433,16 +519,40 @@ export default {
       appliedDiscount: null,
       qrCodeUrl: '',
       selectedStoreIndex: 0,
+      selectedBank: '',
+      banks: [
+        { code: 'NCB', name: 'Ngân hàng NCB' },
+        { code: 'AGRIBANK', name: 'Ngân hàng Agribank' },
+        { code: 'SCB', name: 'Ngân hàng SCB' },
+        { code: 'SACOMBANK', name: 'Ngân hàng Sacombank' },
+        { code: 'EXIMBANK', name: 'Ngân hàng Eximbank' },
+        { code: 'MSBANK', name: 'Ngân hàng MSBank' },
+        { code: 'VIETINBANK', name: 'Ngân hàng VietinBank' },
+        { code: 'VIETCOMBANK', name: 'Ngân hàng Vietcombank' },
+        { code: 'BIDV', name: 'Ngân hàng BIDV' },
+        { code: 'TECHCOMBANK', name: 'Ngân hàng Techcombank' },
+        { code: 'VPBANK', name: 'Ngân hàng VPBank' },
+        { code: 'MBBANK', name: 'Ngân hàng MBBank' },
+        { code: 'HDBANK', name: 'Ngân hàng HDBank' },
+      ],
       steps: [
         { label: 'Thông tin giao hàng' },
         { label: 'Xác nhận đơn hàng' },
-        { label: 'Thanh toán' }
-      ]
+        { label: 'Thanh toán & Xác nhận' }
+      ],
+      showConfirmationModal: false,
     }
   },
   methods: {
     ...checkoutPage.methods,
     nextStep() {
+      if (this.currentStep === 3 && this.paymentMethod === 'VNPay' && !this.selectedBank && !this.cardDetails.cardNumber) {
+        this.showToast('error', 'Vui lòng chọn ngân hàng hoặc nhập thông tin thẻ!')
+        return
+      }
+      if (this.currentStep === 3 && this.paymentMethod === 'VNPay' && this.cardDetails.cardNumber && !this.validateCardDetails()) {
+        return
+      }
       if (this.currentStep < 3) this.currentStep++
     },
     prevStep() {
@@ -459,6 +569,8 @@ export default {
         this.generateQRCode()
       } else {
         this.qrCodeUrl = ''
+        this.cardDetails = { cardNumber: '', expiryDate: '', cvv: '' }
+        this.selectedBank = ''
       }
     },
     selectStore(index) {
@@ -469,7 +581,8 @@ export default {
       if (this.discountCode) {
         this.appliedDiscount = {
           code: this.discountCode,
-          amount: Math.floor(this.order.subtotal * 0.1)
+          amount: Math.floor(this.order.subtotal * 0.1),
+          id: 1
         }
         this.calculateTotal()
       }
@@ -481,17 +594,135 @@ export default {
     },
     async generateQRCode() {
       try {
-        this.qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=VNPay_Transaction_${this.order.total}_${this.invoiceId}`
+        if (!this.invoiceId) {
+          throw new Error('Không tìm thấy mã hóa đơn!')
+        }
+        const hoaDonRequest = {
+          tenKhachHang: this.deliveryMethod === 'delivery' ? this.delivery.ten : this.stores[this.selectedStoreIndex]?.name || 'Khách hàng nhận tại cửa hàng',
+          soDienThoaiKhachHang: this.deliveryMethod === 'delivery' ? this.delivery.soDienThoai : this.pickup.soDienThoai,
+          email: this.deliveryMethod === 'delivery' ? this.delivery.email : this.pickup.email,
+          diaChiKhachHang: {
+            diaChiCuThe: this.deliveryMethod === 'delivery' ? `${this.delivery.soNha}, ${this.delivery.phuong}, ${this.delivery.quan}, ${this.delivery.thanhPho}` : this.pickup.store
+          },
+          loaiDon: this.deliveryMethod === 'delivery' ? 'online' : 'offline',
+          idPhieuGiamGia: this.appliedDiscount ? this.appliedDiscount.id : null
+        }
+        const response = await axios.post(`http://localhost:8080/api/client/thanh-toan-vnpay/${this.invoiceId}`, hoaDonRequest, {
+          params: { bankCode: this.selectedBank }
+        })
+        this.qrCodeUrl = response.data.vnpayUrl
       } catch (error) {
-        console.error('Error generating QR code:', error)
+        this.handleError(error, 'Lỗi khi tạo mã QR VNPAY')
         this.qrCodeUrl = ''
       }
+    },
+    showToast(type, message, isLoading = false, duration = 3000) {
+      this.$refs.toast.addToast({ type, message, isLoading, duration })
+    },
+    openConfirmationModal() {
+      this.showConfirmationModal = true
+    },
+    closeConfirmationModal() {
+      this.showConfirmationModal = false
+    },
+    async confirmOrder() {
+      try {
+        if (this.paymentMethod === 'VNPay' && this.cardDetails.cardNumber && !this.validateCardDetails()) {
+          return
+        }
+        if (this.paymentMethod === 'VNPay') {
+          // Handle VNPAY payment
+          const hoaDonRequest = {
+            tenKhachHang: this.deliveryMethod === 'delivery' ? this.delivery.ten : this.stores[this.selectedStoreIndex]?.name || 'Khách hàng nhận tại cửa hàng',
+            soDienThoaiKhachHang: this.deliveryMethod === 'delivery' ? this.delivery.soDienThoai : this.pickup.soDienThoai,
+            email: this.deliveryMethod === 'delivery' ? this.delivery.email : this.pickup.email,
+            diaChiKhachHang: {
+              diaChiCuThe: this.deliveryMethod === 'delivery' ? `${this.delivery.soNha}, ${this.delivery.phuong}, ${this.delivery.quan}, ${this.delivery.thanhPho}` : this.pickup.store
+            },
+            loaiDon: this.deliveryMethod === 'delivery' ? 'online' : 'offline',
+            idPhieuGiamGia: this.appliedDiscount ? this.appliedDiscount.id : null
+          }
+          if (this.cardDetails.cardNumber) {
+            // Card payment
+            const response = await axios.post(`http://localhost:8080/api/client/thanh-toan-vnpay-card/${this.invoiceId}`, {
+              hoaDonRequest,
+              cardDetails: this.cardDetails
+            })
+            if (response.data.vnpayUrl) {
+              // Redirect to VNPAY payment URL
+              window.location.href = response.data.vnpayUrl
+            } else {
+              throw new Error('Không nhận được URL thanh toán từ VNPAY!')
+            }
+          } else {
+            // QR payment
+            const response = await axios.post(`http://localhost:8080/api/client/thanh-toan-vnpay/${this.invoiceId}`, hoaDonRequest, {
+              params: { bankCode: this.selectedBank }
+            })
+            if (response.data.vnpayUrl) {
+              // Redirect to VNPAY payment URL
+              window.location.href = response.data.vnpayUrl
+            } else {
+              throw new Error('Không nhận được URL thanh toán từ VNPAY!')
+            }
+          }
+        } else {
+          // Handle COD payment
+          await this.submitForm()
+          this.showConfirmationModal = false
+          this.showToast('success', `Đặt hàng thành công! Bạn sẽ nhận được email xác nhận đơn hàng.`)
+          this.$router.push('/cart-page')
+        }
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi thực hiện thanh toán')
+        this.showConfirmationModal = false
+      }
+    },
+    getBankName(code) {
+      const bank = this.banks.find(b => b.code === code)
+      return bank ? bank.name : ''
+    },
+    validateCardDetails() {
+      if (!this.cardDetails.cardNumber || !/^\d{16}$/.test(this.cardDetails.cardNumber)) {
+        this.showToast('error', 'Số thẻ không hợp lệ! Vui lòng nhập 16 chữ số.')
+        return false
+      }
+      if (!this.cardDetails.expiryDate || !/^(0[1-9]|1[0-2])\/\d{2}$/.test(this.cardDetails.expiryDate)) {
+        this.showToast('error', 'Ngày hết hạn không hợp lệ! Vui lòng nhập theo định dạng MM/YY.')
+        return false
+      }
+      if (!this.cardDetails.cvv || !/^\d{3,4}$/.test(this.cardDetails.cvv)) {
+        this.showToast('error', 'Mã CVV không hợp lệ! Vui lòng nhập 3 hoặc 4 chữ số.')
+        return false
+      }
+      return true
     }
   }
 }
 </script>
 
 <style scoped>
+/* Thêm style cho phần thanh toán bằng thẻ */
+.vnpay-options {
+  background-color: var(--light);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid #eee;
+}
+
+.vnpay-card-section {
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: var(--border-radius);
+  border: 1px solid #eee;
+}
+
+.vnpay-card-section h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
 /* Base Styles */
 :root {
   --primary: #3a7bd5;
@@ -1077,6 +1308,74 @@ export default {
   background-color: var(--success);
   border-color: var(--success);
   text-align: center;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  max-width: 500px;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.modal-body {
+  margin-bottom: 1.5rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn-cancel,
+.btn-confirm {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+}
+
+.btn-cancel {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.btn-confirm {
+  background-color: var(--success);
+  color: white;
 }
 
 /* Animations */
