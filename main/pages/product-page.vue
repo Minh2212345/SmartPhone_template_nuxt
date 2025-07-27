@@ -120,7 +120,7 @@
                       <div class="product-cat">
                         <span>Phân loại:</span>
                         <a href="#">{{ manufacturerMap[product.nha_san_xuat] || product.nha_san_xuat || 'Unknown'
-                          }}</a>,
+                        }}</a>,
                         <a href="#">Sản phẩm mới</a>
                       </div>
                       <div class="social-icons social-icons-sm">
@@ -338,12 +338,12 @@
                   <div class="product-cat">
                     <a href="#">{{
                       manufacturerMap[similarProduct.tenNhaSanXuat] || similarProduct.tenNhaSanXuat || 'Unknown'
-                    }}</a>
+                      }}</a>
                   </div>
                   <h3 class="product-title">
                     <a href="#" @click.prevent="handleProductChange(similarProduct.id)">{{
                       similarProduct.tenSanPham
-                    }}</a>
+                      }}</a>
                   </h3>
                   <div class="product-price">{{ formatPrice(similarProduct.giaBan || 0) }} VND</div>
                 </div>
@@ -363,10 +363,10 @@ import ProductPage from '../store/product/product-page.js'
 import ToastNotification from '../components/base/ToastNotification.vue'
 
 export default {
-  extends: ProductPage,
   components: {
     ToastNotification,
   },
+  extends: ProductPage,
   data() {
     return {
       showSidebar: false,
@@ -464,7 +464,7 @@ export default {
 
         const chiTietGioHangDTO = {
           chiTietSanPhamId: this.selectedVariant.ctsp_id,
-          maImel: this.selectedVariant.imel || null,
+          maImel: null, // Để IMEI rỗng
           soLuong: this.quantity,
           idPhieuGiamGia: null,
         }
