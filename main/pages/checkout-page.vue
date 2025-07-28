@@ -135,6 +135,7 @@
                     <div class="row g-3">
                       <div class="col-md-6">
                         <div class="form-floating">
+                          <label for="city">Tỉnh/Thành phố *</label>
                           <select class="form-select" id="city" v-model="delivery.thanhPho" @change="fetchDistricts"
                             required>
                             <option value="" disabled selected>Chọn tỉnh/thành phố</option>
@@ -142,11 +143,11 @@
                               {{ province.name }}
                             </option>
                           </select>
-                          <label for="city">Tỉnh/Thành phố *</label>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-floating">
+                          <label for="district">Quận/Huyện *</label>
                           <select class="form-select" id="district" v-model="delivery.quan" @change="fetchWards"
                             required>
                             <option value="" disabled selected>Chọn quận/huyện</option>
@@ -154,32 +155,31 @@
                               {{ district.name }}
                             </option>
                           </select>
-                          <label for="district">Quận/Huyện *</label>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-floating">
+                          <label for="ward">Xã/Phường *</label>
                           <select class="form-select" id="ward" v-model="delivery.phuong" required>
                             <option value="" disabled selected>Chọn xã/phường</option>
                             <option v-for="ward in wards" :key="ward.name" :value="ward.name">
                               {{ ward.name }}
                             </option>
                           </select>
-                          <label for="ward">Xã/Phường *</label>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-floating">
+                          <label for="street">Số nhà, tên đường *</label>
                           <input type="text" class="form-control" id="street" v-model="delivery.soNha"
                             placeholder="Ví dụ: 123 Nguyễn Trãi" required />
-                          <label for="street">Số nhà, tên đường *</label>
                         </div>
                       </div>
                       <div class="col-12">
                         <div class="form-floating">
+                          <label for="notes">Ghi chú</label>
                           <textarea class="form-control" id="notes" v-model="delivery.ghiChu"
                             placeholder="Ghi chú cho shipper (tùy chọn)" style="height: 100px"></textarea>
-                          <label for="notes">Ghi chú</label>
                         </div>
                       </div>
                     </div>
@@ -398,8 +398,10 @@
                   <button class="btn-outline-secondary btn-prev" @click="prevStep">
                     <i class="bi bi-arrow-left me-2"></i> Quay lại
                   </button>
-                  <button class="btn-success btn-submit" @click="openConfirmationModal">
-                    <i class="bi bi-check-circle me-2"></i> Đặt hàng
+                  <button class="btn-success btn-submit" @click="openConfirmationModal" :disabled="isLoading">
+                    <span v-if="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    <i v-else class="bi bi-check-circle me-2"></i>
+                    {{ isLoading ? 'Đang xử lý...' : 'Đặt hàng' }}
                   </button>
                 </div>
               </div>
@@ -465,8 +467,8 @@
       </div>
 
       <!-- Confirmation Modal -->
-      <div v-if="showConfirmationModal" class="modal-overlay" @click.self="closeConfirmationModal">
-        <div class="modal-content" @click.stop>
+      <div v-if="showConfirmationModal" class="modal-overlay" :class="{ loading: isLoading }" @click.self="closeConfirmationModal">
+        <div class="modal-content" :class="{ loading: isLoading }" @click.stop>
           <div class="modal-header">
             <h3 class="modal-title">Xác nhận đặt hàng</h3>
             <button class="modal-close" @click="closeConfirmationModal">
@@ -488,8 +490,9 @@
             <button class="btn-secondary btn-cancel" @click="closeConfirmationModal">
               Hủy
             </button>
-            <button class="btn-success btn-confirm" @click="confirmOrder">
-              Xác nhận đặt hàng
+            <button class="btn-success btn-confirm" @click="confirmOrder" :disabled="isLoading">
+              <span v-if="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              {{ isLoading ? 'Đang xử lý...' : 'Xác nhận đặt hàng' }}
             </button>
           </div>
         </div>
@@ -520,6 +523,7 @@ export default {
       qrCodeUrl: '',
       selectedStoreIndex: 0,
       selectedBank: '',
+      isLoading: false,
       banks: [
         { code: 'NCB', name: 'Ngân hàng NCB' },
         { code: 'AGRIBANK', name: 'Ngân hàng Agribank' },
@@ -627,11 +631,12 @@ export default {
     },
     async confirmOrder() {
       try {
+        this.isLoading = true
         if (this.paymentMethod === 'VNPay' && this.cardDetails.cardNumber && !this.validateCardDetails()) {
+          this.isLoading = false
           return
         }
         if (this.paymentMethod === 'VNPay') {
-          // Handle VNPAY payment
           const hoaDonRequest = {
             tenKhachHang: this.deliveryMethod === 'delivery' ? this.delivery.ten : this.stores[this.selectedStoreIndex]?.name || 'Khách hàng nhận tại cửa hàng',
             soDienThoaiKhachHang: this.deliveryMethod === 'delivery' ? this.delivery.soDienThoai : this.pickup.soDienThoai,
@@ -643,31 +648,26 @@ export default {
             idPhieuGiamGia: this.appliedDiscount ? this.appliedDiscount.id : null
           }
           if (this.cardDetails.cardNumber) {
-            // Card payment
             const response = await axios.post(`http://localhost:8080/api/client/thanh-toan-vnpay-card/${this.invoiceId}`, {
               hoaDonRequest,
               cardDetails: this.cardDetails
             })
             if (response.data.vnpayUrl) {
-              // Redirect to VNPAY payment URL
               window.location.href = response.data.vnpayUrl
             } else {
               throw new Error('Không nhận được URL thanh toán từ VNPAY!')
             }
           } else {
-            // QR payment
             const response = await axios.post(`http://localhost:8080/api/client/thanh-toan-vnpay/${this.invoiceId}`, hoaDonRequest, {
               params: { bankCode: this.selectedBank }
             })
             if (response.data.vnpayUrl) {
-              // Redirect to VNPAY payment URL
               window.location.href = response.data.vnpayUrl
             } else {
               throw new Error('Không nhận được URL thanh toán từ VNPAY!')
             }
           }
         } else {
-          // Handle COD payment
           await this.submitForm()
           this.showConfirmationModal = false
           this.showToast('success', `Đặt hàng thành công! Bạn sẽ nhận được email xác nhận đơn hàng.`)
@@ -676,6 +676,8 @@ export default {
       } catch (error) {
         this.handleError(error, 'Lỗi khi thực hiện thanh toán')
         this.showConfirmationModal = false
+      } finally {
+        this.isLoading = false
       }
     },
     getBankName(code) {
@@ -708,6 +710,8 @@ export default {
   padding: 1.5rem;
   border-radius: var(--border-radius);
   border: 1px solid #eee;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
 }
 
 .vnpay-card-section {
@@ -718,9 +722,10 @@ export default {
 }
 
 .vnpay-card-section h4 {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 1rem;
+  font-family: 'Inter', sans-serif;
 }
 
 /* Base Styles */
@@ -741,6 +746,7 @@ export default {
   background-color: #f5f7fa;
   min-height: 100vh;
   padding: 2rem 0 4rem;
+  font-family: 'Inter', sans-serif;
 }
 
 /* Breadcrumb Styles */
@@ -758,7 +764,8 @@ export default {
 }
 
 .breadcrumb-item {
-  font-size: 0.9rem;
+  font-size: 1.3rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .breadcrumb-item.active {
@@ -771,6 +778,7 @@ export default {
   text-decoration: none;
   transition: var(--transition);
   font-family: 'Inter', sans-serif;
+  font-size: 1.3rem;
 }
 
 .breadcrumb-link:hover {
@@ -830,13 +838,16 @@ export default {
   color: var(--secondary);
   margin-bottom: 0.5rem;
   transition: var(--transition);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
 }
 
 .step-label {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: var(--secondary);
   font-weight: 500;
   white-space: nowrap;
+  font-family: 'Inter', sans-serif;
 }
 
 .progress-step.active .step-number {
@@ -882,11 +893,12 @@ export default {
 }
 
 .summary-title {
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
   display: flex;
   align-items: center;
+  font-family: 'Inter', sans-serif;
 }
 
 .summary-body {
@@ -904,18 +916,20 @@ export default {
 }
 
 .step-title {
-  font-size: 1.5rem;
+  font-size: 2.3rem;
   font-weight: 700;
   color: var(--dark);
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
+  font-family: 'Inter', sans-serif;
 }
 
 .step-subtitle {
   color: var(--secondary);
   margin: 0;
   font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
 }
 
 /* Section Styles */
@@ -924,7 +938,7 @@ export default {
 }
 
 .section-title {
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: var(--dark);
   margin-bottom: 1rem;
@@ -935,16 +949,20 @@ export default {
 
 /* Form Styles */
 .form-floating {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 1rem;
 }
 
 .form-control,
 .form-select {
   border-radius: 8px;
+  height: 50px;
   margin: 0 !important;
   border: 1px solid #e0e0e0;
   transition: var(--transition);
   font-family: 'Inter', sans-serif;
+  font-size: 1.3rem;
 }
 
 .form-control:focus,
@@ -955,6 +973,8 @@ export default {
 
 .form-label {
   font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
 }
 
 /* Delivery Options */
@@ -979,7 +999,7 @@ export default {
 }
 
 .option-icon {
-  font-size: 1.5rem;
+  font-size: 2.3rem;
   color: var(--primary);
   margin-right: 1rem;
 }
@@ -989,15 +1009,17 @@ export default {
 }
 
 .option-content h4 {
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .option-content p {
-  font-size: 0.85rem;
+  font-size: 1.1rem;
   color: var(--secondary);
   margin: 0;
+  font-family: 'Inter', sans-serif;
 }
 
 .option-radio {
@@ -1005,8 +1027,8 @@ export default {
 }
 
 .option-radio input {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
 }
 
@@ -1041,22 +1063,24 @@ export default {
 }
 
 .store-radio input {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
 }
 
 .store-content h4 {
-  font-size: 0.95rem;
+  font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .store-address,
 .store-hours {
-  font-size: 0.85rem;
+  font-size: 1rem;
   margin: 0;
   color: var(--secondary);
+  font-family: 'Inter', sans-serif;
 }
 
 /* Order Items */
@@ -1080,15 +1104,17 @@ export default {
 }
 
 .item-details h4 {
-  font-size: 0.95rem;
+  font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .item-quantity {
-  font-size: 0.85rem;
+  font-size: 1.2rem;
   color: var(--secondary);
-  margin: 0;
+  margin-top: .5rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .item-price {
@@ -1097,14 +1123,17 @@ export default {
 }
 
 .price-unit {
-  font-size: 0.85rem;
+  font-size: 1.2rem;
   color: var(--secondary);
   margin-bottom: 0.25rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .price-total {
   font-weight: 600;
   margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
 }
 
 /* Discount Styles */
@@ -1116,11 +1145,14 @@ export default {
 .discount-input .form-control {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  font-size: 1.5rem;
 }
 
 .btn-apply {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
 }
 
 /* Payment Options */
@@ -1145,7 +1177,7 @@ export default {
 }
 
 .payment-icon {
-  font-size: 1.5rem;
+  font-size: 2.3rem;
   color: var(--primary);
   margin-right: 1rem;
 }
@@ -1156,15 +1188,17 @@ export default {
 }
 
 .payment-content h4 {
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .payment-content p {
-  font-size: 0.85rem;
+  font-size: 1.2rem;
   color: var(--secondary);
   margin: 0;
+  font-family: 'Inter', sans-serif;
 }
 
 .payment-radio {
@@ -1172,8 +1206,8 @@ export default {
 }
 
 .payment-radio input {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
 }
 
@@ -1226,17 +1260,20 @@ export default {
 }
 
 .product-name {
-  font-size: 0.9rem;
+  font-size: 1.5rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .product-quantity {
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--secondary);
+  font-family: 'Inter', sans-serif;
 }
 
 .product-price {
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 1.5rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .order-totals {
@@ -1247,7 +1284,8 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.75rem;
-  font-size: 0.9rem;
+  font-size: 1.5rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .total-row:last-child {
@@ -1260,7 +1298,7 @@ export default {
 
 .total-row.grand-total {
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.5rem;
   padding-top: 0.75rem;
   border-top: 1px solid #eee;
 }
@@ -1269,8 +1307,9 @@ export default {
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
-  font-size: 0.85rem;
+  font-size: 1.2rem;
   color: var(--secondary);
+  font-family: 'Inter', sans-serif;
 }
 
 .benefit-item:last-child {
@@ -1301,7 +1340,8 @@ export default {
   justify-content: center;
   border-radius: .5rem;
   padding: 1rem;
-  font-size: 1rem;
+  font-size: 1.5rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .btn-submit {
@@ -1341,19 +1381,22 @@ export default {
 }
 
 .modal-title {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 600;
+  font-family: 'Inter', sans-serif;
 }
 
 .modal-close {
   background: none;
   border: none;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   cursor: pointer;
 }
 
 .modal-body {
   margin-bottom: 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
 }
 
 .modal-footer {
@@ -1366,6 +1409,8 @@ export default {
 .btn-confirm {
   padding: 0.75rem 1.5rem;
   border-radius: var(--border-radius);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
 }
 
 .btn-cancel {
@@ -1376,6 +1421,109 @@ export default {
 .btn-confirm {
   background-color: var(--success);
   color: white;
+  position: relative;
+  transition: var(--transition);
+}
+
+/* Loading Overlay for Modal */
+.modal-overlay.loading {
+  background-color: rgba(0, 0, 0, 0.7);
+  cursor: wait;
+}
+
+.modal-content.loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.modal-content.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: var(--border-radius);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Beautiful Gradient Spinner */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 5px solid transparent;
+  border-top-color: var(--primary);
+  border-right-color: var(--success);
+  border-radius: 50%;
+  animation: spin 1s linear infinite, pulse 1.5s ease-in-out infinite;
+  position: relative;
+  z-index: 11;
+}
+
+.modal-content.loading::before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border: 5px solid transparent;
+  border-top-color: var(--primary);
+  border-right-color: var(--success);
+  border-radius: 50%;
+  animation: spin 1s linear infinite, pulse 1.5s ease-in-out infinite;
+  z-index: 11;
+}
+
+/* Enhanced Button Loading State */
+.btn-confirm:disabled {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.btn-confirm .spinner-border {
+  display: none;
+}
+
+.btn-confirm:disabled .spinner-border {
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  vertical-align: middle;
+  border: 0.25em solid currentColor;
+  border-right-color: transparent;
+  animation: spin 0.75s linear infinite;
+}
+
+/* Ensure modal content is blurred during loading */
+.modal-content.loading .modal-header,
+.modal-content.loading .modal-body,
+.modal-content.loading .modal-footer {
+  filter: blur(2px);
+  transition: filter 0.3s ease;
 }
 
 /* Animations */
@@ -1411,7 +1559,7 @@ export default {
   }
 
   .step-title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
 
   .step-actions {
@@ -1427,7 +1575,6 @@ export default {
 }
 
 @media (max-width: 576px) {
-
   .delivery-option,
   .payment-option {
     flex-direction: column;
