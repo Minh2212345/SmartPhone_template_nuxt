@@ -27,7 +27,7 @@
       </div>
       <div class="chat-input">
         <input v-model="inputMessage" type="text" placeholder="Nhập tin nhắn..." @keyup.enter="sendMessage" />
-        <button @click="sendMessage">→</button>
+        <button @click="sendMessage" :disabled="isSending">→</button>
       </div>
     </div>
   </div>
@@ -38,11 +38,6 @@ import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
 import axios from 'axios'
 
-// Polyfill cho global
-if (typeof global === 'undefined') {
-  window.global = window
-}
-
 export default {
   name: 'ChatBoxComponent',
   data() {
@@ -52,10 +47,10 @@ export default {
       chatMode: null, // 'ai' or 'staff'
       messages: [],
       inputMessage: '',
-      customerId: 1, // Giả định, trong thực tế lấy từ auth
+      customerId: 1, // Trong thực tế, lấy từ auth (VD: JWT token)
       stompClient: null,
-      chatMessages: null,
       isConnecting: false,
+      isSending: false,
     }
   },
   mounted() {
@@ -91,13 +86,18 @@ export default {
       if (this.stompClient && this.stompClient.connected) {
         this.stompClient.subscribe(`/topic/customer/${this.customerId}`, (message) => {
           const msg = JSON.parse(message.body)
-          this.messages.push({
-            sender: msg.sender, // Phân biệt nhân viên và khách hàng
-            text: msg.text,
-            type: msg.type,
-            time: msg.time,
-          })
-          this.scrollToBottom()
+          // Kiểm tra tin nhắn trùng dựa trên time
+          if (!this.messages.some((m) => m.time === msg.time && m.text === msg.text)) {
+            this.messages.push({
+              sender: msg.sender === 'customer' ? 'sent' : 'received',
+              text: msg.text,
+              type: msg.type,
+              time: msg.time,
+            })
+            this.scrollToBottom()
+          } else {
+            console.log('Duplicate message skipped:', msg)
+          }
         })
       }
     },
@@ -108,21 +108,13 @@ export default {
       this.messages = [
         { sender: 'received', text: 'Bạn cần tìm sản phẩm như nào?', type: 'text', time: new Date().toISOString() },
       ]
-      fetch(`http://localhost:8080/api/messages/${this.customerId}`)
+      axios
+        .get(`http://localhost:8080/api/messages/${this.customerId}`)
         .then((res) => {
-          if (!res.ok) throw new Error('Network response was not ok')
-          return res.json()
-        })
-        .then((data) => {
-          this.messages = data.filter((msg) => msg.type === 'text' && msg.sender === 'ai')
-          this.$nextTick(() => {
-            if (this.chatMessages) {
-              this.chatMessages.scrollTop = this.chatMessages.scrollHeight
-            }
-          })
+          this.messages = res.data.filter((msg) => msg.type === 'text' && msg.sender === 'ai')
+          this.scrollToBottom()
         })
         .catch((error) => {
-          console.log('Toast:', { type: 'error', message: 'Lỗi khi tải lịch sử tin nhắn AI' })
           console.error('Error fetching AI messages:', error)
         })
     },
@@ -139,13 +131,13 @@ export default {
         },
         { sender: 'received', text: 'Em có thể giúp gì Anh/Chị?', type: 'text', time: new Date().toISOString() },
       ]
-      fetch(`http://localhost:8080/api/messages/${this.customerId}`)
+      axios
+        .get(`http://localhost:8080/api/messages/${this.customerId}`)
         .then((res) => {
-          if (!res.ok) throw new Error('Network response was not ok')
-          return res.json()
-        })
-        .then((data) => {
-          this.messages = data
+          this.messages = res.data.map((msg) => ({
+            ...msg,
+            sender: msg.sender === 'customer' ? 'sent' : 'received',
+          }))
           this.scrollToBottom()
           if (this.stompClient && this.stompClient.connected) {
             this.subscribeToCustomerTopic()
@@ -157,12 +149,9 @@ export default {
           console.error('Error fetching messages:', error)
         })
     },
-    formatTime(time) {
-      if (!time) return ''
-      return new Date(time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
-    },
-    sendMessage() {
-      if (!this.inputMessage.trim()) return
+    async sendMessage() {
+      if (!this.inputMessage.trim() || this.isSending) return
+      this.isSending = true
 
       const message = {
         type: 'text',
@@ -172,35 +161,35 @@ export default {
         time: new Date().toISOString(),
       }
 
-      this.messages.push({ ...message, sender: 'sent' })
       if (this.chatMode === 'ai') {
-        axios
-          .post('http://localhost:8080/api/chatbot', { message: this.inputMessage })
-          .then((response) => {
-            this.messages.push({
-              sender: 'received',
-              text: response.data.reply,
-              type: 'text',
-              time: new Date().toISOString(),
-            })
-            this.scrollToBottom()
+        try {
+          const response = await axios.post('http://localhost:8080/api/chatbot', { message: this.inputMessage })
+          this.messages.push({
+            sender: 'received',
+            text: response.data.reply,
+            type: 'text',
+            time: new Date().toISOString(),
           })
-          .catch((error) => {
-            console.error('Lỗi khi gọi API:', error)
-          })
+          this.scrollToBottom()
+        } catch (error) {
+          console.error('Error calling chatbot API:', error)
+        }
       } else if (this.stompClient && this.stompClient.connected) {
         this.stompClient.send(`/app/chat/customer/${this.customerId}`, JSON.stringify(message))
       } else {
+        let timeoutId = null
         this.connectWebSocket()
-        setTimeout(() => {
+        timeoutId = setTimeout(() => {
           if (this.stompClient && this.stompClient.connected) {
             this.stompClient.send(`/app/chat/customer/${this.customerId}`, JSON.stringify(message))
           }
+          clearTimeout(timeoutId)
         }, 1000)
       }
 
       this.inputMessage = ''
       this.scrollToBottom()
+      this.isSending = false
     },
     closeChat() {
       if (this.stompClient) this.stompClient.disconnect()

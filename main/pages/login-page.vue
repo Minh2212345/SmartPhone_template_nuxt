@@ -175,14 +175,19 @@ export default {
           matKhau: this.password,
         });
 
-        // Handle successful login
-        alert(response.data); // Example: "Đăng nhập thành công: <taikhoan>"
-        // Optionally redirect or store token
-        this.$router.push('/'); // Redirect to dashboard or another page
+        // Giả định backend trả về đối tượng chứa customerId
+        const { customerId } = response.data; // Cần đảm bảo backend trả về customerId
+        if (customerId) {
+          // Lưu customerId vào localStorage hoặc Vuex để sử dụng trong ChatBoxComponent
+          localStorage.setItem('customerId', customerId);
+          alert('Đăng nhập thành công!');
+          this.$router.push('/'); // Chuyển hướng đến trang chính
+        } else {
+          alert('Không tìm thấy ID khách hàng từ phản hồi đăng nhập');
+        }
       } catch (error) {
-        // Handle error
         if (error.response) {
-          alert(error.response.data); // Example: "Vui lòng cung cấp tên đăng nhập hoặc email"
+          alert(error.response.data);
         } else {
           alert('Lỗi kết nối đến máy chủ');
         }
