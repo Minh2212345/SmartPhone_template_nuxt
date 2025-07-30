@@ -93,7 +93,6 @@
                     </div>
                   </div>
                   <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                    <!-- Registration form (unchanged for now) -->
                     <form action="#">
                       <div class="form-group">
                         <label for="register-email">Địa chỉ email *</label>
@@ -158,12 +157,15 @@
 
 <script>
 import axios from 'axios';
+import mitt from 'mitt';
+
+const emitter = mitt(); // Tạo event bus
 
 export default {
   data() {
     return {
-      loginInput: '', // Stores username or email
-      password: '', // Stores password
+      loginInput: '',
+      password: '',
     };
   },
   methods: {
@@ -175,19 +177,28 @@ export default {
           matKhau: this.password,
         });
 
-        // Giả định backend trả về đối tượng chứa customerId
-        const { customerId } = response.data; // Cần đảm bảo backend trả về customerId
+        // Giả định API trả về customerId và fullName (điều chỉnh theo API thực tế)
+        const { customerId, fullName } = response.data;
         if (customerId) {
-          // Lưu customerId vào localStorage hoặc Vuex để sử dụng trong ChatBoxComponent
           localStorage.setItem('customerId', customerId);
+          localStorage.setItem('customerName', fullName || this.loginInput);
+          localStorage.setItem('isLoggedIn', 'true');
+          
+          // Emit sự kiện để thông báo Navbar cập nhật
+          emitter.emit('loginStatusChanged', {
+            isLoggedIn: true,
+            customerName: fullName || this.loginInput,
+          });
+
           alert('Đăng nhập thành công!');
-          this.$router.push('/'); // Chuyển hướng đến trang chính
+          this.$router.push('/');
         } else {
           alert('Không tìm thấy ID khách hàng từ phản hồi đăng nhập');
         }
       } catch (error) {
+        console.error('Lỗi đăng nhập:', error);
         if (error.response) {
-          alert(error.response.data);
+          alert(error.response.data.message || 'Lỗi đăng nhập');
         } else {
           alert('Lỗi kết nối đến máy chủ');
         }
