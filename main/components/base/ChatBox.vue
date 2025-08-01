@@ -1,23 +1,11 @@
 <template>
   <div class="chat-container">
-    <button v-if="!showOptions && !showChat" class="chat-button" @click="showOptions = true">Chat ngay</button>
-
-    <!-- Options panel -->
-    <div v-if="showOptions && !showChat" class="options-box">
-      <div class="chat-header">
-        <h2 style="color: white">Mobile World</h2>
-        <button class="close-button" @click="showOptions = false">×</button>
-      </div>
-      <div class="options-buttons">
-        <button class="option-button" @click="startAIChat">Chat với AI</button>
-        <button class="option-button" @click="startStaffChat">Chat với Nhân viên</button>
-      </div>
-    </div>
-
-    <!-- Chat box -->
+    <button v-if="!showChat" class="chat-button" @click="openChat">Chat ngay</button>
     <div v-if="showChat" class="chat-box">
       <div class="chat-header">
-        <h2 style="color: white">{{ chatMode === 'ai' ? 'AI Assistant' : 'Nhân viên Mobile World' }}</h2>
+        <h2 style="color: white">
+          {{ chatMode === 'ai' ? 'AI Assistant' : 'Nhân viên Mobile World' }}
+        </h2>
         <button class="close-button" @click="closeChat">×</button>
       </div>
       <div ref="chatMessages" class="chat-messages">
@@ -42,116 +30,96 @@ export default {
   name: 'ChatBoxComponent',
   data() {
     return {
-      showOptions: false,
       showChat: false,
-      chatMode: null, // 'ai' or 'staff'
+      chatMode: 'ai', // Mặc định là AI
       messages: [],
       inputMessage: '',
-      customerId: 1, // Trong thực tế, lấy từ auth (VD: JWT token)
+      customerId: null, // Không hard-code nữa
       stompClient: null,
       isConnecting: false,
       isSending: false,
+      subscribed: false,
     }
   },
   mounted() {
-    this.connectWebSocket()
+    // Lấy customerId từ localStorage khi component được khởi tạo
+    this.customerId = localStorage.getItem('customerId') || null;
+    if (!this.customerId) {
+      console.warn('Không tìm thấy customerId trong localStorage');
+    }
   },
   beforeDestroy() {
-    if (this.stompClient) this.stompClient.disconnect()
+    if (this.stompClient) this.stompClient.disconnect();
   },
   methods: {
+    openChat() {
+      if (!this.customerId) {
+        alert('Vui lòng đăng nhập để sử dụng chức năng chat!');
+        return;
+      }
+      this.showChat = true;
+      this.chatMode = 'ai';
+      this.messages = [
+        { sender: 'received', text: 'Tôi có thể giúp gì cho bạn?', type: 'text', time: new Date().toISOString() },
+      ];
+      axios
+        .get(`http://localhost:8080/api/messages/${this.customerId}`)
+        .then((res) => {
+          // Lấy lịch sử AI
+          this.messages = [
+            { sender: 'received', text: 'Tôi có thể giúp gì cho bạn?', type: 'text', time: new Date().toISOString() },
+            ...res.data.filter((msg) => msg.type === 'text' && msg.sender === 'ai')
+          ];
+          this.scrollToBottom();
+        })
+        .catch(() => {});
+    },
     connectWebSocket() {
-      if (this.isConnecting || (this.stompClient && this.stompClient.connected)) return
-      this.isConnecting = true
+      if (!this.customerId) {
+        console.error('Không có customerId để kết nối WebSocket');
+        return;
+      }
+      if (this.isConnecting || (this.stompClient && this.stompClient.connected)) return;
+      this.isConnecting = true;
 
-      const socket = new SockJS('http://localhost:8080/chat-sockjs')
-      this.stompClient = Stomp.over(socket)
+      const socket = new SockJS('http://localhost:8080/chat-sockjs');
+      this.stompClient = Stomp.over(socket);
       this.stompClient.connect(
         {},
         () => {
-          console.log('WebSocket connected for customer')
-          this.isConnecting = false
-          if (this.chatMode === 'staff') {
-            this.subscribeToCustomerTopic()
-          }
+          this.isConnecting = false;
+          this.subscribeToCustomerTopic();
         },
-        (error) => {
-          console.error('WebSocket connection error:', error)
-          this.isConnecting = false
-          setTimeout(() => this.connectWebSocket(), 2000)
+        () => {
+          this.isConnecting = false;
+          setTimeout(() => this.connectWebSocket(), 2000);
         }
-      )
+      );
     },
     subscribeToCustomerTopic() {
-      if (this.stompClient && this.stompClient.connected) {
+      if (this.stompClient && this.stompClient.connected && !this.subscribed) {
         this.stompClient.subscribe(`/topic/customer/${this.customerId}`, (message) => {
-          const msg = JSON.parse(message.body)
-          // Kiểm tra tin nhắn trùng dựa trên time
+          const msg = JSON.parse(message.body);
           if (!this.messages.some((m) => m.time === msg.time && m.text === msg.text)) {
             this.messages.push({
               sender: msg.sender === 'customer' ? 'sent' : 'received',
               text: msg.text,
               type: msg.type,
               time: msg.time,
-            })
-            this.scrollToBottom()
-          } else {
-            console.log('Duplicate message skipped:', msg)
+            });
+            this.scrollToBottom();
           }
-        })
+        });
+        this.subscribed = true;
       }
     },
-    startAIChat() {
-      this.chatMode = 'ai'
-      this.showOptions = false
-      this.showChat = true
-      this.messages = [
-        { sender: 'received', text: 'Bạn cần tìm sản phẩm như nào?', type: 'text', time: new Date().toISOString() },
-      ]
-      axios
-        .get(`http://localhost:8080/api/messages/${this.customerId}`)
-        .then((res) => {
-          this.messages = res.data.filter((msg) => msg.type === 'text' && msg.sender === 'ai')
-          this.scrollToBottom()
-        })
-        .catch((error) => {
-          console.error('Error fetching AI messages:', error)
-        })
-    },
-    startStaffChat() {
-      this.chatMode = 'staff'
-      this.showOptions = false
-      this.showChat = true
-      this.messages = [
-        {
-          sender: 'received',
-          text: 'Xin chào Anh/Chị! Em là nhân viên của Mobile World',
-          type: 'text',
-          time: new Date().toISOString(),
-        },
-        { sender: 'received', text: 'Em có thể giúp gì Anh/Chị?', type: 'text', time: new Date().toISOString() },
-      ]
-      axios
-        .get(`http://localhost:8080/api/messages/${this.customerId}`)
-        .then((res) => {
-          this.messages = res.data.map((msg) => ({
-            ...msg,
-            sender: msg.sender === 'customer' ? 'sent' : 'received',
-          }))
-          this.scrollToBottom()
-          if (this.stompClient && this.stompClient.connected) {
-            this.subscribeToCustomerTopic()
-          } else {
-            this.connectWebSocket()
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching messages:', error)
-        })
-    },
     async sendMessage() {
-      if (!this.inputMessage.trim() || this.isSending) return
-      this.isSending = true
+      if (!this.inputMessage.trim() || this.isSending) return;
+      if (!this.customerId) {
+        alert('Vui lòng đăng nhập để gửi tin nhắn!');
+        return;
+      }
+      this.isSending = true;
 
       const message = {
         type: 'text',
@@ -159,55 +127,89 @@ export default {
         sender: 'customer',
         customerId: this.customerId,
         time: new Date().toISOString(),
+      };
+
+      // Nếu đang ở AI và phát hiện từ khóa chuyển sang nhân viên
+      if (
+        this.chatMode === 'ai' &&
+        /nhân\s*viên\s*hỗ\s*trợ|gặp\s*nhân\s*viên|liên\s*hệ\s*nhân\s*viên/i.test(this.inputMessage)
+      ) {
+        // Chuyển sang chat nhân viên
+        this.chatMode = 'staff';
+        this.messages = [
+          { sender: 'received', text: 'Xin chào!', type: 'text', time: new Date().toISOString() }
+        ];
+        this.connectWebSocket();
+        // Lấy lịch sử chat với nhân viên
+        axios
+          .get(`http://localhost:8080/api/messages/${this.customerId}`)
+          .then((res) => {
+            this.messages = [
+              { sender: 'received', text: 'Xin chào!', type: 'text', time: new Date().toISOString() },
+              ...res.data.map((msg) => ({
+                ...msg,
+                sender: msg.sender === 'customer' ? 'sent' : 'received',
+              }))
+            ];
+            this.scrollToBottom();
+          })
+          .catch(() => {});
+        this.inputMessage = '';
+        this.isSending = false;
+        return;
       }
 
       if (this.chatMode === 'ai') {
         try {
-          const response = await axios.post('http://localhost:8080/api/chatbot', { message: this.inputMessage })
+          const response = await axios.post('http://localhost:8080/api/chatbot', { message: this.inputMessage });
           this.messages.push({
             sender: 'received',
             text: response.data.reply,
             type: 'text',
             time: new Date().toISOString(),
-          })
-          this.scrollToBottom()
+          });
+          this.scrollToBottom();
         } catch (error) {
-          console.error('Error calling chatbot API:', error)
+          console.error('Lỗi khi gửi tin nhắn tới AI:', error);
         }
       } else if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send(`/app/chat/customer/${this.customerId}`, JSON.stringify(message))
+        this.stompClient.send(`/app/chat/customer/${this.customerId}`, JSON.stringify(message));
       } else {
-        let timeoutId = null
-        this.connectWebSocket()
-        timeoutId = setTimeout(() => {
+        this.connectWebSocket();
+        setTimeout(() => {
           if (this.stompClient && this.stompClient.connected) {
-            this.stompClient.send(`/app/chat/customer/${this.customerId}`, JSON.stringify(message))
+            this.stompClient.send(`/app/chat/customer/${this.customerId}`, JSON.stringify(message));
+            this.messages.push({
+              sender: 'sent',
+              text: this.inputMessage,
+              type: 'text',
+              time: message.time,
+            });
           }
-          clearTimeout(timeoutId)
-        }, 1000)
+        }, 1000);
       }
 
-      this.inputMessage = ''
-      this.scrollToBottom()
-      this.isSending = false
+      this.inputMessage = '';
+      this.scrollToBottom();
+      this.isSending = false;
     },
     closeChat() {
-      if (this.stompClient) this.stompClient.disconnect()
-      this.showChat = false
-      this.showOptions = false
-      this.chatMode = null
-      this.messages = []
-      this.inputMessage = ''
+      if (this.stompClient) this.stompClient.disconnect();
+      this.showChat = false;
+      this.chatMode = 'ai';
+      this.messages = [];
+      this.inputMessage = '';
+      this.subscribed = false;
     },
     scrollToBottom() {
       this.$nextTick(() => {
         if (this.$refs.chatMessages) {
-          this.$refs.chatMessages.scrollTop = this.$refs.chatMessages.scrollHeight
+          this.$refs.chatMessages.scrollTop = this.$refs.chatMessages.scrollHeight;
         }
-      })
+      });
     },
   },
-}
+};
 </script>
 
 <style scoped>
