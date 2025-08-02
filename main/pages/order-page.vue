@@ -1,40 +1,40 @@
+```vue
 <template>
   <div class="min-h-screen bg-gray-100 flex flex-col">
     <!-- Thanh thông tin phía trên -->
-<div class="bg-white shadow-lg p-4 flex items-center border-b border-gray-200 rounded-xl m-4">
-  <!-- Avatar -->
-  <img src="/assets/images/icons/ava-profile.png" style="height: 10rem; margin: 2rem" alt="" />
+    <div class="bg-white shadow-lg p-4 flex items-center border-b border-gray-200 rounded-xl m-4">
+      <!-- Avatar -->
+      <img src="/assets/images/icons/ava-profile.png" style="height: 10rem; margin: 2rem" alt="" />
 
-  <!-- Thông tin người dùng + thống kê -->
-  <div class="flex items-start gap-x-12">
-    <!-- Thông tin người dùng -->
-    <div>
-      <span class="text-5xl font-semibold text-gray-800 font-custom">Để name ở đây nè</span>
-      <div class="flex items-center">
-        <p class="text-3xl text-gray-500 font-custom">Số điện thoại thì ở đây</p>
+      <!-- Thông tin người dùng + thống kê -->
+      <div class="flex items-start gap-x-12">
+        <!-- Thông tin người dùng -->
+        <div>
+          <span class="text-5xl font-semibold text-gray-800 font-custom">{{ customerName }}</span>
+          <div class="flex items-center">
+            <p class="text-3xl text-gray-500 font-custom">{{ phoneNumber }}</p>
+          </div>
+          <p class="text-lg text-gray-500 mt-1 font-custom">Cập nhật sau 01/01/2026</p>
+        </div>
+
+        <!-- Thống kê -->
+        <div class="flex items-center gap-x-8 ml-8">
+          <!-- Tổng số đơn hàng -->
+          <div class="text-center pl-4 border-l-2 border-[#162d63]">
+            <i class="las la-shopping-cart text-2xl mb-1" style="color: #162d63;"></i>
+            <p class="text-xl font-bold" style="color: #162d63;">2</p>
+            <p class="text-lg text-gray-600 font-custom">Tổng số đơn hàng đã mua</p>
+          </div>
+
+          <!-- Tổng tiền đã tích lũy -->
+          <div class="text-center pl-4 border-l-2 border-[#162d63]">
+            <i class="las la-money-bill-wave text-2xl mb-1"></i>
+            <p class="text-xl font-bold" style="color: #162d63;">0 VNĐ</p>
+            <p class="text-lg text-gray-600 font-custom">Tổng tiền đã tích lũy</p>
+          </div>
+        </div>
       </div>
-      <p class="text-lg text-gray-500 mt-1 font-custom">Cập nhật sau 01/01/2026</p>
     </div>
-
-    <!-- Thống kê -->
-    <div class="flex items-center gap-x-8 ml-8">
-      <!-- Tổng số đơn hàng -->
-      <div class="text-center pl-4 border-l-2 border-[#162d63]">
-        <i class="las la-shopping-cart text-2xl mb-1" style="color: #162d63;"></i>
-        <p class="text-xl font-bold" style="color: #162d63;">2</p>
-        <p class="text-lg text-gray-600 font-custom">Tổng số đơn hàng đã mua</p>
-      </div>
-
-      <!-- Tổng tiền đã tích lũy -->
-      <div class="text-center pl-4 border-l-2 border-[#162d63]">
-        <i class="las la-money-bill-wave text-2xl mb-1" ></i>
-        <p class="text-xl font-bold" style="color: #162d63;">0 VNĐ</p>
-        <p class="text-lg text-gray-600 font-custom">Tổng tiền đã tích lũy</p>
-      </div>
-    </div>
-  </div>
-</div>
-
 
     <!-- Khu vực nội dung chính -->
     <div class="flex flex-1 justify-center">
@@ -150,10 +150,13 @@
                       <td class="py-2 px-4">{{ order.date }}</td>
                       <td class="py-2 px-4">{{ order.status }}</td>
                       <td class="py-2 px-4">{{ order.total }} VNĐ</td>
-                      <td class="py-2 px-4">                        
-                        <NuxtLink class="px-2 py-1 bg-blue-500 text-white text-lg rounded-lg hover:bg-blue-600 transition duration-200 font-custom" to="/invoice-status">
-                  Tra cứu
-                </NuxtLink>
+                      <td class="py-2 px-4">
+                        <NuxtLink
+                          class="px-2 py-1 bg-blue-500 text-white text-lg rounded-lg hover:bg-blue-600 transition duration-200 font-custom"
+                          to="/invoice-status"
+                        >
+                          Tra cứu
+                        </NuxtLink>
                       </td>
                     </tr>
                     <!-- Dữ liệu mẫu -->
@@ -228,7 +231,7 @@
             <!-- Thông báo -->
             <div class="bg-blue-50 text-blue-700 p-3 rounded-lg mb-1 flex justify-between items-center">
               <span class="text-sm">Vui lòng cập nhật thông tin để có trải nghiệm tốt hơn.</span>
-              <button class="text-sm text-blue-700 underline">Cập nhật</button>
+              <button @click="updateAccountInfo" class="text-sm text-blue-700 underline">Cập nhật</button>
             </div>
             <!-- Thông tin cá nhân -->
             <div class="bg-white p-4 rounded-3xl mb-1">
@@ -248,19 +251,28 @@
                 <!-- Giới tính -->
                 <div class="flex items-center gap-2">
                   <label class="w-1/3 text-lg text-gray-600 font-custom">Giới tính:</label>
-                  <input type="text" v-model="gender" class="w-2/3 border rounded-lg px-3 py-2" />
+                  <div class="w-2/3 flex items-center gap-4">
+                    <label class="flex items-center">
+                      <input type="radio" v-model="gender" :value="true" class="mr-1" />
+                      <span class="text-lg text-gray-600 font-custom">Nam</span>
+                    </label>
+                    <label class="flex items-center">
+                      <input type="radio" v-model="gender" :value="false" class="mr-1" />
+                      <span class="text-lg text-gray-600 font-custom">Nữ</span>
+                    </label>
+                  </div>
                 </div>
 
                 <!-- Ngày sinh -->
                 <div class="flex items-center gap-2">
                   <label class="w-1/3 text-lg text-gray-600 font-custom">Ngày sinh:</label>
-                  <input type="text" v-model="birthDate" class="w-2/3 border rounded-lg px-3 py-2" />
+                  <input type="date" v-model="birthDate" class="w-2/3 border rounded-lg px-3 py-2" />
                 </div>
 
                 <!-- Địa chỉ mặc định -->
                 <div class="flex items-center gap-2">
                   <label class="w-1/3 text-lg text-gray-600 font-custom">Địa chỉ mặc định:</label>
-                  <input type="text" v-model="defaultAddress" class="w-2/3 border rounded-lg px-3 py-2" />
+                  <input type="text" v-model="defaultAddress" class="w-2/3 border rounded-lg px-3 py-2" disabled />
                 </div>
 
                 <!-- Email -->
@@ -270,7 +282,10 @@
                 </div>
               </div>
 
-              <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:text-[#162d63] transition duration-200">
+              <button
+                @click="updateAccountInfo"
+                class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200"
+              >
                 Cập nhật
               </button>
             </div>
@@ -279,7 +294,7 @@
             <div class="bg-white p-4 rounded-3xl mb-1 text-center">
               <h2 class="text-xl font-semibold text-gray-800 mb-2">Sổ địa chỉ</h2>
               <p class="text-gray-600 font-custom">Bạn chưa có địa chỉ nào để giao hàng</p>
-              <button class="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:text-[#162d63] transition duration-200">
+              <button class="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
                 Thêm địa chỉ
               </button>
             </div>
@@ -324,14 +339,28 @@
 </template>
 
 <script>
+import axios from 'axios';
+import mitt from 'mitt';
+
+const emitter = mitt();
+
 export default {
   data() {
     return {
-      activeTab: 'history',
+      activeTab: 'account',
       activeStatus: 'all',
       activeWarrantyStatus: 'all',
       startDate: '2020-12-01',
       endDate: '2025-07-01',
+      customerName: localStorage.getItem('customerName') || 'Khách hàng',
+      phoneNumber: localStorage.getItem('phoneNumber') || 'Chưa có số điện thoại',
+      fullName: localStorage.getItem('fullName') || '',
+      phone: localStorage.getItem('phoneNumber') || '',
+      gender: localStorage.getItem('gender') || '',
+      birthDate: localStorage.getItem('birthDate') || '',
+      defaultAddress: localStorage.getItem('defaultAddress') || '',
+      defaultAddressId: localStorage.getItem('defaultAddressId') || '',
+      email: localStorage.getItem('email') || '',
       tabs: [
         { id: 'overview', name: 'Tổng quan', icon: 'las la-home' },
         { id: 'history', name: 'Lịch sử mua hàng', icon: 'las la-history' },
@@ -361,38 +390,111 @@ export default {
         { id: 1, warrantyId: 'BH123456', date: '01/07/2025', status: 'Đang sửa', product: 'iPhone 14' },
         { id: 2, warrantyId: 'BH123457', date: '30/06/2025', status: 'Đã trả máy', product: 'Samsung Galaxy S23' },
       ],
-    }
+    };
   },
   computed: {
     filteredOrders() {
-      if (this.activeStatus === 'all' && !this.startDate && !this.endDate) return this.orders
-      const start = this.startDate ? new Date(this.startDate) : null
-      const end = this.endDate ? new Date(this.endDate) : null
+      if (this.activeStatus === 'all' && !this.startDate && !this.endDate) return this.orders;
+      const start = this.startDate ? new Date(this.startDate) : null;
+      const end = this.endDate ? new Date(this.endDate) : null;
       return this.orders.filter((order) => {
-        const orderDate = new Date(order.date.split('/').reverse().join('-'))
-        const matchesStatus = this.activeStatus === 'all' || order.status === this.getStatusName(this.activeStatus)
-        const matchesDate = (!start || orderDate >= start) && (!end || orderDate <= end)
-        return matchesStatus && matchesDate
-      })
+        const orderDate = new Date(order.date.split('/').reverse().join('-'));
+        const matchesStatus = this.activeStatus === 'all' || order.status === this.getStatusName(this.activeStatus);
+        const matchesDate = (!start || orderDate >= start) && (!end || orderDate <= end);
+        return matchesStatus && matchesDate;
+      });
     },
     filteredWarranties() {
-      if (this.activeWarrantyStatus === 'all') return this.warranties
-      return this.warranties.filter((warranty) => warranty.status === this.getStatusName(this.activeWarrantyStatus))
+      if (this.activeWarrantyStatus === 'all') return this.warranties;
+      return this.warranties.filter((warranty) => warranty.status === this.getStatusName(this.activeWarrantyStatus));
     },
   },
   methods: {
     getStatusName(statusId) {
-      const statusList = this.activeTab === 'history' ? this.orderStatuses : this.warrantyStatuses
-      const status = statusList.find((s) => s.id === statusId)
-      return status ? status.name : ''
+      const statusList = this.activeTab === 'history' ? this.orderStatuses : this.warrantyStatuses;
+      const status = statusList.find((s) => s.id === statusId);
+      return status ? status.name : '';
+    },
+    formatAddress(address) {
+      if (!address) return '';
+      const { diaChiCuThe, phuong, quan, thanhPho } = address;
+      return [diaChiCuThe, phuong, quan, thanhPho].filter(Boolean).join(', ');
+    },
+    async fetchAccountInfo() {
+      try {
+        const idKhachHang = localStorage.getItem('customerId');
+        if (!idKhachHang) {
+          console.error('Không tìm thấy ID khách hàng trong localStorage');
+          return;
+        }
+        const response = await axios.get(`http://localhost:8080/tai-khoan/thong-tin-khach-hang/${idKhachHang}`);
+        console.log('Thông tin khách hàng:', response.data);
+        const { hoTen, soDienThoai, gioiTinh, ngaySinh, diaChiMacDinh, email } = response.data;
+
+        this.fullName = hoTen || '';
+        this.phone = soDienThoai || '';
+        this.gender = gioiTinh ? true : false; // Chuyển boolean thành true/false
+        this.birthDate = ngaySinh ? new Date(ngaySinh).toISOString().split('T')[0] : '';
+        this.defaultAddress = diaChiMacDinh ? this.formatAddress(diaChiMacDinh) : '';
+        this.defaultAddressId = diaChiMacDinh ? diaChiMacDinh.id : '';
+        this.email = email || '';
+        this.customerName = hoTen || localStorage.getItem('customerName') || 'Khách hàng';
+        this.phoneNumber = soDienThoai || localStorage.getItem('phoneNumber') || 'Chưa có số điện thoại';
+
+        localStorage.setItem('fullName', this.fullName);
+        localStorage.setItem('phoneNumber', this.phone);
+        localStorage.setItem('gender', JSON.stringify(this.gender));
+        localStorage.setItem('birthDate', this.birthDate);
+        localStorage.setItem('defaultAddress', this.defaultAddress);
+        localStorage.setItem('defaultAddressId', this.defaultAddressId);
+        localStorage.setItem('email', this.email);
+      } catch (error) {
+        console.error('Lỗi khi lấy thông tin khách hàng:', error);
+        alert(error.response?.data?.message || 'Lỗi khi lấy thông tin khách hàng');
+      }
+    },
+    async updateAccountInfo() {
+      try {
+        const idKhachHang = localStorage.getItem('customerId');
+        if (!idKhachHang) {
+          alert('Không tìm thấy ID khách hàng');
+          return;
+        }
+        const response = await axios.put(`http://localhost:8080/tai-khoan/thong-tin-khach-hang/${idKhachHang}`, {
+          hoTen: this.fullName,
+          soDienThoai: this.phone,
+          gioiTinh: this.gender,
+          ngaySinh: this.birthDate,
+          idDiaChiMacDinh: this.defaultAddressId, // Gửi id thay vì chuỗi địa chỉ
+          email: this.email,
+        });
+        alert(response.data || 'Cập nhật thông tin thành công');
+
+        localStorage.setItem('fullName', this.fullName);
+        localStorage.setItem('phoneNumber', this.phone);
+        localStorage.setItem('gender', JSON.stringify(this.gender));
+        localStorage.setItem('birthDate', this.birthDate);
+        localStorage.setItem('defaultAddress', this.defaultAddress);
+        localStorage.setItem('defaultAddressId', this.defaultAddressId);
+        localStorage.setItem('email', this.email);
+        localStorage.setItem('customerName', this.fullName);
+        this.customerName = this.fullName;
+        this.phoneNumber = this.phone;
+
+        emitter.emit('loginStatusChanged', {
+          isLoggedIn: true,
+          customerName: this.fullName,
+        });
+      } catch (error) {
+        console.error('Lỗi khi cập nhật thông tin:', error);
+        alert(error.response?.data?.message || 'Lỗi khi cập nhật thông tin');
+      }
     },
   },
   mounted() {
-    this.$nextTick(() => {
-      // Logic bổ sung nếu cần
-    })
+    this.fetchAccountInfo();
   },
-}
+};
 </script>
 
 <style scoped>
@@ -404,3 +506,4 @@ export default {
   display: block;
 }
 </style>
+```

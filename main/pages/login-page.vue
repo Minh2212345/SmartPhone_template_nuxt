@@ -159,7 +159,7 @@
 import axios from 'axios';
 import mitt from 'mitt';
 
-const emitter = mitt(); // Tạo event bus
+const emitter = mitt();
 
 export default {
   data() {
@@ -170,40 +170,41 @@ export default {
   },
   methods: {
     async handleLogin() {
-      try {
+    if (!this.loginInput || !this.password) {
+        alert('Vui lòng nhập tên đăng nhập/email và mật khẩu');
+        return;
+    }
+    try {
         const response = await axios.post('http://localhost:8080/tai-khoan/dang-nhap-Web', {
-          tenDangNhap: this.loginInput,
-          email: this.loginInput,
-          matKhau: this.password,
+            tenDangNhap: this.loginInput,
+            email: this.loginInput,
+            matKhau: this.password,
         });
 
-        // Giả định API trả về customerId và fullName (điều chỉnh theo API thực tế)
-        const { customerId, fullName } = response.data;
-        if (customerId) {
-          localStorage.setItem('customerId', customerId);
-          localStorage.setItem('customerName', fullName || this.loginInput);
-          localStorage.setItem('isLoggedIn', 'true');
-          
-          // Emit sự kiện để thông báo Navbar cập nhật
-          emitter.emit('loginStatusChanged', {
-            isLoggedIn: true,
-            customerName: fullName || this.loginInput,
-          });
+        const { idKhachHang, hoTen, soDienThoai } = response.data;
+        console.log('ID Khách Hàng:', idKhachHang); // In idKhachHang ra console
 
-          alert('Đăng nhập thành công!');
-          this.$router.push('/');
+        if (idKhachHang) {
+            localStorage.setItem('customerId', idKhachHang);
+            localStorage.setItem('customerName', hoTen || this.loginInput);
+            localStorage.setItem('phoneNumber', soDienThoai || '');
+            localStorage.setItem('isLoggedIn', 'true');
+
+            emitter.emit('loginStatusChanged', {
+                isLoggedIn: true,
+                customerName: hoTen || this.loginInput,
+            });
+
+            alert('Đăng nhập thành công!');
+            this.$router.push('/');
         } else {
-          alert('Không tìm thấy ID khách hàng từ phản hồi đăng nhập');
+            alert('Không tìm thấy ID khách hàng từ phản hồi đăng nhập');
         }
-      } catch (error) {
+    } catch (error) {
         console.error('Lỗi đăng nhập:', error);
-        if (error.response) {
-          alert(error.response.data.message || 'Lỗi đăng nhập');
-        } else {
-          alert('Lỗi kết nối đến máy chủ');
-        }
-      }
-    },
+        alert(error.response?.data?.message || 'Lỗi kết nối đến máy chủ');
+    }
+}
   },
 };
 </script>
