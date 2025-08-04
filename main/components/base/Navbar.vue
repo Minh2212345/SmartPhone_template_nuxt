@@ -19,12 +19,16 @@
 
       <!-- Action Buttons -->
       <div class="nav-actions">
-        <!-- Hiển thị lời chào và nút đăng xuất nếu đã đăng nhập -->
+        <!-- Hiển thị lời chào nếu đã đăng nhập -->
         <div v-if="isLoggedIn" class="nav-actions__user">
-          <div class="greeting">Xin chào, {{ customerName }}</div>
-          <button @click="logout" class="action-btn logout-btn">
-            <i class="las la-sign-out-alt"></i> Đăng xuất
-          </button>
+          <div class="greeting" @mouseenter="showModal = true" @mouseleave="showModal = false">
+            Xin chào, {{ customerName }}
+          </div>
+          <div v-if="showModal" class="dropdown-menu" @mouseenter="showModal = true" @mouseleave="showModal = false">
+            <button @click="logout" class="action-btn logout-btn">
+              <i class="las la-sign-out-alt"></i> Đăng xuất
+            </button>
+          </div>
         </div>
         <!-- Hiển thị nút đăng nhập nếu chưa đăng nhập -->
         <NuxtLink v-else to="/login-page#signin" class="action-btn login-btn">
@@ -53,6 +57,7 @@ export default {
       invoiceId: null,
       isLoggedIn: false,
       customerName: '',
+      showModal: false, // Biến để kiểm soát hiển thị dropdown
     };
   },
   mounted() {
@@ -90,10 +95,12 @@ export default {
     updateLoginStatus() {
       this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       this.customerName = localStorage.getItem('customerName') || 'Khách';
+      this.showModal = false; // Đóng dropdown khi cập nhật trạng thái đăng nhập
     },
     handleLoginStatusChange({ isLoggedIn, customerName }) {
       this.isLoggedIn = isLoggedIn;
       this.customerName = customerName || 'Khách';
+      this.showModal = false; // Đóng dropdown khi trạng thái đăng nhập thay đổi
     },
     logout() {
       localStorage.removeItem('customerId');
@@ -103,6 +110,7 @@ export default {
       this.isLoggedIn = false;
       this.customerName = '';
       this.cartItemCount = 0;
+      this.showModal = false;
       emitter.emit('loginStatusChanged', { isLoggedIn: false, customerName: '' });
       alert('Đăng xuất thành công!');
       this.$router.push('/');
@@ -170,6 +178,7 @@ export default {
 }
 
 .nav-actions__user {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -203,6 +212,8 @@ export default {
   color: #ffffff;
   background-color: #d32f2f;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  justify-content: center;
 }
 
 .logout-btn:hover {
@@ -245,6 +256,26 @@ export default {
   font-weight: 500;
   font-family: 'Inter', sans-serif;
   padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.greeting:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  padding: 0.5rem;
+  z-index: 2000;
+  min-width: 150px;
+  display: block; /* Đảm bảo dropdown hiển thị */
 }
 
 /* Responsive Design */
@@ -286,6 +317,13 @@ export default {
   .greeting {
     width: 100%;
     text-align: center;
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    position: static; 
+    min-width: unset;
+    background: rgba(255, 255, 255, 0.95);
   }
 }
 </style>
