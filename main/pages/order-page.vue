@@ -47,6 +47,165 @@
       <!-- Nội dung tab -->
       <div class="w-3/4 p-6 overflow-y-auto">
         <div class="p-6 rounded-lg">
+          <!-- Tab Tổng quan -->
+          <div v-if="activeTab === 'overview'" class="tab-panel">
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="bg-white p-4 rounded-3xl text-center h-full">
+                <p class="text-lg text-gray-500 mb-2 font-custom">Đơn hàng gần đây</p>
+                <p class="text-lg text-gray-600 font-custom">
+                  Bạn chưa có đơn hàng nào hôm nay? Hãy bắt đầu mua sắm ngay nào!
+                </p>
+                <button
+                  class="mt-2 px-4 py-2 bg-blue-500 text-white text-lg rounded-lg hover:bg-blue-600 transition duration-200"
+                >
+                  Đăng ký ngay
+                </button>
+              </div>
+              <div class="bg-white p-4 rounded-3xl text-center h-full">
+                <p class="text-lg text-gray-500 mb-2 font-custom">Ưu đãi của bạn</p>
+                <p class="text-lg text-gray-600 font-custom">Bạn chưa có ưu đãi nào</p>
+                <button
+                  class="mt-2 px-4 py-2 bg-blue-500 text-white text-lg rounded-lg hover:bg-blue-600 transition duration-200"
+                >
+                  Đăng ký ngay
+                </button>
+              </div>
+              <div class="col-span-2 bg-white p-4 rounded-3xl text-center h-full">
+                <p class="text-lg text-gray-500 mb-2 font-custom">Sản phẩm yêu thích</p>
+                <p class="text-lg text-gray-600 font-custom">
+                  Bạn chưa có sản phẩm nào yêu thích? Hãy bắt đầu mua sắm ngay nào!
+                </p>
+                <button
+                  class="mt-2 px-4 py-2 bg-red-600 text-white text-lg rounded-lg hover:bg-red-700 transition duration-200 font-custom"
+                >
+                  Xem sản phẩm
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Lịch sử mua hàng -->
+          <div v-if="activeTab === 'history'" class="tab-panel">
+            <div class="bg-white p-4 rounded-3xl">
+              <div class="mb-2">
+                <label class="text-lg font-custom text-gray-700">Lịch sử mua hàng</label>
+                <input
+                  type="date"
+                  v-model="startDate"
+                  class="border rounded-lg px-3 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+                />
+                <span class="text-lg font-custom">→</span>
+                <input
+                  type="date"
+                  v-model="endDate"
+                  class="border rounded-lg px-3 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+                />
+                <span class="text-lg font-custom ml-2">
+                  <i class="fas fa-calendar-alt"></i>
+                </span>
+              </div>
+              <div class="flex space-x-4 mb-2 border-b border-gray-200">
+                <button
+                  v-for="(status, index) in orderStatuses"
+                  :key="index"
+                  @click="activeStatus = status.id"
+                  class="px-4 py-2 text-gray-600 hover:text-[#162d63] focus:outline-none"
+                  :class="{ 'text-red-600 font-semibold border-b-2 border-[#162d63]': activeStatus === status.id }"
+                >
+                  {{ status.name }}
+                </button>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-lg">
+                  <thead>
+                    <tr class="bg-gray-50 text-left text-gray-600">
+                      <th class="py-2 px-4 border-b">Mã đơn hàng</th>
+                      <th class="py-2 px-4 border-b">Ngày đặt</th>
+                      <th class="py-2 px-4 border-b">Trạng thái</th>
+                      <th class="py-2 px-4 border-b">Tổng tiền</th>
+                      <th class="py-2 px-4 border-b">Tra cứu</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="order in filteredOrders" :key="order.id" class="border-b hover:bg-gray-50">
+                      <td class="py-2 px-4">{{ order.orderId }}</td>
+                      <td class="py-2 px-4">{{ order.date }}</td>
+                      <td class="py-2 px-4">{{ order.status }}</td>
+                      <td class="py-2 px-4">{{ order.total }} VNĐ</td>
+                      <td class="py-2 px-4">
+                        <NuxtLink
+                          class="px-2 py-1 bg-blue-500 text-white text-lg rounded-lg hover:bg-blue-600 transition duration-200 font-custom"
+                          to="/invoice-status"
+                        >
+                          Tra cứu
+                        </NuxtLink>
+                      </td>
+                    </tr>
+                    <tr class="border-b hover:bg-gray-50" v-if="filteredOrders.length === 0">
+                      <td colspan="5" class="py-4 text-center text-gray-500">Chưa có đơn hàng nào</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="mt-4 text-center text-gray-500 text-lg font-custom">
+                Hiển thị {{ filteredOrders.length }} trong tổng số {{ orders.length }} đơn hàng
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Tra cứu bảo hành -->
+          <div v-if="activeTab === 'warranty'" class="tab-panel">
+            <div class="bg-white p-4 rounded-3xl">
+              <div class="flex space-x-4 mb-3 border-b border-gray-200">
+                <button
+                  v-for="(status, index) in warrantyStatuses"
+                  :key="index"
+                  @click="activeWarrantyStatus = status.id"
+                  class="px-4 py-2 text-gray-600 hover:text-[#162d63] focus:outline-none"
+                  :class="{
+                    'text-red-600 font-semibold border-b-2 border-[#162d63]': activeWarrantyStatus === status.id,
+                  }"
+                >
+                  {{ status.name }}
+                </button>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-lg">
+                  <thead>
+                    <tr class="bg-gray-50 text-left text-gray-600">
+                      <th class="py-2 px-4 border-b">Mã bảo hành</th>
+                      <th class="py-2 px-4 border-b">Ngày gửi</th>
+                      <th class="py-2 px-4 border-b">Trạng thái</th>
+                      <th class="py-2 px-4 border-b">Tên sản phẩm</th>
+                      <th class="py-2 px-4 border-b">Tra cứu</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="warranty in filteredWarranties" :key="warranty.id" class="border-b hover:bg-gray-50">
+                      <td class="py-2 px-4">{{ warranty.warrantyId }}</td>
+                      <td class="py-2 px-4">{{ warranty.date }}</td>
+                      <td class="py-2 px-4">{{ warranty.status }}</td>
+                      <td class="py-2 px-4">{{ warranty.product }}</td>
+                      <td class="py-2 px-4">
+                        <button
+                          class="px-2 py-1 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition duration-200"
+                        >
+                          Tra cứu
+                        </button>
+                      </td>
+                    </tr>
+                    <tr class="border-b hover:bg-gray-50" v-if="filteredWarranties.length === 0">
+                      <td colspan="5" class="py-4 text-center text-gray-500">Chưa có bảo hành nào</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="mt-4 text-center text-gray-500 text-sm">
+                Hiển thị {{ filteredWarranties.length }} trong tổng số {{ warranties.length }} bảo hành
+              </div>
+            </div>
+          </div>
+
           <!-- Tab Thông tin tài khoản -->
           <div v-if="activeTab === 'account'" class="tab-panel">
             <div class="bg-blue-50 text-blue-700 p-3 rounded-lg mb-1 flex justify-between items-center" v-if="showUpdatePrompt">
@@ -255,7 +414,7 @@
                       alt="Google Icon"
                       class="mr-2"
                     />
-                    <span class="text-gray-600 font-custom">Google - Đãoscience liên kết</span>
+                    <span class="text-gray-600 font-custom">Google - Đã liên kết</span>
                   </div>
                   <button class="text-red-600 underline">Hủy liên kết</button>
                 </div>
@@ -289,6 +448,10 @@ export default {
   data() {
     return {
       activeTab: 'account',
+      activeStatus: 'all',
+      activeWarrantyStatus: 'all',
+      startDate: '2020-12-01',
+      endDate: '2025-07-01',
       customerName: localStorage.getItem('customerName') || 'Khách hàng',
       phoneNumber: localStorage.getItem('phoneNumber') || 'Chưa có số điện thoại',
       fullName: localStorage.getItem('fullName') || '',
@@ -298,20 +461,60 @@ export default {
       defaultAddress: localStorage.getItem('defaultAddress') || '',
       defaultAddressId: localStorage.getItem('defaultAddressId') || '',
       email: localStorage.getItem('email') || '',
-      updateAt: localStorage.getItem('updateAt') || '', // New field for updateAt
+      updateAt: localStorage.getItem('updateAt') || '',
       errors: {},
       isUpdating: false,
       showUpdatePrompt: false,
-      totalOrders: 2, // Giả lập dữ liệu
-      totalSpent: '22,190,000', // Giả lập dữ liệu
-      addresses: [], // Mảng lưu danh sách địa chỉ
+      totalOrders: 2,
+      totalSpent: '22,190,000',
+      addresses: [],
       tabs: [
         { id: 'overview', name: 'Tổng quan', icon: 'las la-home' },
         { id: 'history', name: 'Lịch sử mua hàng', icon: 'las la-history' },
         { id: 'warranty', name: 'Tra cứu bảo hành', icon: 'las la-tools' },
         { id: 'account', name: 'Thông tin tài khoản', icon: 'las la-user' },
       ],
+      orderStatuses: [
+        { id: 'all', name: 'Tất cả' },
+        { id: 'pending', name: 'Chờ thanh toán' },
+        { id: 'delivering', name: 'Đang giao' },
+        { id: 'delivered', name: 'Đã giao' },
+        { id: 'canceled', name: 'Đã hủy' },
+      ],
+      warrantyStatuses: [
+        { id: 'all', name: 'Tất cả' },
+        { id: 'received', name: 'Đã tiếp nhận' },
+        { id: 'coordinating', name: 'Đang điều phối' },
+        { id: 'repairing', name: 'Đang sửa' },
+        { id: 'repaired', name: 'Đã sửa xong' },
+        { id: 'returned', name: 'Đã trả máy' },
+      ],
+      orders: [
+        { id: 1, orderId: 'DH123456', date: '01/07/2025', status: 'Đang giao', total: '19,190,000' },
+        { id: 2, orderId: 'DH123457', date: '30/06/2025', status: 'Đã giao', total: '3,000,000' },
+      ],
+      warranties: [
+        { id: 1, warrantyId: 'BH123456', date: '01/07/2025', status: 'Đang sửa', product: 'iPhone 14' },
+        { id: 2, warrantyId: 'BH123457', date: '30/06/2025', status: 'Đã trả máy', product: 'Samsung Galaxy S23' },
+      ],
     };
+  },
+  computed: {
+    filteredOrders() {
+      if (this.activeStatus === 'all' && !this.startDate && !this.endDate) return this.orders;
+      const start = this.startDate ? new Date(this.startDate) : null;
+      const end = this.endDate ? new Date(this.endDate) : null;
+      return this.orders.filter((order) => {
+        const orderDate = new Date(order.date.split('/').reverse().join('-'));
+        const matchesStatus = this.activeStatus === 'all' || order.status === this.getStatusName(this.activeStatus);
+        const matchesDate = (!start || orderDate >= start) && (!end || orderDate <= end);
+        return matchesStatus && matchesDate;
+      });
+    },
+    filteredWarranties() {
+      if (this.activeWarrantyStatus === 'all') return this.warranties;
+      return this.warranties.filter((warranty) => warranty.status === this.getStatusName(this.activeWarrantyStatus));
+    },
   },
   methods: {
     validateForm() {
@@ -334,6 +537,11 @@ export default {
         year: 'numeric',
       });
     },
+    getStatusName(statusId) {
+      const statusList = this.activeTab === 'history' ? this.orderStatuses : this.warrantyStatuses;
+      const status = statusList.find((s) => s.id === statusId);
+      return status ? status.name : '';
+    },
     async fetchAccountInfo() {
       try {
         const idKhachHang = localStorage.getItem('customerId');
@@ -352,7 +560,7 @@ export default {
         this.defaultAddress = diaChiMacDinh ? this.formatAddress(diaChiMacDinh) : '';
         this.defaultAddressId = diaChiMacDinh ? diaChiMacDinh.id : '';
         this.email = email || this.email || '';
-        this.updateAt = updateAt ? new Date(updateAt).toISOString() : ''; // Store updateAt
+        this.updateAt = updateAt ? new Date(updateAt).toISOString() : '';
         this.customerName = tenKH || this.fullName || localStorage.getItem('customerName') || 'Khách hàng';
         this.phoneNumber = soDienThoai || this.phone || localStorage.getItem('phoneNumber') || 'Chưa có số điện thoại';
         this.showUpdatePrompt = !tenKH || !soDienThoai;
@@ -414,19 +622,14 @@ export default {
       }
     },
     addNewAddress() {
-      // Placeholder: Chuyển hướng hoặc mở modal để thêm địa chỉ mới
       alert('Chức năng thêm địa chỉ đang được phát triển');
-      // Ví dụ: this.$router.push('/add-address');
     },
     editAddress(addressId) {
-      // Placeholder: Chuyển hướng hoặc mở modal để sửa địa chỉ
       alert(`Chức năng sửa địa chỉ ${addressId} đang được phát triển`);
-      // Ví dụ: this.$router.push(`/edit-address/${addressId}`);
     },
     async deleteAddress(addressId) {
       if (!confirm('Bạn có chắc muốn xóa địa chỉ này?')) return;
       try {
-        // Giả định có endpoint DELETE cho địa chỉ
         await axios.delete(`http://localhost:8080/dia-chi-khach-hang/delete/${addressId}`);
         this.addresses = this.addresses.filter((address) => address.id !== addressId);
         if (this.defaultAddressId === addressId) {
@@ -434,7 +637,6 @@ export default {
           this.defaultAddress = '';
           localStorage.setItem('defaultAddress', '');
           localStorage.setItem('defaultAddressId', '');
-          // Cập nhật thông tin khách hàng để xóa idDiaChiMacDinh
           await this.updateAccountInfo();
         }
         alert('Xóa địa chỉ thành công');
@@ -472,7 +674,7 @@ export default {
         this.birthDate = ngaySinh ? new Date(ngaySinh).toISOString().split('T')[0] : this.birthDate;
         this.defaultAddressId = idDiaChiMacDinh || this.defaultAddressId;
         this.email = email || this.email;
-        this.updateAt = updateAt ? new Date(updateAt).toISOString() : this.updateAt; // Update updateAt
+        this.updateAt = updateAt ? new Date(updateAt).toISOString() : this.updateAt;
         this.customerName = tenKH || this.fullName || 'Khách hàng';
         this.phoneNumber = soDienThoai || this.phone;
         this.showUpdatePrompt = !tenKH || !soDienThoai;
