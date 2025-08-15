@@ -596,26 +596,16 @@ export default {
     },
     async setDefaultAddress(addressId) {
       try {
-        const idKhachHang = localStorage.getItem('customerId');
-        if (!idKhachHang) {
-          alert('Không tìm thấy ID khách hàng');
-          return;
-        }
-        const payload = {
-          tenKH: this.fullName,
-          soDienThoai: this.phone,
-          gioiTinh: this.gender,
-          ngaySinh: this.birthDate || null,
-          idDiaChiMacDinh: addressId,
-          email: this.email || null,
-        };
-        const response = await axios.put(`http://localhost:8080/khach-hang/update/${idKhachHang}`, payload);
-        const { diaChiMacDinh } = response.data;
+        const response = await axios.put(`http://localhost:8080/khach-hang/setDefault/${addressId}`, {
+          macDinh: true
+        });
         this.defaultAddressId = addressId;
-        this.defaultAddress = diaChiMacDinh ? this.formatAddress(diaChiMacDinh) : '';
+        this.defaultAddress = this.addresses.find(addr => addr.id === addressId);
+        this.defaultAddress = this.defaultAddress ? this.formatAddress(this.defaultAddress) : '';
         localStorage.setItem('defaultAddress', this.defaultAddress);
         localStorage.setItem('defaultAddressId', this.defaultAddressId);
-        alert('Đặt địa chỉ mặc định thành công');
+        await this.fetchAccountInfo(); // Cập nhật lại thông tin tài khoản để đồng bộ
+        alert(response.data || 'Cập nhật địa chỉ mặc định thành công!');
       } catch (error) {
         console.error('Lỗi khi đặt địa chỉ mặc định:', error);
         alert(error.response?.data || 'Lỗi khi đặt địa chỉ mặc định');
