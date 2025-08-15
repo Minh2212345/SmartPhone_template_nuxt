@@ -127,7 +127,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="order in filteredOrders" :key="order.id" class="border-b hover:bg-gray-50">
+                    <tr v-for="order in filteredOrders" :class="order.id" class="border-b hover:bg-gray-50">
                       <td class="py-2 px-4">{{ order.orderId }}</td>
                       <td class="py-2 px-4">{{ order.date }}</td>
                       <td class="py-2 px-4">{{ order.status }}</td>
@@ -435,6 +435,87 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal cho thêm/sửa địa chỉ -->
+    <div v-if="showAddressModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-lg w-1/2">
+        <h2 class="text-xl font-semibold mb-4">{{ isEditingAddress ? 'Sửa địa chỉ' : 'Thêm địa chỉ mới' }}</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col">
+            <label class="text-lg text-gray-600 font-custom">Địa chỉ cụ thể:</label>
+            <input
+              type="text"
+              v-model.trim="addressForm.diaChiCuThe"
+              class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-600"
+              :class="{ 'border-red-600': addressErrors.diaChiCuThe }"
+              @input="clearAddressError('diaChiCuThe')"
+            />
+            <p v-if="addressErrors.diaChiCuThe" class="text-red-600 text-sm">{{ addressErrors.diaChiCuThe }}</p>
+          </div>
+          <div class="flex flex-col">
+            <label class="text-lg text-gray-600 font-custom">Thành phố/Tỉnh:</label>
+            <select
+              v-model="addressForm.thanhPhoCode"
+              @change="fetchDistricts"
+              class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-600"
+              :class="{ 'border-red-600': addressErrors.thanhPho }"
+            >
+              <option value="">Chọn Thành phố/Tỉnh</option>
+              <option v-for="province in provinces" :key="province.code" :value="province.code">
+                {{ province.name }}
+              </option>
+            </select>
+            <p v-if="addressErrors.thanhPho" class="text-red-600 text-sm">{{ addressErrors.thanhPho }}</p>
+          </div>
+          <div class="flex flex-col">
+            <label class="text-lg text-gray-600 font-custom">Quận/Huyện:</label>
+            <select
+              v-model="addressForm.quanCode"
+              @change="fetchWards"
+              class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-600"
+              :class="{ 'border-red-600': addressErrors.quan }"
+              :disabled="!addressForm.thanhPhoCode"
+            >
+              <option value="">Chọn Quận/Huyện</option>
+              <option v-for="district in districts" :key="district.code" :value="district.code">
+                {{ district.name }}
+              </option>
+            </select>
+            <p v-if="addressErrors.quan" class="text-red-600 text-sm">{{ addressErrors.quan }}</p>
+          </div>
+          <div class="flex flex-col">
+            <label class="text-lg text-gray-600 font-custom">Phường/Xã:</label>
+            <select
+              v-model="addressForm.phuongCode"
+              class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-600"
+              :class="{ 'border-red-600': addressErrors.phuong }"
+              :disabled="!addressForm.quanCode"
+            >
+              <option value="">Chọn Phường/Xã</option>
+              <option v-for="ward in wards" :key="ward.code" :value="ward.code">
+                {{ ward.name }}
+              </option>
+            </select>
+            <p v-if="addressErrors.phuong" class="text-red-600 text-sm">{{ addressErrors.phuong }}</p>
+          </div>
+        </div>
+        <div class="flex justify-end gap-4 mt-4">
+          <button
+            @click="closeAddressModal"
+            class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition duration-200"
+          >
+            Hủy
+          </button>
+          <button
+            @click="saveAddress"
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200"
+            :disabled="isSavingAddress"
+          >
+            {{ isSavingAddress ? 'Đang lưu...' : 'Lưu' }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -468,6 +549,20 @@ export default {
       totalOrders: 2,
       totalSpent: '22,190,000',
       addresses: [],
+      showAddressModal: false,
+      isEditingAddress: false,
+      isSavingAddress: false,
+      provinces: [],
+      districts: [],
+      wards: [],
+      addressForm: {
+        id: null,
+        diaChiCuThe: '',
+        phuongCode: '',
+        quanCode: '',
+        thanhPhoCode: ''
+      },
+      addressErrors: {},
       tabs: [
         { id: 'overview', name: 'Tổng quan', icon: 'las la-home' },
         { id: 'history', name: 'Lịch sử mua hàng', icon: 'las la-history' },
@@ -525,8 +620,19 @@ export default {
       if (this.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) this.errors.email = 'Email không hợp lệ';
       return Object.keys(this.errors).length === 0;
     },
+    validateAddressForm() {
+      this.addressErrors = {};
+      if (!this.addressForm.diaChiCuThe) this.addressErrors.diaChiCuThe = 'Địa chỉ cụ thể không được để trống';
+      if (!this.addressForm.thanhPhoCode) this.addressErrors.thanhPho = 'Thành phố/Tỉnh không được để trống';
+      if (!this.addressForm.quanCode) this.addressErrors.quan = 'Quận/Huyện không được để trống';
+      if (!this.addressForm.phuongCode) this.addressErrors.phuong = 'Phường/Xã không được để trống';
+      return Object.keys(this.addressErrors).length === 0;
+    },
     clearError(field) {
       if (this.errors[field]) delete this.errors[field];
+    },
+    clearAddressError(field) {
+      if (this.addressErrors[field]) delete this.addressErrors[field];
     },
     formatDate(date) {
       if (!date) return 'Chưa cập nhật';
@@ -611,11 +717,145 @@ export default {
         alert(error.response?.data || 'Lỗi khi đặt địa chỉ mặc định');
       }
     },
+    async fetchProvinces() {
+      try {
+        const response = await axios.get('https://provinces.open-api.vn/api/v1/?depth=1');
+        this.provinces = response.data;
+      } catch (error) {
+        console.error('Lỗi khi lấy danh sách tỉnh/thành phố:', error);
+        alert('Không thể tải danh sách tỉnh/thành phố');
+      }
+    },
+    async fetchDistricts() {
+      this.addressForm.quanCode = '';
+      this.addressForm.phuongCode = '';
+      this.districts = [];
+      this.wards = [];
+      this.clearAddressError('quan');
+      this.clearAddressError('phuong');
+      
+      if (!this.addressForm.thanhPhoCode) return;
+
+      try {
+        const response = await axios.get(`https://provinces.open-api.vn/api/v1/p/${this.addressForm.thanhPhoCode}?depth=2`);
+        this.districts = response.data.districts || [];
+      } catch (error) {
+        console.error('Lỗi khi lấy danh sách quận/huyện:', error);
+        alert('Không thể tải danh sách quận/huyện');
+      }
+    },
+    async fetchWards() {
+      this.addressForm.phuongCode = '';
+      this.wards = [];
+      this.clearAddressError('phuong');
+
+      if (!this.addressForm.quanCode) return;
+
+      try {
+        const response = await axios.get(`https://provinces.open-api.vn/api/v1/d/${this.addressForm.quanCode}?depth=2`);
+        this.wards = response.data.wards || [];
+      } catch (error) {
+        console.error('Lỗi khi lấy danh sách phường/xã:', error);
+        alert('Không thể tải danh sách phường/xã');
+      }
+    },
     addNewAddress() {
-      alert('Chức năng thêm địa chỉ đang được phát triển');
+      this.isEditingAddress = false;
+      this.addressForm = {
+        id: null,
+        diaChiCuThe: '',
+        phuongCode: '',
+        quanCode: '',
+        thanhPhoCode: ''
+      };
+      this.addressErrors = {};
+      this.districts = [];
+      this.wards = [];
+      this.showAddressModal = true;
     },
     editAddress(addressId) {
-      alert(`Chức năng sửa địa chỉ ${addressId} đang được phát triển`);
+      const address = this.addresses.find(addr => addr.id === addressId);
+      if (!address) {
+        alert('Không tìm thấy địa chỉ');
+        return;
+      }
+      this.isEditingAddress = true;
+      this.addressForm = {
+        id: address.id,
+        diaChiCuThe: address.diaChiCuThe || '',
+        phuongCode: address.phuongCode || '',
+        quanCode: address.quanCode || '',
+        thanhPhoCode: address.thanhPhoCode || ''
+      };
+      this.addressErrors = {};
+      this.showAddressModal = true;
+
+      // Tải lại danh sách quận/huyện và phường/xã nếu cần
+      if (this.addressForm.thanhPhoCode) {
+        this.fetchDistricts();
+      }
+      if (this.addressForm.quanCode) {
+        this.fetchWards();
+      }
+    },
+    closeAddressModal() {
+      this.showAddressModal = false;
+      this.addressForm = { id: null, diaChiCuThe: '', phuongCode: '', quanCode: '', thanhPhoCode: '' };
+      this.addressErrors = {};
+      this.districts = [];
+      this.wards = [];
+      this.isEditingAddress = false;
+    },
+    async saveAddress() {
+      if (!this.validateAddressForm()) return;
+
+      this.isSavingAddress = true;
+      try {
+        const idKhachHang = localStorage.getItem('customerId');
+        if (!idKhachHang) {
+          alert('Không tìm thấy ID khách hàng');
+          this.isSavingAddress = false;
+          return;
+        }
+
+        // Lấy tên từ code để gửi về backend
+        const province = this.provinces.find(p => p.code === this.addressForm.thanhPhoCode);
+        const district = this.districts.find(d => d.code === this.addressForm.quanCode);
+        const ward = this.wards.find(w => w.code === this.addressForm.phuongCode);
+
+        const payload = {
+          diaChiCuThe: this.addressForm.diaChiCuThe,
+          phuong: ward ? ward.name : '',
+          quan: district ? district.name : '',
+          thanhPho: province ? province.name : '',
+          phuongCode: this.addressForm.phuongCode,
+          quanCode: this.addressForm.quanCode,
+          thanhPhoCode: this.addressForm.thanhPhoCode,
+          idKhachHang: parseInt(idKhachHang)
+        };
+
+        if (this.isEditingAddress) {
+          // Cập nhật địa chỉ
+          const response = await axios.put(`http://localhost:8080/khach-hang/updateDchi/${this.addressForm.id}`, payload);
+          alert(response.data || 'Cập nhật địa chỉ thành công!');
+        } else {
+          // Thêm địa chỉ mới
+          const response = await axios.post(`http://localhost:8080/khach-hang/addDchiKhachHang`, payload);
+          this.addresses.push(response.data);
+          alert('Thêm địa chỉ thành công!');
+        }
+
+        await this.fetchAddresses(); // Làm mới danh sách địa chỉ
+        if (this.defaultAddressId === this.addressForm.id || !this.defaultAddressId) {
+          await this.fetchAccountInfo(); // Cập nhật lại thông tin tài khoản nếu địa chỉ mặc định bị ảnh hưởng
+        }
+        this.closeAddressModal();
+      } catch (error) {
+        console.error('Lỗi khi lưu địa chỉ:', error);
+        alert(error.response?.data || 'Lỗi khi lưu địa chỉ');
+      } finally {
+        this.isSavingAddress = false;
+      }
     },
     async deleteAddress(addressId) {
       if (!confirm('Bạn có chắc muốn xóa địa chỉ này?')) return;
@@ -702,6 +942,7 @@ export default {
   mounted() {
     this.fetchAccountInfo();
     this.fetchAddresses();
+    this.fetchProvinces();
   },
 };
 </script>
