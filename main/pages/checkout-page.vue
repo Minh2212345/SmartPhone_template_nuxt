@@ -521,9 +521,7 @@ export default {
             params.append('amount', amountToSend.toString());
             params.append('orderInfo', orderInfo);
             params.append('returnUrl', returnUrl);
-            const response = await axios.post('http://localhost:8080/api/payment/create', params.toString(), {
-                headers: { 'Content-Type': 'application/x-www-form-form-urlencoded' },
-            });
+            const response = await axios.post('http://localhost:8080/api/payment/create', params);
             if (response.data) {
                 window.location.href = response.data;
             } else {
