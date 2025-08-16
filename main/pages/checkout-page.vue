@@ -52,7 +52,7 @@
                   <h2 class="step-title">
                     <i class="bi bi-truck me-2"></i>Thông tin giao hàng
                   </h2>
-                  <p class="step-subtitle">Vui lòng nhập thông tin để chúng tôi có thể giao hàng cho bạn</p>
+                  <p class="step-subtitle">Vui lòng kiểm tra hoặc cập nhật thông tin để chúng tôi có thể giao hàng cho bạn</p>
                 </div>
 
                 <!-- Customer Info Section -->
@@ -65,21 +65,21 @@
                       <div class="col-md-6">
                         <div class="form-floating">
                           <label for="fullName">Họ và tên *</label>
-                          <input type="text" class="form-control" id="fullName" v-model="delivery.ten"
+                          <input type="text" class="form-control" id="fullName" v-model="customerInfo.fullName"
                             placeholder="Nhập họ và tên" required />
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-floating">
                           <label for="phone">Số điện thoại *</label>
-                          <input type="tel" class="form-control" id="phone" v-model="delivery.soDienThoai"
+                          <input type="tel" class="form-control" id="phone" v-model="customerInfo.phone"
                             placeholder="Nhập số điện thoại" required />
                         </div>
                       </div>
                       <div class="col-12">
                         <div class="form-floating">
                           <label for="email">Email *</label>
-                          <input type="email" class="form-control" id="email" v-model="delivery.email"
+                          <input type="email" class="form-control" id="email" v-model="customerInfo.email"
                             placeholder="Nhập địa chỉ email" required />
                         </div>
                       </div>
@@ -463,6 +463,11 @@ export default {
         { label: 'Thanh toán & Xác nhận' }
       ],
       showConfirmationModal: false,
+      customerInfo: {
+        fullName: localStorage.getItem('fullName') || '',
+        phone: localStorage.getItem('phoneNumber') || '',
+        email: localStorage.getItem('email') || ''
+      }
     }
   },
   methods: {
@@ -517,7 +522,7 @@ export default {
             params.append('orderInfo', orderInfo);
             params.append('returnUrl', returnUrl);
             const response = await axios.post('http://localhost:8080/api/payment/create', params.toString(), {
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                headers: { 'Content-Type': 'application/x-www-form-form-urlencoded' },
             });
             if (response.data) {
                 window.location.href = response.data;
