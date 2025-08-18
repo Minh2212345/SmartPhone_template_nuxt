@@ -10,7 +10,8 @@
           </li>
           <li class="text-gray-400 text-2xl">/</li>
           <li>
-            <NuxtLink to="/category-4cols" class="text-blue-600 hover:text-blue-800 font-medium">iPhone 16 Series</NuxtLink>
+            <NuxtLink to="/category-4cols" class="text-blue-600 hover:text-blue-800 font-medium">iPhone 16 Series
+            </NuxtLink>
           </li>
           <li class="text-gray-400 text-2xl">/</li>
           <li class="text-gray-800 font-semibold">Giỏ hàng</li>
@@ -20,7 +21,8 @@
       <!-- Page Title -->
       <div class="mb-4">
         <h1 class="text-5xl font-bold text-gray-900 mb-1">Giỏ hàng của bạn</h1>
-        <p class="text-2xl text-gray-600" style="font-family: 'Inter', sans-serif;">Xem lại các sản phẩm đã chọn và tiến hành thanh toán</p>
+        <p class="text-2xl text-gray-600" style="font-family: 'Inter', sans-serif;">Xem lại các sản phẩm đã chọn và tiến
+          hành thanh toán</p>
       </div>
 
       <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
@@ -31,33 +33,41 @@
             <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
               <div class="flex items-center justify-between">
                 <label class="flex items-center space-x-3 cursor-pointer">
-                  <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" class="w-8 h-8 text-blue-600 rounded focus:ring-blue-500 focus:ring-2" />
-                  <span class="text-2xl font-semibold text-gray-800">Chọn tất cả ({{ cartItems.length }} sản phẩm)</span>
+                  <input type="checkbox" v-model="selectAll" @change="toggleSelectAll"
+                    class="w-8 h-8 text-blue-600 rounded focus:ring-blue-500 focus:ring-2" />
+                  <span class="text-2xl font-semibold text-gray-800">Chọn tất cả ({{ cartItems.length }} sản
+                    phẩm)</span>
                 </label>
-                <button @click="removeSelected" :disabled="selectedItems.length === 0" class="text-2xl text-red-600 hover:text-red-800 disabled:opacity-50 disabled:cursor-not-allowed font-medium">Xóa đã chọn</button>
+                <button @click="removeSelected" :disabled="selectedItems.length === 0"
+                  class="text-2xl text-red-600 hover:text-red-800 disabled:opacity-50 disabled:cursor-not-allowed font-medium">Xóa
+                  đã chọn</button>
               </div>
             </div>
 
             <!-- Cart Item List -->
             <div class="space-y-4">
-              <div v-for="(item, index) in cartItems" :key="item.maImel" class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div v-for="(item, index) in cartItems" :key="item.maImel"
+                class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
                 <div class="flex items-start space-x-4">
                   <!-- Checkbox -->
                   <div class="flex-shrink-0 pt-2">
-                    <input type="checkbox" v-model="item.selected" @change="updateSelectedItems" class="w-8 h-8 text-blue-600 rounded focus:ring-blue-500 focus:ring-2" />
+                    <input type="checkbox" v-model="item.selected" @change="updateSelectedItems"
+                      class="w-8 h-8 text-blue-600 rounded focus:ring-blue-500 focus:ring-2" />
                   </div>
 
                   <!-- Product Image -->
                   <div class="flex-shrink-0">
                     <NuxtLink :to="item.productLink">
-                      <img :src="item.image || '/assets/images/placeholder.jpg'" alt="Product image" class="w-40 h-40 object-cover rounded-lg border border-gray-200" />
+                      <img :src="item.image || '/assets/images/placeholder.jpg'" alt="Product image"
+                        class="w-40 h-40 object-cover rounded-lg border border-gray-200" />
                     </NuxtLink>
                   </div>
 
                   <!-- Product Info -->
                   <div class="flex-1 min-w-0">
                     <h3 class="text-3xl font-semibold text-gray-900 mb-3 leading-tight">
-                      <NuxtLink :to="item.productLink" class="hover:text-blue-600 transition-colors">Điện thoại {{ item.tenSanPham || 'Sản phẩm không xác định' }}</NuxtLink>
+                      <NuxtLink :to="item.productLink" class="hover:text-blue-600 transition-colors">Điện thoại {{
+                        item.tenSanPham || 'Sản phẩm không xác định' }}</NuxtLink>
                     </h3>
                     <div class="space-y-2 text-xl text-gray-600">
                       <div class="flex flex-wrap gap-x-6 gap-y-1">
@@ -67,7 +77,8 @@
                       </div>
                       <div class="flex items-center space-x-3">
                         <span class="text-3xl font-bold text-red-600">{{ formatPrice(item.giaBan) }}</span>
-                        <span v-if="item.ghiChuGia" class="text-xl line-through text-gray-400">{{ item.ghiChuGia }}</span>
+                        <span v-if="item.ghiChuGia" class="text-xl line-through text-gray-400">{{ item.ghiChuGia
+                          }}</span>
                       </div>
                     </div>
                   </div>
@@ -76,9 +87,14 @@
                   <div class="flex flex-col sm:flex-row items-end sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
                     <!-- Quantity Controls -->
                     <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
-                      <button class="px-4 py-3 text-2xl text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed" :disabled="item.soLuong <= 1" @click="updateQuantity(index, item.soLuong - 1)">−</button>
-                      <span class="px-4 py-3 text-2xl font-semibold text-gray-900 bg-gray-50 min-w-[50px] text-center">{{ item.soLuong }}</span>
-                      <button class="px-4 py-3 text-2xl text-gray-600 hover:bg-gray-100" @click="updateQuantity(index, item.soLuong + 1)">+</button>
+                      <button
+                        class="px-4 py-3 text-2xl text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                        :disabled="item.soLuong <= 1" @click="updateQuantity(index, item.soLuong - 1)">−</button>
+                      <span
+                        class="px-4 py-3 text-2xl font-semibold text-gray-900 bg-gray-50 min-w-[50px] text-center">{{
+                          item.soLuong }}</span>
+                      <button class="px-4 py-3 text-2xl text-gray-600 hover:bg-gray-100"
+                        @click="updateQuantity(index, item.soLuong + 1)">+</button>
                     </div>
 
                     <!-- Total Price -->
@@ -87,7 +103,8 @@
                     </div>
 
                     <!-- Remove Button -->
-                    <button class="text-red-600 hover:text-red-800 transition-colors p-2" @click="removeItem(index)" title="Xóa sản phẩm">
+                    <button class="text-red-600 hover:text-red-800 transition-colors p-2" @click="removeItem(index)"
+                      title="Xóa sản phẩm">
                       <i class="fas fa-trash-alt text-2xl"></i>
                     </button>
                   </div>
@@ -104,14 +121,18 @@
               </div>
               <h3 class="text-4xl font-semibold text-gray-900 mb-4">Giỏ hàng trống</h3>
               <p class="text-2xl text-gray-600 mb-8">Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm</p>
-              <NuxtLink to="/" class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors text-2xl font-medium">Tiếp tục mua sắm</NuxtLink>
+              <NuxtLink to="/"
+                class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors text-2xl font-medium">
+                Tiếp tục mua sắm
+              </NuxtLink>
             </div>
           </div>
         </div>
 
         <!-- Order Summary -->
         <aside class="xl:col-span-1">
-          <div v-if="cartItems.length > 0" class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 sticky top-6">
+          <div v-if="cartItems.length > 0"
+            class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 sticky top-6">
             <h3 class="text-4xl font-bold text-gray-900 mb-3">Tổng đơn hàng</h3>
 
             <div class="space-y-4 mb-3">
@@ -138,7 +159,8 @@
               <div class="border-t pt-4">
                 <div class="flex justify-between items-center">
                   <span class="text-3xl font-bold text-gray-900">Tổng cộng:</span>
-                  <span class="text-4xl font-bold text-red-600">{{ formatPrice(selectedTotalPrice + shippingFee - discount) }}</span>
+                  <span class="text-4xl font-bold text-red-600">{{ formatPrice(selectedTotalPrice + shippingFee -
+                    discount) }}</span>
                 </div>
               </div>
             </div>
@@ -149,9 +171,14 @@
                 <i class="fas fa-info-circle text-blue-600 text-lg mt-1"></i>
                 <div>
                   <p class="text-lg text-gray-700 leading-relaxed">
-                    <span v-if="cartItems.length >= 3" class="font-semibold text-green-600">Chúc mừng! Bạn được giảm {{ formatPrice(500000) }} khi mua từ 3 sản phẩm trở lên.</span>
-                    <span v-else-if="totalPrice >= 20000000" class="font-semibold text-green-600">Chúc mừng! Bạn được giảm {{ formatPrice(300000) }} khi tổng đơn hàng trên 20,000,000 VNĐ.</span>
-                    <span v-else>Mua thêm <strong>{{ 3 - cartItems.length }} sản phẩm</strong> để được giảm <strong>500,000 VNĐ</strong> hoặc đạt tổng đơn <strong>20,000,000 VNĐ</strong> để được giảm <strong>300,000 VNĐ</strong>!</span>
+                    <span v-if="cartItems.length >= 3" class="font-semibold text-green-600">Chúc mừng! Bạn được giảm
+                      {{
+                        formatPrice(500000) }} khi mua từ 3 sản phẩm trở lên.</span>
+                    <span v-else-if="totalPrice >= 20000000" class="font-semibold text-green-600">Chúc mừng! Bạn được
+                      giảm {{ formatPrice(300000) }} khi tổng đơn hàng trên 20,000,000 VNĐ.</span>
+                    <span v-else>Mua thêm <strong>{{ 3 - cartItems.length }} sản phẩm</strong> để được giảm
+                      <strong>500,000 VNĐ</strong> hoặc đạt tổng đơn <strong>20,000,000 VNĐ</strong> để được giảm
+                      <strong>300,000 VNĐ</strong>!</span>
                   </p>
                 </div>
               </div>
@@ -226,22 +253,53 @@ export default {
         currency: 'VND',
       }).format(price);
     },
+
     async initCart() {
       try {
         this.invoiceId = this.$route.query.invoiceId || localStorage.getItem('invoiceId');
         if (!this.invoiceId) {
-          this.cartItems = [];
-          return;
+          const customerId = localStorage.getItem('customerId');
+          await this.createInvoice(customerId); // Tạo hóa đơn mới nếu chưa có
         }
         await this.fetchCart();
       } catch (error) {
+        // Không gọi handleError, thay vào đó đặt cartItems thành rỗng
         this.cartItems = [];
-        console.error('Khởi tạo giỏ hàng thất bại:', error);
+        this.$refs.toastNotification?.addToast({
+          type: 'info',
+          message: 'Giỏ hàng của bạn đang trống!',
+          isLoading: false,
+          duration: 3000,
+        });
       }
     },
+
+    async createInvoice(customerId) {
+      try {
+        const params = customerId ? { khachHangId: customerId } : {};
+        const response = await axios.post('http://localhost:8080/api/client/hoa-don-cho', {}, { params });
+        this.invoiceId = response.data.id;
+        localStorage.setItem('invoiceId', this.invoiceId);
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi tạo hóa đơn mới');
+      }
+    },
+
+    // Modify fetchCart để handle lỗi không tìm thấy
     async fetchCart() {
       try {
         const response = await axios.get(`http://localhost:8080/api/client/gio-hang/${this.invoiceId}`);
+        if (!response.data || !response.data.chiTietGioHangDTOS || response.data.chiTietGioHangDTOS.length === 0) {
+          // Nếu không có dữ liệu hoặc giỏ hàng rỗng
+          this.cartItems = [];
+          this.$refs.toastNotification?.addToast({
+            type: 'info',
+            message: 'Giỏ hàng của bạn đang trống!',
+            isLoading: false,
+            duration: 3000,
+          });
+          return;
+        }
         this.cartItems = response.data.chiTietGioHangDTOS.map(item => ({
           chiTietSanPhamId: item.chiTietSanPhamId,
           maImel: item.maImel,
@@ -259,8 +317,23 @@ export default {
         }));
         this.updateSelectedItems();
       } catch (error) {
-        this.handleError(error, 'Lỗi khi tải giỏ hàng');
-        this.cartItems = [];
+        if (error.response && error.response.status === 404) {
+          // Nếu hóa đơn không tồn tại, tạo mới và thử lại
+          localStorage.removeItem('invoiceId');
+          this.invoiceId = null;
+          const customerId = localStorage.getItem('customerId');
+          await this.createInvoice(customerId);
+          await this.fetchCart(); // Gọi lại fetchCart
+        } else {
+          // Xử lý các lỗi khác, hiển thị giỏ hàng rỗng
+          this.cartItems = [];
+          this.$refs.toastNotification?.addToast({
+            type: 'info',
+            message: 'Giỏ hàng của bạn đang trống!',
+            isLoading: false,
+            duration: 3000,
+          });
+        }
       }
     },
     async updateQuantity(index, newQuantity) {
@@ -353,7 +426,7 @@ export default {
         const promises = this.selectedItems.map(item =>
           axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
             params: {
-                            idHD: this.invoiceId,
+              idHD: this.invoiceId,
               spId: item.chiTietSanPhamId,
               maImel: item.maImel,
             },

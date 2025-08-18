@@ -1,349 +1,383 @@
 <template>
-  <main class="main">
-    <!-- Enhanced Breadcrumb -->
-    <div class="breadcrumb-container">
-      <div class="container">
+  <main class="min-h-screen bg-gray-50 py-8 font-sans">
+    <!-- Breadcrumb -->
+    <div class="bg-white shadow-sm py-4 mb-6">
+      <div class="container mx-auto px-4">
         <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <NuxtLink to="/" class="breadcrumb-link">
-                <i class="bi bi-house-door"></i> Trang chủ
+          <ol class="flex items-center space-x-2 text-sm">
+            <li>
+              <NuxtLink to="/" class="flex items-center text-gray-600 hover:text-blue-600 transition">
+                <i class="bi bi-house-door mr-1"></i> Trang chủ
               </NuxtLink>
             </li>
-            <li class="breadcrumb-item">
-              <NuxtLink to="/cart-page" class="breadcrumb-link">Giỏ hàng</NuxtLink>
+            <li class="text-gray-400">/</li>
+            <li>
+              <NuxtLink to="/cart-page" class="text-gray-600 hover:text-blue-600 transition">Giỏ hàng</NuxtLink>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Thanh toán</li>
+            <li class="text-gray-400">/</li>
+            <li class="text-blue-600 font-medium" aria-current="page">Thanh toán</li>
           </ol>
         </nav>
       </div>
     </div>
 
-    <div class="container">
-      <!-- Animated Progress Steps -->
-      <div class="checkout-progress mb-5">
-        <div class="progress-track"></div>
-        <div class="row justify-content-between">
-          <div v-for="(step, index) in steps" :key="index" class="col-auto">
-            <div class="progress-step" :class="{
-              'active': currentStep >= index + 1,
-              'completed': currentStep > index + 1
-            }">
-              <div class="step-indicator">
-                <div class="step-number">
-                  <i v-if="currentStep > index + 1" class="bi bi-check"></i>
-                  <span v-else>{{ index + 1 }}</span>
-                </div>
-                <div class="step-label">{{ step.label }}</div>
+    <div class="container mx-auto px-4">
+      <!-- Progress Steps -->
+      <div class="relative mb-8">
+        <div class="absolute top-4 left-0 right-0 h-1 bg-gray-200 rounded-full">
+          <div class="h-1 bg-blue-600 rounded-full transition-all duration-300"
+            :style="{ width: `${(currentStep - 1) * 33.33}%` }"></div>
+        </div>
+        <div class="flex justify-between">
+          <div v-for="(step, index) in steps" :key="index" class="text-center">
+            <div class="flex flex-col items-center">
+              <div
+                class="w-10 h-10 rounded-full flex items-center justify-center text-white font-medium transition-all duration-300"
+                :class="{
+                  'bg-blue-600': currentStep >= index + 1,
+                  'bg-green-500': currentStep > index + 1,
+                  'bg-gray-300': currentStep < index + 1
+                }">
+                <i v-if="currentStep > index + 1" class="bi bi-check"></i>
+                <span v-else>{{ index + 1 }}</span>
               </div>
+              <span class="mt-2 text-sm font-medium"
+                :class="{ 'text-blue-600': currentStep >= index + 1, 'text-gray-600': currentStep < index + 1 }">{{
+                  step.label }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row g-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Left Column - Forms -->
-        <div class="col-lg-8">
-          <div class="checkout-card">
-            <!-- Step 1: Shipping Information -->
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-lg shadow-sm p-6">
             <transition name="fade" mode="out-in">
+              <!-- Step 1: Shipping Information -->
               <div v-if="currentStep === 1" key="step1">
-                <div class="step-header">
-                  <h2 class="step-title">
-                    <i class="bi bi-truck me-2"></i>Thông tin giao hàng
+                <div class="text-center mb-6">
+                  <h2 class="text-2xl font-semibold text-blue-600"><i class="bi bi-truck mr-2"></i>Thông tin giao hàng
                   </h2>
-                  <p class="step-subtitle">Vui lòng kiểm tra hoặc cập nhật thông tin để chúng tôi có thể giao hàng cho bạn</p>
+                  <p class="text-gray-500 mt-1">Vui lòng cung cấp thông tin để giao hàng nhanh chóng</p>
                 </div>
 
-                <!-- Customer Info Section -->
-                <div class="section-container">
-                  <h3 class="section-title">
-                    <i class="bi bi-person-circle me-2"></i>Thông tin khách hàng
-                  </h3>
-                  <form @submit.prevent="submitForm">
-                    <div class="row g-3">
-                      <div class="col-md-6">
-                        <div class="form-floating">
-                          <label for="fullName">Họ và tên *</label>
-                          <input type="text" class="form-control" id="fullName" v-model="customerInfo.fullName"
-                            placeholder="Nhập họ và tên" required />
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-floating">
-                          <label for="phone">Số điện thoại *</label>
-                          <input type="tel" class="form-control" id="phone" v-model="customerInfo.phone"
-                            placeholder="Nhập số điện thoại" required />
-                        </div>
-                      </div>
-                      <div class="col-12">
-                        <div class="form-floating">
-                          <label for="email">Email *</label>
-                          <input type="email" class="form-control" id="email" v-model="customerInfo.email"
-                            placeholder="Nhập địa chỉ email" required />
+                <!-- Delivery Method Selection -->
+                <div class="mb-6">
+                  <h3 class="text-lg font-semibold text-blue-600 mb-4">Phương thức giao hàng</h3>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-md"
+                      :class="{ 'border-blue-600 bg-blue-50': deliveryMethod === 'delivery' }"
+                      @click="setDeliveryMethod('delivery')">
+                      <div class="flex items-center">
+                        <i class="bi bi-truck text-xl text-blue-600 mr-3"></i>
+                        <div>
+                          <h4 class="font-semibold">Giao hàng tận nơi</h4>
+                          <p class="text-sm text-gray-500">Nhận hàng tại địa chỉ bạn chọn</p>
                         </div>
                       </div>
                     </div>
-                  </form>
-                </div>
-
-                <!-- Delivery Method Section -->
-                <div class="section-container">
-                  <h3 class="section-title">
-                    <i class="bi bi-box-seam me-2"></i>Phương thức nhận hàng
-                  </h3>
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <div class="delivery-option" :class="{ 'selected': deliveryMethod === 'delivery' }"
-                        @click="setDeliveryMethod('delivery')">
-                        <div class="option-icon">
-                          <i class="bi bi-truck"></i>
-                        </div>
-                        <div class="option-content">
-                          <h4>Giao hàng tận nơi</h4>
-                          <p>Phí giao hàng: 30,000 VND</p>
-                        </div>
-                        <div class="option-radio">
-                          <input type="radio" :checked="deliveryMethod === 'delivery'" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="delivery-option" :class="{ 'selected': deliveryMethod === 'pickup' }"
-                        @click="setDeliveryMethod('pickup')">
-                        <div class="option-icon">
-                          <i class="bi bi-shop"></i>
-                        </div>
-                        <div class="option-content">
-                          <h4>Nhận tại cửa hàng</h4>
-                          <p>Miễn phí - Nhận trong 2 giờ</p>
-                        </div>
-                        <div class="option-radio">
-                          <input type="radio" :checked="deliveryMethod === 'pickup'" />
+                    <div class="border rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-md"
+                      :class="{ 'border-blue-600 bg-blue-50': deliveryMethod === 'pickup' }"
+                      @click="setDeliveryMethod('pickup')">
+                      <div class="flex items-center">
+                        <i class="bi bi-shop text-xl text-blue-600 mr-3"></i>
+                        <div>
+                          <h4 class="font-semibold">Nhận tại cửa hàng</h4>
+                          <p class="text-sm text-gray-500">Đến lấy hàng tại cửa hàng gần nhất</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!-- Delivery Address Section -->
-                <div v-if="deliveryMethod === 'delivery'" class="section-container">
-                  <h3 class="section-title">
-                    <i class="bi bi-geo-alt me-2"></i>Địa chỉ giao hàng
-                  </h3>
-                  <form @submit.prevent="submitForm">
-                    <div class="row g-3">
-                      <div class="col-md-6">
-                        <div class="form-floating">
-                          <label for="city">Tỉnh/Thành phố *</label>
-                          <select class="form-select" id="city" v-model="delivery.thanhPho" @change="fetchDistricts"
-                            required>
-                            <option value="" disabled selected>Chọn tỉnh/thành phố</option>
-                            <option v-for="province in provinces" :key="province.name" :value="province.name">
-                              {{ province.name }}
-                            </option>
-                          </select>
+                <!-- Delivery Form -->
+                <div v-if="deliveryMethod === 'delivery'" class="border rounded-lg p-4">
+                  <h3 class="text-lg font-semibold text-blue-600 mb-4">Địa chỉ giao hàng <span
+                      class="text-gray-500">(Bắt buộc)</span></h3>
+                  <div class="border rounded-lg p-4 mb-4 bg-gray-50">
+                    <div class="flex items-center justify-between">
+                      <h4 class="font-semibold text-green-600"><i class="bi bi-check-circle-fill mr-2"></i>Địa chỉ đã
+                        chọn</h4>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">
+                      <strong>{{ selectedAddress.ten || delivery.ten }}</strong> | {{ selectedAddress.soDienThoai ||
+                        delivery.soDienThoai }}
+                    </p>
+                    <p class="text-sm text-gray-600">
+                      {{ selectedAddress.diaChiCuThe || delivery.soNha }}, {{ selectedAddress.phuong || delivery.phuong
+                      }}, {{ selectedAddress.quan || delivery.quan }}, {{ selectedAddress.thanhPho || delivery.thanhPho
+                      }}
+                    </p>
+                    <div class="flex gap-2 mt-3">
+                      <button class="btn btn-outline-primary text-sm" @click="editSelectedAddress">
+                        <i class="bi bi-pencil mr-1"></i>Chỉnh sửa
+                      </button>
+                      <button class="btn btn-outline-danger text-sm" @click="confirmDeleteAddress(selectedAddressId)">
+                        <i class="bi bi-trash mr-1"></i>Xóa
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Tabs Navigation -->
+                  <div class="flex gap-2 mb-4 bg-gray-100 p-1 rounded-lg">
+                    <button class="flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200"
+                      :class="{ 'bg-blue-600 text-white': activeTab === 0, 'bg-transparent text-gray-600': activeTab !== 0 }"
+                      @click="activeTab = 0">
+                      <i class="bi bi-plus-lg mr-2"></i>Thêm địa chỉ mới
+                    </button>
+                    <button class="flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200"
+                      :class="{ 'bg-blue-600 text-white': activeTab === 1, 'bg-transparent text-gray-600': activeTab !== 1 }"
+                      @click="activeTab = 1">
+                      <i class="bi bi-list-ul mr-2"></i>Chọn từ danh sách
+                    </button>
+                  </div>
+
+                  <!-- Tab Content -->
+                  <div>
+                    <!-- Add New Address Tab -->
+                    <div v-if="activeTab === 0" class="border rounded-lg p-4 bg-white">
+                      <form @submit.prevent="saveAddress">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div class="space-y-1">
+                            <label for="fullName" class="block text-sm font-medium text-gray-700">Họ và tên <span
+                                class="text-red-500">*</span></label>
+                            <input type="text" id="fullName" v-model="delivery.ten"
+                              class="w-full border rounded-md p-2 text-sm" placeholder="Nguyễn Văn A" required />
+                          </div>
+                          <div class="space-y-1">
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Số điện thoại <span
+                                class="text-red-500">*</span></label>
+                            <input type="tel" id="phone" v-model="delivery.soDienThoai"
+                              class="w-full border rounded-md p-2 text-sm" placeholder="0123456789" required
+                              pattern="[0-9]{10}" />
+                          </div>
+                          <div class="space-y-1">
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email <span
+                                class="text-red-500">*</span></label>
+                            <input type="email" id="email" v-model="delivery.email"
+                              class="w-full border rounded-md p-2 text-sm" placeholder="example@domain.com" required />
+                          </div>
+                          <div class="space-y-1">
+                            <label for="city" class="block text-sm font-medium text-gray-700">Tỉnh/Thành phố <span
+                                class="text-red-500">*</span></label>
+                            <select id="city" v-model="delivery.thanhPho" @change="fetchDistricts"
+                              class="w-full border rounded-md p-2 text-sm" required>
+                              <option value="" disabled selected>Chọn tỉnh/thành phố</option>
+                              <option v-for="province in provinces" :key="province.name" :value="province.name">
+                                {{ province.name }}
+                              </option>
+                            </select>
+                          </div>
+                          <div class="space-y-1">
+                            <label for="district" class="block text-sm font-medium text-gray-700">Quận/Huyện <span
+                                class="text-red-500">*</span></label>
+                            <select id="district" v-model="delivery.quan" @change="fetchWards"
+                              class="w-full border rounded-md p-2 text-sm" required>
+                              <option value="" disabled selected>Chọn quận/huyện</option>
+                              <option v-for="district in districts" :key="district.name" :value="district.name">
+                                {{ district.name }}
+                              </option>
+                            </select>
+                          </div>
+                          <div class="space-y-1">
+                            <label for="ward" class="block text-sm font-medium text-gray-700">Xã/Phường <span
+                                class="text-red-500">*</span></label>
+                            <select id="ward" v-model="delivery.phuong" class="w-full border rounded-md p-2 text-sm"
+                              required>
+                              <option value="" disabled selected>Chọn xã/phường</option>
+                              <option v-for="ward in wards" :key="ward.name" :value="ward.name">
+                                {{ ward.name }}
+                              </option>
+                            </select>
+                          </div>
+                          <div class="col-span-2 space-y-1">
+                            <label for="address" class="block text-sm font-medium text-gray-700">Số nhà, tên đường <span
+                                class="text-red-500">*</span></label>
+                            <input type="text" id="address" v-model="delivery.soNha"
+                              class="w-full border rounded-md p-2 text-sm" placeholder="123 Đường Láng, Đống Đa"
+                              required />
+                          </div>
+                          <div class="col-span-2 space-y-1">
+                            <label for="notes" class="block text-sm font-medium text-gray-700">Ghi chú (không bắt
+                              buộc)</label>
+                            <textarea id="notes" v-model="delivery.ghiChu" class="w-full border rounded-md p-2 text-sm"
+                              placeholder="Ghi chú"></textarea>
+                          </div>
+                        </div>
+                        <div class="flex justify-end gap-2 mt-4">
+                          <button type="submit"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Lưu địa
+                            chỉ</button>
+                          <button type="button"
+                            class="border border-gray-300 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-100 transition"
+                            @click="clearSelectedAddress">Xóa lựa chọn</button>
+                        </div>
+                      </form>
+                    </div>
+                    <!-- Address List Tab -->
+                    <div v-else class="border rounded-lg p-4 bg-white">
+                      <div class="space-y-3 max-h-80 overflow-y-auto">
+                        <div v-for="address in addresses" :key="address.id"
+                          class="border rounded-lg p-3 cursor-pointer hover:shadow-md transition"
+                          :class="{ 'border-blue-600 bg-blue-50': selectedAddressId === address.id }"
+                          @click="selectAddress(address)">
+                          <div class="flex items-center">
+                            <input type="radio" :checked="selectedAddressId === address.id" class="mr-3" />
+                            <div class="flex-1">
+                              <h4 class="font-semibold">{{ address.ten }}</h4>
+                              <p class="text-sm text-gray-600">{{ address.soDienThoai }}</p>
+                              <p class="text-sm text-gray-600">{{ address.diaChiCuThe }}, {{ address.phuong }}, {{
+                                address.quan }}, {{ address.thanhPho }}</p>
+                            </div>
+                            <div class="flex gap-2">
+                              <button class="text-blue-600 hover:text-blue-700 text-sm"
+                                @click.stop="editAddress(address)">
+                                <i class="bi bi-pencil"></i> Chỉnh sửa
+                              </button>
+                              <button class="text-red-600 hover:text-red-700 text-sm"
+                                @click.stop="confirmDeleteAddress(address.id)">
+                                <i class="bi bi-trash"></i> Xóa
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-floating">
-                          <label for="district">Quận/Huyện *</label>
-                          <select class="form-select" id="district" v-model="delivery.quan" @change="fetchWards"
-                            required>
-                            <option value="" disabled selected>Chọn quận/huyện</option>
-                            <option v-for="district in districts" :key="district.name" :value="district.name">
-                              {{ district.name }}
-                            </option>
-                          </select>
-                        </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Pickup Form -->
+                <div v-else class="border rounded-lg p-4">
+                  <h3 class="text-lg font-semibold text-blue-600 mb-4">Nhận tại cửa hàng <span
+                      class="text-gray-500">(Bắt buộc)</span></h3>
+                  <form>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div class="col-span-2 space-y-1">
+                        <label for="store" class="block text-sm font-medium text-gray-700">Cửa hàng nhận hàng <span
+                            class="text-red-500">*</span></label>
+                        <select id="store" v-model="pickup.store"
+                          @change="selectStore(stores.findIndex(s => s.address === pickup.store))"
+                          class="w-full border rounded-md p-2 text-sm" required>
+                          <option value="" disabled selected>Chọn cửa hàng</option>
+                          <option v-for="store in stores" :key="store.address" :value="store.address">
+                            {{ store.name }} - {{ store.address }}
+                          </option>
+                        </select>
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-floating">
-                          <label for="ward">Xã/Phường *</label>
-                          <select class="form-select" id="ward" v-model="delivery.phuong" required>
-                            <option value="" disabled selected>Chọn xã/phường</option>
-                            <option v-for="ward in wards" :key="ward.name" :value="ward.name">
-                              {{ ward.name }}
-                            </option>
-                          </select>
-                        </div>
+                      <div class="space-y-1">
+                        <label for="pickupPhone" class="block text-sm font-medium text-gray-700">Số điện thoại <span
+                            class="text-red-500">*</span></label>
+                        <input type="tel" id="pickupPhone" v-model="pickup.soDienThoai"
+                          class="w-full border rounded-md p-2 text-sm" placeholder="0123456789" required
+                          pattern="[0-9]{10}" />
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-floating">
-                          <label for="street">Số nhà, tên đường *</label>
-                          <input type="text" class="form-control" id="street" v-model="delivery.soNha"
-                            placeholder="Ví dụ: 123 Nguyễn Trãi" required />
-                        </div>
-                      </div>
-                      <div class="col-12">
-                        <div class="form-floating">
-                          <label for="notes">Ghi chú</label>
-                          <textarea class="form-control" id="notes" v-model="delivery.ghiChu"
-                            placeholder="Ghi chú cho shipper (tùy chọn)" style="height: 100px"></textarea>
-                        </div>
+                      <div class="space-y-1">
+                        <label for="pickupEmail" class="block text-sm font-medium text-gray-700">Email <span
+                            class="text-red-500">*</span></label>
+                        <input type="email" id="pickupEmail" v-model="pickup.email"
+                          class="w-full border rounded-md p-2 text-sm" placeholder="example@domain.com" required />
                       </div>
                     </div>
                   </form>
                 </div>
-
-                <!-- Store Pickup Section -->
-                <div v-if="deliveryMethod === 'pickup'" class="section-container">
-                  <h3 class="section-title">
-                    <i class="bi bi-shop-window me-2"></i>Chọn cửa hàng
-                  </h3>
-                  <form @submit.prevent="submitForm">
-                    <div class="row g-3">
-                      <div class="col-md-6">
-                        <div class="form-floating">
-                          <label for="pickupPhone">Số điện thoại *</label>
-                          <input type="tel" class="form-control" id="pickupPhone" v-model="pickup.soDienThoai"
-                            placeholder="Nhập số điện thoại" required />
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-floating">
-                          <label for="pickupEmail">Email *</label>
-                          <input type="email" class="form-control" id="pickupEmail" v-model="pickup.email"
-                            placeholder="Nhập địa chỉ email" required />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="store-list mt-3">
-                      <div v-for="(store, index) in stores" :key="index" class="store-card"
-                        :class="{ 'selected': selectedStoreIndex === index }" @click="selectStore(index)">
-                        <div class="store-radio">
-                          <input type="radio" :checked="selectedStoreIndex === index" />
-                        </div>
-                        <div class="store-content">
-                          <h4>{{ store.name }}</h4>
-                          <p class="store-address">{{ store.address }}</p>
-                          <p class="store-hours">{{ store.hours || '8:00 - 22:00 (Thứ 2 - Chủ nhật)' }}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-
-                <div class="step-actions">
-                  <button class="btn-primary btn-next" @click="nextStep">
-                    Tiếp tục <i class="bi bi-arrow-right ms-2"></i>
+                <div class="flex justify-between mt-6 pt-4 border-t">
+                  <button class="border border-gray-300 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-100 transition"
+                    @click="prevStep">
+                    <i class="bi bi-arrow-left mr-2"></i>Quay lại
+                  </button>
+                  <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                    @click="nextStep">
+                    Tiếp tục <i class="bi bi-arrow-right ml-2"></i>
                   </button>
                 </div>
               </div>
 
               <!-- Step 2: Order Summary -->
               <div v-else-if="currentStep === 2" key="step2">
-                <div class="step-header">
-                  <h2 class="step-title">
-                    <i class="bi bi-clipboard-check me-2"></i>Xác nhận đơn hàng
-                  </h2>
-                  <p class="step-subtitle">Kiểm tra lại thông tin đơn hàng của bạn</p>
+                <div class="text-center mb-6">
+                  <h2 class="text-2xl font-semibold text-blue-600"><i class="bi bi-cart-check mr-2"></i>Xác nhận đơn
+                    hàng</h2>
+                  <p class="text-gray-500 mt-1">Kiểm tra lại thông tin đơn hàng của bạn</p>
                 </div>
-
-                <!-- Order Items Section -->
-                <div class="section-container">
-                  <h3 class="section-title">
-                    <i class="bi bi-cart-check me-2"></i>Sản phẩm đã chọn
-                  </h3>
-                  <div class="order-items">
-                    <div v-for="(item, index) in order.items" :key="index" class="order-item">
-                      <div class="item-details">
-                        <h4>{{ item.name }}</h4>
-                        <p class="item-quantity">Số lượng: {{ item.quantity }}</p>
+                <div class="border rounded-lg p-4">
+                  <h3 class="text-lg font-semibold text-blue-600 mb-4">Sản phẩm</h3>
+                  <div class="space-y-3">
+                    <div v-for="(item, index) in order.items" :key="index"
+                      class="flex justify-between items-center border-b pb-3">
+                      <div>
+                        <h4 class="font-semibold">{{ item.name }}</h4>
+                        <p class="text-sm text-gray-600">Số lượng: {{ item.quantity }}</p>
                       </div>
-                      <div class="item-price">
-                        <p class="price-unit">{{ item.price.toLocaleString() }}đ</p>
-                        <p class="price-total">{{ (item.price * item.quantity).toLocaleString() }}đ</p>
+                      <div class="text-right">
+                        <p class="text-sm text-gray-600">{{ item.price.toLocaleString('vi-VN') }} ₫</p>
+                        <p class="font-semibold">{{ (item.price * item.quantity).toLocaleString('vi-VN') }} ₫</p>
                       </div>
                     </div>
                   </div>
+                  <div class="flex gap-2 mt-4">
+                    <input v-model="discountCode" class="flex-1 border rounded-md p-2 text-sm"
+                      placeholder="Nhập mã giảm giá" />
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                      @click="applyDiscount">Áp dụng</button>
+                  </div>
                 </div>
-
-                <!-- Discount Code Section -->
-                <div class="section-container">
-                  <h3 class="section-title">
-                    <i class="bi bi-percent me-2"></i>Mã giảm giá
-                  </h3>
-                  <form @submit.prevent="applyDiscount">
-                    <div class="discount-input">
-                      <input type="text" class="form-control" v-model="discountCode" placeholder="Nhập mã giảm giá" />
-                      <button class="btn-apply btn-primary" type="submit"
-                        style="padding: 0; border-top-left-radius: 0px; border-bottom-left-radius: 0px;">
-                        Áp dụng
-                      </button>
-                    </div>
-                    <p v-if="appliedDiscount" class="text-success mt-2">
-                      Mã giảm giá {{ appliedDiscount.code }} đã được áp dụng (-{{
-                        appliedDiscount.amount.toLocaleString() }}đ)
-                    </p>
-                  </form>
-                </div>
-
-                <div class="step-actions">
-                  <button class="btn-outline-secondary btn-prev" @click="prevStep">
-                    <i class="bi bi-arrow-left me-2"></i> Quay lại
+                <div class="flex justify-between mt-6 pt-4 border-t">
+                  <button class="border border-gray-300 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-100 transition"
+                    @click="prevStep">
+                    <i class="bi bi-arrow-left mr-2"></i>Quay lại
                   </button>
-                  <button class="btn-primary btn-next" @click="nextStep">
-                    Tiếp tục thanh toán <i class="bi bi-arrow-right ms-2"></i>
+                  <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                    @click="nextStep">
+                    Tiếp tục <i class="bi bi-arrow-right ml-2"></i>
                   </button>
                 </div>
               </div>
 
               <!-- Step 3: Payment -->
-              <div v-else key="step3">
-                <div class="step-header">
-                  <h2 class="step-title">
-                    <i class="bi bi-credit-card me-2"></i>Thanh toán
-                  </h2>
-                  <p class="step-subtitle">Chọn phương thức thanh toán phù hợp</p>
+              <div v-else-if="currentStep === 3" key="step3">
+                <div class="text-center mb-6">
+                  <h2 class="text-2xl font-semibold text-blue-600"><i class="bi bi-credit-card mr-2"></i>Phương thức
+                    thanh toán</h2>
+                  <p class="text-gray-500 mt-1">Chọn phương thức thanh toán phù hợp</p>
                 </div>
-
-                <div class="section-container">
-                  <h3 class="section-title">
-                    <i class="bi bi-wallet2 me-2"></i>Phương thức thanh toán
-                  </h3>
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <div class="payment-option" :class="{ 'selected': paymentMethod === 'VNPay' }"
-                        @click="setPaymentMethod('VNPay')">
-                        <div class="payment-icon">
-                          <i class="bi bi-credit-card-2-front"></i>
-                        </div>
-                        <div class="payment-content">
-                          <h4>VNPay</h4>
-                          <p>Thanh toán qua thẻ ATM, Internet Banking, QR Code hoặc thẻ tín dụng</p>
-                        </div>
-                        <div class="payment-radio">
-                          <input type="radio" :checked="paymentMethod === 'VNPay'" />
+                <div class="border rounded-lg p-4">
+                  <h3 class="text-lg font-semibold text-blue-600 mb-4">Chọn phương thức</h3>
+                  <div class="space-y-3">
+                    <div class="border rounded-lg p-3 cursor-pointer hover:shadow-md transition"
+                      :class="{ 'border-blue-600 bg-blue-50': paymentMethod === 'COD' }"
+                      @click="setPaymentMethod('COD')">
+                      <div class="flex items-center">
+                        <input type="radio" :checked="paymentMethod === 'COD'" class="mr-3" />
+                        <i class="bi bi-cash text-xl text-blue-600 mr-3"></i>
+                        <div>
+                          <h4 class="font-semibold">Thanh toán khi nhận hàng (COD)</h4>
+                          <p class="text-sm text-gray-600">Thanh toán bằng tiền mặt khi nhận hàng</p>
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-6">
-                      <div class="payment-option" :class="{ 'selected': paymentMethod === 'Tiền mặt' }"
-                        @click="setPaymentMethod('Tiền mặt')">
-                        <div class="payment-icon">
-                          <i class="bi bi-cash-stack"></i>
-                        </div>
-                        <div class="payment-content">
-                          <h4>Thanh toán khi nhận hàng (COD)</h4>
-                          <p>Thanh toán bằng tiền mặt khi nhận hàng</p>
-                        </div>
-                        <div class="payment-radio">
-                          <input type="radio" :checked="paymentMethod === 'Tiền mặt'" />
+                    <div class="border rounded-lg p-3 cursor-pointer hover:shadow-md transition"
+                      :class="{ 'border-blue-600 bg-blue-50': paymentMethod === 'VNPay' }"
+                      @click="setPaymentMethod('VNPay')">
+                      <div class="flex items-center">
+                        <input type="radio" :checked="paymentMethod === 'VNPay'" class="mr-3" />
+                        <i class="bi bi-credit-card-2-front text-xl text-blue-600 mr-3"></i>
+                        <div>
+                          <h4 class="font-semibold">Thanh toán qua VNPay</h4>
+                          <p class="text-sm text-gray-600">Thanh toán an toàn qua cổng VNPay</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div class="step-actions">
-                  <button class="btn-outline-secondary btn-prev" @click="prevStep">
-                    <i class="bi bi-arrow-left me-2"></i> Quay lại
+                <div class="flex justify-between mt-6 pt-4 border-t">
+                  <button class="border border-gray-300 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-100 transition"
+                    @click="prevStep">
+                    <i class="bi bi-arrow-left mr-2"></i>Quay lại
                   </button>
-                  <button class="btn-success btn-submit" @click="openConfirmationModal" :disabled="isLoading">
-                    <span v-if="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    <i v-else class="bi bi-check-circle me-2"></i>
-                    {{ isLoading ? 'Đang xử lý...' : 'Đặt hàng' }}
+                  <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                    @click="confirmOrder">
+                    Hoàn tất đơn hàng <i class="bi bi-check-circle ml-2"></i>
                   </button>
                 </div>
               </div>
@@ -352,56 +386,46 @@
         </div>
 
         <!-- Right Column - Order Summary -->
-        <div class="col-lg-4">
-          <div class="summary-card">
-            <div class="summary-header">
-              <h3 class="summary-title">
-                <i class="bi bi-receipt me-2"></i>Tóm tắt đơn hàng
-              </h3>
-            </div>
-            <div class="summary-body">
-              <div class="order-products">
-                <div v-for="(item, index) in order.items" :key="index" class="product-item">
-                  <div class="product-info">
-                    <span class="product-name">{{ item.name }}</span>
-                    <span class="product-quantity">x{{ item.quantity }}</span>
-                  </div>
-                  <div class="product-price">
-                    {{ (item.price * item.quantity).toLocaleString() }}đ
-                  </div>
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+            <h3 class="text-lg font-semibold text-blue-600 mb-4">Tóm tắt đơn hàng</h3>
+            <div class="space-y-3">
+              <div v-for="(item, index) in order.items" :key="index"
+                class="flex justify-between items-center border-b pb-3">
+                <div>
+                  <span class="font-medium">{{ item.name }}</span>
+                  <span class="text-sm text-gray-600 ml-2">x{{ item.quantity }}</span>
                 </div>
-              </div>
-              <div class="order-totals">
-                <div class="total-row">
-                  <span>Tạm tính</span>
-                  <span>{{ order.subtotal.toLocaleString() }}đ</span>
-                </div>
-                <div class="total-row">
-                  <span>Phí vận chuyển</span>
-                  <span>{{ order.shipping.toLocaleString() }}đ</span>
-                </div>
-                <div v-if="appliedDiscount" class="total-row discount">
-                  <span>Giảm giá ({{ appliedDiscount.code }})</span>
-                  <span>-{{ appliedDiscount.amount.toLocaleString() }}đ</span>
-                </div>
-                <div class="total-row grand-total">
-                  <span>Tổng cộng</span>
-                  <span>{{ order.total.toLocaleString() }}đ</span>
-                </div>
+                <span class="font-semibold">{{ (item.price * item.quantity).toLocaleString('vi-VN') }} ₫</span>
               </div>
             </div>
-            <div class="summary-footer">
-              <div class="benefit-item">
-                <i class="bi bi-truck"></i>
-                <span>Giao hàng trong 2-3 ngày</span>
+            <div class="border-t pt-3 mt-3">
+              <div class="flex justify-between text-sm">
+                <span>Tạm tính</span>
+                <span>{{ order.subtotal.toLocaleString('vi-VN') }} ₫</span>
               </div>
-              <div class="benefit-item">
-                <i class="bi bi-shield-check"></i>
-                <span>Bảo hành chính hãng</span>
+              <div class="flex justify-between text-sm mt-2">
+                <span>Phí vận chuyển</span>
+                <span>{{ order.shipping.toLocaleString('vi-VN') }} ₫</span>
               </div>
-              <div class="benefit-item">
-                <i class="bi bi-arrow-return-left"></i>
-                <span>Đổi trả trong 7 ngày</span>
+              <div v-if="appliedDiscount" class="flex justify-between text-sm mt-2 text-green-600">
+                <span>Giảm giá</span>
+                <span>-{{ appliedDiscount.amount.toLocaleString('vi-VN') }} ₫</span>
+              </div>
+              <div class="flex justify-between font-semibold text-lg mt-3 pt-3 border-t">
+                <span>Tổng cộng</span>
+                <span>{{ order.total.toLocaleString('vi-VN') }} ₫</span>
+              </div>
+            </div>
+            <div class="mt-4 space-y-2">
+              <div class="flex items-center text-sm text-gray-600">
+                <i class="bi bi-truck text-green-500 mr-2"></i> Miễn phí vận chuyển cho đơn từ 5.000.000 ₫
+              </div>
+              <div class="flex items-center text-sm text-gray-600">
+                <i class="bi bi-arrow-repeat text-green-500 mr-2"></i> Đổi trả dễ dàng trong 30 ngày
+              </div>
+              <div class="flex items-center text-sm text-gray-600">
+                <i class="bi bi-shield-check text-green-500 mr-2"></i> Bảo hành chính hãng
               </div>
             </div>
           </div>
@@ -409,965 +433,41 @@
       </div>
 
       <!-- Confirmation Modal -->
-      <div v-if="showConfirmationModal" class="modal-overlay" :class="{ loading: isLoading }" @click.self="closeConfirmationModal">
-        <div class="modal-content" :class="{ loading: isLoading }" @click.stop>
-          <div class="modal-header">
-            <h3 class="modal-title">Xác nhận đặt hàng</h3>
-            <button class="modal-close" @click="closeConfirmationModal">
+      <div v-if="showConfirmationModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+          <div class="flex justify-between items-center mb-4">
+            <h5 class="text-lg font-semibold text-blue-600">Xác nhận đơn hàng</h5>
+            <button class="text-gray-600 hover:text-blue-600" @click="showConfirmationModal = false">
               <i class="bi bi-x-lg"></i>
             </button>
           </div>
-          <div class="modal-body">
-            <p>Bạn có chắc chắn muốn đặt hàng với tổng cộng <strong>{{ order.total.toLocaleString() }}đ</strong>?</p>
-            <p v-if="paymentMethod === 'VNPay'">Bạn sẽ được chuyển hướng đến cổng thanh toán VNPay.</p>
-            <p v-else>Đơn hàng sẽ được xử lý ngay sau khi xác nhận (Thanh toán khi nhận hàng).</p>
+          <div class="text-gray-600 mb-4">
+            Bạn có chắc chắn muốn đặt hàng với tổng giá trị {{ order.total.toLocaleString('vi-VN') }} ₫?
           </div>
-          <div class="modal-footer">
-            <button class="btn-secondary btn-cancel" @click="closeConfirmationModal">
-              Hủy
-            </button>
-            <button class="btn-success btn-confirm" @click="confirmOrder" :disabled="isLoading">
-              <span v-if="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              {{ isLoading ? 'Đang xử lý...' : 'Xác nhận đặt hàng' }}
+          <div class="flex justify-center gap-2">
+            <button class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition"
+              @click="showConfirmationModal = false">Hủy</button>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+              :disabled="isLoading" @click="submitOrder">
+              Xác nhận
+              <span v-if="isLoading" class="ml-2 spinner-border spinner-border-sm"></span>
             </button>
           </div>
         </div>
       </div>
-      <ToastNotification ref="toast" />
     </div>
   </main>
 </template>
 
 <script>
-import axios from 'axios'
-import checkoutPage from '../store/pay/checkout-page'
-import ToastNotification from '../components/base/ToastNotification.vue'
+import checkoutLogic from '../store/pay/checkout-page'
 
-export default {
-  components: {
-    ToastNotification,
-  },
-  ...checkoutPage,
-  data() {
-    return {
-      ...checkoutPage.data(),
-      currentStep: 1,
-      deliveryMethod: 'delivery',
-      paymentMethod: 'Tiền mặt',
-      discountCode: '',
-      appliedDiscount: null,
-      isLoading: false,
-      steps: [
-        { label: 'Thông tin giao hàng' },
-        { label: 'Xác nhận đơn hàng' },
-        { label: 'Thanh toán & Xác nhận' }
-      ],
-      showConfirmationModal: false,
-      customerInfo: {
-        fullName: localStorage.getItem('fullName') || '',
-        phone: localStorage.getItem('phoneNumber') || '',
-        email: localStorage.getItem('email') || ''
-      }
-    }
-  },
-  methods: {
-    ...checkoutPage.methods,
-    nextStep() {
-      if (this.currentStep < 3) this.currentStep++
-    },
-    prevStep() {
-      if (this.currentStep > 1) this.currentStep--
-    },
-    setDeliveryMethod(method) {
-      this.deliveryMethod = method
-      this.order.shipping = method === 'delivery' ? 30000 : 0
-      this.calculateTotal()
-    },
-    setPaymentMethod(method) {
-      this.paymentMethod = method
-    },
-    applyDiscount() {
-      if (this.discountCode) {
-        this.appliedDiscount = {
-          code: this.discountCode,
-          amount: Math.floor(this.order.subtotal * 0.1),
-          id: 1
-        }
-        this.calculateTotal()
-      }
-    },
-    calculateTotal() {
-      let total = this.order.subtotal + this.order.shipping
-      if (this.appliedDiscount) total -= this.appliedDiscount.amount
-      this.order.total = Math.max(0, total)
-    },
-    showToast(type, message, isLoading = false, duration = 3000) {
-      this.$refs.toast.addToast({ type, message, isLoading, duration })
-    },
-    openConfirmationModal() {
-      this.showConfirmationModal = true
-    },
-    closeConfirmationModal() {
-      this.showConfirmationModal = false
-    },
-    async confirmOrder() {
-      try {
-        this.isLoading = true
-        if (this.paymentMethod === 'VNPay') {
-            const orderInfo = `Thanh toán hóa đơn`;
-            const amountToSend = this.order.total;
-            const returnUrl = 'http://localhost:3000';
-            const params = new URLSearchParams();
-            params.append('amount', amountToSend.toString());
-            params.append('orderInfo', orderInfo);
-            params.append('returnUrl', returnUrl);
-            const response = await axios.post('http://localhost:8080/api/payment/create', params);
-            if (response.data) {
-                window.location.href = response.data;
-            } else {
-                throw new Error('Không nhận được URL thanh toán từ VNPAY!');
-            }
-        } else {
-          await this.submitForm()
-          this.showConfirmationModal = false
-          this.showToast('success', `Đặt hàng thành công! Bạn sẽ nhận được email xác nhận đơn hàng.`)
-          this.$router.push('/cart-page')
-        }
-      } catch (error) {
-        this.handleError(error, 'Lỗi khi thực hiện thanh toán')
-        this.showConfirmationModal = false
-      } finally {
-        this.isLoading = false
-      }
-    },
-  }
-}
+export default checkoutLogic
 </script>
 
 <style scoped>
-/* Thêm style cho phần thanh toán bằng thẻ */
-.vnpay-options {
-  background-color: var(--light);
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  border: 1px solid #eee;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-}
-
-.vnpay-card-section {
-  padding: 1.5rem;
-  background-color: #fff;
-  border-radius: var(--border-radius);
-  border: 1px solid #eee;
-}
-
-.vnpay-card-section h4 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  font-family: 'Inter', sans-serif;
-}
-
-/* Base Styles */
-:root {
-  --primary: #3a7bd5;
-  --primary-light: #e8f0fe;
-  --secondary: #6c757d;
-  --success: #28a745;
-  --danger: #dc3545;
-  --light: #f8f9fa;
-  --dark: #212529;
-  --border-radius: 12px;
-  --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  --transition: all 0.3s ease;
-}
-
-.main {
-  background-color: #f5f7fa;
-  min-height: 100vh;
-  padding: 2rem 0 4rem;
-  font-family: 'Inter', sans-serif;
-}
-
-/* Breadcrumb Styles */
-.breadcrumb-container {
-  background-color: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  padding: 1rem 0;
-  margin-bottom: 2rem;
-}
-
-.breadcrumb {
-  padding: 0;
-  margin: 0;
-  background: transparent;
-}
-
-.breadcrumb-item {
-  font-size: 1.3rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.breadcrumb-item.active {
-  color: var(--dark);
-  font-weight: 500;
-}
-
-.breadcrumb-link {
-  color: var(--secondary);
-  text-decoration: none;
-  transition: var(--transition);
-  font-family: 'Inter', sans-serif;
-  font-size: 1.3rem;
-}
-
-.breadcrumb-link:hover {
-  color: var(--primary);
-}
-
-/* Progress Steps */
-.checkout-progress {
-  position: relative;
-  margin-bottom: 3rem !important;
-}
-
-.progress-track {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background-color: #e9ecef;
-  z-index: 1;
-  border-radius: 2px;
-}
-
-.progress-track::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  height: 100%;
-  width: calc((100% / 3) * (v-bind('currentStep') - 1));
-  background-color: var(--primary);
-  border-radius: 2px;
-  transition: var(--transition);
-}
-
-.progress-step {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-}
-
-.step-indicator {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.step-number {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 2px solid #e9ecef;
-  border-radius: 50%;
-  font-weight: 600;
-  color: var(--secondary);
-  margin-bottom: 0.5rem;
-  transition: var(--transition);
-  font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-}
-
-.step-label {
-  font-size: 1rem;
-  color: var(--secondary);
-  font-weight: 500;
-  white-space: nowrap;
-  font-family: 'Inter', sans-serif;
-}
-
-.progress-step.active .step-number {
-  border-color: var(--primary);
-  color: var(--primary);
-  box-shadow: 0 0 0 5px rgba(58, 123, 213, 0.2);
-}
-
-.progress-step.completed .step-number {
-  background-color: var(--primary);
-  border-color: var(--primary);
-  color: white;
-}
-
-.progress-step.active .step-label,
-.progress-step.completed .step-label {
-  color: var(--primary);
-  font-weight: 600;
-}
-
-/* Card Styles */
-.checkout-card,
-.summary-card {
-  background-color: white;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  border: none;
-  overflow: hidden;
-}
-
-.checkout-card {
-  padding: 2rem;
-}
-
-.summary-card {
-  position: sticky;
-  top: 20px;
-}
-
-.summary-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid #eee;
-}
-
-.summary-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  font-family: 'Inter', sans-serif;
-}
-
-.summary-body {
-  padding: 1.5rem;
-}
-
-.summary-footer {
-  padding: 1.5rem;
-  border-top: 1px solid #eee;
-}
-
-/* Step Header */
-.step-header {
-  margin-bottom: 2rem;
-}
-
-.step-title {
-  font-size: 2.3rem;
-  font-weight: 700;
-  color: var(--dark);
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  font-family: 'Inter', sans-serif;
-}
-
-.step-subtitle {
-  color: var(--secondary);
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-}
-
-/* Section Styles */
-.section-container {
-  margin-bottom: 2.5rem;
-}
-
-.section-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--dark);
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  font-family: 'Inter', sans-serif;
-}
-
-/* Form Styles */
-.form-floating {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-}
-
-.form-control,
-.form-select {
-  border-radius: 8px;
-  height: 50px;
-  margin: 0 !important;
-  border: 1px solid #e0e0e0;
-  transition: var(--transition);
-  font-family: 'Inter', sans-serif;
-  font-size: 1.3rem;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 0.25rem rgba(58, 123, 213, 0.15);
-}
-
-.form-label {
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-}
-
-/* Delivery Options */
-.delivery-option {
-  display: flex;
-  align-items: center;
-  padding: 1.25rem;
-  border: 2px solid #eee;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: var(--transition);
-  height: 100%;
-}
-
-.delivery-option:hover {
-  border-color: var(--primary);
-}
-
-.delivery-option.selected {
-  border-color: var(--primary);
-  background-color: var(--primary-light);
-}
-
-.option-icon {
-  font-size: 2.3rem;
-  color: var(--primary);
-  margin-right: 1rem;
-}
-
-.option-content {
-  flex-grow: 1;
-}
-
-.option-content h4 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.option-content p {
-  font-size: 1.1rem;
-  color: var(--secondary);
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-}
-
-.option-radio {
-  margin-left: 1rem;
-}
-
-.option-radio input {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-
-/* Store List */
-.store-list {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.store-card {
-  display: flex;
-  align-items: flex-start;
-  padding: 1rem;
-  border: 2px solid #eee;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.store-card:hover {
-  border-color: var(--primary);
-}
-
-.store-card.selected {
-  border-color: var(--primary);
-  background-color: var(--primary-light);
-}
-
-.store-radio {
-  margin-right: 1rem;
-  margin-top: 0.25rem;
-}
-
-.store-radio input {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-
-.store-content h4 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.store-address,
-.store-hours {
-  font-size: 1rem;
-  margin: 0;
-  color: var(--secondary);
-  font-family: 'Inter', sans-serif;
-}
-
-/* Order Items */
-.order-items {
-  border: 1px solid #eee;
-  border-radius: var(--border-radius);
-}
-
-.order-item {
-  display: flex;
-  padding: 1rem;
-  border-bottom: 1px solid #eee;
-}
-
-.order-item:last-child {
-  border-bottom: none;
-}
-
-.item-details {
-  flex-grow: 1;
-}
-
-.item-details h4 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.item-quantity {
-  font-size: 1.2rem;
-  color: var(--secondary);
-  margin-top: .5rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.item-price {
-  text-align: right;
-  min-width: 100px;
-}
-
-.price-unit {
-  font-size: 1.2rem;
-  color: var(--secondary);
-  margin-bottom: 0.25rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.price-total {
-  font-weight: 600;
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-}
-
-/* Discount Styles */
-.discount-input {
-  display: flex;
-  margin-bottom: 1rem;
-}
-
-.discount-input .form-control {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  font-size: 1.5rem;
-}
-
-.btn-apply {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-}
-
-/* Payment Options */
-.payment-option {
-  display: flex;
-  align-items: center;
-  padding: 1.25rem;
-  border: 2px solid #eee;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: var(--transition);
-  height: 100%;
-}
-
-.payment-option:hover {
-  border-color: var(--primary);
-}
-
-.payment-option.selected {
-  border-color: var(--primary);
-  background-color: var(--primary-light);
-}
-
-.payment-icon {
-  font-size: 2.3rem;
-  color: var(--primary);
-  margin-right: 1rem;
-}
-
-.payment-content {
-  flex-grow: 1;
-  font-family: 'Inter', sans-serif;
-}
-
-.payment-content h4 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.payment-content p {
-  font-size: 1.2rem;
-  color: var(--secondary);
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-}
-
-.payment-radio {
-  margin-left: 1rem;
-}
-
-.payment-radio input {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-
-/* VNPay QR Section */
-.vnpay-qr-section {
-  background-color: var(--light);
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  border: 1px solid #eee;
-}
-
-.vnpay-logo-img {
-  max-width: 150px;
-  height: auto;
-  margin-bottom: 1rem;
-}
-
-.qr-code,
-.vnpay-logo {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-}
-
-.qr-code-img {
-  max-width: 200px;
-  height: auto;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 0.5rem;
-  background-color: white;
-}
-
-/* Order Summary */
-.order-products {
-  margin-bottom: 1.5rem;
-}
-
-.product-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.product-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.product-name {
-  font-size: 1.5rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.product-quantity {
-  font-size: 1rem;
-  color: var(--secondary);
-  font-family: 'Inter', sans-serif;
-}
-
-.product-price {
-  font-weight: 500;
-  font-size: 1.5rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.order-totals {
-  padding: 1rem 0;
-}
-
-.total-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-  font-size: 1.5rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.total-row:last-child {
-  margin-bottom: 0;
-}
-
-.total-row.discount {
-  color: var(--success);
-}
-
-.total-row.grand-total {
-  font-weight: 600;
-  font-size: 1.5rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #eee;
-}
-
-.benefit-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
-  color: var(--secondary);
-  font-family: 'Inter', sans-serif;
-}
-
-.benefit-item:last-child {
-  margin-bottom: 0;
-}
-
-.benefit-item i {
-  margin-right: 0.75rem;
-  color: var(--success);
-}
-
-/* Step Actions */
-.step-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #eee;
-  margin-top: 2rem;
-}
-
-.btn-next,
-.btn-submit,
-.btn-prev,
-.btn-apply {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: .5rem;
-  padding: 1rem;
-  font-size: 1.5rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.btn-submit {
-  background-color: var(--success);
-  border-color: var(--success);
-  text-align: center;
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: white;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  max-width: 500px;
-  width: 100%;
-  padding: 1.5rem;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.modal-title {
-  font-size: 1.4rem;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.3rem;
-  cursor: pointer;
-}
-
-.modal-body {
-  margin-bottom: 1.5rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-}
-
-.btn-cancel,
-.btn-confirm {
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--border-radius);
-  font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-}
-
-.btn-cancel {
-  background-color: var(--secondary);
-  color: white;
-}
-
-.btn-confirm {
-  background-color: var(--success);
-  color: white;
-  position: relative;
-  transition: var(--transition);
-}
-
-/* Loading Overlay for Modal */
-.modal-overlay.loading {
-  background-color: rgba(0, 0, 0, 0.7);
-  cursor: wait;
-}
-
-.modal-content.loading {
-  position: relative;
-  pointer-events: none;
-}
-
-.modal-content.loading::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: var(--border-radius);
-  z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Beautiful Gradient Spinner */
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-.spinner {
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  border: 5px solid transparent;
-  border-top-color: var(--primary);
-  border-right-color: var(--success);
-  border-radius: 50%;
-  animation: spin 1s linear infinite, pulse 1.5s ease-in-out infinite;
-  position: relative;
-  z-index: 11;
-}
-
-.modal-content.loading::before {
-  content: '';
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  border: 5px solid transparent;
-  border-top-color: var(--primary);
-  border-right-color: var(--success);
-  border-radius: 50%;
-  animation: spin 1s linear infinite, pulse 1.5s ease-in-out infinite;
-  z-index: 11;
-}
-
-/* Enhanced Button Loading State */
-.btn-confirm:disabled {
-  background-color: #6c757d;
-  border-color: #6c757d;
-  opacity: 0.8;
-  cursor: not-allowed;
-}
-
-.btn-confirm .spinner-border {
-  display: none;
-}
-
-.btn-confirm:disabled .spinner-border {
-  display: inline-block;
-  width: 1.2rem;
-  height: 1.2rem;
-  vertical-align: middle;
-  border: 0.25em solid currentColor;
-  border-right-color: transparent;
-  animation: spin 0.75s linear infinite;
-}
-
-/* Ensure modal content is blurred during loading */
-.modal-content.loading .modal-header,
-.modal-content.loading .modal-body,
-.modal-content.loading .modal-footer {
-  filter: blur(2px);
-  transition: filter 0.3s ease;
-}
-
-/* Animations */
+/* Tailwind CSS is used in the template, so minimal custom styles are needed */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -1379,60 +479,11 @@ export default {
   transform: translateY(10px);
 }
 
-/* Responsive Styles */
-@media (max-width: 1550px) {
-  .main {
-    padding: 3.5rem;
-  }
-
-  .checkout-card {
-    padding: 1.5rem;
-  }
-
-  .summary-card {
-    margin-top: 2rem;
-  }
+.btn-outline-primary {
+  @apply border border-blue-600 text-blue-600 px-3 py-1 rounded-md hover:bg-blue-50 transition;
 }
 
-@media (max-width: 768px) {
-  .progress-track::before {
-    width: calc((100% / 3) * (v-bind('currentStep') - 1));
-  }
-
-  .step-title {
-    font-size: 1.5rem;
-  }
-
-  .step-actions {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .btn-prev,
-  .btn-next,
-  .btn-submit {
-    width: 100%;
-  }
-}
-
-@media (max-width: 576px) {
-  .delivery-option,
-  .payment-option {
-    flex-direction: column;
-    text-align: center;
-    padding: 1rem;
-  }
-
-  .option-icon,
-  .payment-icon {
-    margin-right: 0;
-    margin-bottom: 0.75rem;
-  }
-
-  .option-radio,
-  .payment-radio {
-    margin-left: 0;
-    margin-top: 0.75rem;
-  }
+.btn-outline-danger {
+  @apply border border-red-600 text-red-600 px-3 py-1 rounded-md hover:bg-red-50 transition;
 }
 </style>
