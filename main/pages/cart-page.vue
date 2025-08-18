@@ -257,13 +257,22 @@ export default {
     async initCart() {
       try {
         this.invoiceId = this.$route.query.invoiceId || localStorage.getItem('invoiceId');
+        const customerId = localStorage.getItem('customerId');
+
+        if (this.invoiceId) {
+          // Kiểm tra xem hóa đơn có hợp lệ không
+          const invoiceExists = await this.checkInvoiceExists(this.invoiceId);
+          if (!invoiceExists) {
+            localStorage.removeItem('invoiceId');
+            this.invoiceId = null;
+          }
+        }
+
         if (!this.invoiceId) {
-          const customerId = localStorage.getItem('customerId');
-          await this.createInvoice(customerId); // Tạo hóa đơn mới nếu chưa có
+          await this.createInvoice(customerId || null);
         }
         await this.fetchCart();
       } catch (error) {
-        // Không gọi handleError, thay vào đó đặt cartItems thành rỗng
         this.cartItems = [];
         this.$refs.toastNotification?.addToast({
           type: 'info',
@@ -271,6 +280,18 @@ export default {
           isLoading: false,
           duration: 3000,
         });
+      }
+    },
+
+    async checkInvoiceExists(invoiceId) {
+      try {
+        await axios.get(`http://localhost:8080/api/client/gio-hang/${invoiceId}`);
+        return true;
+      } catch (error) {
+        if (error.response?.status === 500 || error.response?.status === 404) {
+          return false;
+        }
+        throw error;
       }
     },
 

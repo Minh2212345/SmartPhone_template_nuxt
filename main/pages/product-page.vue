@@ -418,7 +418,8 @@ export default {
         await axios.get(`http://localhost:8080/api/client/gio-hang/${invoiceId}`);
         return true;
       } catch (error) {
-        if (error.response?.status === 500 && error.response?.data?.message?.includes('Hóa đơn không tồn tại')) {
+        // Xử lý lỗi hóa đơn không tồn tại hoặc không ở trạng thái chờ
+        if (error.response?.status === 500 || error.response?.status === 404) {
           return false;
         }
         throw error;
@@ -469,7 +470,7 @@ export default {
           }
         }
 
-        // Kiểm tra sự tồn tại của hóa đơn
+        // Kiểm tra sự tồn tại và trạng thái của hóa đơn
         if (this.invoiceId) {
           const invoiceExists = await this.checkInvoiceExists(this.invoiceId);
           if (!invoiceExists) {
@@ -478,7 +479,7 @@ export default {
           }
         }
 
-        // Nếu không có invoiceId hoặc hóa đơn không tồn tại, tạo mới (với customerId nếu có)
+        // Nếu không có invoiceId hoặc hóa đơn không hợp lệ, tạo mới
         if (!this.invoiceId) {
           await this.createInvoice(customerId);
         }
@@ -508,12 +509,39 @@ export default {
         }, 3000);
       } catch (error) {
         console.error('Error adding to cart:', error);
-        this.$refs.toastNotification?.addToast({
-          type: 'error',
-          message: 'Lỗi khi thêm sản phẩm vào giỏ hàng: ' + (error.response?.data?.message || error.message),
-          isLoading: false,
-          duration: 5000,
-        });
+        // Xử lý lỗi cụ thể khi hóa đơn không phải trạng thái chờ
+        if (error.response?.data?.message?.includes('Hóa đơn này không phải hóa đơn chờ')) {
+          localStorage.removeItem('invoiceId');
+          this.invoiceId = null;
+          await this.createInvoice(customerId);
+          // Thử lại thêm sản phẩm vào giỏ hàng
+          const chiTietGioHangDTO = {
+            chiTietSanPhamId: this.selectedVariant.ctsp_id,
+            maImel: null,
+            soLuong: this.quantity,
+            idPhieuGiamGia: null,
+          };
+          const response = await axios.post(
+            `http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`,
+            chiTietGioHangDTO
+          );
+          this.$refs.toastNotification?.addToast({
+            type: 'success',
+            message: `Sản phẩm "${this.product.ten_san_pham}" đã được thêm vào giỏ hàng!`,
+            isLoading: false,
+            duration: 3000,
+          });
+          setTimeout(() => {
+            this.$router.push('/cart-page');
+          }, 3000);
+        } else {
+          this.$refs.toastNotification?.addToast({
+            type: 'error',
+            message: 'Lỗi khi thêm sản phẩm vào giỏ hàng: ' + (error.response?.data?.message || error.message),
+            isLoading: false,
+            duration: 5000,
+          });
+        }
       }
     },
   },
