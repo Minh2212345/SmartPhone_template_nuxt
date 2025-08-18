@@ -1,24 +1,12 @@
 <template>
   <div class="toast-container">
     <transition-group name="toast-slide" tag="div">
-      <div
-        v-for="toast in toasts"
-        :key="toast.id"
-        class="toast-notification"
-        :class="`toast-${toast.type}`"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-      >
+      <div v-for="toast in toasts" :key="toast.id" class="toast-notification" :class="`toast-${toast.type}`"
+        role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
           <i :class="toastIcon(toast.type)" class="toast-icon"></i>
           <strong class="toast-title">{{ toastTitle(toast.type) }}</strong>
-          <button
-            type="button"
-            class="btn-close"
-            @click="removeToast(toast.id)"
-            aria-label="Close"
-          >
+          <button type="button" class="btn-close" @click="removeToast(toast.id)" aria-label="Close">
             <i class="bi bi-x"></i>
           </button>
         </div>
@@ -85,104 +73,161 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --success-color: #28a745;
+  --error-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+}
+
 .toast-container {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 1.5rem;
+  right: 1.5rem;
   z-index: 1050;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.75rem;
+  max-width: 90%;
 }
 
 .toast-notification {
   display: flex;
   flex-direction: column;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  min-width: 300px;
-  max-width: 400px;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  min-width: 280px;
+  max-width: 360px;
+  background: white;
+  font-family: 'Inter', sans-serif;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .toast-success {
-  background-color: #d4f4e2;
-  border-left: 4px solid #28a745;
+  border-left: 4px solid var(--success-color);
+  background: linear-gradient(to right, #d4f4e2, #ffffff);
 }
 
 .toast-error {
-  background-color: #f8d7da;
-  border-left: 4px solid #dc3545;
+  border-left: 4px solid var(--error-color);
+  background: linear-gradient(to right, #f8d7da, #ffffff);
 }
 
 .toast-warning {
-  background-color: #fff3cd;
-  border-left: 4px solid #ffc107;
+  border-left: 4px solid var(--warning-color);
+  background: linear-gradient(to right, #fff3cd, #ffffff);
 }
 
 .toast-info {
-  background-color: #d1ecf1;
-  border-left: 4px solid #17a2b8;
+  border-left: 4px solid var(--info-color);
+  background: linear-gradient(to right, #d1ecf1, #ffffff);
 }
 
 .toast-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-bottom: 0.5rem;
 }
 
 .toast-icon {
-  margin-right: 10px;
+  font-size: 1.25rem;
+  color: inherit;
+  margin-right: 0.75rem;
 }
 
 .toast-title {
-  font-size: 1.4rem;
+  font-size: 1rem;
   font-weight: 600;
+  color: #1f2937;
+  flex-grow: 1;
 }
 
 .btn-close {
   background: none;
   border: none;
-  font-size: 1.2rem;
+  font-size: 1rem;
   cursor: pointer;
-  color: #333;
+  color: #6b7280;
+  padding: 0.25rem;
+  transition: color 0.3s ease;
+}
+
+.btn-close:hover {
+  color: #1f2937;
 }
 
 .toast-body {
-  margin-top: 8px;
-  font-size:1.4rem;
+  font-size: 0.875rem;
+  color: #374151;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.75rem;
+  line-height: 1.5;
 }
 
 .loading-spinner {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+}
+
+.spinner-border {
+  color: #6b7280;
 }
 
 /* Transition styles */
 .toast-slide-enter-active,
 .toast-slide-leave-active {
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .toast-slide-enter-from {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateX(100%) scale(0.95);
 }
 
 .toast-slide-enter-to {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(0) scale(1);
 }
 
 .toast-slide-leave-from {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(0) scale(1);
 }
 
 .toast-slide-leave-to {
   opacity: 0;
-  transform: translateY(-20px);
+  transform: translateX(100%) scale(0.95);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .toast-container {
+    top: 1rem;
+    right: 1rem;
+    max-width: 95%;
+  }
+
+  .toast-notification {
+    min-width: 240px;
+    max-width: 320px;
+    padding: 0.75rem;
+  }
+
+  .toast-title {
+    font-size: 0.875rem;
+  }
+
+  .toast-body {
+    font-size: 0.75rem;
+  }
+
+  .toast-icon {
+    font-size: 1rem;
+  }
 }
 </style>

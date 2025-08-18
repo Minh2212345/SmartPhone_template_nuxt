@@ -358,9 +358,9 @@
 </template>
 
 <script>
-import axios from 'axios'
-import ProductPage from '../store/product/product-page.js'
-import ToastNotification from '../components/base/ToastNotification.vue'
+import axios from 'axios';
+import ProductPage from '../store/product/product-page.js';
+import ToastNotification from '../components/base/ToastNotification.vue';
 
 export default {
   components: {
@@ -378,62 +378,71 @@ export default {
         address: '',
       },
       invoiceId: null,
-    }
+    };
   },
   mounted() {
-    this.invoiceId = localStorage.getItem('invoiceId')
+    this.invoiceId = localStorage.getItem('invoiceId');
   },
   methods: {
     toggleSidebar() {
-      this.showSidebar = !this.showSidebar
+      this.showSidebar = !this.showSidebar;
     },
     async submitOrder() {
-      console.log('Order submitted:', this.orderInfo)
-      this.showBuyNowModal = false
+      console.log('Order submitted:', this.orderInfo);
+      this.showBuyNowModal = false;
       this.orderInfo = {
         name: '',
         phone: '',
         email: '',
         address: '',
-      }
+      };
       this.$refs.toastNotification?.addToast({
         type: 'success',
         message: 'Đặt hàng thành công!',
         isLoading: false,
         duration: 3000,
-      })
+      });
     },
-    async createInvoice() {
+    async getExistingPendingInvoice(customerId) {
       try {
-        const response = await axios.post('http://localhost:8080/api/client/hoa-don-cho', null, {
-          params: { khachHangId: null },
-        })
-        this.invoiceId = response.data.id
-        if (!this.invoiceId) {
-          throw new Error('Invoice ID is undefined')
-        }
-        localStorage.setItem('invoiceId', this.invoiceId)
-        return this.invoiceId
+        const response = await axios.get(`http://localhost:8080/api/client/hoa-don-cho/khach-hang/${customerId}`);
+        const pendingInvoices = response.data.filter(invoice => invoice.trangThai === 0);  // Filter trạng thái = 0 nếu backend chưa filter
+        return pendingInvoices.length > 0 ? pendingInvoices[0] : null;
       } catch (error) {
-        console.error('Error creating invoice:', error)
+        console.error('Lỗi khi kiểm tra hóa đơn chờ:', error);
+        return null;  // Nếu lỗi, coi như không có, sẽ tạo mới
+      }
+    },
+    async checkInvoiceExists(invoiceId) {
+      try {
+        await axios.get(`http://localhost:8080/api/client/gio-hang/${invoiceId}`);
+        return true;
+      } catch (error) {
+        if (error.response?.status === 500 && error.response?.data?.message?.includes('Hóa đơn không tồn tại')) {
+          return false;
+        }
+        throw error;
+      }
+    },
+    async createInvoice(customerId) {
+      try {
+        const params = customerId ? { khachHangId: parseInt(customerId) } : {};
+        const response = await axios.post('http://localhost:8080/api/client/hoa-don-cho', null, { params });
+        this.invoiceId = response.data.id;
+        if (!this.invoiceId) {
+          throw new Error('Invoice ID is undefined');
+        }
+        localStorage.setItem('invoiceId', this.invoiceId);
+        return this.invoiceId;
+      } catch (error) {
+        console.error('Error creating invoice:', error);
         this.$refs.toastNotification?.addToast({
           type: 'error',
           message: 'Không thể tạo hóa đơn chờ.',
           isLoading: false,
           duration: 5000,
-        })
-        throw error
-      }
-    },
-    async checkInvoiceExists(invoiceId) {
-      try {
-        await axios.get(`http://localhost:8080/api/client/gio-hang/${invoiceId}`)
-        return true
-      } catch (error) {
-        if (error.response?.status === 500 && error.response?.data?.message?.includes('Hóa đơn không tồn tại')) {
-          return false
-        }
-        throw error
+        });
+        throw error;
       }
     },
     async addToCart() {
@@ -444,58 +453,71 @@ export default {
             message: 'Vui lòng chọn sản phẩm hợp lệ!',
             isLoading: false,
             duration: 5000,
-          })
-          return
+          });
+          return;
+        }
+
+        const customerId = localStorage.getItem('customerId');
+
+        // Kiểm tra hóa đơn chờ hiện có của khách hàng
+        let existingInvoice = null;
+        if (customerId) {
+          existingInvoice = await this.getExistingPendingInvoice(customerId);
+          if (existingInvoice) {
+            this.invoiceId = existingInvoice.id;
+            localStorage.setItem('invoiceId', this.invoiceId);
+          }
         }
 
         // Kiểm tra sự tồn tại của hóa đơn
         if (this.invoiceId) {
-          const invoiceExists = await this.checkInvoiceExists(this.invoiceId)
+          const invoiceExists = await this.checkInvoiceExists(this.invoiceId);
           if (!invoiceExists) {
-            localStorage.removeItem('invoiceId')
-            this.invoiceId = null
+            localStorage.removeItem('invoiceId');
+            this.invoiceId = null;
           }
         }
 
-        // Nếu không có invoiceId hoặc hóa đơn không tồn tại, tạo mới
+        // Nếu không có invoiceId hoặc hóa đơn không tồn tại, tạo mới (với customerId nếu có)
         if (!this.invoiceId) {
-          await this.createInvoice()
+          await this.createInvoice(customerId);
         }
 
+        // Thêm sản phẩm vào giỏ hàng
         const chiTietGioHangDTO = {
           chiTietSanPhamId: this.selectedVariant.ctsp_id,
-          maImel: null, // Để IMEI rỗng
+          maImel: null,
           soLuong: this.quantity,
           idPhieuGiamGia: null,
-        }
+        };
 
         const response = await axios.post(
           `http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`,
           chiTietGioHangDTO
-        )
+        );
 
         this.$refs.toastNotification?.addToast({
           type: 'success',
           message: `Sản phẩm "${this.product.ten_san_pham}" đã được thêm vào giỏ hàng!`,
           isLoading: false,
           duration: 3000,
-        })
+        });
 
         setTimeout(() => {
-          this.$router.push('/cart-page')
-        }, 3000)
+          this.$router.push('/cart-page');
+        }, 3000);
       } catch (error) {
-        console.error('Error adding to cart:', error)
+        console.error('Error adding to cart:', error);
         this.$refs.toastNotification?.addToast({
           type: 'error',
           message: 'Lỗi khi thêm sản phẩm vào giỏ hàng: ' + (error.response?.data?.message || error.message),
           isLoading: false,
           duration: 5000,
-        })
+        });
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>
