@@ -96,9 +96,8 @@ export default {
   methods: {
     async createNewInvoice() {
       try {
-        const customerId = localStorage.getItem('customerId'); // Lấy ID khách hàng nếu đã login
-        const params = customerId ? { khachHangId: customerId } : {}; // Truyền params nếu có ID
-
+        const customerId = localStorage.getItem('customerId');
+        const params = customerId ? { khachHangId: customerId } : {};
         const response = await axios.post('http://localhost:8080/api/client/hoa-don-cho', {}, { params });
         this.invoiceId = response.data.id;
         localStorage.setItem('invoiceId', this.invoiceId);
@@ -260,12 +259,12 @@ export default {
         }
         let hoaDonRequest = {};
         let loaiDon = 'online';
-        const customerId = localStorage.getItem('customerId'); // Lấy idKhachHang từ localStorage
+        const customerId = localStorage.getItem('customerId');
 
         if (this.deliveryMethod === 'delivery') {
           if (!this.validateDelivery()) return;
           hoaDonRequest = {
-            idKhachHang: customerId ? parseInt(customerId) : null, // Thêm idKhachHang
+            idKhachHang: customerId ? parseInt(customerId) : 1,
             tenKhachHang: this.delivery.ten,
             soDienThoaiKhachHang: this.delivery.soDienThoai,
             email: this.delivery.email,
@@ -279,8 +278,8 @@ export default {
           if (!this.validatePickup()) return;
           loaiDon = 'offline';
           hoaDonRequest = {
-            idKhachHang: customerId ? parseInt(customerId) : null, // Thêm idKhachHang
-            tenKhachHang: this.delivery.ten || this.stores[this.selectedStoreIndex]?.name || 'Khách hàng nhận tại cửa hàng',
+            idKhachHang: customerId ? parseInt(customerId) : 1,
+            tenKhachHang: this.delivery.ten || this.stores[this.selectedStoreIndex]?.name || 'Khách lẻ',
             soDienThoaiKhachHang: this.pickup.soDienThoai,
             email: this.pickup.email,
             diaChiKhachHang: {
@@ -292,7 +291,9 @@ export default {
         }
 
         const response = await axios.post(`http://localhost:8080/api/client/thanh-toan/${this.invoiceId}`, hoaDonRequest);
+        // Xóa invoiceId và các dữ liệu liên quan khỏi localStorage
         localStorage.removeItem('invoiceId');
+        this.invoiceId = null;
         this.showToast('success', `Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Bạn sẽ nhận được email thông báo chi tiết.`);
         this.$router.push('/cart-page');
       } catch (error) {
@@ -407,31 +408,36 @@ export default {
       this.showConfirmationModal = true
     },
     async submitOrder() {
-      this.isLoading = true
+      this.isLoading = true;
       try {
         if (this.paymentMethod === 'VNPay') {
-          const params = new URLSearchParams()
-          params.append('amount', this.order.total)
-          params.append('orderInfo', `Thanh toan don hang #${this.invoiceId}`)
-          params.append('invoiceId', this.invoiceId)
-          params.append('returnUrl', window.location.origin + '/payment-callback')
-          const response = await axios.post('http://localhost:8080/api/payment/create', params)
+          const params = new URLSearchParams();
+          params.append('amount', this.order.total);
+          params.append('orderInfo', `Thanh toan don hang #${this.invoiceId}`);
+          params.append('invoiceId', this.invoiceId);
+          params.append('returnUrl', window.location.origin + '/payment-callback');
+          const response = await axios.post('http://localhost:8080/api/payment/create', params);
           if (response.data) {
-            window.location.href = response.data
+            // Lưu invoiceId tạm thời để xử lý callback
+            localStorage.setItem('pendingInvoiceId', this.invoiceId);
+            window.location.href = response.data;
           } else {
-            throw new Error('Không nhận được URL thanh toán từ VNPAY!')
+            throw new Error('Không nhận được URL thanh toán từ VNPAY!');
           }
         } else {
-          await this.submitForm()
-          this.showConfirmationModal = false
-          this.showToast('success', `Đặt hàng thành công! Bạn sẽ nhận được email xác nhận đơn hàng.`)
-          this.$router.push('/cart-page')
+          await this.submitForm();
+          this.showConfirmationModal = false;
+          this.showToast('success', `Đặt hàng thành công! Bạn sẽ nhận được email xác nhận đơn hàng.`);
+          // Xóa invoiceId khỏi localStorage và reset state
+          localStorage.removeItem('invoiceId');
+          this.invoiceId = null;
+          this.$router.push('/cart-page');
         }
       } catch (error) {
-        this.handleError(error, 'Lỗi khi thực hiện thanh toán')
-        this.showConfirmationModal = false
+        this.handleError(error, 'Lỗi khi thực hiện thanh toán');
+        this.showConfirmationModal = false;
       } finally {
-        this.isLoading = false
+        this.isLoading = false;
       }
     },
     setPaymentMethod(method) {
