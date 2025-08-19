@@ -13,14 +13,14 @@
                   <div class="container intro-content text-left py-10">
                     <div class="row justify-content-end">
                       <div class="col-auto col-sm-7 col-md-6 col-lg-5">
-                        <h3 class="intro-subtitle text-primary font-semibold text-lg mb-2">Sản phẩm mới</h3>
-                        <h2 class="intro-title text-4xl font-bold text-gray-800">iPad Pro M4</h2>
+                        <h3 class="intro-subtitle text-primary font-semibold text-xl mb-2">Sản phẩm mới</h3>
+                        <h2 class="intro-title text-5xl font-bold text-gray-800">iPad Pro M4</h2>
                         <div class="intro-price mt-4 mb-6">
                           <span class="intro-old-price text-gray-500 line-through text-lg mr-2">36.590.000 VND</span>
-                          <span class="text-primary text-2xl font-semibold">36.224.000 VND</span>
+                          <span class="text-primary text-3xl font-semibold">36.224.000 VND</span>
                         </div>
                         <a href="category.html"
-                          class="btn btn-primary btn-round inline-flex items-center px-6 py-3 text-base font-medium">
+                          class="btn btn-primary btn-round inline-flex items-center px-6 py-3 text-lg font-medium">
                           <span>Xem chi tiết</span>
                           <i class="icon-long-arrow-right ml-2"></i>
                         </a>
@@ -32,13 +32,13 @@
                   <div class="container intro-content text-left py-10">
                     <div class="row justify-content-end">
                       <div class="col-auto col-sm-7 col-md-6 col-lg-5">
-                        <h3 class="intro-subtitle text-primary font-semibold text-lg mb-2">Sản phẩm mới</h3>
-                        <h2 class="intro-title text-4xl font-bold text-gray-800">Beats Solo 4</h2>
+                        <h3 class="intro-subtitle text-primary font-semibold text-xl mb-2">Sản phẩm mới</h3>
+                        <h2 class="intro-title text-5xl font-bold text-gray-800">Beats Solo 4</h2>
                         <div class="intro-price mt-4 mb-6">
-                          <span class="text-primary text-2xl font-semibold">3.299.000 VND</span>
+                          <span class="text-primary text-3xl font-semibold">3.299.000 VND</span>
                         </div>
                         <a href="category.html"
-                          class="btn btn-primary btn-round inline-flex items-center px-6 py-3 text-base font-medium">
+                          class="btn btn-primary btn-round inline-flex items-center px-6 py-3 text-lg font-medium">
                           <span>Xem chi tiết</span>
                           <i class="icon-long-arrow-right ml-2"></i>
                         </a>
@@ -84,20 +84,20 @@
       <div class="container new-arrivals mb-6">
         <div class="heading heading-flex mb-4 items-center">
           <div class="heading-left">
-            <h2 class="title text-2xl font-bold text-gray-800">Sản phẩm mới</h2>
+            <h2 class="title text-3xl font-bold text-gray-800">Sản phẩm mới</h2>
           </div>
           <div class="heading-right">
             <div class="btn-group d-flex flex-wrap gap-2" role="tablist">
-              <a id="new-all-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
+              <a id="new-all-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium"
                 data-toggle="tab" href="#new-all-tab" role="tab" aria-controls="new-all-tab" aria-selected="true"
                 :class="{ active: true }">Tất cả</a>
-              <a id="new-tv-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
+              <a id="new-tv-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium"
                 data-toggle="tab" href="#new-tv-tab" role="tab" aria-controls="new-tv-tab"
                 aria-selected="false">iPhone</a>
-              <a id="new-computers-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
+              <a id="new-computers-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium"
                 data-toggle="tab" href="#new-computers-tab" role="tab" aria-controls="new-computers-tab"
                 aria-selected="false">Samsung</a>
-              <a id="new-phones-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
+              <a id="new-phones-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium"
                 data-toggle="tab" href="#new-phones-tab" role="tab" aria-controls="new-phones-tab"
                 aria-selected="false">OPPO</a>
             </div>
@@ -137,13 +137,13 @@
                   </div>
                 </figure>
                 <div class="product-body p-4">
-                  <div class="product-cat text-sm text-gray-500">
+                  <div class="product-cat text-base text-gray-700">
                     <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
-                  <h3 class="product-title text-base font-semibold text-gray-800 mt-2">
+                  <h3 class="product-title text-lg font-semibold text-gray-800 mt-2">
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
-                  <div class="product-price text-lg font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
+                  <div class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
                     }} VND</div>
                 </div>
               </div>
@@ -183,13 +183,13 @@
                   </div>
                 </figure>
                 <div class="product-body p-4">
-                  <div class="product-cat text-sm text-gray-500">
+                  <div class="product-cat text-base text-gray-700">
                     <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
-                  <h3 class="product-title text-base font-semibold text-gray-800 mt-2">
+                  <h3 class="product-title text-lg font-semibold text-gray-800 mt-2">
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
-                  <div class="product-price text-lg font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
+                  <div class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
                     }} VND</div>
                 </div>
               </div>
@@ -228,13 +228,13 @@
                   </div>
                 </figure>
                 <div class="product-body p-4">
-                  <div class="product-cat text-sm text-gray-500">
+                  <div class="product-cat text-base text-gray-700">
                     <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
-                  <h3 class="product-title text-base font-semibold text-gray-800 mt-2">
+                  <h3 class="product-title text-lg font-semibold text-gray-800 mt-2">
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
-                  <div class="product-price text-lg font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
+                  <div class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
                     }} VND</div>
                 </div>
               </div>
@@ -273,13 +273,13 @@
                   </div>
                 </figure>
                 <div class="product-body p-4">
-                  <div class="product-cat text-sm text-gray-500">
+                  <div class="product-cat text-base text-gray-700">
                     <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
-                  <h3 class="product-title text-base font-semibold text-gray-800 mt-2">
+                  <h3 class="product-title text-lg font-semibold text-gray-800 mt-2">
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
-                  <div class="product-price text-lg font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
+                  <div class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
                     }} VND</div>
                 </div>
               </div>
@@ -293,20 +293,21 @@
       <div class="container trending mb-6">
         <div class="heading heading-flex mb-4 items-center">
           <div class="heading-left">
-            <h2 class="title text-2xl font-bold text-gray-800">Sản phẩm nổi bật</h2>
+            <h2 class="title text-3xl font-bold text-gray-800">Sản phẩm nổi bật</h2>
           </div>
           <div class="heading-right">
             <div class="btn-group d-flex flex-wrap gap-2" role="tablist">
-              <a id="trending-all-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
+              <a id="trending-all-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium"
                 data-toggle="tab" href="#trending-all-tab" role="tab" aria-controls="trending-all-tab"
                 aria-selected="true" :class="{ active: true }">Tất cả</a>
-              <a id="trending-tv-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
+              <a id="trending-tv-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium"
                 data-toggle="tab" href="#trending-tv-tab" role="tab" aria-controls="trending-tv-tab"
                 aria-selected="false">iPhone</a>
-              <a id="trending-computers-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
-                data-toggle="tab" href="#trending-computers-tab" role="tab" aria-controls="trending-computers-tab"
+              <a id="trending-computers-link"
+                class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium" data-toggle="tab"
+                href="#trending-computers-tab" role="tab" aria-controls="trending-computers-tab"
                 aria-selected="false">Samsung</a>
-              <a id="trending-phones-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
+              <a id="trending-phones-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium"
                 data-toggle="tab" href="#trending-phones-tab" role="tab" aria-controls="trending-phones-tab"
                 aria-selected="false">OPPO</a>
             </div>
@@ -353,18 +354,18 @@
                   </div>
                 </figure>
                 <div class="product-body p-4">
-                  <div class="product-cat text-sm text-gray-500">
+                  <div class="product-cat text-base text-gray-700">
                     <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
-                  <h3 class="product-title text-base font-semibold text-gray-800 mt-2">
+                  <h3 class="product-title text-lg font-semibold text-gray-800 mt-2">
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
                   <div v-if="product.hasDiscount"
-                    class="product-price text-lg font-medium mt-2 flex items-center justify-center gap-2">
+                    class="product-price text-xl font-medium mt-2 flex items-center justify-center gap-2">
                     <span class="text-gray-500 line-through">{{ formatPrice(product.giaBan || 0) }} VND</span>
                     <span class="text-red-600">{{ formatPrice(product.giaSauKhiGiam || 0) }} VND</span>
                   </div>
-                  <div v-else class="product-price text-lg font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan
+                  <div v-else class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan
                     || 0) }} VND</div>
                 </div>
               </div>
@@ -378,24 +379,26 @@
       <div class="container for-you mb-6">
         <div class="heading heading-flex mb-4 items-center">
           <div class="heading-left">
-            <h2 class="title text-2xl font-bold text-gray-800">Sản phẩm gợi ý</h2>
+            <h2 class="title text-3xl font-bold text-gray-800">Sản phẩm gợi ý</h2>
           </div>
           <div class="heading-right">
             <div class="btn-group d-flex flex-wrap gap-2" role="tablist">
-              <a id="recommended-all-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
+              <a id="recommended-all-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium"
                 :class="{ active: selectedManufacturer === null }" @click.prevent="filterRecommendedProducts(null)"
                 role="tab" aria-controls="recommended-all-tab" aria-selected="true">Tất cả</a>
-              <a id="recommended-iphone-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
+              <a id="recommended-iphone-link"
+                class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium"
                 :class="{ active: selectedManufacturer === 1 }" @click.prevent="filterRecommendedProducts(1)" role="tab"
                 aria-controls="recommended-iphone-tab" aria-selected="false">iPhone</a>
               <a id="recommended-samsung-link"
-                class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
+                class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium"
                 :class="{ active: selectedManufacturer === 2 }" @click.prevent="filterRecommendedProducts(2)" role="tab"
                 aria-controls="recommended-samsung-tab" aria-selected="false">Samsung</a>
-              <a id="recommended-oppo-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium"
+              <a id="recommended-oppo-link" class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium"
                 :class="{ active: selectedManufacturer === 4 }" @click.prevent="filterRecommendedProducts(4)" role="tab"
                 aria-controls="recommended-oppo-tab" aria-selected="false">OPPO</a>
-              <NuxtLink to="/category-4cols" class="btn btn-outline-primary rounded-full px-4 py-2 text-sm font-medium">
+              <NuxtLink to="/category-4cols"
+                class="btn btn-outline-primary rounded-full px-4 py-2 text-base font-medium">
                 Xem thêm sản phẩm</NuxtLink>
             </div>
           </div>
@@ -418,18 +421,18 @@
                   </NuxtLink>
                 </figure>
                 <div class="product-body p-4 text-center">
-                  <div class="product-cat text-sm text-gray-500">
+                  <div class="product-cat text-base text-gray-700">
                     <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
                   </div>
-                  <h3 class="product-title text-base font-semibold text-gray-800 mt-2">
+                  <h3 class="product-title text-lg font-semibold text-gray-800 mt-2">
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
                   <div v-if="product.hasDiscount"
-                    class="product-price text-lg font-medium mt-2 flex items-center justify-center gap-2">
+                    class="product-price text-xl font-medium mt-2 flex items-center justify-center gap-2">
                     <span class="text-gray-500 line-through">{{ formatPrice(product.giaBan || 0) }} VND</span>
                     <span class="text-red-600">{{ formatPrice(product.giaSauKhiGiam || 0) }} VND</span>
                   </div>
-                  <div v-else class="product-price text-lg font-medium text-gray-900 mt-2">{{
+                  <div v-else class="product-price text-xl font-medium text-gray-900 mt-2">{{
                     formatPrice(product.giaSauKhiGiam || 0) }} VND</div>
                 </div>
               </div>
@@ -454,23 +457,22 @@ export default IndexPage
 </script>
 
 <style scoped>
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 /* Professional color palette */
 :root {
   --primary-color: #2563eb;
-  /* Blue */
   --secondary-color: #dc2626;
-  /* Red for discounts */
   --text-color: #1f2937;
-  /* Dark gray for text */
   --muted-color: #6b7280;
-  /* Muted gray for secondary text */
   --background-color: #f9fafb;
-  /* Light gray background */
 }
 
 /* General styles */
 .page-wrapper {
   background-color: var(--background-color);
+  font-family: 'Inter', sans-serif;
 }
 
 .main {
@@ -488,7 +490,6 @@ export default IndexPage
   background-size: cover;
   background-position: center;
   height: 450px;
-  /* Increased height for a more premium look */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -503,31 +504,39 @@ export default IndexPage
   color: var(--primary-color);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-size: 1.75rem;
+  /* giảm từ 2.25rem */
+  font-weight: 600;
 }
 
 .intro-title {
   color: var(--text-color);
   line-height: 1.2;
+  font-size: 4rem;
+  /* giảm từ 4.5rem */
+  font-weight: 700;
 }
 
 .intro-price .intro-old-price {
   color: var(--muted-color);
+  font-size: 1.75rem;
+  /* giảm từ 2.25rem */
+}
+
+.intro-price .text-primary {
+  font-size: 2.5rem;
+  /* giảm từ 3rem */
+  font-weight: 600;
 }
 
 .btn-primary {
   background-color: var(--primary-color);
-  color: white;
+  color: rgb(2, 0, 0);
   border-radius: 9999px;
   transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn-primary:hover {
-  background-color: #1d4ed8;
-  transform: translateY(-2px);
-}
-
-.slider-loader {
-  height: 4px;
+  font-size: 1.625rem;
+  /* giảm từ 2.125rem */
+  font-weight: bold;
 }
 
 /* Banner styles */
@@ -539,7 +548,7 @@ export default IndexPage
 
 .img-banner {
   width: 100% !important;
-  height: 140px !important;
+  height: 120px !important;
   object-fit: cover;
   border-radius: 0.5rem;
 }
@@ -550,7 +559,8 @@ export default IndexPage
   top: 12px;
   left: 12px;
   padding: 6px 12px;
-  font-size: 12px;
+  font-size: 1.375rem;
+  /* giảm từ 1.875rem */
   font-weight: 600;
   color: white;
   border-radius: 4px;
@@ -559,7 +569,6 @@ export default IndexPage
 
 .label-new {
   background-color: #1e40af;
-  /* Dark blue for new products */
 }
 
 .label-discount {
@@ -594,6 +603,8 @@ export default IndexPage
   color: var(--muted-color);
   text-decoration: none;
   transition: color 0.3s ease;
+  font-size: 1.375rem;
+  /* giảm từ 1.875rem */
 }
 
 .product-cat a:hover {
@@ -604,14 +615,16 @@ export default IndexPage
   color: var(--text-color);
   text-decoration: none;
   transition: color 0.3s ease;
-}
-
-.product-title a:hover {
-  color: var(--primary-color);
+  font-size: 1.75rem;
+  /* giảm từ 2.25rem */
+  font-weight: 600;
 }
 
 .product-price {
   color: var(--text-color);
+  font-size: 2rem;
+  /* giảm từ 2.5rem */
+  font-weight: 600;
 }
 
 /* Button group */
@@ -619,17 +632,9 @@ export default IndexPage
   border: 2px solid var(--primary-color);
   color: var(--primary-color);
   transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.btn-group .btn-outline-primary:hover {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.btn-group .btn-outline-primary.active {
-  background-color: var(--primary-color);
-  color: white;
-  border-color: var(--primary-color);
+  font-size: 1.8rem;
+  /* giảm từ 2.3rem */
+  font-weight: bold;
 }
 
 /* Scroll top button */
@@ -644,7 +649,23 @@ export default IndexPage
   }
 
   .intro-title {
+    font-size: 2.5rem;
+  }
+
+  .intro-subtitle {
+    font-size: 1rem;
+  }
+
+  .intro-price .text-primary {
     font-size: 1.75rem;
+  }
+
+  .intro-price .intro-old-price {
+    font-size: 1rem;
+  }
+
+  .btn-primary {
+    font-size: 1rem;
   }
 
   .banner-right {
@@ -674,7 +695,23 @@ export default IndexPage
   }
 
   .intro-title {
+    font-size: 2rem;
+  }
+
+  .intro-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .intro-price .text-primary {
     font-size: 1.5rem;
+  }
+
+  .intro-price .intro-old-price {
+    font-size: 0.875rem;
+  }
+
+  .btn-primary {
+    font-size: 0.875rem;
   }
 
   .btn-group {
@@ -690,6 +727,14 @@ export default IndexPage
   .img-banner {
     height: 100px !important;
   }
+
+  .product-title a {
+    font-size: 1rem;
+  }
+
+  .product-price {
+    font-size: 1.25rem;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -699,6 +744,15 @@ export default IndexPage
 
   .btn-group .btn-outline-primary {
     padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .product-title a {
+    font-size: 1.125rem;
+  }
+
+  .product-price {
+    font-size: 1.375rem;
   }
 }
 </style>

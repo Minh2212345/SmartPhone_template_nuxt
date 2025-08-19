@@ -244,6 +244,74 @@
                 <span class="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full">{{ addresses.length }} địa
                   chỉ</span>
               </div>
+
+              <!-- Address Card Slider -->
+              <div v-if="addresses.length > 0" class="relative">
+                <div class="flex overflow-x-auto pb-4 -mx-2 scrollbar-hide" ref="slider">
+                  <div v-for="address in addresses" :key="address.id"
+                    class="flex-none mx-2 bg-white rounded-lg border border-gray-200 p-5 hover:shadow-sm transition-shadow duration-300"
+                    style="width: 1230px;">
+                    <div class="flex justify-between items-start mb-4">
+                      <div class="flex items-start gap-4 flex-1">
+                        <svg class="w-5 h-5 text-blue-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <p class="text-gray-800 leading-relaxed">{{ formatAddress(address) }}</p>
+                      </div>
+                      <span v-if="defaultAddressId === address.id"
+                        class="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
+                        Mặc định
+                      </span>
+                    </div>
+                    <div class="flex justify-end gap-4 pt-4 border-t border-gray-200">
+                      <button v-if="defaultAddressId !== address.id"
+                        class="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors duration-200"
+                        @click="setDefaultAddress(address.id)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Đặt mặc định
+                      </button>
+                      <button
+                        class="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors duration-200"
+                        @click="editAddress(address.id)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Sửa
+                      </button>
+                      <button
+                        class="flex items-center gap-1 text-sm text-red-600 hover:text-red-700 transition-colors duration-200"
+                        @click="deleteAddress(address.id)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Xóa
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Navigation Arrows -->
+                <button v-if="addresses.length > 3" @click="scrollSlider(-1)"
+                  class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 z-10">
+                  <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button v-if="addresses.length > 3" @click="scrollSlider(1)"
+                  class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 z-10">
+                  <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+
               <div v-if="addresses.length === 0" class="text-center py-12 bg-white rounded-lg border border-gray-200">
                 <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -259,54 +327,7 @@
                   Thêm địa chỉ mới
                 </button>
               </div>
-              <div v-else class="max-h-96 overflow-y-auto space-y-4 pr-2">
-                <div v-for="address in addresses" :key="address.id"
-                  class="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-sm transition-shadow duration-300">
-                  <div class="flex justify-between items-start mb-4">
-                    <div class="flex items-start gap-4 flex-1">
-                      <svg class="w-5 h-5 text-blue-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      <p class="text-gray-800 leading-relaxed">{{ formatAddress(address) }}</p>
-                    </div>
-                    <span v-if="defaultAddressId === address.id"
-                      class="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
-                      Mặc định
-                    </span>
-                  </div>
-                  <div class="flex justify-end gap-4 pt-4 border-t border-gray-200">
-                    <button v-if="defaultAddressId !== address.id"
-                      class="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors duration-200"
-                      @click="setDefaultAddress(address.id)">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                      </svg>
-                      Đặt mặc định
-                    </button>
-                    <button
-                      class="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors duration-200"
-                      @click="editAddress(address.id)">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                      Sửa
-                    </button>
-                    <button
-                      class="flex items-center gap-1 text-sm text-red-600 hover:text-red-700 transition-colors duration-200"
-                      @click="deleteAddress(address.id)">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                      Xóa
-                    </button>
-                  </div>
-                </div>
-              </div>
+
               <button v-if="addresses.length > 0"
                 class="mt-6 w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium flex items-center justify-center gap-2"
                 @click="addNewAddress">
@@ -532,6 +553,14 @@ export default {
     }
   },
   methods: {
+    scrollSlider(direction) {
+      const slider = this.$refs.slider;
+      const scrollAmount = 1250; // Khoảng cách cuộn mỗi lần (tương đương với chiều rộng card + margin)
+      slider.scrollBy({
+        left: direction * scrollAmount,
+        behavior: 'smooth'
+      });
+    },
     async handleLogin() {
       if (!this.loginInput || !this.password) {
         alert('Tên đăng nhập hoặc email và mật khẩu không được để trống');
@@ -945,11 +974,46 @@ export default {
 </script>
 
 <style scoped>
-/* .font-custom {
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom scrollbar hide */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
-.tab-panel {
-  display: block;
-} */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Card slider styling */
+.flex-none {
+  flex: none;
+}
+
+/* Navigation arrows styling */
+.absolute {
+  position: absolute;
+}
+
+.translate-y-1\/2 {
+  transform: translateY(-50%);
+}
+
+/* General styling */
+*,
+*:before,
+*:after {
+  font-size: 1.5rem !important;
+}
+
+i,
+svg {
+  font-size: 1.2rem !important;
+}
+
+button,
+input,
+select,
+label {
+  font-size: 1.5rem !important;
+}
 </style>
