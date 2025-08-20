@@ -4,12 +4,17 @@
       <h1>Chi tiết đơn hàng {{ order.maHoaDon }} - {{ getStatusNameById(order.trangThai) }}</h1>
     </div>
 
-    <div class="status-timeline">
+    <div v-if="order.trangThai !== 4" class="status-timeline">
       <div v-for="(status, index) in orderStatuses" :key="index" class="status-item" :class="{ active: isStatusActive(status.id), current: isCurrentStatus(status.id) }">
         <span><i :class="status.icon"></i></span>
         <span>{{ status.name }}</span>
         <span>{{ getStatusTimestamp(status.id) }}</span>
       </div>
+    </div>
+    <div v-else class="text-center py-8 bg-red-50 rounded-lg border-2 border-dashed border-red-200">
+      <i class="las la-exclamation-circle text-6xl text-red-500 mb-4"></i>
+      <h2 class="text-4xl font-extrabold text-red-700">ĐƠN HÀNG ĐÃ ĐƯỢC HỦY</h2>
+      <p class="text-gray-600 mt-2">Đơn hàng này đã được hủy và không thể hoàn tác.</p>
     </div>
 
     <div class="divider-right">
@@ -64,14 +69,11 @@ export default {
       order: null,
       statusTimeline: [],
       orderStatuses: [
+        { id: 0, name: 'Đơn hàng đã đặt', icon: 'las la-receipt' },
         { id: 1, name: 'Chờ xác nhận', icon: 'las la-file-invoice' },
-        { id: 2, name: 'Đã xác nhận', icon: 'las la-check-circle' },
-        { id: 3, name: 'Chờ vận chuyển', icon: 'las la-box' },
-        { id: 4, name: 'Đang vận chuyển', icon: 'las la-shipping-fast' },
-        { id: 5, name: 'Đã giao hàng', icon: 'las la-truck' },
-        { id: 6, name: 'Đã hủy', icon: 'las la-times-circle' },
-        { id: 7, name: 'Yêu cầu hủy', icon: 'las la-undo' },
-        { id: 8, name: 'Đã hoàn thành', icon: 'las la-calendar-check' },
+        { id: 3, name: 'Chờ giao hàng', icon: 'las la-box' },
+        { id: 4, name: 'Vận chuyển', icon: 'las la-shipping-fast' },
+        { id: 8, name: 'Hoàn thành', icon: 'las la-calendar-check' },
       ],
     }
   },
@@ -107,13 +109,13 @@ export default {
         return;
       }
       try {
-        const response = await axios.put(`http://localhost:8080/api/hoa-don/${this.order.id}/update-status?trangThai=6`);
+        const response = await axios.put(`http://localhost:8080/api/hoa-don/${this.order.id}/cancel`);
         this.order = response.data;
         alert('Đã hủy đơn hàng thành công.');
         this.fetchOrderDetail(this.order.id); // Refresh order details
       } catch (error) {
         console.error('Lỗi khi hủy đơn hàng:', error);
-        alert('Hủy đơn hàng thất bại.');
+        alert(error.response.data.message || 'Hủy đơn hàng thất bại.');
       }
     },
     getStatusNameById(statusId) {
