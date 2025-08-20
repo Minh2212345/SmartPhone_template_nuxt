@@ -108,14 +108,14 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                   <tr v-for="order in filteredOrders" :key="order.id" class="hover:bg-gray-50">
-                    <td class="py-4 px-6">{{ order.orderId }}</td>
-                    <td class="py-4 px-6">{{ order.date }}</td>
-                    <td class="py-4 px-6">{{ order.status }}</td>
-                    <td class="py-4 px-6">{{ order.total }} VNĐ</td>
+                    <td class="py-4 px-6">{{ order.ma }}</td>
+                    <td class="py-4 px-6">{{ formatDate(order.ngayTao) }}</td>
+                    <td class="py-4 px-6">{{ getStatusNameById(order.trangThai) }}</td>
+                    <td class="py-4 px-6">{{ formatCurrency(order.tongTienSauGiam) }}</td>
                     <td class="py-4 px-6">
                       <NuxtLink
                         class="px-4 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium"
-                        to="/invoice-status">
+                        :to="'/invoice-status?orderId=' + order.id">
                         Tra cứu
                       </NuxtLink>
                     </td>
@@ -126,7 +126,19 @@
                 </tbody>
               </table>
             </div>
-            <p class="text-center text-gray-500 mt-4">Hiển thị {{ filteredOrders.length }} / {{ orders.length }} đơn
+            <!-- Pagination -->
+            <div class="flex justify-center items-center gap-4 mt-4">
+              <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 0"
+                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:opacity-50">
+                Trước
+              </button>
+              <span class="text-gray-700">Trang {{ currentPage + 1 }} / {{ totalPages }}</span>
+              <button @click="goToPage(currentPage + 1)" :disabled="currentPage >= totalPages - 1"
+                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:opacity-50">
+                Sau
+              </button>
+            </div>
+            <p class="text-center text-gray-500 mt-4">Hiển thị {{ filteredOrders.length }} / {{ totalElements }} đơn
               hàng</p>
           </div>
 
@@ -461,10 +473,10 @@ export default {
     return {
       isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
       activeTab: 'account',
-      activeStatus: 'all',
+      activeStatus: null, // Changed to null to represent 'all'
       activeWarrantyStatus: 'all',
-      startDate: '2020-12-01',
-      endDate: '2025-07-01',
+      startDate: null,
+      endDate: null,
       customerName: localStorage.getItem('customerName') || 'Khách hàng',
       phoneNumber: localStorage.getItem('phoneNumber') || 'Chưa có số điện thoại',
       fullName: localStorage.getItem('fullName') || '',
@@ -478,8 +490,8 @@ export default {
       errors: {},
       isUpdating: false,
       showUpdatePrompt: false,
-      totalOrders: 2,
-      totalSpent: '22,190,000',
+      totalOrders: 0,
+      totalSpent: '0',
       addresses: [],
       showAddressModal: false,
       isEditingAddress: false,
@@ -502,11 +514,15 @@ export default {
         { id: 'account', name: 'Thông tin tài khoản', icon: 'las la-user' },
       ],
       orderStatuses: [
-        { id: 'all', name: 'Tất cả' },
-        { id: 'pending', name: 'Chờ thanh toán' },
-        { id: 'delivering', name: 'Đang giao' },
-        { id: 'delivered', name: 'Đã giao' },
-        { id: 'canceled', name: 'Đã hủy' },
+        { id: null, name: 'Tất cả' },
+        { id: 1, name: 'Chờ xác nhận' },
+        { id: 2, name: 'Đã xác nhận' },
+        { id: 3, name: 'Chờ vận chuyển' },
+        { id: 4, name: 'Đang vận chuyển' },
+        { id: 5, name: 'Đã giao hàng' },
+        { id: 6, name: 'Đã hủy' },
+        { id: 7, name: 'Yêu cầu hủy' },
+        { id: 8, name: 'Đã hoàn thành' },
       ],
       warrantyStatuses: [
         { id: 'all', name: 'Tất cả' },
@@ -516,43 +532,100 @@ export default {
         { id: 'repaired', name: 'Đã sửa xong' },
         { id: 'returned', name: 'Đã trả máy' },
       ],
-      orders: [
-        { id: 1, orderId: 'DH123456', date: '01/07/2025', status: 'Đang giao', total: '19,190,000' },
-        { id: 2, orderId: 'DH123457', date: '30/06/2025', status: 'Đã giao', total: '3,000,000' },
-      ],
+      orders: [],
       warranties: [
         { id: 1, warrantyId: 'BH123456', date: '01/07/2025', status: 'Đang sửa', product: 'iPhone 14' },
         { id: 2, warrantyId: 'BH123457', date: '30/06/2025', status: 'Đã trả máy', product: 'Samsung Galaxy S23' },
       ],
+      currentPage: 0,
+      totalPages: 0,
+      totalElements: 0,
     };
   },
   computed: {
     filteredOrders() {
-      if (this.activeStatus === 'all' && !this.startDate && !this.endDate) return this.orders;
-      const start = this.startDate ? new Date(this.startDate) : null;
-      const end = this.endDate ? new Date(this.endDate) : null;
-      return this.orders.filter((order) => {
-        const orderDate = new Date(order.date.split('/').reverse().join('-'));
-        const matchesStatus = this.activeStatus === 'all' || order.status === this.getStatusName(this.activeStatus);
-        const matchesDate = (!start || orderDate >= start) && (!end || orderDate <= end);
-        return matchesStatus && matchesDate;
-      });
+      // This computed property is no longer needed as filtering is done on the backend
+      return this.orders;
     },
     filteredWarranties() {
       if (this.activeWarrantyStatus === 'all') return this.warranties;
       return this.warranties.filter((warranty) => warranty.status === this.getStatusName(this.activeWarrantyStatus));
     },
   },
+  watch: {
+    activeTab(newTab) {
+      if (newTab === 'history') {
+        this.fetchOrders();
+      }
+    },
+    activeStatus() {
+      this.fetchOrders();
+    },
+    startDate() {
+      this.fetchOrders();
+    },
+    endDate() {
+      this.fetchOrders();
+    }
+  },
   mounted() {
     if (this.isLoggedIn) {
       this.fetchAccountInfo();
       this.fetchAddresses();
       this.fetchProvinces();
+      if (this.activeTab === 'history') {
+        this.fetchOrders();
+      }
     } else {
       this.$router.push('/login');
     }
   },
+
   methods: {
+    async fetchOrders(page = 0) {
+      try {
+        const idKhachHang = localStorage.getItem('customerId');
+        if (!idKhachHang) {
+          console.error('Không tìm thấy ID khách hàng trong localStorage');
+          return;
+        }
+
+        const params = {
+          page: page,
+          size: 5, // Or any other page size you prefer
+          idKhachHang: idKhachHang,
+          trangThai: this.activeStatus,
+          startDate: this.startDate ? new Date(this.startDate).toISOString() : null,
+          endDate: this.endDate ? new Date(this.endDate).toISOString() : null
+        };
+
+        const response = await axios.get('http://localhost:8080/api/hoa-don/my-orders', { params });
+
+        this.orders = response.data.content;
+        this.totalPages = response.data.totalPages;
+        this.currentPage = response.data.number;
+        this.totalElements = response.data.totalElements;
+        this.totalOrders = response.data.totalElements;
+
+      } catch (error) {
+        console.error('Lỗi khi lấy lịch sử đơn hàng:', error);
+        alert(error.response?.data?.error || 'Lỗi khi lấy lịch sử đơn hàng');
+      }
+    },
+    getStatusNameById(statusId) {
+      const status = this.orderStatuses.find(s => s.id === statusId);
+      return status ? status.name : 'Không xác định';
+    },
+    formatCurrency(value) {
+      if (!value) return '0 VNĐ';
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    },
+    goToPage(page) {
+      if (page >= 0 && page < this.totalPages) {
+        this.fetchOrders(page);
+      }
+    },
+
     scrollSlider(direction) {
       const slider = this.$refs.slider;
       const scrollAmount = 1250; // Khoảng cách cuộn mỗi lần (tương đương với chiều rộng card + margin)
