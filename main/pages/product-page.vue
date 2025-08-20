@@ -120,7 +120,7 @@
                       <div class="product-cat">
                         <span>Phân loại:</span>
                         <a href="#">{{ manufacturerMap[product.nha_san_xuat] || product.nha_san_xuat || 'Unknown'
-                        }}</a>,
+                          }}</a>,
                         <a href="#">Sản phẩm mới</a>
                       </div>
                       <div class="social-icons social-icons-sm">
@@ -338,12 +338,12 @@
                   <div class="product-cat">
                     <a href="#">{{
                       manufacturerMap[similarProduct.tenNhaSanXuat] || similarProduct.tenNhaSanXuat || 'Unknown'
-                      }}</a>
+                    }}</a>
                   </div>
                   <h3 class="product-title">
                     <a href="#" @click.prevent="handleProductChange(similarProduct.id)">{{
                       similarProduct.tenSanPham
-                      }}</a>
+                    }}</a>
                   </h3>
                   <div class="product-price">{{ formatPrice(similarProduct.giaBan || 0) }} VND</div>
                 </div>
@@ -406,11 +406,11 @@ export default {
     async getExistingPendingInvoice(customerId) {
       try {
         const response = await axios.get(`http://localhost:8080/api/client/hoa-don-cho/khach-hang/${customerId}`);
-        const pendingInvoices = response.data.filter(invoice => invoice.trangThai === 0);  // Filter trạng thái = 0 nếu backend chưa filter
-        return pendingInvoices.length > 0 ? pendingInvoices[0] : null;
+        const pendingInvoices = response.data;
+        return pendingInvoices.find(invoice => invoice.trangThai === 6) || null;
       } catch (error) {
-        console.error('Lỗi khi kiểm tra hóa đơn chờ:', error);
-        return null;  // Nếu lỗi, coi như không có, sẽ tạo mới
+        console.error('Lỗi khi lấy hóa đơn chờ:', error);
+        return null;
       }
     },
     async checkInvoiceExists(invoiceId) {
@@ -427,25 +427,15 @@ export default {
     },
     async createInvoice(customerId) {
       try {
-        const params = customerId ? { khachHangId: parseInt(customerId) } : {};
-        const response = await axios.post('http://localhost:8080/api/client/hoa-don-cho', null, { params });
+        const params = customerId ? { khachHangId: customerId } : {};
+        const response = await axios.post('http://localhost:8080/api/client/hoa-don-cho', {}, { params });
         this.invoiceId = response.data.id;
-        if (!this.invoiceId) {
-          throw new Error('Invoice ID is undefined');
-        }
         localStorage.setItem('invoiceId', this.invoiceId);
-        return this.invoiceId;
       } catch (error) {
-        console.error('Error creating invoice:', error);
-        this.$refs.toastNotification?.addToast({
-          type: 'error',
-          message: 'Không thể tạo hóa đơn chờ.',
-          isLoading: false,
-          duration: 5000,
-        });
-        throw error;
+        throw new Error('Lỗi khi tạo hóa đơn mới: ' + (error.response?.data?.message || error.message));
       }
     },
+
     async addToCart() {
       try {
         if (!this.selectedVariant || !this.selectedVariant.ctsp_id) {
@@ -459,29 +449,21 @@ export default {
         }
 
         const customerId = localStorage.getItem('customerId');
+        let invoiceId = localStorage.getItem('invoiceId');
 
-        // Kiểm tra hóa đơn chờ hiện có của khách hàng
-        let existingInvoice = null;
-        if (customerId) {
-          existingInvoice = await this.getExistingPendingInvoice(customerId);
-          if (existingInvoice) {
-            this.invoiceId = existingInvoice.id;
-            localStorage.setItem('invoiceId', this.invoiceId);
-          }
-        }
-
-        // Kiểm tra sự tồn tại và trạng thái của hóa đơn
-        if (this.invoiceId) {
-          const invoiceExists = await this.checkInvoiceExists(this.invoiceId);
-          if (!invoiceExists) {
+        // Kiểm tra trạng thái hóa đơn hiện tại
+        if (invoiceId) {
+          const isPending = await this.isPendingInvoice(invoiceId);
+          if (!isPending) {
             localStorage.removeItem('invoiceId');
-            this.invoiceId = null;
+            invoiceId = null;
           }
         }
 
-        // Nếu không có invoiceId hoặc hóa đơn không hợp lệ, tạo mới
-        if (!this.invoiceId) {
-          await this.createInvoice(customerId);
+        // Nếu không có hóa đơn hoặc hóa đơn không hợp lệ, tạo hóa đơn mới
+        if (!invoiceId) {
+          await this.createInvoice(customerId || null);
+          invoiceId = this.invoiceId;
         }
 
         // Thêm sản phẩm vào giỏ hàng
@@ -493,9 +475,14 @@ export default {
         };
 
         const response = await axios.post(
-          `http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`,
+          `http://localhost:8080/api/client/gio-hang/them?idHD=${invoiceId}`,
           chiTietGioHangDTO
         );
+
+        // Kiểm tra phản hồi từ backend
+        if (!response.data || !response.data.chiTietGioHangDTOS) {
+          throw new Error('Phản hồi từ backend không hợp lệ');
+        }
 
         this.$refs.toastNotification?.addToast({
           type: 'success',
@@ -504,44 +491,32 @@ export default {
           duration: 3000,
         });
 
+        // Chuyển hướng đến cart-page với invoiceId
         setTimeout(() => {
-          this.$router.push('/cart-page');
+          this.$router.push({
+            path: '/cart-page',
+            query: { invoiceId: invoiceId },
+          });
         }, 3000);
       } catch (error) {
         console.error('Error adding to cart:', error);
-        // Xử lý lỗi cụ thể khi hóa đơn không phải trạng thái chờ
-        if (error.response?.data?.message?.includes('Hóa đơn này không phải hóa đơn chờ')) {
-          localStorage.removeItem('invoiceId');
-          this.invoiceId = null;
-          await this.createInvoice(customerId);
-          // Thử lại thêm sản phẩm vào giỏ hàng
-          const chiTietGioHangDTO = {
-            chiTietSanPhamId: this.selectedVariant.ctsp_id,
-            maImel: null,
-            soLuong: this.quantity,
-            idPhieuGiamGia: null,
-          };
-          const response = await axios.post(
-            `http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`,
-            chiTietGioHangDTO
-          );
-          this.$refs.toastNotification?.addToast({
-            type: 'success',
-            message: `Sản phẩm "${this.product.ten_san_pham}" đã được thêm vào giỏ hàng!`,
-            isLoading: false,
-            duration: 3000,
-          });
-          setTimeout(() => {
-            this.$router.push('/cart-page');
-          }, 3000);
-        } else {
-          this.$refs.toastNotification?.addToast({
-            type: 'error',
-            message: 'Lỗi khi thêm sản phẩm vào giỏ hàng: ' + (error.response?.data?.message || error.message),
-            isLoading: false,
-            duration: 5000,
-          });
-        }
+        this.$refs.toastNotification?.addToast({
+          type: 'error',
+          message: 'Lỗi khi thêm sản phẩm vào giỏ hàng: ' + (error.response?.data?.message || error.message),
+          isLoading: false,
+          duration: 5000,
+        });
+      }
+    },
+
+    // Thêm hàm kiểm tra trạng thái hóa đơn
+    async isPendingInvoice(invoiceId) {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/client/gio-hang/${invoiceId}`);
+        return response.data.trangThai === 6;
+      } catch (error) {
+        console.error('Lỗi khi kiểm tra trạng thái hóa đơn:', error);
+        return false;
       }
     },
   },

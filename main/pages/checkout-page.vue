@@ -406,7 +406,7 @@
               </div>
               <div class="flex justify-between text-sm mt-2">
                 <span>Phí vận chuyển</span>
-                <span>{{ order.shipping.toLocaleString('vi-VN') }} ₫</span>
+                <span>Tính phí vận chuyển được thu từ bên thứ ba</span>
               </div>
               <div v-if="appliedDiscount" class="flex justify-between text-sm mt-2 text-green-600">
                 <span>Giảm giá</span>
@@ -418,9 +418,6 @@
               </div>
             </div>
             <div class="mt-4 space-y-2">
-              <div class="flex items-center text-sm text-gray-600">
-                <i class="bi bi-truck text-green-500 mr-2"></i> Miễn phí vận chuyển cho đơn từ 5.000.000 ₫
-              </div>
               <div class="flex items-center text-sm text-gray-600">
                 <i class="bi bi-arrow-repeat text-green-500 mr-2"></i> Đổi trả dễ dàng trong 30 ngày
               </div>
