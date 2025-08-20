@@ -110,7 +110,10 @@
                   <tr v-for="order in filteredOrders" :key="order.id" class="hover:bg-gray-50">
                     <td class="py-4 px-6">{{ order.ma }}</td>
                     <td class="py-4 px-6">{{ formatDate(order.ngayTao) }}</td>
-                    <td class="py-4 px-6">{{ getStatusNameById(order.trangThai) }}</td>
+                    <td class="py-4 px-6">
+                      <span v-if="order.trangThai === 0">{{ getStatusNameById(order.trangThai) }} - {{ formatDate(order.ngayTao) }}</span>
+                      <span v-else>{{ getStatusNameById(order.trangThai) }}</span>
+                    </td>
                     <td class="py-4 px-6">{{ formatCurrency(order.tongTienSauGiam) }}</td>
                     <td class="py-4 px-6">
                       <NuxtLink
@@ -142,48 +145,17 @@
               hàng</p>
           </div>
 
-          <!-- Warranty Tab -->
-          <div v-if="activeTab === 'warranty'" class="space-y-6">
-            <div class="flex gap-6 border-b border-gray-200 pb-2 overflow-x-auto">
-              <button v-for="status in warrantyStatuses" :key="status.id"
-                class="px-6 py-2 text-gray-700 hover:text-blue-700 whitespace-nowrap transition-colors duration-200"
-                :class="{ 'text-blue-700 font-medium border-b-2 border-blue-600': activeWarrantyStatus === status.id }"
-                @click="activeWarrantyStatus = status.id">
-                {{ status.name }}
+          
+
+          <!-- Order Lookup Tab -->
+          <div v-if="activeTab === 'order-lookup'" class="space-y-6">
+            <h2 class="text-xl font-medium text-gray-800">Tra cứu đơn hàng</h2>
+            <div class="flex gap-4">
+              <input v-model="orderLookupId" type="text" placeholder="Nhập mã đơn hàng" class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-600" @keyup.enter="lookupOrder" />
+              <button @click="lookupOrder" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium">
+                Tìm kiếm
               </button>
             </div>
-            <div class="overflow-x-auto border border-gray-200 rounded-lg">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th class="py-3 px-6 text-left text-sm font-medium text-gray-700">Mã bảo hành</th>
-                    <th class="py-3 px-6 text-left text-sm font-medium text-gray-700">Ngày gửi</th>
-                    <th class="py-3 px-6 text-left text-sm font-medium text-gray-700">Trạng thái</th>
-                    <th class="py-3 px-6 text-left text-sm font-medium text-gray-700">Tên sản phẩm</th>
-                    <th class="py-3 px-6 text-left text-sm font-medium text-gray-700">Tra cứu</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                  <tr v-for="warranty in filteredWarranties" :key="warranty.id" class="hover:bg-gray-50">
-                    <td class="py-4 px-6">{{ warranty.warrantyId }}</td>
-                    <td class="py-4 px-6">{{ warranty.date }}</td>
-                    <td class="py-4 px-6">{{ warranty.status }}</td>
-                    <td class="py-4 px-6">{{ warranty.product }}</td>
-                    <td class="py-4 px-6">
-                      <button
-                        class="px-4 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium">
-                        Tra cứu
-                      </button>
-                    </td>
-                  </tr>
-                  <tr v-if="filteredWarranties.length === 0">
-                    <td colspan="5" class="py-6 text-center text-gray-500">Chưa có bảo hành nào</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p class="text-center text-gray-500 mt-4">Hiển thị {{ filteredWarranties.length }} / {{ warranties.length }}
-              bảo hành</p>
           </div>
 
           <!-- Account Tab -->
@@ -510,19 +482,16 @@ export default {
       tabs: [
         { id: 'overview', name: 'Tổng quan', icon: 'las la-home' },
         { id: 'history', name: 'Lịch sử mua hàng', icon: 'las la-history' },
-        { id: 'warranty', name: 'Tra cứu bảo hành', icon: 'las la-tools' },
+        { id: 'order-lookup', name: 'Tra cứu đơn hàng', icon: 'las la-search-dollar' },
         { id: 'account', name: 'Thông tin tài khoản', icon: 'las la-user' },
       ],
       orderStatuses: [
         { id: null, name: 'Tất cả' },
+        { id: 0, name: 'Đơn hàng đã đặt' },
         { id: 1, name: 'Chờ xác nhận' },
-        { id: 2, name: 'Đã xác nhận' },
-        { id: 3, name: 'Chờ vận chuyển' },
-        { id: 4, name: 'Đang vận chuyển' },
-        { id: 5, name: 'Đã giao hàng' },
-        { id: 6, name: 'Đã hủy' },
-        { id: 7, name: 'Yêu cầu hủy' },
-        { id: 8, name: 'Đã hoàn thành' },
+        { id: 3, name: 'Chờ giao hàng' },
+        { id: 4, name: 'Vận chuyển' },
+        { id: 8, name: 'Hoàn thành' },
       ],
       warrantyStatuses: [
         { id: 'all', name: 'Tất cả' },
@@ -547,10 +516,7 @@ export default {
       // This computed property is no longer needed as filtering is done on the backend
       return this.orders;
     },
-    filteredWarranties() {
-      if (this.activeWarrantyStatus === 'all') return this.warranties;
-      return this.warranties.filter((warranty) => warranty.status === this.getStatusName(this.activeWarrantyStatus));
-    },
+    
   },
   watch: {
     activeTab(newTab) {
@@ -582,6 +548,20 @@ export default {
   },
 
   methods: {
+    async lookupOrder() {
+      if (!this.orderLookupId.trim()) {
+        alert('Vui lòng nhập mã đơn hàng.');
+        return;
+      }
+      try {
+        const response = await axios.get(`http://localhost:8080/api/hoa-don/ma/${this.orderLookupId.trim()}`);
+        const orderId = response.data.id;
+        this.$router.push(`/invoice-status?orderId=${orderId}`);
+      } catch (error) {
+        console.error('Lỗi khi tra cứu đơn hàng:', error);
+        alert('Không tìm thấy đơn hàng với mã đã cho.');
+      }
+    },
     async fetchOrders(page = 0) {
       try {
         const idKhachHang = localStorage.getItem('customerId');
