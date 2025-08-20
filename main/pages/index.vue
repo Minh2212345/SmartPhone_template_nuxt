@@ -144,7 +144,7 @@
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
                   <div class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
-                    }} VND</div>
+                  }} VND</div>
                 </div>
               </div>
             </div>
@@ -190,7 +190,7 @@
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
                   <div class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
-                    }} VND</div>
+                  }} VND</div>
                 </div>
               </div>
             </div>
@@ -235,7 +235,7 @@
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
                   <div class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
-                    }} VND</div>
+                  }} VND</div>
                 </div>
               </div>
             </div>
@@ -280,7 +280,7 @@
                     <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
                   </h3>
                   <div class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
-                    }} VND</div>
+                  }} VND</div>
                 </div>
               </div>
             </div>
@@ -457,6 +457,12 @@ export default IndexPage
 </script>
 
 <style scoped>
+/* Global font-smoothing for a refined typography */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -473,6 +479,8 @@ export default IndexPage
 .page-wrapper {
   background-color: var(--background-color);
   font-family: 'Inter', sans-serif;
+  /* Optionally slightly reduce letter spacing for a refined look */
+  letter-spacing: 0.3px;
 }
 
 .main {
@@ -505,28 +513,27 @@ export default IndexPage
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 1.75rem;
-  /* giảm từ 2.25rem */
-  font-weight: 600;
+  font-weight: 500;
+  /* reduced weight for smoother look */
 }
 
 .intro-title {
   color: var(--text-color);
   line-height: 1.2;
   font-size: 4rem;
-  /* giảm từ 4.5rem */
-  font-weight: 700;
+  font-weight: 600;
+  /* slightly lighter than bold */
 }
 
 .intro-price .intro-old-price {
   color: var(--muted-color);
   font-size: 1.75rem;
-  /* giảm từ 2.25rem */
 }
 
 .intro-price .text-primary {
   font-size: 2.5rem;
-  /* giảm từ 3rem */
-  font-weight: 600;
+  font-weight: 500;
+  /* reduced weight */
 }
 
 .btn-primary {
@@ -535,7 +542,6 @@ export default IndexPage
   border-radius: 9999px;
   transition: background-color 0.3s ease, transform 0.2s ease;
   font-size: 1.625rem;
-  /* giảm từ 2.125rem */
   font-weight: bold;
 }
 
@@ -560,8 +566,7 @@ export default IndexPage
   left: 12px;
   padding: 6px 12px;
   font-size: 1.375rem;
-  /* giảm từ 1.875rem */
-  font-weight: 600;
+  font-weight: 500;
   color: white;
   border-radius: 4px;
   z-index: 10;
@@ -582,12 +587,14 @@ export default IndexPage
   border-radius: 0.5rem;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  /* subtler shadow */
 }
 
 .product-7:hover,
 .product-2:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .product-image {
@@ -604,7 +611,6 @@ export default IndexPage
   text-decoration: none;
   transition: color 0.3s ease;
   font-size: 1.375rem;
-  /* giảm từ 1.875rem */
 }
 
 .product-cat a:hover {
@@ -616,15 +622,15 @@ export default IndexPage
   text-decoration: none;
   transition: color 0.3s ease;
   font-size: 1.75rem;
-  /* giảm từ 2.25rem */
-  font-weight: 600;
+  font-weight: 500;
+  /* smoother weight */
 }
 
 .product-price {
   color: var(--text-color);
   font-size: 2rem;
-  /* giảm từ 2.5rem */
-  font-weight: 600;
+  font-weight: 500;
+  /* lighter weight for a more refined look */
 }
 
 /* Button group */
@@ -633,7 +639,6 @@ export default IndexPage
   color: var(--primary-color);
   transition: background-color 0.3s ease, color 0.3s ease;
   font-size: 1.8rem;
-  /* giảm từ 2.3rem */
   font-weight: bold;
 }
 

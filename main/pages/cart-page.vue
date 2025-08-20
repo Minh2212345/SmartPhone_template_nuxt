@@ -259,20 +259,32 @@ export default {
         this.invoiceId = this.$route.query.invoiceId || localStorage.getItem('invoiceId');
         const customerId = localStorage.getItem('customerId');
 
+        // Kiểm tra hóa đơn hiện tại
         if (this.invoiceId) {
-          // Kiểm tra xem hóa đơn có hợp lệ không
-          const invoiceExists = await this.checkInvoiceExists(this.invoiceId);
-          if (!invoiceExists) {
+          const isPending = await this.isPendingInvoice(this.invoiceId);
+          if (!isPending) {
             localStorage.removeItem('invoiceId');
             this.invoiceId = null;
           }
         }
 
+        // Nếu không có hóa đơn chờ, kiểm tra hóa đơn chờ của khách hàng
+        if (!this.invoiceId && customerId) {
+          const existingInvoice = await this.getExistingPendingInvoice(customerId);
+          if (existingInvoice) {
+            this.invoiceId = existingInvoice.id;
+            localStorage.setItem('invoiceId', this.invoiceId);
+          }
+        }
+
+        // Nếu vẫn không có hóa đơn, tạo mới
         if (!this.invoiceId) {
           await this.createInvoice(customerId || null);
         }
+
         await this.fetchCart();
       } catch (error) {
+        console.error('Lỗi khi khởi tạo giỏ hàng:', error);
         this.cartItems = [];
         this.$refs.toastNotification?.addToast({
           type: 'info',
@@ -280,6 +292,28 @@ export default {
           isLoading: false,
           duration: 3000,
         });
+      }
+    },
+
+    async getExistingPendingInvoice(customerId) {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/client/hoa-don-cho/khach-hang/${customerId}`);
+        const pendingInvoices = response.data;
+        return pendingInvoices.find(invoice => invoice.trangThai === 6) || null;
+      } catch (error) {
+        console.error('Lỗi khi lấy hóa đơn chờ:', error);
+        return null;
+      }
+    },
+
+    // Thêm hàm kiểm tra trạng thái hóa đơn
+    async isPendingInvoice(invoiceId) {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/client/gio-hang/${invoiceId}`);
+        return response.data.trangThai === 6;
+      } catch (error) {
+        console.error('Lỗi khi kiểm tra trạng thái hóa đơn:', error);
+        return false;
       }
     },
 
@@ -302,7 +336,7 @@ export default {
         this.invoiceId = response.data.id;
         localStorage.setItem('invoiceId', this.invoiceId);
       } catch (error) {
-        this.handleError(error, 'Lỗi khi tạo hóa đơn mới');
+        throw new Error('Lỗi khi tạo hóa đơn mới: ' + (error.response?.data?.message || error.message));
       }
     },
 
@@ -395,49 +429,20 @@ export default {
     async removeItem(index) {
       try {
         const item = this.cartItems[index];
-        const response = await axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
+        await axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
           params: {
             idHD: this.invoiceId,
             spId: item.chiTietSanPhamId,
             maImel: item.maImel,
           },
         });
-
-        this.cartItems = response.data.chiTietGioHangDTOS.map(item => ({
-          chiTietSanPhamId: item.chiTietSanPhamId,
-          maImel: item.maImel,
-          tenSanPham: item.tenSanPham || 'Sản phẩm không xác định',
-          mauSac: item.mauSac || 'Không xác định',
-          ram: item.ram || 'Không xác định',
-          boNhoTrong: item.boNhoTrong || 'Không xác định',
-          giaBan: item.giaBan || 0,
-          ghiChuGia: item.ghiChuGia || '',
-          soLuong: item.soLuong || 1,
-          tongTien: item.tongTien || 0,
-          image: item.image || '/assets/images/placeholder.jpg',
-          productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`,
-          selected: true,
-        }));
-
-        if (this.cartItems.length === 0) {
-          await axios.delete(`http://localhost:8080/api/client/hoa-don-cho/${this.invoiceId}`);
-          localStorage.removeItem('invoiceId');
-          this.invoiceId = null;
-          this.$refs.toastNotification?.addToast({
-            type: 'success',
-            message: 'Giỏ hàng trống, hóa đơn chờ đã được xóa!',
-            isLoading: false,
-            duration: 3000,
-          });
-        } else {
-          this.$refs.toastNotification?.addToast({
-            type: 'success',
-            message: `Đã xóa sản phẩm "${item.tenSanPham}" khỏi giỏ hàng!`,
-            isLoading: false,
-            duration: 3000,
-          });
-        }
-        this.updateSelectedItems();
+        // Gọi fetchCart để cập nhật giỏ ngay lập tức
+        await this.fetchCart();
+        this.$refs.toastNotification?.addToast({
+          type: 'success',
+          message: `Đã xóa sản phẩm "${item.tenSanPham}" khỏi giỏ hàng!`,
+          duration: 3000,
+        });
       } catch (error) {
         this.handleError(error, 'Lỗi khi xóa sản phẩm');
       }
@@ -454,11 +459,11 @@ export default {
           })
         );
         await Promise.all(promises);
+        // Gọi fetchCart để cập nhật giỏ ngay lập tức
         await this.fetchCart();
         this.$refs.toastNotification?.addToast({
           type: 'success',
           message: 'Đã xóa các sản phẩm đã chọn!',
-          isLoading: false,
           duration: 3000,
         });
       } catch (error) {

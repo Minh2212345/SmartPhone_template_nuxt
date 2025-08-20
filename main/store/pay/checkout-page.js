@@ -41,7 +41,6 @@ export default {
       order: {
         items: [],
         subtotal: 0,
-        shipping: 30000,
         total: 0
       },
       invoiceId: null,
@@ -71,17 +70,15 @@ export default {
       await this.fetchCart();
       const customerId = localStorage.getItem('customerId');
       if (customerId) {
-        await this.fetchAddresses();  // Fetch addresses nếu logged in
-        // Tự động chọn địa chỉ đầu tiên nếu có (tùy chọn)
+        await this.fetchAddresses();
         if (this.addresses.length > 0) {
           this.selectAddress(this.addresses[0]);
         }
       }
     } catch (error) {
       this.handleError(error, 'Lỗi khi tải thông tin giỏ hàng');
-      // Nếu lỗi do không tìm thấy hóa đơn, thử tạo mới với khachHangId
       if (error.message.includes('Không tìm thấy hóa đơn')) {
-        await this.createNewInvoice(); // Đã có khachHangId ở đây
+        await this.createNewInvoice();
         await this.fetchCart();
         const customerId = localStorage.getItem('customerId');
         if (customerId) {
@@ -119,7 +116,7 @@ export default {
           price: item.giaBan || 0
         }));
         this.order.subtotal = response.data.tongTien || 0;
-        this.order.total = this.order.subtotal + this.order.shipping;
+        this.order.total = this.order.subtotal;
       } catch (error) {
         console.error('Lỗi fetchCart:', error.message, error.response?.data);
         throw new Error('Không tìm thấy hóa đơn hoặc giỏ hàng không hợp lệ');
@@ -150,7 +147,6 @@ export default {
       this.delivery.thanhPho = address.thanhPho || ''
       this.delivery.soNha = address.diaChiCuThe || ''
       this.delivery.ghiChu = address.ghiChu || ''
-
       if (address.thanhPho) {
         await this.fetchDistricts()
         this.delivery.quan = address.quan || ''
@@ -264,7 +260,7 @@ export default {
         if (this.deliveryMethod === 'delivery') {
           if (!this.validateDelivery()) return;
           hoaDonRequest = {
-            idKhachHang: customerId ? parseInt(customerId) : 1,
+            idKhachHang: customerId ? parseInt(customerId) : 1, // Khách lẻ nếu không đăng nhập
             tenKhachHang: this.delivery.ten,
             soDienThoaiKhachHang: this.delivery.soDienThoai,
             email: this.delivery.email,
@@ -278,7 +274,7 @@ export default {
           if (!this.validatePickup()) return;
           loaiDon = 'offline';
           hoaDonRequest = {
-            idKhachHang: customerId ? parseInt(customerId) : 1,
+            idKhachHang: customerId ? parseInt(customerId) : 1, // Khách lẻ nếu không đăng nhập
             tenKhachHang: this.delivery.ten || this.stores[this.selectedStoreIndex]?.name || 'Khách lẻ',
             soDienThoaiKhachHang: this.pickup.soDienThoai,
             email: this.pickup.email,
@@ -291,15 +287,18 @@ export default {
         }
 
         const response = await axios.post(`http://localhost:8080/api/client/thanh-toan/${this.invoiceId}`, hoaDonRequest);
-        // Xóa invoiceId và các dữ liệu liên quan khỏi localStorage
+        this.showToast('success', `Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Bạn sẽ nhận được email thông báo chi tiết.`);
+
+        // Xóa invoiceId sau khi thanh toán thành công
         localStorage.removeItem('invoiceId');
         this.invoiceId = null;
-        this.showToast('success', `Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Bạn sẽ nhận được email thông báo chi tiết.`);
+
         this.$router.push('/cart-page');
       } catch (error) {
         this.handleError(error, 'Lỗi khi thực hiện thanh toán');
       }
     },
+
     validateDelivery() {
       console.log('Validating delivery:', this.delivery)
       if (!this.delivery.ten) {
@@ -353,13 +352,6 @@ export default {
     },
     setDeliveryMethod(method) {
       this.deliveryMethod = method
-      if (method === 'pickup') {
-        this.order.shipping = 0
-        this.order.total = this.order.subtotal
-      } else {
-        this.order.shipping = 30000
-        this.order.total = this.order.subtotal + this.order.shipping
-      }
     },
     selectStore(index) {
       this.selectedStoreIndex = index
@@ -372,7 +364,7 @@ export default {
           invoiceId: this.invoiceId
         })
         this.appliedDiscount = response.data
-        this.order.total = this.order.subtotal + this.order.shipping - (this.appliedDiscount?.amount || 0)
+        this.order.total = this.order.subtotal - (this.appliedDiscount?.amount || 0)
         this.showToast('success', 'Mã giảm giá đã được áp dụng!')
       } catch (error) {
         this.handleError(error, 'Mã giảm giá không hợp lệ')
@@ -380,7 +372,6 @@ export default {
     },
     showToast(type, message) {
       console.log(`${type}: ${message}`)
-      // Thêm logic hiển thị toast nếu cần, ví dụ sử dụng vue-toastification
     },
     nextStep() {
       console.log('Nút Tiếp tục được nhấn, currentStep:', this.currentStep)
@@ -416,9 +407,8 @@ export default {
           params.append('orderInfo', `Thanh toan don hang #${this.invoiceId}`);
           params.append('invoiceId', this.invoiceId);
           params.append('returnUrl', window.location.origin + '/payment-callback');
-          const response = await axios.post('http://localhost:8080/api/payment/create', params);
+          const response = await axios.post('http://localhost:8080/api/client/payment/create', params);
           if (response.data) {
-            // Lưu invoiceId tạm thời để xử lý callback
             localStorage.setItem('pendingInvoiceId', this.invoiceId);
             window.location.href = response.data;
           } else {
@@ -428,7 +418,7 @@ export default {
           await this.submitForm();
           this.showConfirmationModal = false;
           this.showToast('success', `Đặt hàng thành công! Bạn sẽ nhận được email xác nhận đơn hàng.`);
-          // Xóa invoiceId khỏi localStorage và reset state
+          // Xóa invoiceId sau khi thanh toán
           localStorage.removeItem('invoiceId');
           this.invoiceId = null;
           this.$router.push('/cart-page');
@@ -438,6 +428,22 @@ export default {
         this.showConfirmationModal = false;
       } finally {
         this.isLoading = false;
+      }
+    },
+    async handlePaymentCallback() {
+      try {
+        const response = await axios.get('http://localhost:8080/api/client/payment/callback', {
+          params: this.$route.query
+        });
+        if (response.data.status === 'success') {
+          this.showToast('success', response.data.message);
+          localStorage.removeItem('pendingInvoiceId');
+          this.$router.push('/cart-page');
+        } else {
+          this.showToast('error', response.data.message);
+        }
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi xử lý kết quả thanh toán');
       }
     },
     setPaymentMethod(method) {
