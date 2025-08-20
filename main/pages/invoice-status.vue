@@ -1,55 +1,33 @@
 <template>
-  <div class="order-details-container">
+  <div v-if="order" class="order-details-container">
     <div class="order-header">
-      <h1>Chi tiết đơn hàng DH123456 - Đặt Hàng Thành Công</h1>
-    </div>
-
-    <div class="order-section">
-      <div class="order-time">
-        <h2>Đơn hàng đã đặt</h2>        
-      </div>
+      <h1>Chi tiết đơn hàng {{ order.maHoaDon }} - {{ getStatusNameById(order.trangThai) }}</h1>
     </div>
 
     <div class="status-timeline">
-      <div class="status-item active">
-        <span><i class="las la-file-invoice"></i></span>
-        <span>Đơn hàng đã đặt</span>
-        <span>15:32 01-7-2024</span>
-      </div>
-      <div class="status-item active">
-        <span><i class="las la-mail-bulk"></i></span>
-        <span>Chờ xác nhận</span>
-      </div>
-      <div class="status-item">
-        <span><i class="las la-box"></i></span>
-        <span>Chờ giao hàng</span>
-      </div>
-      <div class="status-item">
-        <span><i class="las la-shipping-fast"></i></span>
-        <span>Vận chuyển</span>
-      </div>
-      <div class="status-item">
-        <span><i class="las la-calendar-check"></i></span>
-        <span>Hoàn thành</span>
+      <div v-for="(status, index) in orderStatuses" :key="index" class="status-item" :class="{ active: isStatusActive(status.id), current: isCurrentStatus(status.id) }">
+        <span><i :class="status.icon"></i></span>
+        <span>{{ status.name }}</span>
+        <span>{{ getStatusTimestamp(status.id) }}</span>
       </div>
     </div>
 
     <div class="divider-right">
-      <button class="cancel-btn">Hủy Đơn Hàng</button>
+      <button v-if="canCancelOrder" @click="cancelOrder" class="cancel-btn">Hủy Đơn Hàng</button>
     </div>
 
     <div class="info-row">
       <div class="info-section recipient">
         <h2>THÔNG TIN NHẬN HÀNG</h2>
         <div class="recipient-info">
-          <p><strong>Người nhận:</strong> Nguyễn Phùng Dũng - 0395561234</p>
-          <p><strong>Địa chỉ:</strong> Hoàng Quốc Việt, Phường Cố Nhuế 1, Quận Bắc Tú Liêm, Hà Nội</p>
+          <p><strong>Người nhận:</strong> {{ order.tenKhachHang }} - {{ order.soDienThoaiKhachHang }}</p>
+          <p><strong>Địa chỉ:</strong> {{ order.diaChiKhachHang }}</p>
         </div>
       </div>
       <div class="info-section payment">
         <h2>THÔNG TIN THANH TOÁN</h2>
         <div class="payment-method">
-          <p><strong>Thanh toán online</strong></p>
+          <p><strong>{{ order.loaiDon }}</strong></p>
         </div>
       </div>
     </div>
@@ -58,26 +36,116 @@
       <strong>THÔNG TIN SẢN PHẨM</strong>
     </div>
 
-    <div class="product-container">
+    <div v-for="product in order.sanPhamChiTietInfos" :key="product.chiTietSanPhamId" class="product-container">
       <div class="product-info">
-        <img src="assets/images/products/table/product-1.jpg" alt="">
+        <img :src="product.duongDan" alt="">
         <div class="product-details">
-          <p><strong>Iphone 16 Trắng 128GB</strong></p>
-          <p class="price">19.190.000 đ</p>
+          <p><strong>{{ product.tenSanPham }} {{ product.mauSac }} {{ product.dungLuongRam }}/{{ product.dungLuongBoNhoTrong }}</strong></p>
+          <p class="price">{{ formatCurrency(product.giaBan) }}</p>
         </div>
       </div>
       <div class="quantity">
-        <p>Số lượng: 1</p>
+        <p>Số lượng: 1</p> <!-- This seems to be hardcoded, the DTO doesn't have quantity per item -->
       </div>
     </div>
+  </div>
+  <div v-else class="text-center p-8">
+    <p>Đang tải thông tin đơn hàng...</p>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'OrderDetails',
   data() {
-    return {}
+    return {
+      order: null,
+      statusTimeline: [],
+      orderStatuses: [
+        { id: 1, name: 'Chờ xác nhận', icon: 'las la-file-invoice' },
+        { id: 2, name: 'Đã xác nhận', icon: 'las la-check-circle' },
+        { id: 3, name: 'Chờ vận chuyển', icon: 'las la-box' },
+        { id: 4, name: 'Đang vận chuyển', icon: 'las la-shipping-fast' },
+        { id: 5, name: 'Đã giao hàng', icon: 'las la-truck' },
+        { id: 6, name: 'Đã hủy', icon: 'las la-times-circle' },
+        { id: 7, name: 'Yêu cầu hủy', icon: 'las la-undo' },
+        { id: 8, name: 'Đã hoàn thành', icon: 'las la-calendar-check' },
+      ],
+    }
+  },
+  computed: {
+    canCancelOrder() {
+      // Only allow cancellation if the order status is 'Chờ xác nhận'
+      return this.order && this.order.trangThai === 1;
+    }
+  },
+  mounted() {
+    const orderId = this.$route.query.orderId;
+    if (orderId) {
+      this.fetchOrderDetail(orderId);
+    }
+  },
+  methods: {
+    async fetchOrderDetail(orderId) {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/hoa-don/${orderId}/detail`);
+        this.order = response.data;
+        if (response.data.lichSuHoaDon && Array.isArray(response.data.lichSuHoaDon)) {
+          this.statusTimeline = response.data.lichSuHoaDon.sort((a, b) => new Date(a.thoiGian) - new Date(b.thoiGian));
+        } else {
+          this.statusTimeline = [];
+        }
+      } catch (error) {
+        console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
+        alert('Không thể tải thông tin chi tiết đơn hàng.');
+      }
+    },
+    async cancelOrder() {
+      if (!confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')) {
+        return;
+      }
+      try {
+        const response = await axios.put(`http://localhost:8080/api/hoa-don/${this.order.id}/update-status?trangThai=6`);
+        this.order = response.data;
+        alert('Đã hủy đơn hàng thành công.');
+        this.fetchOrderDetail(this.order.id); // Refresh order details
+      } catch (error) {
+        console.error('Lỗi khi hủy đơn hàng:', error);
+        alert('Hủy đơn hàng thất bại.');
+      }
+    },
+    getStatusNameById(statusId) {
+      const status = this.orderStatuses.find(s => s.id === statusId);
+      return status ? status.name : 'Không xác định';
+    },
+    getStatusIcon(statusId) {
+      const status = this.orderStatuses.find(s => s.id === statusId);
+      return status ? status.icon : 'las la-question-circle';
+    },
+    isStatusActive(statusId) {
+      if (!this.order) return false;
+      // A status is active if its ID is less than or equal to the current status ID.
+      // This makes the timeline linear.
+      return statusId <= this.order.trangThai;
+    },
+    isCurrentStatus(statusId) {
+      return this.order && this.order.trangThai === statusId;
+    },
+    getStatusTimestamp(statusId) {
+      const status = this.statusTimeline.find(s => s.trangThai === statusId);
+      return status ? this.formatDateTime(status.thoiGian) : '';
+    },
+    formatDateTime(dateTime) {
+      if (!dateTime) return '';
+      const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+      return new Date(dateTime).toLocaleDateString('vi-VN', options);
+    },
+    formatCurrency(value) {
+      if (!value) return '0 VNĐ';
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    }
   }
 }
 </script>
@@ -156,6 +224,10 @@ span i {
   font-weight: bold;
 }
 
+.status-item.current span {
+  color: #2289ff; /* Blue color for current status */
+}
+
 .status-item::before {
   content: '';
   width: 12px;
@@ -168,6 +240,10 @@ span i {
 
 .status-item.active::before {
   background-color: #00ac09;
+}
+
+.status-item.current::before {
+  background-color: #2289ff; /* Blue color for current status */
 }
 
 .status-item.active + .status-item.active::after {
