@@ -407,7 +407,7 @@ export default {
           params.append('orderInfo', `Thanh toan don hang #${this.invoiceId}`);
           params.append('invoiceId', this.invoiceId);
           params.append('returnUrl', window.location.origin + '/payment-callback');
-          const response = await axios.post('http://localhost:8080/api/client/payment/create', params);
+          const response = await axios.post('http://localhost:8080/api/payment/create', params);
           if (response.data) {
             localStorage.setItem('pendingInvoiceId', this.invoiceId);
             window.location.href = response.data;
