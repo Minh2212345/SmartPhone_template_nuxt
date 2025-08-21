@@ -4,17 +4,23 @@
       <h1>Chi tiết đơn hàng {{ order.maHoaDon }} - {{ getStatusNameById(order.trangThai) }}</h1>
     </div>
 
-    <div v-if="order.trangThai !== 4" class="status-timeline">
-      <div v-for="(status, index) in orderStatuses" :key="index" class="status-item" :class="{ active: isStatusActive(status.id), current: isCurrentStatus(status.id) }">
-        <span><i :class="status.icon"></i></span>
-        <span>{{ status.name }}</span>
-        <span>{{ getStatusTimestamp(status.id) }}</span>
+    <!-- Status Timeline -->
+    <div class="order-section my-5">
+      <div class="timeline-container" :class="{ 'single-status': order.loaiDon === 'trực tiếp' }">
+        <div v-for="(status, index) in timelineStatuses" :key="index" class="timeline-step" :class="{
+          'completed': status.completed,
+          'current': status.current,
+          'canceled': status.title === 'Đã hủy'
+        }">
+          <div class="step-circle">
+            <i :class="status.icon"></i>
+          </div>
+          <div class="step-content">
+            <h6 class="step-title">{{ status.title }}</h6>
+            <p class="step-time">{{ status.time }}</p>
+          </div>
+        </div>
       </div>
-    </div>
-    <div v-else class="text-center py-8 bg-red-50 rounded-lg border-2 border-dashed border-red-200">
-      <i class="las la-exclamation-circle text-6xl text-red-500 mb-4"></i>
-      <h2 class="text-4xl font-extrabold text-red-700">ĐƠN HÀNG ĐÃ ĐƯỢC HỦY</h2>
-      <p class="text-gray-600 mt-2">Đơn hàng này đã được hủy và không thể hoàn tác.</p>
     </div>
 
     <div class="divider-right">
@@ -50,7 +56,7 @@
         </div>
       </div>
       <div class="quantity">
-        <p>Số lượng: 1</p> <!-- This seems to be hardcoded, the DTO doesn't have quantity per item -->
+        <p>Số lượng: 1</p>
       </div>
     </div>
   </div>
@@ -68,19 +74,12 @@ export default {
     return {
       order: null,
       statusTimeline: [],
-      orderStatuses: [
-        { id: 0, name: 'Đơn hàng đã đặt', icon: 'las la-receipt' },
-        { id: 1, name: 'Chờ xác nhận', icon: 'las la-file-invoice' },
-        { id: 3, name: 'Chờ giao hàng', icon: 'las la-box' },
-        { id: 4, name: 'Vận chuyển', icon: 'las la-shipping-fast' },
-        { id: 8, name: 'Hoàn thành', icon: 'las la-calendar-check' },
-      ],
+      timelineStatuses: [],
     }
   },
   computed: {
     canCancelOrder() {
-      // Only allow cancellation if the order status is 'Chờ xác nhận'
-      return this.order && this.order.trangThai === 1;
+      return this.order && this.order.trangThai === 0; // Changed from 1 to 0 based on new mapping
     }
   },
   mounted() {
@@ -99,6 +98,7 @@ export default {
         } else {
           this.statusTimeline = [];
         }
+        this.updateTimelineStatuses();
       } catch (error) {
         console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
         alert('Không thể tải thông tin chi tiết đơn hàng.');
@@ -118,26 +118,72 @@ export default {
         alert(error.response.data.message || 'Hủy đơn hàng thất bại.');
       }
     },
+    mapStatusIdToName(statusId) {
+      const statusMap = {
+        0: 'Chờ xác nhận',
+        1: 'Chờ giao hàng',
+        2: 'Đang giao',
+        3: 'Hoàn thành',
+        4: 'Đã hủy',
+      };
+      return statusMap[statusId] || 'Không xác định';
+    },
     getStatusNameById(statusId) {
-      const status = this.orderStatuses.find(s => s.id === statusId);
-      return status ? status.name : 'Không xác định';
+        return this.mapStatusIdToName(statusId);
     },
-    getStatusIcon(statusId) {
-      const status = this.orderStatuses.find(s => s.id === statusId);
-      return status ? status.icon : 'las la-question-circle';
-    },
-    isStatusActive(statusId) {
-      if (!this.order) return false;
-      // A status is active if its ID is less than or equal to the current status ID.
-      // This makes the timeline linear.
-      return statusId <= this.order.trangThai;
-    },
-    isCurrentStatus(statusId) {
-      return this.order && this.order.trangThai === statusId;
-    },
-    getStatusTimestamp(statusId) {
-      const status = this.statusTimeline.find(s => s.trangThai === statusId);
-      return status ? this.formatDateTime(status.thoiGian) : '';
+    updateTimelineStatuses() {
+      if (!this.order) return;
+
+      if (this.order.loaiDon === 'trực tiếp') {
+        this.timelineStatuses = [
+          {
+            title: 'Hoàn thành',
+            time: this.formatDateTime(this.order.ngayTao) || 'Đang chờ',
+            icon: 'las la-check-circle',
+            completed: true,
+            current: true,
+          },
+        ];
+      } else {
+        this.timelineStatuses = [
+          { title: 'Chờ xác nhận', time: 'Đang chờ', icon: 'las la-hourglass-split', completed: false, current: false },
+          { title: 'Chờ giao hàng', time: 'Đang chờ', icon: 'las la-box', completed: false, current: false },
+          { title: 'Đang giao', time: 'Đang chờ', icon: 'las la-shipping-fast', completed: false, current: false },
+          { title: 'Hoàn thành', time: 'Đang chờ', icon: 'las la-calendar-check', completed: false, current: false },
+        ];
+
+        const status = this.mapStatusIdToName(this.order.trangThai);
+
+        if (status === 'Đã hủy') {
+          this.timelineStatuses = [
+            {
+              title: 'Đã hủy',
+              time: this.formatDateTime(this.order.ngayTao) || 'Đang chờ',
+              icon: 'las la-times-circle',
+              completed: false,
+              current: true,
+            },
+          ];
+        } else {
+            const statusIndex = this.timelineStatuses.findIndex(s => s.title === status);
+
+            this.timelineStatuses.forEach((item, index) => {
+                const historyItem = this.statusTimeline.find(h => this.mapStatusIdToName(h.trangThai) === item.title);
+                item.time = historyItem ? this.formatDateTime(historyItem.thoiGian) : 'Đang chờ';
+
+                if (index < statusIndex) {
+                    item.completed = true;
+                    item.current = false;
+                } else if (index === statusIndex) {
+                    item.completed = true;
+                    item.current = true;
+                } else {
+                    item.completed = false;
+                    item.current = false;
+                }
+            });
+        }
+      }
     },
     formatDateTime(dateTime) {
       if (!dateTime) return '';
@@ -153,24 +199,13 @@ export default {
 </script>
 
 <style scoped>
+/* General Styles */
 .order-details-container {
-  font-family: Arial, sans-serif;  
+  font-family: Arial, sans-serif;
   margin: 0 auto;
-  padding: 20px;  
+  padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-span i {
-  font-size: 32px;
-}
-
-.cancel-btn {
-  background-color: #ff0000;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;  
 }
 
 .order-header h1 {
@@ -184,99 +219,122 @@ span i {
   margin-bottom: 20px;
 }
 
-.order-time h2 {
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-
-.status-timeline {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px 0;
+/* Timeline Styles from Admin */
+.timeline-container {
   position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start; /* Align items to the start for better text alignment */
+  max-width: 100%;
+  margin: 0 auto;
 }
 
-.status-timeline::before {
+.timeline-container::before {
   content: '';
   position: absolute;
-  top: 15px;
-  left: calc(0% + 6px); 
-  right: calc(0% + 6px);
-  height: 2px;
-  background-color: #ddd;
+  top: 35px; /* Adjust position to be in the middle of the circle */
+  left: 5%;
+  right: 5%;
+  height: 4px;
+  background: #e0e0e0; /* A neutral background color */
+  border-radius: 2px;
   z-index: 1;
 }
 
-.status-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 2;
+.timeline-step {
   position: relative;
-  flex: 1;
-}
-
-.status-item span {  
-  padding: 0 10px;
-  color: #666;
-}
-
-.status-item.active span {
-  color: #00ac09;
-  font-weight: bold;
-}
-
-.status-item.current span {
-  color: #2289ff; /* Blue color for current status */
-}
-
-.status-item::before {
-  content: '';
-  width: 12px;
-  height: 12px;
-  background-color: #ddd;
-  border-radius: 50%;
-  margin-bottom: 5px;
-  z-index: 2;
-}
-
-.status-item.active::before {
-  background-color: #00ac09;
-}
-
-.status-item.current::before {
-  background-color: #2289ff; /* Blue color for current status */
-}
-
-.status-item.active + .status-item.active::after {
-  content: '';
-  position: absolute;
-  top: 15px;
-  left: -50%;
-  width: 100%;
-  height: 2px;
-  background-color: #00ac09;
-  z-index: 1;
-}
-
-.divider {
   text-align: center;
-  margin: 20px 0;
-  padding: 10px 0;
-  border-top: 1px solid #eee;  
+  flex: 1;
+  padding: 0 10px;
+  z-index: 2;
+}
+
+.step-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem; /* Increased icon size */
+  z-index: 2;
+  margin: 0 auto 1rem;
+  transition: all 0.4s ease;
+  background: #bdc3c7; /* Default gray */
+  color: white;
+  border: 4px solid white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.timeline-step.completed .step-circle {
+  background: #27ae60; /* Green for completed */
+}
+
+.timeline-step.current .step-circle {
+  background: #3498db; /* Blue for current */
+  transform: scale(1.1);
+}
+
+.timeline-step.canceled .step-circle {
+  background: #e74c3c; /* Red for canceled */
+}
+
+.step-content {
+  padding: 0 0.5rem;
+}
+
+.step-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.step-time {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-top: 0.25rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .timeline-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .timeline-container::before {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 100%;
+  }
+  .timeline-step {
+    margin-bottom: 2rem;
+    width: 100%;
+  }
+}
+
+/* Other existing styles */
+.cancel-btn {
+  background-color: #ff0000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
 }
 
 .divider-right {
-  text-align: right;  
+  text-align: right;
   padding: 10px 0;
-  border-top: 1px solid #eee;  
+  border-top: 1px solid #eee;
 }
 
 .divider-left {
   text-align: left;
   margin: 20px 0;
   padding: 10px 0;
-  border-top: 1px solid #eee;  
+  border-top: 1px solid #eee;
 }
 
 .info-row {
@@ -285,18 +343,11 @@ span i {
   margin-bottom: 15px;
 }
 
-.info-section.recipient {
+.info-section.recipient, .info-section.payment {
   width: 48.8%;
   background-color: #f5f5f5;
-  border-radius: 15px 15px;
-  padding: 10px 10px;
-}
-
-.info-section.payment {
-  width: 48.8%;
-  background-color: #f5f5f5;
-  border-radius: 15px 15px;
-  padding: 10px 10px;
+  border-radius: 15px;
+  padding: 10px;
 }
 
 .info-section h2 {
