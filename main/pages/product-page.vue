@@ -25,19 +25,27 @@
                   <div class="product-gallery product-gallery-vertical">
                     <div class="row">
                       <figure class="product-main-image">
-                        <img id="product-zoom"
+                        <img
+                          id="product-zoom"
                           :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
                           :data-zoom-image="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
-                          alt="product image" />
+                          alt="product image"
+                        />
                         <a id="btn-product-gallery" href="#" class="btn-product-gallery">
                           <i class="icon-arrows"></i>
                         </a>
                       </figure>
                       <div id="product-zoom-gallery" class="product-image-gallery">
-                        <a v-for="color in uniqueColors" :key="color.name" class="product-gallery-item"
-                          :class="{ active: selectedVariant.mau_sac === color.name }" href="#"
-                          :data-image="getImageForColor(color.name)" :data-zoom-image="getImageForColor(color.name)"
-                          @click.prevent="selectColor(color.name)">
+                        <a
+                          v-for="color in uniqueColors"
+                          :key="color.name"
+                          class="product-gallery-item"
+                          :class="{ active: selectedVariant.mau_sac === color.name }"
+                          href="#"
+                          :data-image="getImageForColor(color.name)"
+                          :data-zoom-image="getImageForColor(color.name)"
+                          @click.prevent="selectColor(color.name)"
+                        >
                           <img :src="getImageForColor(color.name)" alt="product variant" />
                         </a>
                       </div>
@@ -51,17 +59,31 @@
                       {{ product.ten_san_pham }} - {{ selectedVariant.bo_nho_trong_dung_luong }}
                     </h1>
                     <div v-if="selectedVariant.has_discount" class="product-price">
-                      <span style="text-decoration: line-through; color: #999">{{
-                        formatPrice(selectedVariant.gia_ban_dau) }} VND</span>
-                      <span style="color: red; margin-left: 5px">{{ formatPrice(selectedVariant.gia_sau_khi_giam) }}
-                        VND</span>
-                      <span v-if="
-                        selectedVariant.loai_giam_gia_ap_dung === 'Phần trăm' && selectedVariant.giam_phan_tram > 0
-                      " class="badge badge-danger ml-2">Giảm {{ selectedVariant.giam_phan_tram }}%</span>
-                      <span v-else-if="
-                        selectedVariant.loai_giam_gia_ap_dung === 'Tiền mặt' && selectedVariant.giam_toi_da > 0
-                      " class="badge badge-danger ml-2">Giảm {{ formatPrice(selectedVariant.giam_toi_da) }}
-                        VND</span>
+                      <span v-if="selectedVariant.gia_ban_dau > 0" style="text-decoration: line-through; color: #999"
+                        >{{ formatPrice(selectedVariant.gia_ban_dau) }} VND</span
+                      >
+                      <span v-if="selectedVariant.gia_sau_khi_giam > 0" style="color: red; margin-left: 5px"
+                        >{{ formatPrice(selectedVariant.gia_sau_khi_giam) }} VND</span
+                      >
+                      <span v-else style="color: red; margin-left: 5px">Liên hệ để đặt hàng</span>
+                      <span
+                        v-if="
+                          selectedVariant.loai_giam_gia_ap_dung === 'Phần trăm' && selectedVariant.giam_phan_tram > 0
+                        "
+                        class="badge badge-danger ml-2"
+                        >Giảm {{ selectedVariant.giam_phan_tram }}%</span
+                      >
+                      <span
+                        v-else-if="
+                          selectedVariant.loai_giam_gia_ap_dung === 'Tiền mặt' && selectedVariant.giam_toi_da > 0
+                        "
+                        class="badge badge-danger ml-2"
+                        >Giảm {{ formatPrice(selectedVariant.giam_toi_da) }} VND</span
+                      >
+                    </div>
+                    <div v-else class="product-price" style="color: #00aeef">
+                      <span v-if="selectedVariant.gia_ban > 0">{{ formatPrice(selectedVariant.gia_ban) }} VND</span>
+                      <span v-else>Liên hệ để đặt hàng</span>
                     </div>
                     <div v-else class="product-price" style="color: #00aeef">
                       {{ formatPrice(selectedVariant.gia_ban) }} VND
@@ -69,10 +91,16 @@
                     <div class="memory-options">
                       <h5>Chọn bộ nhớ</h5>
                       <div class="d-flex flex-wrap">
-                        <div v-for="memory in uniqueMemories" :key="memory" class="option-btn" :class="{
-                          active: selectedVariant.bo_nho_trong_dung_luong === memory,
-                          disabled: !isMemoryAvailable(memory),
-                        }" @click="isMemoryAvailable(memory) && selectMemory(memory)">
+                        <div
+                          v-for="memory in uniqueMemories"
+                          :key="memory"
+                          class="option-btn"
+                          :class="{
+                            active: selectedVariant.bo_nho_trong_dung_luong === memory,
+                            disabled: !isMemoryAvailable(memory),
+                          }"
+                          @click="isMemoryAvailable(memory) && selectMemory(memory)"
+                        >
                           {{ memory }}<br />
                           <span class="check-icon"><i class="fas fa-check"></i></span>
                         </div>
@@ -83,14 +111,19 @@
                       <div class="color-options">
                         <h5>Chọn màu để xem giá sản phẩm</h5>
                         <div class="d-flex flex-wrap">
-                          <div v-for="color in uniqueColors" :key="color.name" class="option-btn color-btn"
+                          <div
+                            v-for="color in uniqueColors"
+                            :key="color.name"
+                            class="option-btn color-btn"
                             :class="{ active: selectedVariant.mau_sac === color.name }"
-                            @click="selectColor(color.name)">
+                            @click="selectColor(color.name)"
+                          >
                             <span class="color-circle" :style="{ backgroundColor: color.hex }"></span>
                             {{ color.name }}<br />
-                            <span v-if="getPriceForColor(color.name) !== null">{{
-                              formatPrice(getPriceForColor(color.name)) }} VND</span>
-                            <span v-else>Không có sẵn</span>
+                            <span v-if="getPriceForColor(color.name) !== null"
+                              >{{ formatPrice(getPriceForColor(color.name)) }} VND</span
+                            >
+                            <span v-else>Liên hệ để đặt hàng</span>
                             <span class="check-icon"><i class="fas fa-check"></i></span>
                           </div>
                         </div>
@@ -100,18 +133,28 @@
                     <div class="details-filter-row details-row-size">
                       <label for="qty">Số lượng:</label>
                       <div class="product-details-quantity">
-                        <input id="qty" v-model="quantity" type="number" class="form-control" min="1" max="10" step="1"
-                          data-decimals="0" required />
+                        <input
+                          id="qty"
+                          v-model="quantity"
+                          type="number"
+                          class="form-control"
+                          min="1"
+                          max="10"
+                          step="1"
+                          data-decimals="0"
+                          required
+                        />
                       </div>
                     </div>
 
                     <div class="product-details-action">
-                      <a href="#" class="btn-product btn-cart" @click.prevent="addToCart"><span>Thêm vào giỏ
-                          hàng</span></a>
+                      <a href="#" class="btn-product btn-cart" @click.prevent="addToCart"
+                        ><span>Thêm vào giỏ hàng</span></a
+                      >
                       <NuxtLink to="/cart-page" class="btn-product btn-cart ml-2"><span>Mua ngay</span></NuxtLink>
                       <div class="details-action-wrapper">
-                        <NuxtLink to="/compare-page" class="btn-product btn-compare" title="Compare"><span>So
-                            sánh</span>
+                        <NuxtLink to="/compare-page" class="btn-product btn-compare" title="Compare"
+                          ><span>So sánh</span>
                         </NuxtLink>
                       </div>
                     </div>
@@ -119,19 +162,22 @@
                     <div class="product-details-footer">
                       <div class="product-cat">
                         <span>Phân loại:</span>
-                        <a href="#">{{ manufacturerMap[product.nha_san_xuat] || product.nha_san_xuat || 'Unknown'
-                          }}</a>,
+                        <a href="#">{{ manufacturerMap[product.nha_san_xuat] || product.nha_san_xuat || 'Unknown' }}</a
+                        >,
                         <a href="#">Sản phẩm mới</a>
                       </div>
                       <div class="social-icons social-icons-sm">
                         <span class="social-label">Chia sẻ:</span>
-                        <a href="#" class="social-icon" title="Facebook" target="_blank"><i
-                            class="icon-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Facebook" target="_blank"
+                          ><i class="icon-facebook-f"></i
+                        ></a>
                         <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                        <a href="#" class="social-icon" title="Instagram" target="_blank"><i
-                            class="icon-instagram"></i></a>
-                        <a href="#" class="social-icon" title="Pinterest" target="_blank"><i
-                            class="icon-pinterest"></i></a>
+                        <a href="#" class="social-icon" title="Instagram" target="_blank"
+                          ><i class="icon-instagram"></i
+                        ></a>
+                        <a href="#" class="social-icon" title="Pinterest" target="_blank"
+                          ><i class="icon-pinterest"></i
+                        ></a>
                       </div>
                     </div>
                   </div>
@@ -168,8 +214,11 @@
                   <button class="close-btn" @click="showSidebar = false">×</button>
                 </div>
                 <div class="sidebar-body">
-                  <img :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'" alt="Product Image"
-                    class="sidebar-image" />
+                  <img
+                    :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
+                    alt="Product Image"
+                    class="sidebar-image"
+                  />
                   <table class="specs-table">
                     <tr>
                       <td><i class="fas fa-shield-alt mr-2"></i>Chỉ số chống bụi và nước</td>
@@ -307,7 +356,9 @@
             </div>
 
             <h2 class="title text-center mb-4">Những sản phẩm tương tự</h2>
-            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
+            <div
+              class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
+              data-toggle="owl"
               data-owl-options='{
               "nav": false,
               "dots": true,
@@ -320,13 +371,20 @@
                 "992": { "items": 4 },
                 "1200": { "items": 4, "nav": true, "dots": false }
               }
-            }'>
-              <div v-for="similarProduct in similarProducts" :key="similarProduct.id"
-                class="product product-7 text-center">
+            }'
+            >
+              <div
+                v-for="similarProduct in similarProducts"
+                :key="similarProduct.id"
+                class="product product-7 text-center"
+              >
                 <figure class="product-media">
                   <NuxtLink :to="`/product-page?sp_id=${similarProduct.id}`">
-                    <img :src="similarProduct.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
-                      class="product-image" />
+                    <img
+                      :src="similarProduct.imageUrl || '/assets/images/placeholder.jpg'"
+                      alt="Product image"
+                      class="product-image"
+                    />
                   </NuxtLink>
                   <div class="product-action-vertical">
                     <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
@@ -358,9 +416,9 @@
 </template>
 
 <script>
-import axios from 'axios';
-import ProductPage from '../store/product/product-page.js';
-import ToastNotification from '../components/base/ToastNotification.vue';
+import axios from 'axios'
+import ProductPage from '../store/product/product-page.js'
+import ToastNotification from '../components/base/ToastNotification.vue'
 
 export default {
   components: {
@@ -378,61 +436,61 @@ export default {
         address: '',
       },
       invoiceId: null,
-    };
+    }
   },
   mounted() {
-    this.invoiceId = localStorage.getItem('invoiceId');
+    this.invoiceId = localStorage.getItem('invoiceId')
   },
   methods: {
     toggleSidebar() {
-      this.showSidebar = !this.showSidebar;
+      this.showSidebar = !this.showSidebar
     },
     async submitOrder() {
-      console.log('Order submitted:', this.orderInfo);
-      this.showBuyNowModal = false;
+      console.log('Order submitted:', this.orderInfo)
+      this.showBuyNowModal = false
       this.orderInfo = {
         name: '',
         phone: '',
         email: '',
         address: '',
-      };
+      }
       this.$refs.toastNotification?.addToast({
         type: 'success',
         message: 'Đặt hàng thành công!',
         isLoading: false,
         duration: 3000,
-      });
+      })
     },
     async getExistingPendingInvoice(customerId) {
       try {
-        const response = await axios.get(`http://localhost:8080/api/client/hoa-don-cho/khach-hang/${customerId}`);
-        const pendingInvoices = response.data;
-        return pendingInvoices.find(invoice => invoice.trangThai === 6) || null;
+        const response = await axios.get(`http://localhost:8080/api/client/hoa-don-cho/khach-hang/${customerId}`)
+        const pendingInvoices = response.data
+        return pendingInvoices.find((invoice) => invoice.trangThai === 6) || null
       } catch (error) {
-        console.error('Lỗi khi lấy hóa đơn chờ:', error);
-        return null;
+        console.error('Lỗi khi lấy hóa đơn chờ:', error)
+        return null
       }
     },
     async checkInvoiceExists(invoiceId) {
       try {
-        await axios.get(`http://localhost:8080/api/client/gio-hang/${invoiceId}`);
-        return true;
+        await axios.get(`http://localhost:8080/api/client/gio-hang/${invoiceId}`)
+        return true
       } catch (error) {
         // Xử lý lỗi hóa đơn không tồn tại hoặc không ở trạng thái chờ
         if (error.response?.status === 500 || error.response?.status === 404) {
-          return false;
+          return false
         }
-        throw error;
+        throw error
       }
     },
     async createInvoice(customerId) {
       try {
-        const params = customerId ? { khachHangId: customerId } : {};
-        const response = await axios.post('http://localhost:8080/api/client/hoa-don-cho', {}, { params });
-        this.invoiceId = response.data.id;
-        localStorage.setItem('invoiceId', this.invoiceId);
+        const params = customerId ? { khachHangId: customerId } : {}
+        const response = await axios.post('http://localhost:8080/api/client/hoa-don-cho', {}, { params })
+        this.invoiceId = response.data.id
+        localStorage.setItem('invoiceId', this.invoiceId)
       } catch (error) {
-        throw new Error('Lỗi khi tạo hóa đơn mới: ' + (error.response?.data?.message || error.message));
+        throw new Error('Lỗi khi tạo hóa đơn mới: ' + (error.response?.data?.message || error.message))
       }
     },
 
@@ -444,26 +502,26 @@ export default {
             message: 'Vui lòng chọn sản phẩm hợp lệ!',
             isLoading: false,
             duration: 5000,
-          });
-          return;
+          })
+          return
         }
 
-        const customerId = localStorage.getItem('customerId');
-        let invoiceId = localStorage.getItem('invoiceId');
+        const customerId = localStorage.getItem('customerId')
+        let invoiceId = localStorage.getItem('invoiceId')
 
         // Kiểm tra trạng thái hóa đơn hiện tại
         if (invoiceId) {
-          const isPending = await this.isPendingInvoice(invoiceId);
+          const isPending = await this.isPendingInvoice(invoiceId)
           if (!isPending) {
-            localStorage.removeItem('invoiceId');
-            invoiceId = null;
+            localStorage.removeItem('invoiceId')
+            invoiceId = null
           }
         }
 
         // Nếu không có hóa đơn hoặc hóa đơn không hợp lệ, tạo hóa đơn mới
         if (!invoiceId) {
-          await this.createInvoice(customerId || null);
-          invoiceId = this.invoiceId;
+          await this.createInvoice(customerId || null)
+          invoiceId = this.invoiceId
         }
 
         // Thêm sản phẩm vào giỏ hàng
@@ -472,16 +530,16 @@ export default {
           maImel: null,
           soLuong: this.quantity,
           idPhieuGiamGia: null,
-        };
+        }
 
         const response = await axios.post(
           `http://localhost:8080/api/client/gio-hang/them?idHD=${invoiceId}`,
           chiTietGioHangDTO
-        );
+        )
 
         // Kiểm tra phản hồi từ backend
         if (!response.data || !response.data.chiTietGioHangDTOS) {
-          throw new Error('Phản hồi từ backend không hợp lệ');
+          throw new Error('Phản hồi từ backend không hợp lệ')
         }
 
         this.$refs.toastNotification?.addToast({
@@ -489,38 +547,38 @@ export default {
           message: `Sản phẩm "${this.product.ten_san_pham}" đã được thêm vào giỏ hàng!`,
           isLoading: false,
           duration: 3000,
-        });
+        })
 
         // Chuyển hướng đến cart-page với invoiceId
         setTimeout(() => {
           this.$router.push({
             path: '/cart-page',
             query: { invoiceId: invoiceId },
-          });
-        }, 3000);
+          })
+        }, 3000)
       } catch (error) {
-        console.error('Error adding to cart:', error);
+        console.error('Error adding to cart:', error)
         this.$refs.toastNotification?.addToast({
           type: 'error',
           message: 'Lỗi khi thêm sản phẩm vào giỏ hàng: ' + (error.response?.data?.message || error.message),
           isLoading: false,
           duration: 5000,
-        });
+        })
       }
     },
 
     // Thêm hàm kiểm tra trạng thái hóa đơn
     async isPendingInvoice(invoiceId) {
       try {
-        const response = await axios.get(`http://localhost:8080/api/client/gio-hang/${invoiceId}`);
-        return response.data.trangThai === 6;
+        const response = await axios.get(`http://localhost:8080/api/client/gio-hang/${invoiceId}`)
+        return response.data.trangThai === 6
       } catch (error) {
-        console.error('Lỗi khi kiểm tra trạng thái hóa đơn:', error);
-        return false;
+        console.error('Lỗi khi kiểm tra trạng thái hóa đơn:', error)
+        return false
       }
     },
   },
-};
+}
 </script>
 
 <style scoped>
