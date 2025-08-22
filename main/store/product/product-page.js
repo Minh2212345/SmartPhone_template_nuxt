@@ -37,8 +37,8 @@ export default {
         'Vàng đồng': '#b8860b',
         Nâu: '#8b4513',
       },
-      isLoading: false, // Thêm trạng thái loading
-    }
+      isLoading: false,
+    };
   },
   computed: {
     uniqueMemories() {
@@ -53,7 +53,9 @@ export default {
     availableMemories() {
       return [
         ...new Set(
-          this.variants.filter((v) => v.mau_sac === this.selectedVariant.mau_sac).map((v) => v.bo_nho_trong_dung_luong)
+          this.variants
+            .filter((v) => v.mau_sac === this.selectedVariant.mau_sac && (v.gia_ban != null && v.gia_ban > 0 || v.gia_sau_khi_giam != null && v.gia_sau_khi_giam > 0))
+            .map((v) => v.bo_nho_trong_dung_luong)
         ),
       ].sort();
     },
@@ -77,204 +79,209 @@ export default {
       if (kieu_man_hinh) parts.push(`Kiểu: ${kieu_man_hinh}`);
       return parts.length > 0 ? parts.join(', ') : 'Không có thông tin';
     },
+    isProductAvailable() {
+      return this.variants.some((v) => (v.gia_ban != null && v.gia_ban > 0) || (v.gia_sau_khi_giam != null && v.gia_sau_khi_giam > 0));
+    },
   },
   watch: {
     '$route.query.sp_id'(newSpId, oldSpId) {
       if (newSpId && newSpId !== oldSpId) {
-        this.isLoading = true
-        // Reset dữ liệu trước khi fetch mới
-        this.product = {}
-        this.variants = []
-        this.selectedVariant = {}
-        this.similarProducts = []
+        this.isLoading = true;
+        this.product = {};
+        this.variants = [];
+        this.selectedVariant = {};
+        this.similarProducts = [];
         this.fetchProductDetails(newSpId)
-          .then(() => {
-            return this.fetchSimilarProducts()
-          })
+          .then(() => this.fetchSimilarProducts())
           .then(() => {
             this.$nextTick(() => {
-              this.initializeOwlCarousel()
-            })
+              this.initializeOwlCarousel();
+            });
           })
           .finally(() => {
-            this.isLoading = false
-          })
+            this.isLoading = false;
+          });
       }
     },
   },
   async mounted() {
-    const sanPhamId = this.$route.query.sp_id
+    const sanPhamId = this.$route.query.sp_id;
     if (sanPhamId) {
-      this.isLoading = true
-      await this.fetchProductDetails(sanPhamId)
-      await this.fetchSimilarProducts()
+      this.isLoading = true;
+      await this.fetchProductDetails(sanPhamId);
+      await this.fetchSimilarProducts();
       this.$nextTick(() => {
-        this.initializeOwlCarousel()
-      })
-      this.isLoading = false
+        this.initializeOwlCarousel();
+      });
+      this.isLoading = false;
     }
   },
   methods: {
     async fetchProductDetails(sanPhamId) {
       try {
-        this.product = {};
-        this.variants = [];
-        this.selectedVariant = {};
-
+        this.isLoading = true;
         const response = await this.$axios.get('/api/chi-tiet-san-pham', {
           params: { sanPhamId },
         });
-        if (Array.isArray(response.data) && response.data.length > 0) {
-          this.variants = response.data.map((item) => ({
-            sp_id: item.sp_id,
-            ten_san_pham: item.ten_san_pham,
-            sp_ma: item.sp_ma,
-            sp_created_at: item.sp_created_at,
-            nha_san_xuat: item.nha_san_xuat,
-            ten_cpu: item.ten_cpu,
-            ten_gpu: item.ten_gpu,
-            thong_so_camera_sau: item.thong_so_camera_sau,
-            thong_so_camera_truoc: item.thong_so_camera_truoc,
-            ctsp_id: item.ctsp_id,
-            gia_ban: item.gia_ban,
-            ctsp_ma: item.ctsp_ma,
-            id_imel: item.id_imel,
-            imel: item.imel_value, // Sử dụng imel_value từ API
-            mau_sac: item.mau_sac,
-            ram_dung_luong: item.ram_dung_luong,
-            bo_nho_trong_dung_luong: item.bo_nho_trong_dung_luong,
-            anh_san_pham_url: item.anh_san_pham_url,
-            ghi_chu: item.ghi_chu,
-            gia_sau_khi_giam: item.gia_sau_khi_giam,
-            gia_ban_dau: item.gia_ban_dau,
-            has_discount: item.has_discount,
-            giam_phan_tram: item.giam_phan_tram,
-            giam_toi_da: item.giam_toi_da,
-            loai_giam_gia_ap_dung: item.loai_giam_gia_ap_dung,
-            chi_so_khang_bui_nuoc: item.chi_so_khang_bui_nuoc,
-            ten_cong_nghe_mang: item.ten_cong_nghe_mang,
-            he_dieu_hanh: item.he_dieu_hanh,
-            phien_ban: item.phien_ban,
-            ho_tro_bo_nho_ngoai: item.ho_tro_bo_nho_ngoai,
-            dung_luong_pin: item.dung_luong_pin,
-            cac_loai_sim_ho_tro: item.cac_loai_sim_ho_tro,
-            chat_lieu_khung: item.chat_lieu_khung,
-            chat_lieu_mat_lung: item.chat_lieu_mat_lung,
-            cong_nghe_ho_tro: item.cong_nghe_ho_tro,
-            ten_cong_nghe_man_hinh: item.ten_cong_nghe_man_hinh,
-            chuan_man_hinh: item.chuan_man_hinh,
-            kich_thuoc: item.kich_thuoc,
-            do_phan_giai: item.do_phan_giai,
-            do_sang_toi_da: item.do_sang_toi_da,
-            tan_so_quet: item.tan_so_quet,
-            kieu_man_hinh: item.kieu_man_hinh,
-          }));
-          this.product = {
-            sp_id: this.variants[0].sp_id,
-            ten_san_pham: this.variants[0].ten_san_pham,
-            nha_san_xuat: this.variants[0].nha_san_xuat,
-            ten_cpu: this.variants[0].ten_cpu,
-            ten_gpu: this.variants[0].ten_gpu,
-            thong_so_camera_sau: this.variants[0].thong_so_camera_sau,
-            thong_so_camera_truoc: this.variants[0].thong_so_camera_truoc,
-            chi_so_khang_bui_nuoc: this.variants[0].chi_so_khang_bui_nuoc,
-            ten_cong_nghe_mang: this.variants[0].ten_cong_nghe_mang,
-            he_dieu_hanh: this.variants[0].he_dieu_hanh,
-            phien_ban: this.variants[0].phien_ban,
-            ho_tro_bo_nho_ngoai: this.variants[0].ho_tro_bo_nho_ngoai,
-            dung_luong_pin: this.variants[0].dung_luong_pin,
-            cac_loai_sim_ho_tro: this.variants[0].cac_loai_sim_ho_tro,
-            chat_lieu_khung: this.variants[0].chat_lieu_khung,
-            chat_lieu_mat_lung: this.variants[0].chat_lieu_mat_lung,
-            cong_nghe_ho_tro: this.variants[0].cong_nghe_ho_tro,
-            ten_cong_nghe_man_hinh: this.variants[0].ten_cong_nghe_man_hinh,
-            chuan_man_hinh: this.variants[0].chuan_man_hinh,
-            kich_thuoc: this.variants[0].kich_thuoc,
-            do_phan_giai: this.variants[0].do_phan_giai,
-            do_sang_toi_da: this.variants[0].do_sang_toi_da,
-            tan_so_quet: this.variants[0].tan_so_quet,
-            kieu_man_hinh: this.variants[0].kieu_man_hinh,
-          };
-          this.selectedVariant = { ...this.variants[0] };
+        const variants = response.data;
+        if (variants.length > 0) {
+          this.product = variants[0];
+          this.variants = variants;
+          this.selectedVariant = variants.find((v) => v.gia_ban != null && v.gia_ban > 0) || variants[0];
         } else {
-          this.variants = [];
           this.product = {};
+          this.variants = [];
           this.selectedVariant = {};
         }
       } catch (error) {
-        console.error('Error fetching product details:', error.message, error.response?.status);
-        this.variants = [];
-        this.product = {};
-        this.selectedVariant = {};
+        console.error('Error fetching product details:', error.message);
+      } finally {
+        this.isLoading = false;
       }
     },
     async fetchSimilarProducts() {
       try {
-        const response = await this.$axios.get('/api/suggested-products')
+        const response = await this.$axios.get('/api/suggested-products');
         this.similarProducts = Array.isArray(response.data)
           ? response.data
-            .filter((p) => p.id !== this.product.sp_id)
-            .slice(0, 5)
-            .map((product) => ({
-              ...product,
-              tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown',
-            }))
-          : []
-        // Khởi tạo lại Owl Carousel sau khi dữ liệu được cập nhật
+              .filter((p) => p.id !== this.product.sp_id)
+              .slice(0, 5)
+              .map((product) => ({
+                ...product,
+                tenNhaSanXuat: this.manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown',
+              }))
+          : [];
         this.$nextTick(() => {
-          this.initializeOwlCarousel()
-        })
+          this.initializeOwlCarousel();
+        });
       } catch (error) {
-        console.error('Error fetching suggested products:', error.message, error.response?.status)
-        this.similarProducts = []
+        console.error('Error fetching suggested products:', error.message, error.response?.status);
+        this.similarProducts = [];
       }
     },
     selectColor(color) {
+      if (!this.isProductAvailable) return;
       const variant = this.variants.find(
         (v) => v.mau_sac === color && v.bo_nho_trong_dung_luong === this.selectedVariant.bo_nho_trong_dung_luong
       ) || this.variants.find((v) => v.mau_sac === color);
-      if (variant) {
-        this.selectedVariant = { ...variant, imel: variant.imel || null }; // Đảm bảo imel không undefined
+      if (variant && ((variant.gia_ban != null && variant.gia_ban > 0) || (variant.gia_sau_khi_giam != null && variant.gia_sau_khi_giam > 0))) {
+        this.selectedVariant = { ...variant, imel: variant.imel || null };
         console.log('Selected Variant after color change:', this.selectedVariant);
       }
     },
     selectMemory(memory) {
-      const variant = this.variants.find((v) => v.bo_nho_trong_dung_luong === memory && v.mau_sac === this.selectedVariant.mau_sac) ||
-        this.variants.find((v) => v.bo_nho_trong_dung_luong === memory);
-      if (variant) {
-        this.selectedVariant = { ...variant, imel: variant.imel || null }; // Đảm bảo imel không undefined
+      if (!this.isProductAvailable) return;
+      const variant = this.variants.find(
+        (v) => v.bo_nho_trong_dung_luong === memory && v.mau_sac === this.selectedVariant.mau_sac
+      ) || this.variants.find((v) => v.bo_nho_trong_dung_luong === memory);
+      if (variant && ((variant.gia_ban != null && variant.gia_ban > 0) || (variant.gia_sau_khi_giam != null && variant.gia_sau_khi_giam > 0))) {
+        this.selectedVariant = { ...variant, imel: variant.imel || null };
         console.log('Selected Variant after memory change:', this.selectedVariant);
       }
     },
     getImageForColor(color) {
-      const variant = this.variants.find((v) => v.mau_sac === color)
-      return variant ? variant.anh_san_pham_url : '/assets/images/placeholder.jpg'
+      const variant = this.variants.find((v) => v.mau_sac === color);
+      return variant ? (variant.anh_san_pham_url || '/assets/images/placeholder.jpg') : '/assets/images/placeholder.jpg';
     },
     getPriceForMemory(memory) {
       const variant =
         this.variants.find((v) => v.bo_nho_trong_dung_luong === memory && v.mau_sac === this.selectedVariant.mau_sac) ||
-        this.variants.find((v) => v.bo_nho_trong_dung_luong === memory)
-      return variant ? variant.gia_ban : 0
+        this.variants.find((v) => v.bo_nho_trong_dung_luong === memory);
+      return variant ? (variant.gia_ban != null && variant.gia_ban > 0 ? variant.gia_ban : null) : null;
     },
     getPriceForColor(color) {
       const variant = this.variants.find(
         (v) => v.mau_sac === color && v.bo_nho_trong_dung_luong === this.selectedVariant.bo_nho_trong_dung_luong
       );
-      return variant ? (variant.has_discount ? variant.gia_sau_khi_giam : variant.gia_ban) : null;
+      if (!variant) return null;
+      const price = variant.has_discount ? variant.gia_sau_khi_giam : variant.gia_ban;
+      return price != null && price > 0 ? price : null;
     },
     isMemoryAvailable(memory) {
-      return this.availableMemories.includes(memory)
+      const variant =
+        this.variants.find((v) => v.bo_nho_trong_dung_luong === memory && v.mau_sac === this.selectedVariant.mau_sac) ||
+        this.variants.find((v) => v.bo_nho_trong_dung_luong === memory);
+      return variant && ((variant.gia_ban != null && variant.gia_ban > 0) || (variant.gia_sau_khi_giam != null && variant.gia_sau_khi_giam > 0));
+    },
+    isColorAvailable(color) {
+      const variant = this.variants.find(
+        (v) => v.mau_sac === color && v.bo_nho_trong_dung_luong === this.selectedVariant.bo_nho_trong_dung_luong
+      ) || this.variants.find((v) => v.mau_sac === color);
+      return variant && ((variant.gia_ban != null && variant.gia_ban > 0) || (variant.gia_sau_khi_giam != null && variant.gia_sau_khi_giam > 0));
     },
     formatPrice(price) {
-      return Number(price).toLocaleString('vi-VN')
+      return price != null && price > 0 ? Number(price).toLocaleString('vi-VN') : 'Liên hệ để đặt hàng';
     },
     addToCart() {
+      if (!this.isProductAvailable) {
+        this.$refs.toastNotification?.addToast({
+          type: 'warning',
+          message: 'Sản phẩm hiện không có sẵn. Vui lòng liên hệ để đặt hàng!',
+          isLoading: false,
+          duration: 3000,
+        });
+        return;
+      }
       console.log('Added:', {
         productId: this.product.sp_id,
         variantId: this.selectedVariant.ctsp_id,
-        imel: this.selectedVariant.imel, // Thêm imel vào giỏ hàng
+        imel: this.selectedVariant.imel,
         totalItems: this.quantity,
-      })
+      });
+      // Existing addToCart logic remains unchanged
+    },
+    async buyNow() {
+      if (!this.isProductAvailable) {
+        this.$refs.toastNotification?.addToast({
+          type: 'warning',
+          message: 'Sản phẩm hiện không có sẵn. Vui lòng liên hệ để đặt hàng!',
+          isLoading: false,
+          duration: 3000,
+        });
+        return;
+      }
+      try {
+        const response = await this.$axios.post('/api/client/them-gio-hang', {
+          productId: this.product.sp_id,
+          variantId: this.selectedVariant.ctsp_id,
+          imel: this.selectedVariant.imel,
+          totalItems: this.quantity,
+        });
+        const invoiceId = response.data.hoaDonId;
+        this.$refs.toastNotification?.addToast({
+          type: 'success',
+          message: 'Đã thêm sản phẩm vào giỏ hàng! Đang chuyển hướng...',
+          isLoading: false,
+          duration: 3000,
+        });
+        setTimeout(() => {
+          this.$router.push({
+            path: '/cart-page',
+            query: { invoiceId: invoiceId },
+          });
+        }, 3000);
+      } catch (error) {
+        console.error('Error during buy now:', error);
+        this.$refs.toastNotification?.addToast({
+          type: 'error',
+          message: 'Lỗi khi mua hàng: ' + (error.response?.data?.message || error.message),
+          isLoading: false,
+          duration: 5000,
+        });
+      }
+    },
+    async isPendingInvoice(invoiceId) {
+      try {
+        const response = await this.$axios.get(`http://localhost:8080/api/client/gio-hang/${invoiceId}`);
+        return response.data.trangThai === 6;
+      } catch (error) {
+        console.error('Lỗi khi kiểm tra trạng thái hóa đơn:', error);
+        return false;
+      }
+    },
+    handleImageError(event) {
+      console.error('Image failed to load:', event.target.src);
+      event.target.src = '/assets/images/placeholder.jpg';
     },
     initializeOwlCarousel() {
       if (process.client) {
@@ -283,7 +290,6 @@ export default {
           if ($ && $.fn && $.fn.owlCarousel) {
             const $carousel = $('.owl-carousel');
             if ($carousel.length) {
-              // Hủy carousel cũ nếu tồn tại
               if ($carousel.hasClass('owl-loaded')) {
                 try {
                   $carousel.trigger('destroy.owl.carousel');
@@ -294,7 +300,6 @@ export default {
                   console.warn('Error destroying Owl Carousel:', e);
                 }
               }
-              // Khởi tạo carousel mới
               const options = $carousel.data('owl-options') || {
                 nav: false,
                 dots: true,
@@ -326,4 +331,4 @@ export default {
       }
     },
   },
-}
+};

@@ -38,78 +38,83 @@
               </div>
             </div>
 
-            <div class="products mb-3">
-              <div class="row justify-content-center">
-                <div class="col-6 col-md-4 col-lg-4 col-xl-3" v-for="product in products" :key="product.id">
-                  <div class="product product-7 text-center shadow">
-                    <figure class="product-media">
-                      <NuxtLink :to="`/product-page?sp_id=${product.id}`">
-                        <img
-                          :src="product.imageUrl || '/assets/images/placeholder.jpg'"
-                          alt="Product image"
-                          class="product-image"
-                        />
-                      </NuxtLink>
-                      <div class="product-action-vertical">
-                        <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
-                          <span>So sánh</span>
-                        </NuxtLink>
-                      </div>
-                      <span
-                        v-if="product.hasDiscount"
-                        class="product-label label-discount"
-                        style="
-                          position: absolute;
-                          top: 10px;
-                          left: 10px;
-                          background-color: #ff3333;
-                          color: white;
-                          padding: 2px 6px;
-                          border-radius: 4px;
-                        "
-                      >
-                        <span v-if="product.loaiGiamGiaApDung === 'Phần trăm' && product.giamPhanTram > 0"
-                          >Giảm {{ product.giamPhanTram }}%</span
-                        >
-                        <span v-else-if="product.loaiGiamGiaApDung === 'Tiền mặt' && product.giamToiDa > 0"
-                          >Giảm {{ formatPrice(product.giamToiDa) }} VND</span
-                        >
-                      </span>
-                    </figure>
-                    <div class="product-body">
-                      <div class="product-cat">
-                        <NuxtLink to="/category-4cols">{{
-                          manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown'
-                        }}</NuxtLink>
-                      </div>
-                      <h3 class="product-title">
-                        <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
-                      </h3>
-                      <div v-if="product.hasDiscount" class="product-price">
-                        <span style="text-decoration: line-through; color: #999"
-                          >{{ formatPrice(product.giaBan || 0) }} VND</span
-                        >
-                        <span style="color: red; margin-left: 5px"
-                          >{{ formatPrice(product.giaSauKhiGiam || 0) }} VND</span
-                        >
-                      </div>
-                      <div v-else class="product-price">{{ formatPrice(product.giaBan || 0) }} VND</div>
-                      <div class="product-nav product-nav-dots">
-                        <a
-                          v-for="(mauSac, index) in product.mauSacList"
-                          :key="index"
-                          :class="{ active: index === 0 }"
-                          :style="{ background: getColorCode(mauSac) }"
-                          href="#"
-                        >
-                          <span class="sr-only">{{ mauSac }}</span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <div class="products mb-3">
+    <div class="row justify-content-center">
+      <div class="col-6 col-md-4 col-lg-4 col-xl-3" v-for="product in products" :key="product.id">
+        <div class="product product-7 text-center shadow">
+          <figure class="product-media">
+            <NuxtLink :to="`/product-page?sp_id=${product.id}`">
+              <img
+                :src="product.imageUrl || '/assets/images/placeholder.jpg'"
+                alt="Product image"
+                class="product-image"
+              />
+            </NuxtLink>
+            <div class="product-action-vertical">
+              <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
+                <span>So sánh</span>
+              </NuxtLink>
             </div>
+            <span
+              v-if="product.hasDiscount && product.giaBan"
+              class="product-label label-discount"
+              style="
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                background-color: #ff3333;
+                color: white;
+                padding: 2px 6px;
+                border-radius: 4px;
+              "
+            >
+              <span v-if="product.loaiGiamGiaApDung === 'Phần trăm' && product.giamPhanTram > 0"
+                >Giảm {{ product.giamPhanTram }}%</span
+              >
+              <span v-else-if="product.loaiGiamGiaApDung === 'Tiền mặt' && product.giamToiDa > 0"
+                >Giảm {{ formatPrice(product.giamToiDa) }} VND</span
+              >
+            </span>
+          </figure>
+          <div class="product-body">
+            <div class="product-cat">
+              <NuxtLink to="/category-4cols">{{
+                manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown'
+              }}</NuxtLink>
+            </div>
+            <h3 class="product-title">
+              <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
+            </h3>
+            <div v-if="product.giaBan">
+              <div v-if="product.hasDiscount" class="product-price">
+                <span style="text-decoration: line-through; color: #999"
+                  >{{ formatPrice(product.giaBan) }} VND</span
+                >
+                <span style="color: red; margin-left: 5px"
+                  >{{ formatPrice(product.giaSauKhiGiam) }} VND</span
+                >
+              </div>
+              <div v-else class="product-price">{{ formatPrice(product.giaBan) }} VND</div>
+            </div>
+            <div v-else class="product-price" style="color: #333; font-weight: bold">
+              Liên hệ để đặt hàng
+            </div>
+            <div class="product-nav product-nav-dots">
+              <a
+                v-for="(mauSac, index) in product.mauSacList"
+                :key="index"
+                :class="{ active: index === 0 }"
+                :style="{ background: getColorCode(mauSac) }"
+                href="#"
+              >
+                <span class="sr-only">{{ mauSac }}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
             <nav aria-label="Page navigation">
               <ul class="pagination justify-content-center">
