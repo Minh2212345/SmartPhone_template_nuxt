@@ -10,7 +10,7 @@
         <div v-for="(status, index) in timelineStatuses" :key="index" class="timeline-step" :class="{
           'completed': status.completed,
           'current': status.current,
-          'canceled': status.title === 'Đã hủy'
+          'canceled': status.title === 'Đã hủy' || order.trangThai === 4
         }">
           <div class="step-circle">
             <i :class="status.icon"></i>
@@ -134,6 +134,23 @@ export default {
     updateTimelineStatuses() {
       if (!this.order) return;
 
+      const currentStatusName = this.mapStatusIdToName(this.order.trangThai);
+
+      // If the order is explicitly cancelled (trangThai === 4) or if the mapped name is "Đã hủy"
+      // (which implies a backend issue where 3 is sent for cancelled orders)
+      if (this.order.trangThai === 4 || currentStatusName === 'Đã hủy') {
+        this.timelineStatuses = [
+          {
+            title: 'Đã hủy',
+            time: this.formatDateTime(this.order.ngayTao) || 'Đang chờ',
+            icon: 'las la-times-circle',
+            completed: true,
+            current: true,
+          },
+        ];
+        return;
+      }
+
       if (this.order.loaiDon === 'trực tiếp') {
         this.timelineStatuses = [
           {
@@ -152,37 +169,38 @@ export default {
           { title: 'Hoàn thành', time: 'Đang chờ', icon: 'las la-calendar-check', completed: false, current: false },
         ];
 
-        const status = this.mapStatusIdToName(this.order.trangThai);
-
-        if (status === 'Đã hủy') {
-          this.timelineStatuses = [
-            {
-              title: 'Đã hủy',
-              time: this.formatDateTime(this.order.ngayTao) || 'Đang chờ',
-              icon: 'las la-times-circle',
-              completed: false,
-              current: true,
-            },
-          ];
-        } else {
-            const statusIndex = this.timelineStatuses.findIndex(s => s.title === status);
-
-            this.timelineStatuses.forEach((item, index) => {
-                const historyItem = this.statusTimeline.find(h => this.mapStatusIdToName(h.trangThai) === item.title);
-                item.time = historyItem ? this.formatDateTime(historyItem.thoiGian) : 'Đang chờ';
-
-                if (index < statusIndex) {
-                    item.completed = true;
-                    item.current = false;
-                } else if (index === statusIndex) {
-                    item.completed = true;
-                    item.current = true;
-                } else {
-                    item.completed = false;
-                    item.current = false;
-                }
-            });
+        // Workaround: If backend sends 3 for cancelled orders, force display as "Đã hủy"
+        if (this.order.trangThai === 3 && this.order.lichSuHoaDon.some(item => item.hanhDong.includes('Hủy đơn hàng'))) {
+            this.timelineStatuses = [
+                {
+                    title: 'Đã hủy',
+                    time: this.formatDateTime(this.order.ngayTao) || 'Đang chờ',
+                    icon: 'las la-times-circle',
+                    completed: true,
+                    current: true,
+                },
+            ];
+            return;
         }
+
+        const status = this.mapStatusIdToName(this.order.trangThai);
+        const statusIndex = this.timelineStatuses.findIndex(s => s.title === status);
+
+        this.timelineStatuses.forEach((item, index) => {
+            const historyItem = this.statusTimeline.find(h => this.mapStatusIdToName(h.trangThai) === item.title);
+            item.time = historyItem ? this.formatDateTime(historyItem.thoiGian) : 'Đang chờ';
+
+            if (index < statusIndex) {
+                item.completed = true;
+                item.current = false;
+            } else if (index === statusIndex) {
+                item.completed = true;
+                item.current = true;
+            } else {
+                item.completed = false;
+                item.current = false;
+            }
+        });
       }
     },
     formatDateTime(dateTime) {
