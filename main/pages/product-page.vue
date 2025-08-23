@@ -832,4 +832,18 @@ export default {
   line-height: 20px;
   font-size: 12px;
 }
+
+#product-zoom-gallery {
+  max-height: 500px; 
+  overflow-y: auto; 
+  display: block; 
+}
+
+.product-gallery-item img {
+  max-height: 80px;
+  max-width: 80px; 
+  width: auto;
+  height: auto;
+  object-fit: cover;
+}
 </style>
