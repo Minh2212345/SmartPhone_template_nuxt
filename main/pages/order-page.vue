@@ -79,14 +79,6 @@
 
           <!-- Order History Tab -->
           <div v-if="activeTab === 'history'" class="space-y-6">
-            <div class="flex items-center gap-4 mb-4">
-              <label class="text-xl font-medium text-gray-800">Lịch sử mua hàng</label>
-              <input v-model="startDate" type="date"
-                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" />
-              <span class="text-xl text-gray-600">→</span>
-              <input v-model="endDate" type="date"
-                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" />
-            </div>
             <div class="flex gap-6 border-b border-gray-200 pb-2 overflow-x-auto">
               <button v-for="status in orderStatuses" :key="status.id"
                 class="px-6 py-2 text-gray-700 hover:text-blue-700 whitespace-nowrap transition-colors duration-200"
@@ -447,8 +439,6 @@ export default {
       activeTab: 'account',
       activeStatus: null, // Changed to null to represent 'all'
       activeWarrantyStatus: 'all',
-      startDate: null,
-      endDate: null,
       customerName: localStorage.getItem('customerName') || 'Khách hàng',
       phoneNumber: localStorage.getItem('phoneNumber') || 'Chưa có số điện thoại',
       fullName: localStorage.getItem('fullName') || '',
@@ -487,11 +477,11 @@ export default {
       ],
       orderStatuses: [
         { id: null, name: 'Tất cả' },
-        { id: 0, name: 'Đơn hàng đã đặt' },
-        { id: 1, name: 'Chờ xác nhận' },
-        { id: 3, name: 'Chờ giao hàng' },
-        { id: 4, name: 'Vận chuyển' },
-        { id: 8, name: 'Hoàn thành' },
+        { id: 0, name: 'Chờ xác nhận' },
+        { id: 1, name: 'Chờ giao hàng' },
+        { id: 2, name: 'Đang giao' },
+        { id: 3, name: 'Hoàn thành' },
+        { id: 4, name: 'Đã hủy' },
       ],
       warrantyStatuses: [
         { id: 'all', name: 'Tất cả' },
@@ -525,12 +515,6 @@ export default {
       }
     },
     activeStatus() {
-      this.fetchOrders();
-    },
-    startDate() {
-      this.fetchOrders();
-    },
-    endDate() {
       this.fetchOrders();
     }
   },
@@ -576,7 +560,8 @@ export default {
           idKhachHang: idKhachHang,
           trangThai: this.activeStatus,
           startDate: this.startDate ? new Date(this.startDate).toISOString() : null,
-          endDate: this.endDate ? new Date(this.endDate).toISOString() : null
+          endDate: this.endDate ? new Date(this.endDate).toISOString() : null,
+          deleted: false
         };
 
         const response = await axios.get('http://localhost:8080/api/hoa-don/my-orders', { params });
@@ -1068,5 +1053,15 @@ input,
 select,
 label {
   font-size: 1.5rem !important;
+}
+
+.cancelled-order {
+  background-color: #fee2e2; /* A more prominent red background */
+  color: #b91c1c; /* Darker red text */
+  opacity: 1; /* Ensure full opacity */
+}
+
+.cancelled-order:hover {
+  background-color: #fecaca; /* Slightly darker red on hover */
 }
 </style>
