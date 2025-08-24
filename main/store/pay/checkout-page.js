@@ -13,6 +13,7 @@ export default {
       deliveryMethod: 'delivery',
       discountCode: '',
       appliedDiscount: null,
+      calculatedDiscount: 0,
       showConfirmationModal: false,
       isLoading: false,
       selectedStoreIndex: null,
@@ -230,6 +231,7 @@ export default {
       try {
         const idKhachHang = localStorage.getItem('customerId');
         const addressData = {
+          idKhachHang: idKhachHang,
           ten: this.delivery.ten,
           soDienThoai: this.delivery.soDienThoai,
           email: this.delivery.email,
@@ -240,9 +242,9 @@ export default {
           ghiChu: this.delivery.ghiChu
         };
         if (this.selectedAddressId) {
-          await axios.put(`http://localhost:8080/khach-hang/update/${this.selectedAddressId}`, addressData);
+          await axios.put(`http://localhost:8080/khach-hang/updateDchi/${this.selectedAddressId}`, addressData);
         } else {
-          await axios.post(`http://localhost:8080/khach-hang/add/${idKhachHang}`, addressData);
+          await axios.post(`http://localhost:8080/khach-hang/addDchiKhachHang`, addressData);
         }
         await this.fetchAddresses();
         this.showToast('success', 'Địa chỉ đã được lưu thành công!');
@@ -260,7 +262,7 @@ export default {
     async confirmDeleteAddress(addressId) {
       if (confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
         try {
-          await axios.delete(`http://localhost:8080/khach-hang/delete/${addressId}`);
+          await axios.put(`http://localhost:8080/khach-hang/deleteDCKH/${addressId}`);
           this.addresses = this.addresses.filter(a => a.id !== addressId);
           if (this.selectedAddressId === addressId) {
             this.clearSelectedAddress();
@@ -456,12 +458,25 @@ export default {
     },
     async applyDiscount() {
       try {
-        const response = await axios.post('http://localhost:8080/api/discount/apply', {
-          code: this.discountCode,
-          invoiceId: this.invoiceId
+        const customerId = localStorage.getItem('customerId');
+        const response = await axios.get('http://localhost:8080/api/phieu-giam-gia/validate-at-checkout', {
+          params: {
+            ma: this.discountCode,
+            totalPrice: this.order.subtotal,
+            khachHangId: customerId
+          }
         });
         this.appliedDiscount = response.data;
-        this.order.total = this.order.subtotal - (this.appliedDiscount?.amount || 0);
+        if (this.appliedDiscount.loaiPhieuGiamGia === 'Phần trăm') {
+          let discountAmount = (this.order.subtotal * this.appliedDiscount.phanTramGiamGia) / 100;
+          if (discountAmount > this.appliedDiscount.soTienGiamToiDa) {
+            discountAmount = this.appliedDiscount.soTienGiamToiDa;
+          }
+          this.calculatedDiscount = discountAmount;
+        } else { // Tiền mặt
+          this.calculatedDiscount = this.appliedDiscount.soTienGiamToiDa;
+        }
+        this.order.total = this.order.subtotal - this.calculatedDiscount;
         this.showToast('success', 'Mã giảm giá đã được áp dụng!');
       } catch (error) {
         this.handleError(error, 'Mã giảm giá không hợp lệ');
