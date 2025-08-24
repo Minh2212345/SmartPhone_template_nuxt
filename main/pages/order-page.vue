@@ -113,6 +113,12 @@
                         :to="'/invoice-status?orderId=' + order.id">
                         Tra cứu
                       </NuxtLink>
+                      <button
+                        v-if="order.trangThai === 0"
+                        @click="cancelOrder(order.id)"
+                        class="ml-2 px-4 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200 font-medium">
+                        Hủy đơn
+                      </button>
                     </td>
                   </tr>
                   <tr v-if="filteredOrders.length === 0">
@@ -1006,6 +1012,17 @@ export default {
       if (!address) return '';
       const { diaChiCuThe, phuong, quan, thanhPho } = address;
       return [diaChiCuThe, phuong, quan, thanhPho].filter(Boolean).join(', ');
+    },
+    async cancelOrder(orderId) {
+      if (!confirm('Bạn có chắc muốn hủy đơn hàng này?')) return;
+      try {
+        await axios.put(`http://localhost:8080/api/hoa-don/${orderId}/cancel-client`);
+        alert('Hủy đơn hàng thành công!');
+        this.fetchOrders(this.currentPage);
+      } catch (error) {
+        console.error('Lỗi khi hủy đơn hàng:', error);
+        alert(error.response?.data?.message || 'Lỗi khi hủy đơn hàng');
+      }
     },
   },
 };
