@@ -410,7 +410,7 @@
               </div>
               <div v-if="appliedDiscount" class="flex justify-between text-sm mt-2 text-green-600">
                 <span>Giảm giá</span>
-                <span>-{{ appliedDiscount.amount.toLocaleString('vi-VN') }} ₫</span>
+                <span>-{{ calculatedDiscount.toLocaleString('vi-VN') }} ₫</span>
               </div>
               <div class="flex justify-between font-semibold text-lg mt-3 pt-3 border-t">
                 <span>Tổng cộng</span>
