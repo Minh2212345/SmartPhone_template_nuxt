@@ -118,27 +118,29 @@ export default {
   },
   methods: {
     async fetchProductDetails(sanPhamId) {
-      try {
-        this.isLoading = true;
-        const response = await this.$axios.get('/api/chi-tiet-san-pham', {
-          params: { sanPhamId },
-        });
-        const variants = response.data;
-        if (variants.length > 0) {
-          this.product = variants[0];
-          this.variants = variants;
-          this.selectedVariant = variants.find((v) => v.gia_ban != null && v.gia_ban > 0) || variants[0];
-        } else {
-          this.product = {};
-          this.variants = [];
-          this.selectedVariant = {};
-        }
-      } catch (error) {
-        console.error('Error fetching product details:', error.message);
-      } finally {
-        this.isLoading = false;
-      }
-    },
+  try {
+    this.isLoading = true;
+    const response = await this.$axios.get('/api/chi-tiet-san-pham', {
+      params: { sanPhamId },
+    });
+    const variants = response.data;
+    if (variants.length > 0) {
+      this.product = variants[0];
+      this.variants = variants;
+      this.selectedVariant = variants.find(
+        (v) => (v.gia_ban != null && v.gia_ban > 0) || (v.gia_sau_khi_giam != null && v.gia_sau_khi_giam > 0)
+      ) || variants[0];
+    } else {
+      this.product = {};
+      this.variants = [];
+      this.selectedVariant = {};
+    }
+  } catch (error) {
+    console.error('Error fetching product details:', error.message);
+  } finally {
+    this.isLoading = false;
+  }
+},
     async fetchSimilarProducts() {
       try {
         const response = await this.$axios.get('/api/suggested-products');
