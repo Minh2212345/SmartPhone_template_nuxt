@@ -131,21 +131,24 @@
                     </div>
 
                     <div class="details-filter-row details-row-size">
-                      <label for="qty">Số lượng:</label>
-                      <div class="product-details-quantity">
-                        <input
-                          id="qty"
-                          v-model="quantity"
-                          type="number"
-                          class="form-control"
-                          min="1"
-                          max="10"
-                          step="1"
-                          data-decimals="0"
-                          required
-                        />
-                      </div>
-                    </div>
+  <label for="qty">Số lượng:</label>
+  <div class="product-details-quantity">
+    <input
+      id="qty"
+      v-model="quantity"
+      type="number"
+      class="form-control"
+      min="1"
+      :max="selectedVariant.so_luong_ton_kho || 10"
+      step="1"
+      data-decimals="0"
+      required
+    />
+    <span class="stock-info" v-if="selectedVariant.so_luong_ton_kho != null">
+      (Còn {{ Number(selectedVariant.so_luong_ton_kho) }} sản phẩm)
+    </span>
+  </div>
+</div>
 
                     <div class="product-details-action">
                       <a href="#" class="btn-product btn-cart" @click.prevent="addToCart"
@@ -833,17 +836,14 @@ export default {
   font-size: 12px;
 }
 
-#product-zoom-gallery {
-  max-height: 500px; 
-  overflow-y: auto; 
-  display: block; 
-}
 
 .product-gallery-item img {
   max-height: 80px;
-  max-width: 80px; 
+  max-width: 80px;
   width: auto;
   height: auto;
   object-fit: cover;
 }
+
+
 </style>
