@@ -170,7 +170,7 @@ export default {
         ];
 
         // Workaround: If backend sends 3 for cancelled orders, force display as "Đã hủy"
-        if (this.order.trangThai === 3 && this.order.lichSuHoaDon.some(item => item.hanhDong.includes('Hủy đơn hàng'))) {
+        if (this.order.trangThai === 3 && Array.isArray(this.order.lichSuHoaDon) && this.order.lichSuHoaDon.some(item => item.hanhDong.includes('Hủy đơn hàng'))) {
             this.timelineStatuses = [
                 {
                     title: 'Đã hủy',
