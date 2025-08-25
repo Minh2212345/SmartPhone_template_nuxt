@@ -518,7 +518,7 @@ export default {
           params.append('amount', this.order.total);
           params.append('orderInfo', `Thanh toan don hang #${this.invoiceId}`);
           params.append('invoiceId', this.invoiceId);
-          params.append('returnUrl', window.location.origin + '/checkout'); // Đảm bảo là /checkout
+          params.append('returnUrl', window.location.origin + '/checkout-page'); // Đảm bảo là /checkout-page
 
           const customerId = localStorage.getItem('customerId');
           const hoaDonRequest = {
