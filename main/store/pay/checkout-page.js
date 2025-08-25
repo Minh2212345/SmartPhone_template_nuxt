@@ -142,6 +142,15 @@ export default {
       console.error('Mounted Error:', error);
     }
   },
+  watch: {
+    activeTab(newVal) {
+      // Khi người dùng chuyển sang tab "Thêm địa chỉ mới" (index = 0),
+      // chúng ta cần xóa lựa chọn địa chỉ hiện tại để đảm bảo đây là thao tác THÊM MỚI.
+      if (newVal === 0) {
+        this.clearSelectedAddress();
+      }
+    }
+  },
   methods: {
     async createNewInvoice() {
       try {
@@ -210,7 +219,8 @@ export default {
     },
     editSelectedAddress() {
       this.activeTab = 0;
-      this.delivery = { ...this.selectedAddress };
+      // Tái sử dụng hàm selectAddress để đảm bảo ID được gán chính xác
+      this.selectAddress(this.selectedAddress);
     },
     clearSelectedAddress() {
       this.selectedAddressId = null;
@@ -242,7 +252,7 @@ export default {
           ghiChu: this.delivery.ghiChu
         };
         if (this.selectedAddressId) {
-          await axios.put(`http://localhost:8080/khach-hang/updateDchi/${this.selectedAddressId}`, addressData);
+          await axios.put(`http://localhost:8080/khach-hang/client/updateDiaChi/${this.selectedAddressId}`, addressData);
         } else {
           await axios.post(`http://localhost:8080/khach-hang/addDchiKhachHang`, addressData);
         }
@@ -262,14 +272,18 @@ export default {
     async confirmDeleteAddress(addressId) {
       if (confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
         try {
-          await axios.put(`http://localhost:8080/khach-hang/deleteDCKH/${addressId}`);
-          this.addresses = this.addresses.filter(a => a.id !== addressId);
+          await axios.delete(`http://localhost:8080/khach-hang/client/deleteDiaChi/${addressId}`);
+          this.showToast('success', 'Đã gửi yêu cầu xóa địa chỉ!');
+
+          // Nếu địa chỉ bị xóa là địa chỉ đang được chọn, hãy xóa lựa chọn đó đi
           if (this.selectedAddressId === addressId) {
             this.clearSelectedAddress();
           }
-          this.showToast('success', 'Địa chỉ đã được xóa!');
+
+          // Tải lại danh sách địa chỉ từ server để lấy trạng thái đúng nhất
+          await this.fetchAddresses();
         } catch (error) {
-          this.handleError(error, 'Lỗi khi xóa địa chỉ');
+          this.handleError(error, 'Lỗi khi xóa địa chỉ. Vui lòng kiểm tra lại backend.');
         }
       }
     },
