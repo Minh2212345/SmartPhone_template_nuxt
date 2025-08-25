@@ -78,9 +78,9 @@
           </figure>
           <div class="product-body">
             <div class="product-cat">
-              <NuxtLink to="/category-4cols">{{
-                manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown'
-              }}</NuxtLink>
+              <!-- <NuxtLink to="/category-4cols">{{
+                product.tenNhaSanXuat
+              }}</NuxtLink> -->
             </div>
             <h3 class="product-title">
               <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
