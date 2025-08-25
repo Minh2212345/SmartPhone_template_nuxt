@@ -394,34 +394,39 @@ export default {
     async updateQuantity(index, newQuantity) {
       const item = this.cartItems[index];
       try {
-        const chiTietGioHangDTO = {
-          chiTietSanPhamId: item.chiTietSanPhamId,
-          maImel: item.maImel,
-          soLuong: newQuantity,
-          idPhieuGiamGia: item.idPhieuGiamGia || null,
-        };
-        const response = await axios.post(`http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`, chiTietGioHangDTO);
-        this.cartItems = response.data.chiTietGioHangDTOS.map(item => ({
-          chiTietSanPhamId: item.chiTietSanPhamId,
-          maImel: item.maImel,
-          tenSanPham: item.tenSanPham || 'Sản phẩm không xác định',
-          mauSac: item.mauSac || 'Không xác định',
-          ram: item.ram || 'Không xác định',
-          boNhoTrong: item.boNhoTrong || 'Không xác định',
-          giaBan: item.giaBan || 0,
-          ghiChuGia: item.ghiChuGia || '',
-          soLuong: item.soLuong || 1,
-          tongTien: item.tongTien || 0,
-          image: item.image || '/assets/images/placeholder.jpg',
-          productLink: `/product-page?sp_id=${item.chiTietSanPhamId}`,
-          selected: this.cartItems.find(i => i.maImel === item.maImel)?.selected || true,
-        }));
-        this.$refs.toastNotification?.addToast({
-          type: 'success',
-          message: 'Cập nhật số lượng thành công!',
-          isLoading: false,
-          duration: 3000,
-        });
+        if (newQuantity > item.soLuong) { // Increment quantity
+          const chiTietGioHangDTO = {
+            chiTietSanPhamId: item.chiTietSanPhamId,
+            maImel: '', // No IMEI for adding a generic instance
+            soLuong: 1, // Always add one item at a time
+            idPhieuGiamGia: item.idPhieuGiamGia || null,
+          };
+          await axios.post(`http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`, chiTietGioHangDTO);
+          this.$refs.toastNotification?.addToast({
+            type: 'success',
+            message: 'Đã thêm 1 sản phẩm!',
+            isLoading: false,
+            duration: 3000,
+          });
+        } else if (newQuantity < item.soLuong) { // Decrement quantity
+          // To decrement, we need to remove one instance of this product.
+          // The backend's xoaSanPhamKhoiGioHang removes one instance if maImel is empty.
+          await axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
+            params: {
+              idHD: this.invoiceId,
+              spId: item.chiTietSanPhamId,
+              maImel: '', // Remove one generic instance
+            },
+          });
+          this.$refs.toastNotification?.addToast({
+            type: 'success',
+            message: 'Đã xóa 1 sản phẩm!',
+            isLoading: false,
+            duration: 3000,
+          });
+        }
+        // After adding/removing, re-fetch the cart to update the UI
+        await this.fetchCart();
       } catch (error) {
         this.handleError(error, 'Lỗi khi cập nhật số lượng');
       }

@@ -460,7 +460,7 @@ export default {
       return true;
     },
     handleError(error, defaultMessage) {
-      const message = error.response?.data?.message || error.message || defaultMessage || 'Đã xảy ra lỗi không xác định';
+      const message = error.response?.data || error.message || defaultMessage || 'Đã xảy ra lỗi không xác định';
       this.showToast('error', message);
     },
     setDeliveryMethod(method) {
@@ -497,7 +497,12 @@ export default {
       }
     },
     showToast(type, message) {
-      console.log(`${type}: ${message}`);
+      // Replace with your actual toast notification implementation
+      if (type === 'success') {
+        alert(`SUCCESS: ${message}`);
+      } else {
+        alert(`ERROR: ${message}`);
+      }
     },
     nextStep() {
       console.log('Nút Tiếp tục được nhấn, currentStep:', this.currentStep);

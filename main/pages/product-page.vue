@@ -528,21 +528,19 @@ export default {
         }
 
         // Thêm sản phẩm vào giỏ hàng
-        const chiTietGioHangDTO = {
-          chiTietSanPhamId: this.selectedVariant.ctsp_id,
-          maImel: null,
-          soLuong: this.quantity,
-          idPhieuGiamGia: null,
-        }
+        // Loop to add each item individually
+        for (let i = 0; i < this.quantity; i++) {
+          const chiTietGioHangDTO = {
+            chiTietSanPhamId: this.selectedVariant.ctsp_id,
+            maImel: null,
+            soLuong: 1, // Always add one item at a time
+            idPhieuGiamGia: null,
+          };
 
-        const response = await axios.post(
-          `http://localhost:8080/api/client/gio-hang/them?idHD=${invoiceId}`,
-          chiTietGioHangDTO
-        )
-
-        // Kiểm tra phản hồi từ backend
-        if (!response.data || !response.data.chiTietGioHangDTOS) {
-          throw new Error('Phản hồi từ backend không hợp lệ')
+          await axios.post(
+            `http://localhost:8080/api/client/gio-hang/them?idHD=${invoiceId}`,
+            chiTietGioHangDTO
+          );
         }
 
         this.$refs.toastNotification?.addToast({
@@ -550,7 +548,7 @@ export default {
           message: `Sản phẩm "${this.product.ten_san_pham}" đã được thêm vào giỏ hàng!`,
           isLoading: false,
           duration: 3000,
-        })
+        });
 
         // Chuyển hướng đến cart-page với invoiceId
         setTimeout(() => {
