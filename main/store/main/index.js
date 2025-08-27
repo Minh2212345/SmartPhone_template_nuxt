@@ -110,7 +110,7 @@ async fetchBestProducts() {
     const response = await this.$axios.get('/api/show-best-product', {
       params: { sortBy: 'SALES' },
     });
-    console.log('Best Products Response:', response.data); // Thêm log để debug
+    console.log('Best Products Response:', response.data); // ThÃªm log Ä‘á»ƒ debug
     this.trendingBestProducts = Array.isArray(response.data)
       ? response.data.map((product) => ({
           ...product,
@@ -127,7 +127,7 @@ async fetchSaleProducts() {
     const response = await this.$axios.get('/api/show-best-product', {
       params: { sortBy: 'DISCOUNT' },
     });
-    console.log('Sale Products Response:', response.data); // Thêm log để debug
+    console.log('Sale Products Response:', response.data); // ThÃªm log Ä‘á»ƒ debug
     this.trendingSaleProducts = Array.isArray(response.data)
       ? response.data.map((product) => ({
           ...product,
@@ -187,7 +187,7 @@ async fetchRecommendedProducts(idNhaSanXuat) {
               }
               $introSlider.owlCarousel(this.owlOptions);
             }
-            // Khởi tạo các carousel khác nếu cần
+            // Khá»Ÿi táº¡o cÃ¡c carousel khÃ¡c náº¿u cáº§n
             $('.owl-carousel')
               .not('.intro-slider')
               .each(function () {
