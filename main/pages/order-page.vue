@@ -736,9 +736,9 @@ export default {
           return;
         }
         const response = await axios.get(`http://localhost:8080/tai-khoan/thong-tin-khach-hang/${idKhachHang}`);
-        const { tenKH, soDienThoai, gioiTinh, ngaySinh, diaChiMacDinh, email, updateAt } = response.data;
+        const { hoTen, soDienThoai, gioiTinh, ngaySinh, diaChiMacDinh, email, updateAt } = response.data;
 
-        this.fullName = tenKH || this.fullName || '';
+        this.fullName = hoTen || this.fullName || '';
         this.phone = soDienThoai || this.phone || '';
         this.gender = gioiTinh !== null ? gioiTinh : null;
         this.birthDate = ngaySinh ? new Date(ngaySinh).toISOString().split('T')[0] : '';
@@ -746,9 +746,9 @@ export default {
         this.defaultAddressId = diaChiMacDinh ? diaChiMacDinh.id : '';
         this.email = email || this.email || '';
         this.updateAt = updateAt ? new Date(updateAt).toISOString() : '';
-        this.customerName = tenKH || this.fullName || localStorage.getItem('customerName') || 'Khách hàng';
+        this.customerName = hoTen || this.fullName || localStorage.getItem('customerName') || 'Khách hàng';
         this.phoneNumber = soDienThoai || this.phone || localStorage.getItem('phoneNumber') || 'Chưa có số điện thoại';
-        this.showUpdatePrompt = !tenKH || !soDienThoai;
+        this.showUpdatePrompt = !hoTen || !soDienThoai;
 
         localStorage.setItem('fullName', this.fullName);
         localStorage.setItem('phoneNumber', this.phone);
@@ -962,7 +962,7 @@ export default {
         }
 
         const payload = {
-          tenKH: this.fullName,
+          hoTen: this.fullName,
           soDienThoai: this.phone,
           gioiTinh: this.gender,
           ngaySinh: this.birthDate || null,
@@ -972,17 +972,17 @@ export default {
 
         const response = await axios.put(`http://localhost:8080/khach-hang/update/${idKhachHang}`, payload);
 
-        const { tenKH, soDienThoai, gioiTinh, ngaySinh, idDiaChiMacDinh, email, updateAt } = response.data;
-        this.fullName = tenKH || this.fullName;
+        const { hoTen, soDienThoai, gioiTinh, ngaySinh, idDiaChiMacDinh, email, updateAt } = response.data;
+        this.fullName = hoTen || this.fullName;
         this.phone = soDienThoai || this.phone;
         this.gender = gioiTinh !== null ? gioiTinh : this.gender;
         this.birthDate = ngaySinh ? new Date(ngaySinh).toISOString().split('T')[0] : this.birthDate;
         this.defaultAddressId = idDiaChiMacDinh || this.defaultAddressId;
         this.email = email || this.email;
         this.updateAt = updateAt ? new Date(updateAt).toISOString() : this.updateAt;
-        this.customerName = tenKH || this.fullName || 'Khách hàng';
+        this.customerName = hoTen || this.fullName || 'Khách hàng';
         this.phoneNumber = soDienThoai || this.phone;
-        this.showUpdatePrompt = !tenKH || !soDienThoai;
+        this.showUpdatePrompt = !hoTen || !soDienThoai;
 
         localStorage.setItem('fullName', this.fullName);
         localStorage.setItem('phoneNumber', this.phone);

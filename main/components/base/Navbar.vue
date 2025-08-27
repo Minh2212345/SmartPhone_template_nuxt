@@ -19,16 +19,12 @@
 
       <!-- Action Buttons -->
       <div class="nav-actions">
-        <!-- User Greeting and Dropdown -->
+        <!-- User Greeting and Logout Button -->
         <div v-if="isLoggedIn" class="nav-actions__user">
-          <div class="greeting" @mouseenter="showModal = true" @mouseleave="showModal = false">
-            Xin chào, {{ customerName }}
-          </div>
-          <div v-if="showModal" class="dropdown-menu" @mouseenter="showModal = true" @mouseleave="showModal = false">
-            <button @click="logout" class="action-btn logout-btn">
-              <i class="las la-sign-out-alt"></i> Đăng xuất
-            </button>
-          </div>
+          <span class="greeting">Xin chào, {{ customerName }}</span>
+          <button @click="logout" class="action-btn logout-btn">
+            <i class="las la-sign-out-alt"></i> Đăng xuất
+          </button>
         </div>
         <!-- Login Button -->
         <NuxtLink v-else to="/login-page#signin" class="action-btn login-btn">
@@ -58,7 +54,6 @@ export default {
       invoiceId: null,
       isLoggedIn: false,
       customerName: '',
-      showModal: false,
     };
   },
   mounted() {
@@ -90,12 +85,10 @@ export default {
     updateLoginStatus() {
       this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       this.customerName = localStorage.getItem('customerName') || 'Khách';
-      this.showModal = false;
     },
     handleLoginStatusChange({ isLoggedIn, customerName }) {
       this.isLoggedIn = isLoggedIn;
       this.customerName = customerName || 'Khách';
-      this.showModal = false;
     },
     logout() {
       localStorage.removeItem('customerId');
@@ -105,7 +98,6 @@ export default {
       this.isLoggedIn = false;
       this.customerName = '';
       this.cartItemCount = 0;
-      this.showModal = false;
       emitter.emit('loginStatusChanged', { isLoggedIn: false, customerName: '' });
       alert('Đăng xuất thành công!');
       this.$router.push('/');
@@ -130,7 +122,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
@@ -159,7 +151,7 @@ export default {
 .nav-link {
   color: #ffffff;
   font-family: 'Inter', sans-serif;
-  font-size: 1,5rem;
+  font-size: 1.5rem;
   font-weight: 500;
   text-decoration: none;
   padding: 0.5rem 1rem;
@@ -179,34 +171,18 @@ export default {
 }
 
 .nav-actions__user {
-  position: relative;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .greeting {
   color: #ffffff;
   font-family: 'Inter', sans-serif;
-  font-size: 1,5rem;
+  font-size: 1.5rem;
   font-weight: 500;
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.greeting:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  padding: 0.5rem;
-  min-width: 160px;
-  z-index: 2000;
 }
 
 .action-btn {
@@ -236,8 +212,8 @@ export default {
 .logout-btn {
   color: #ffffff;
   background-color: #d32f2f;
-  width: 100%;
-  justify-content: center;
+  border: none;
+  cursor: pointer;
 }
 
 .logout-btn:hover {
@@ -302,12 +278,9 @@ export default {
   }
 
   .nav-actions__user {
+    flex-direction: column;
     width: 100%;
-  }
-
-  .action-btn {
-    justify-content: center;
-    width: 100%;
+    gap: 0.5rem;
   }
 
   .greeting {
@@ -315,12 +288,9 @@ export default {
     text-align: center;
   }
 
-  .dropdown-menu {
-    position: static;
+  .action-btn {
+    justify-content: center;
     width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: none;
-    border-radius: 6px;
   }
 }
 </style>

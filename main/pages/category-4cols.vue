@@ -470,6 +470,7 @@ input[type='range'] {
   background: transparent;
   z-index: 3;
   pointer-events: none;
+  margin-top: -7px !important;
 }
 
 input[type='range']::-webkit-slider-thumb {
