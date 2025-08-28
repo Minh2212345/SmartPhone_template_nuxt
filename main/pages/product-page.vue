@@ -1,186 +1,239 @@
 <template>
   <div>
-    <!-- Template giữ nguyên, không cần thay đổi -->
-    <div v-if="isLoading || (product && selectedVariant)" :key="$route.query.sp_id" class="page-wrapper">
+    <div v-if="isLoading || (product && selectedVariant)" :key="$route.query.sp_id" class="modern-product-page">
       <main class="main">
-        <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
-          <div class="container d-flex align-items-center">
-            <ol class="breadcrumb">
+        <!-- Modern Breadcrumb -->
+        <nav aria-label="breadcrumb" class="modern-breadcrumb">
+          <div class="container">
+            <ol class="breadcrumb-list">
               <li class="breadcrumb-item">
-                <NuxtLink to="/">Trang chủ</NuxtLink>
+                <NuxtLink to="/" class="breadcrumb-link">
+                  <i class="fas fa-home"></i>
+                  <span>Trang chủ</span>
+                </NuxtLink>
               </li>
               <li class="breadcrumb-item">
-                <NuxtLink to="/category-4cols">Sản phẩm</NuxtLink>
+                <NuxtLink to="/category-4cols" class="breadcrumb-link">
+                  <i class="fas fa-mobile-alt"></i>
+                  <span>Sản phẩm</span>
+                </NuxtLink>
               </li>
-              <li class="breadcrumb-item active" aria-current="page">{{ product.ten_san_pham || 'Sản phẩm' }}</li>
+              <li class="breadcrumb-item active">
+                <span>{{ product.ten_san_pham || 'Sản phẩm' }}</span>
+              </li>
             </ol>
           </div>
         </nav>
 
         <div class="page-content">
           <div class="container">
-            <div class="product-details-top">
+            <!-- Product Details Section -->
+            <div class="modern-product-details">
               <div class="row">
-                <div class="col-md-6">
-                  <div class="product-gallery product-gallery-vertical">
-                    <div class="row">
-                      <figure class="product-main-image">
-                        <img
-                          id="product-zoom"
-                          :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
-                          :data-zoom-image="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
-                          alt="product image"
-                        />
-                        <a id="btn-product-gallery" href="#" class="btn-product-gallery">
-                          <i class="icon-arrows"></i>
-                        </a>
+                <!-- Product Gallery -->
+                <div class="col-lg-6">
+                  <div class="modern-product-gallery">
+                    <div class="main-image-container">
+                      <figure class="main-product-image">
+                        <div class="image-wrapper">
+                          <img id="product-zoom"
+                            :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
+                            :data-zoom-image="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
+                            alt="product image" class="main-image" />
+                          <div class="image-overlay">
+                            <button class="zoom-btn">
+                              <i class="fas fa-search-plus"></i>
+                            </button>
+                          </div>
+                        </div>
                       </figure>
-                      <div id="product-zoom-gallery" class="product-image-gallery">
-                        <a
-                          v-for="color in uniqueColors"
-                          :key="color.name"
-                          class="product-gallery-item"
-                          :class="{ active: selectedVariant.mau_sac === color.name }"
-                          href="#"
-                          :data-image="getImageForColor(color.name)"
-                          :data-zoom-image="getImageForColor(color.name)"
-                          @click.prevent="selectColor(color.name)"
-                        >
-                          <img :src="getImageForColor(color.name)" alt="product variant" />
-                        </a>
+
+                      <!-- Thumbnail Gallery -->
+                      <div class="thumbnail-gallery">
+                        <div class="thumbnail-wrapper">
+                          <div v-for="color in uniqueColors" :key="color.name" class="thumbnail-item"
+                            :class="{ active: selectedVariant.mau_sac === color.name }"
+                            @click="selectColor(color.name)">
+                            <img :src="getImageForColor(color.name)" :alt="color.name" class="thumbnail-image" />
+                            <div class="thumbnail-overlay"></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="col-md-6">
-                  <div class="product-details">
-                    <h1 class="product-title">
-                      {{ product.ten_san_pham }} - {{ selectedVariant.bo_nho_trong_dung_luong }}
-                    </h1>
-                    <div v-if="selectedVariant.has_discount" class="product-price">
-                      <span v-if="selectedVariant.gia_ban_dau > 0" style="text-decoration: line-through; color: #999"
-                        >{{ formatPrice(selectedVariant.gia_ban_dau) }} VND</span
-                      >
-                      <span v-if="selectedVariant.gia_sau_khi_giam > 0" style="color: red; margin-left: 5px"
-                        >{{ formatPrice(selectedVariant.gia_sau_khi_giam) }} VND</span
-                      >
-                      <span v-else style="color: red; margin-left: 5px">Liên hệ để đặt hàng</span>
-                      <span
-                        v-if="
-                          selectedVariant.loai_giam_gia_ap_dung === 'Phần trăm' && selectedVariant.giam_phan_tram > 0
-                        "
-                        class="badge badge-danger ml-2"
-                        >Giảm {{ selectedVariant.giam_phan_tram }}%</span
-                      >
-                      <span
-                        v-else-if="
-                          selectedVariant.loai_giam_gia_ap_dung === 'Tiền mặt' && selectedVariant.giam_toi_da > 0
-                        "
-                        class="badge badge-danger ml-2"
-                        >Giảm {{ formatPrice(selectedVariant.giam_toi_da) }} VND</span
-                      >
+                <!-- Product Info -->
+                <div class="col-lg-6">
+                  <div class="modern-product-info">
+                    <!-- Product Title -->
+                    <div class="product-header">
+                      <div class="brand-badge">
+                        <i class="fas fa-star"></i>
+                        <span>{{ manufacturerMap[product.nha_san_xuat] || product.nha_san_xuat || 'Premium' }}</span>
+                      </div>
+                      <h1 class="modern-product-title">
+                        {{ product.ten_san_pham + " | Chính Hãng VN/A" }}
+                      </h1>
+                      <div class="product-subtitle">
+                        {{ selectedVariant.bo_nho_trong_dung_luong }} - {{ selectedVariant.mau_sac }}
+                      </div>
                     </div>
-                    <div v-else class="product-price" style="color: #00aeef">
-                      <span v-if="selectedVariant.gia_ban > 0">{{ formatPrice(selectedVariant.gia_ban) }} VND</span>
-                      <span v-else>Liên hệ để đặt hàng</span>
+
+                    <!-- Product Rating -->
+                    <div class="product-rating-section">
+                      <div class="rating-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                      </div>
+                      <span class="rating-text">(4.8 - 256 đánh giá)</span>
                     </div>
-                    <div v-else class="product-price" style="color: #00aeef">
-                      {{ formatPrice(selectedVariant.gia_ban) }} VND
-                    </div>
-                    <div class="memory-options">
-                      <h5>Chọn bộ nhớ</h5>
-                      <div class="d-flex flex-wrap">
-                        <div
-                          v-for="memory in uniqueMemories"
-                          :key="memory"
-                          class="option-btn"
-                          :class="{
-                            active: selectedVariant.bo_nho_trong_dung_luong === memory,
-                            disabled: !isMemoryAvailable(memory),
-                          }"
-                          @click="isMemoryAvailable(memory) && selectMemory(memory)"
-                        >
-                          {{ memory }}<br />
-                          <span class="check-icon"><i class="fas fa-check"></i></span>
+
+                    <!-- Product Price -->
+                    <div class="modern-price-section">
+                      <div v-if="selectedVariant.has_discount" class="price-container">
+                        <div class="price-main">
+                          <span v-if="selectedVariant.gia_sau_khi_giam > 0" class="current-price">
+                            {{ formatPrice(selectedVariant.gia_sau_khi_giam) }} VND
+                          </span>
+                          <span v-else class="contact-price">Liên hệ để đặt hàng</span>
+                        </div>
+                        <div class="price-secondary">
+                          <span v-if="selectedVariant.gia_ban_dau > 0" class="old-price">
+                            {{ formatPrice(selectedVariant.gia_ban_dau) }} VND
+                          </span>
+                          <span
+                            v-if="selectedVariant.loai_giam_gia_ap_dung === 'Phần trăm' && selectedVariant.giam_phan_tram > 0"
+                            class="discount-badge">
+                            <i class="fas fa-tag"></i>
+                            Giảm {{ selectedVariant.giam_phan_tram }}%
+                          </span>
+                          <span
+                            v-else-if="selectedVariant.loai_giam_gia_ap_dung === 'Tiền mặt' && selectedVariant.giam_toi_da > 0"
+                            class="discount-badge">
+                            <i class="fas fa-tag"></i>
+                            Giảm {{ formatPrice(selectedVariant.giam_toi_da) }} VND
+                          </span>
+                        </div>
+                      </div>
+                      <div v-else class="price-container">
+                        <div class="price-main">
+                          <span v-if="selectedVariant.gia_ban > 0" class="current-price">
+                            {{ formatPrice(selectedVariant.gia_ban) }} VND
+                          </span>
+                          <span v-else class="contact-price">Liên hệ để đặt hàng</span>
                         </div>
                       </div>
                     </div>
 
-                    <div class="details-filter-row details-row-size">
-                      <div class="color-options">
-                        <h5>Chọn màu để xem giá sản phẩm</h5>
-                        <div class="d-flex flex-wrap">
-                          <div
-                            v-for="color in uniqueColors"
-                            :key="color.name"
-                            class="option-btn color-btn"
-                            :class="{ active: selectedVariant.mau_sac === color.name }"
-                            @click="selectColor(color.name)"
-                          >
-                            <span class="color-circle" :style="{ backgroundColor: color.hex }"></span>
-                            {{ color.name }}<br />
-                            <span v-if="getPriceForColor(color.name) !== null"
-                              >{{ formatPrice(getPriceForColor(color.name)) }} VND</span
-                            >
-                            <span v-else>Liên hệ để đặt hàng</span>
-                            <span class="check-icon"><i class="fas fa-check"></i></span>
+                    <!-- Memory Options -->
+                    <div class="modern-options-section">
+                      <h5 class="options-title">
+                        <i class="fas fa-memory"></i>
+                        Chọn bộ nhớ
+                      </h5>
+                      <div class="options-grid">
+                        <div v-for="memory in uniqueMemories" :key="memory" class="modern-option-btn memory-option"
+                          :class="{
+                            active: selectedVariant.bo_nho_trong_dung_luong === memory,
+                            disabled: !isMemoryAvailable(memory),
+                          }" @click="isMemoryAvailable(memory) && selectMemory(memory)">
+                          <div class="option-content">
+                            <span class="option-text">{{ memory }}</span>
+                            <div class="option-check">
+                              <i class="fas fa-check"></i>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <!-- <div class="details-filter-row details-row-size">
-                      <label for="qty">Số lượng:</label>
-                      <div class="product-details-quantity">
-                        <input
-                          id="qty"
-                          v-model="quantity"
-                          type="number"
-                          class="form-control"
-                          min="1"
-                          :max="selectedVariant.so_luong_ton_kho || 10"
-                          step="1"
-                          data-decimals="0"
-                          required
-                        />
-                        <span class="stock-info" v-if="selectedVariant.so_luong_ton_kho != null">
-                          (Còn {{ Number(selectedVariant.so_luong_ton_kho) }} sản phẩm)
-                        </span>
-                      </div>
-                    </div> -->
-
-                    <div class="product-details-action">
-                      <a href="#" class="btn-product btn-cart" @click.prevent="addToCart"
-                        ><span>Thêm vào giỏ hàng</span></a
-                      >
-                      <NuxtLink to="/cart-page" class="btn-product btn-cart ml-2"><span>Mua ngay</span></NuxtLink>
-                      <div class="details-action-wrapper">
-                        <NuxtLink to="/compare-page" class="btn-product btn-compare" title="Compare"
-                          ><span>So sánh</span>
-                        </NuxtLink>
+                    <!-- Color Options -->
+                    <div class="modern-options-section">
+                      <h5 class="options-title">
+                        <i class="fas fa-palette"></i>
+                        Chọn màu sắc
+                      </h5>
+                      <div class="options-grid">
+                        <div v-for="color in uniqueColors" :key="color.name" class="modern-option-btn color-option"
+                          :class="{ active: selectedVariant.mau_sac === color.name }" @click="selectColor(color.name)">
+                          <div class="option-content">
+                            <div class="color-preview">
+                              <span class="color-circle" :style="{ backgroundColor: color.hex }"></span>
+                            </div>
+                            <div class="color-info">
+                              <span class="color-name">{{ color.name }}</span>
+                              <span class="color-price" v-if="getPriceForColor(color.name) !== null">
+                                {{ formatPrice(getPriceForColor(color.name)) }} VND
+                              </span>
+                              <span class="color-price" v-else>Liên hệ</span>
+                            </div>
+                            <div class="option-check">
+                              <i class="fas fa-check"></i>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="product-details-footer">
-                      <div class="product-cat">
-                        <span>Phân loại:</span>
-                        <a href="#">{{ manufacturerMap[product.nha_san_xuat] || product.nha_san_xuat || 'Unknown' }}</a
-                        >,
-                        <a href="#">Sản phẩm mới</a>
+                    <!-- Action Buttons -->
+                    <div class="modern-action-section">
+                      <div class="action-buttons">
+                        <button class="modern-btn primary" @click="addToCart">
+                          <i class="fas fa-shopping-cart"></i>
+                          <span>Thêm vào giỏ hàng</span>
+                          <div class="btn-shine"></div>
+                        </button>
+                        <NuxtLink to="/cart-page" class="modern-btn secondary">
+                          <i class="fas fa-bolt"></i>
+                          <span>Mua ngay</span>
+                          <div class="btn-shine"></div>
+                        </NuxtLink>
                       </div>
-                      <div class="social-icons social-icons-sm">
-                        <span class="social-label">Chia sẻ:</span>
-                        <a href="#" class="social-icon" title="Facebook" target="_blank"
-                          ><i class="icon-facebook-f"></i
-                        ></a>
-                        <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                        <a href="#" class="social-icon" title="Instagram" target="_blank"
-                          ><i class="icon-instagram"></i
-                        ></a>
-                        <a href="#" class="social-icon" title="Pinterest" target="_blank"
-                          ><i class="icon-pinterest"></i
-                        ></a>
+                      <div class="secondary-actions">
+                        <button class="secondary-btn">
+                          <i class="fas fa-heart"></i>
+                          <span>Yêu thích</span>
+                        </button>
+                        <NuxtLink to="/compare-page" class="secondary-btn">
+                          <i class="fas fa-balance-scale"></i>
+                          <span>So sánh</span>
+                        </NuxtLink>
+                        <button class="secondary-btn specs-btn" @click="toggleSidebar">
+                          <i class="fas fa-list-ul"></i>
+                          <span>Thông số chi tiết</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Product Meta -->
+                    <div class="modern-product-meta">
+                      <div class="meta-item">
+                        <i class="fas fa-tag"></i>
+                        <span class="meta-label">Phân loại:</span>
+                        <span class="meta-value">{{ manufacturerMap[product.nha_san_xuat] || product.nha_san_xuat ||
+                          'Unknown' }}, Sản phẩm mới</span>
+                      </div>
+                      <div class="meta-item">
+                        <i class="fas fa-share-alt"></i>
+                        <span class="meta-label">Chia sẻ:</span>
+                        <div class="social-share">
+                          <a href="#" class="social-btn facebook" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                          </a>
+                          <a href="#" class="social-btn twitter" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                          </a>
+                          <a href="#" class="social-btn instagram" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                          </a>
+                          <a href="#" class="social-btn pinterest" title="Pinterest">
+                            <i class="fab fa-pinterest"></i>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -188,27 +241,45 @@
               </div>
             </div>
 
-            <div v-if="product && selectedVariant" class="highlight-specs">
-              <h3>Thông số nổi bật</h3>
-              <div class="row">
-                <div class="col-md-4">
-                  <i class="fas fa-microchip mr-2"></i>
-                  <strong>CPU:</strong> {{ product.ten_cpu || 'Không có thông tin' }}
+            <!-- Highlight Specs -->
+            <div v-if="product && selectedVariant" class="modern-highlight-specs">
+              <div class="specs-header">
+                <h3 class="specs-title">
+                  <i class="fas fa-star"></i>
+                  Thông số nổi bật
+                </h3>
+              </div>
+              <div class="specs-grid">
+                <div class="spec-item">
+                  <div class="spec-icon">
+                    <i class="fas fa-microchip"></i>
+                  </div>
+                  <div class="spec-content">
+                    <span class="spec-label">CPU</span>
+                    <span class="spec-value">{{ product.ten_cpu || 'Không có thông tin' }}</span>
+                  </div>
                 </div>
-                <div class="col-md-4">
-                  <i class="fas fa-desktop mr-2"></i>
-                  <strong>GPU:</strong> {{ product.ten_gpu || 'Không có thông tin' }}
+                <div class="spec-item">
+                  <div class="spec-icon">
+                    <i class="fas fa-desktop"></i>
+                  </div>
+                  <div class="spec-content">
+                    <span class="spec-label">GPU</span>
+                    <span class="spec-value">{{ product.ten_gpu || 'Không có thông tin' }}</span>
+                  </div>
                 </div>
-                <div class="col-md-4">
-                  <i class="fas fa-memory mr-2"></i>
-                  <strong>RAM:</strong> {{ selectedVariant.ram_dung_luong || 'Không có thông tin' }}
+                <div class="spec-item">
+                  <div class="spec-icon">
+                    <i class="fas fa-memory"></i>
+                  </div>
+                  <div class="spec-content">
+                    <span class="spec-label">RAM</span>
+                    <span class="spec-value">{{ selectedVariant.ram_dung_luong || 'Không có thông tin' }}</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div v-if="selectedVariant" class="product-desc-content mb-4">
-              <button class="btn btn-primary mt-3" @click="toggleSidebar">Xem thông số chi tiết</button>
-            </div>
 
             <div v-if="showSidebar" class="sidebar-overlay" @click.self="showSidebar = false">
               <div class="sidebar-panel">
@@ -217,11 +288,8 @@
                   <button class="close-btn" @click="showSidebar = false">×</button>
                 </div>
                 <div class="sidebar-body">
-                  <img
-                    :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
-                    alt="Product Image"
-                    class="sidebar-image"
-                  />
+                  <img :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'" alt="Product Image"
+                    class="sidebar-image" />
                   <table class="specs-table">
                     <tr>
                       <td><i class="fas fa-shield-alt mr-2"></i>Chỉ số chống bụi và nước</td>
@@ -303,110 +371,55 @@
               </div>
             </div>
 
-            <div v-if="selectedVariant" class="product-desc-content mb-4">
-              <h3>Mô tả sản phẩm</h3>
-              <p>{{ selectedVariant.ghi_chu || 'Không có mô tả chi tiết cho sản phẩm này.' }}</p>
+            <!-- Product Description -->
+            <div v-if="selectedVariant" class="modern-product-description">
+              <div class="description-header">
+                <h3 class="description-title">
+                  <i class="fas fa-file-alt"></i>
+                  Mô tả sản phẩm
+                </h3>
+              </div>
+              <div class="description-content">
+                <p>{{ selectedVariant.ghi_chu || 'Không có mô tả chi tiết cho sản phẩm này.' }}</p>
+              </div>
             </div>
 
-            <!-- <div v-if="selectedVariant" class="reviews mb-4">
-              <h3>Đánh giá (2)</h3>
-              <div class="review">
-                <div class="row no-gutters">
-                  <div class="col-auto">
-                    <h4><a href="#">Chí Dũng</a></h4>
-                    <div class="ratings-container">
-                      <div class="ratings">
-                        <div class="ratings-val" style="width: 80%"></div>
-                      </div>
-                    </div>
-                    <span class="review-date">12/03/2025</span>
-                  </div>
-                  <div class="col">
-                    <h4>Hiệu năng mạnh mẽ</h4>
-                    <div class="review-content">
-                      <p>Pin trâu tốt - đẹp - sang - mạnh - hơi nóng máy tí thui</p>
-                    </div>
-                    <div class="review-action">
-                      <a href="#"><i class="icon-thumbs-up"></i>Có ích (2)</a>
-                      <a href="#"><i class="icon-thumbs-down"></i>Không có ích (0)</a>
-                    </div>
-                  </div>
-                </div>
+            <!-- Similar Products -->
+            <div class="modern-similar-products">
+              <div class="similar-header">
+                <h2 class="similar-title">
+                  <i class="fas fa-heart"></i>
+                  Những sản phẩm tương tự
+                </h2>
               </div>
-              <div class="review">
-                <div class="row no-gutters">
-                  <div class="col-auto">
-                    <h4><a href="#">Nguyễn Thành Nhân</a></h4>
-                    <div class="ratings-container">
-                      <div class="ratings">
-                        <div class="ratings-val" style="width: 100%"></div>
+              <div class="similar-products-grid">
+                <div v-for="similarProduct in similarProducts" :key="similarProduct.id" class="modern-similar-card">
+                  <div class="similar-card-inner">
+                    <figure class="similar-product-media">
+                      <div class="similar-image-wrapper">
+                        <NuxtLink :to="`/product-page?sp_id=${similarProduct.id}`">
+                          <img :src="similarProduct.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
+                            class="similar-product-image" />
+                        </NuxtLink>
+                        <div class="similar-overlay">
+                          <NuxtLink to="/compare-page" class="similar-compare-btn" title="So sánh">
+                            <i class="fas fa-balance-scale"></i>
+                          </NuxtLink>
+                        </div>
                       </div>
+                    </figure>
+                    <div class="similar-product-info">
+                      <div class="similar-brand">
+                        {{ manufacturerMap[similarProduct.tenNhaSanXuat] || similarProduct.tenNhaSanXuat || 'Unknown' }}
+                      </div>
+                      <h3 class="similar-product-name">
+                        <a href="#" @click.prevent="handleProductChange(similarProduct.id)">{{
+                          similarProduct.tenSanPham
+                          }}</a>
+                      </h3>
+                      <div class="similar-product-price">{{ formatPrice(similarProduct.giaBan || 0) }} VND</div>
                     </div>
-                    <span class="review-date">19/2/2025</span>
                   </div>
-                  <div class="col">
-                    <h4>Thời lượng pin cực khủng</h4>
-                    <div class="review-content">
-                      <p>SVIP nên giữ thời gian lâu hơn 2 năm</p>
-                    </div>
-                    <div class="review-action">
-                      <a href="#"><i class="icon-thumbs-up"></i>Có ích (0)</a>
-                      <a href="#"><i class="icon-thumbs-down"></i>Không có ích (0)</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-
-            <h2 class="title text-center mb-4">Những sản phẩm tương tự</h2>
-            <div
-              class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
-              data-toggle="owl"
-              data-owl-options='{
-              "nav": false,
-              "dots": true,
-              "margin": 20,
-              "loop": false,
-              "responsive": {
-                "0": { "items": 1 },
-                "480": { "items": 2 },
-                "768": { "items": 3 },
-                "992": { "items": 4 },
-                "1200": { "items": 4, "nav": true, "dots": false }
-              }
-            }'
-            >
-              <div
-                v-for="similarProduct in similarProducts"
-                :key="similarProduct.id"
-                class="product product-7 text-center"
-              >
-                <figure class="product-media">
-                  <NuxtLink :to="`/product-page?sp_id=${similarProduct.id}`">
-                    <img
-                      :src="similarProduct.imageUrl || '/assets/images/placeholder.jpg'"
-                      alt="Product image"
-                      class="product-image"
-                    />
-                  </NuxtLink>
-                  <div class="product-action-vertical">
-                    <NuxtLink to="/compare-page" class="btn-product-icon btn-compare" title="Compare">
-                      <span>So sánh</span>
-                    </NuxtLink>
-                  </div>
-                </figure>
-                <div class="product-body">
-                  <div class="product-cat">
-                    <a href="#">{{
-                      manufacturerMap[similarProduct.tenNhaSanXuat] || similarProduct.tenNhaSanXuat || 'Unknown'
-                    }}</a>
-                  </div>
-                  <h3 class="product-title">
-                    <a href="#" @click.prevent="handleProductChange(similarProduct.id)">{{
-                      similarProduct.tenSanPham
-                    }}</a>
-                  </h3>
-                  <div class="product-price">{{ formatPrice(similarProduct.giaBan || 0) }} VND</div>
                 </div>
               </div>
             </div>
@@ -583,6 +596,899 @@ export default {
 </script>
 
 <style scoped>
+/* ===== CSS CUSTOM PROPERTIES ===== */
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  --border-radius: 0.5rem;
+  --border-radius-lg: 1rem;
+  --border-radius-xl: 1.5rem;
+
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== MODERN PRODUCT PAGE ===== */
+.modern-product-page {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #e6f3ff 0%, #e6f9f0 100%);
+  min-height: 100vh;
+  font-size: calc(1rem + 0.3rem);
+}
+
+/* ===== BREADCRUMB ===== */
+.modern-breadcrumb {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+  content: '/';
+  margin: 0 0.5rem;
+  color: #6b7280;
+}
+
+.breadcrumb-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.breadcrumb-link:hover {
+  color: #667eea;
+  text-decoration: none;
+}
+
+.breadcrumb-item.active span {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+/* ===== PRODUCT DETAILS ===== */
+.modern-product-details {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: var(--border-radius-xl);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ===== PRODUCT GALLERY ===== */
+.modern-product-gallery {
+  position: relative;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border-radius: var(--border-radius-xl);
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.main-image-container {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.main-product-image {
+  position: relative;
+  margin: 0;
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+.main-product-image:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+}
+
+.image-wrapper {
+  position: relative;
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  width: 100%;
+  min-height: 400px;
+  border: 2px solid rgba(102, 126, 234, 0.1);
+}
+
+.main-image {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-image:hover {
+  transform: scale(1.05) rotate(1deg);
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image-wrapper:hover .image-overlay {
+  opacity: 1;
+}
+
+.zoom-btn {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #667eea;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+}
+
+.zoom-btn:hover {
+  background: white;
+  transform: scale(1.15) rotate(10deg);
+  box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+  border-color: #667eea;
+}
+
+/* ===== THUMBNAIL GALLERY ===== */
+.thumbnail-gallery {
+  margin-top: 2rem;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(15px);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.thumbnail-wrapper {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.thumbnail-item {
+  position: relative;
+  width: 9rem;
+  height: 9rem;
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.thumbnail-item.active {
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.4), 0 15px 35px rgba(102, 126, 234, 0.2);
+  transform: scale(1.1) translateY(-5px);
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.thumbnail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 1rem;
+}
+
+.thumbnail-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.thumbnail-item:hover .thumbnail-overlay {
+  opacity: 1;
+}
+
+.thumbnail-item:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.25);
+  border-color: rgba(102, 126, 234, 0.6);
+}
+
+.thumbnail-item:hover .thumbnail-image {
+  transform: scale(1.02);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+/* ===== PRODUCT INFO SECTION ===== */
+.modern-product-info {
+  padding-left: 2rem;
+}
+
+.product-header {
+  margin-bottom: 1.5rem;
+}
+
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary-gradient);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-md);
+}
+
+.modern-product-title {
+  font-size: calc(2.25rem + 0.3rem);
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.product-subtitle {
+  color: #6b7280;
+  font-size: calc(1.125rem + 0.3rem);
+  font-weight: 500;
+}
+
+/* ===== PRODUCT RATING ===== */
+.product-rating-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 0.25rem;
+  color: #fbbf24;
+  font-size: calc(1.125rem + 0.3rem);
+}
+
+.rating-text {
+  color: #6b7280;
+  font-weight: 500;
+  font-size: calc(1rem + 0.3rem);
+}
+
+/* ===== PRICE SECTION ===== */
+.modern-price-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.price-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.price-main .current-price {
+  font-size: calc(2rem + 0.3rem);
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.contact-price {
+  font-size: calc(1.5rem + 0.3rem);
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.price-secondary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.old-price {
+  color: #9ca3af;
+  text-decoration: line-through;
+  font-size: 1.125rem;
+}
+
+.discount-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--danger-gradient);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== OPTIONS SECTION ===== */
+.modern-options-section {
+  margin-bottom: 2rem;
+}
+
+.options-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.options-title i {
+  color: #667eea;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.modern-option-btn {
+  position: relative;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: var(--border-radius-lg);
+  padding: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  overflow: hidden;
+}
+
+.modern-option-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-gradient);
+  opacity: 0.1;
+  transition: var(--transition);
+}
+
+.modern-option-btn:hover::before {
+  left: 0;
+}
+
+.color-option:hover .color-circle {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.modern-option-btn.active {
+  border-color: #667eea;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3), 0 8px 25px rgba(102, 126, 234, 0.2);
+  transform: translateY(-2px);
+}
+
+.color-option.active .color-circle {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.4), 0 6px 20px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.modern-option-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.option-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.option-text {
+  font-weight: 600;
+  color: #1f2937;
+  flex: 1;
+}
+
+.option-check {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.modern-option-btn.active .option-check {
+  opacity: 1;
+}
+
+/* ===== COLOR OPTIONS ===== */
+.color-option .option-content {
+  align-items: center;
+}
+
+.color-preview {
+  display: flex;
+  align-items: center;
+}
+
+.color-circle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  position: relative;
+}
+
+.color-circle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, transparent 50%, rgba(0, 0, 0, 0.1) 100%);
+  pointer-events: none;
+}
+
+.color-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.color-name {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.color-price {
+  font-size: calc(0.875rem + 0.3rem);
+  color: #dc2626;
+  font-weight: 600;
+}
+
+/* ===== ACTION SECTION ===== */
+.modern-action-section {
+  margin-bottom: 2rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.modern-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: var(--border-radius-lg);
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
+  overflow: hidden;
+  min-width: 200px;
+}
+
+.modern-btn.primary {
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.modern-btn.secondary {
+  background: var(--secondary-gradient);
+  color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.modern-btn.outline {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.modern-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2xl);
+  text-decoration: none;
+  color: white;
+}
+
+.modern-btn.outline:hover {
+  color: #667eea;
+}
+
+.btn-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: var(--transition);
+}
+
+.modern-btn:hover .btn-shine {
+  left: 100%;
+}
+
+.secondary-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: var(--border-radius);
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.secondary-btn:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  text-decoration: none;
+}
+
+/* ===== PRODUCT META ===== */
+.modern-product-meta {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.meta-item i {
+  color: #667eea;
+  width: 1.25rem;
+}
+
+.meta-label {
+  font-weight: 600;
+  color: #374151;
+  min-width: 80px;
+}
+
+.meta-value {
+  color: #6b7280;
+}
+
+.social-share {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.social-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.social-btn.facebook {
+  background: #1877f2;
+}
+
+.social-btn.twitter {
+  background: #1da1f2;
+}
+
+.social-btn.instagram {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.social-btn.pinterest {
+  background: #bd081c;
+}
+
+.social-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ===== HIGHLIGHT SPECS ===== */
+.modern-highlight-specs {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: var(--border-radius-xl);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.specs-header {
+  margin-bottom: 1.5rem;
+}
+
+.specs-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.specs-title i {
+  color: #667eea;
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.spec-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  transition: var(--transition);
+}
+
+.spec-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.spec-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #667eea;
+  font-size: 1.25rem;
+}
+
+.spec-content {
+  flex: 1;
+}
+
+.spec-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.spec-value {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.secondary-btn.specs-btn {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border: 2px solid #dc2626;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.secondary-btn.specs-btn:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  color: white;
+  border-color: #b91c1c;
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+  transform: translateY(-2px);
+}
+
+.secondary-btn.specs-btn i {
+  color: white;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+.sidebar-panel {
+  background: white;
+  border-radius: var(--border-radius-xl) 0 0 var(--border-radius-xl);
+  width: 100%;
+  max-width: 500px;
+  height: 100vh;
+  overflow: hidden;
+  box-shadow: var(--shadow-2xl);
+  animation: slideInRight 0.3s ease-out;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: var(--primary-gradient);
+  color: white;
+}
+
+.sidebar-header h5 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-body {
+  padding: 1.5rem;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.sidebar-image {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: var(--border-radius);
+  margin-bottom: 1.5rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.specs-table tr {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.specs-table td {
+  padding: 1rem;
+  vertical-align: top;
+}
+
+.specs-table td:first-child {
+  font-weight: 600;
+  color: #374151;
+  width: 40%;
+}
+
+.specs-table td:last-child {
+  color: #6b7280;
+}
+
+/* ===== MODAL ===== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -590,255 +1496,409 @@ export default {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  backdrop-filter: blur(5px);
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
   background: white;
-  padding: 20px;
-  border-radius: 5px;
-  width: 100%;
+  border-radius: var(--border-radius-xl);
+  width: 90%;
   max-width: 500px;
-  position: relative;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: var(--shadow-2xl);
 }
 
 .modal-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: var(--primary-gradient);
+  color: white;
 }
 
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
+.modal-header h5 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  max-height: calc(80vh - 80px);
+  overflow-y: auto;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
 }
 
-.form-group input,
-.form-group textarea {
+.form-control {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
 }
 
-.form-group textarea {
-  min-height: 100px;
+.form-control:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-/* Tăng cỡ chữ cho các phần thông tin bên ngoài */
-.product-title,
-.product-price,
-.memory-options h5,
-.color-options h5,
-.product-details-footer,
-.product-desc-content p,
-.reviews h3,
-.reviews h4,
-.review-content p,
-.review-date,
-.highlight-specs {
-  font-size: 1.8rem;
-}
-
-.highlight-specs {
-  border: 1px solid #eee;
-  padding: 15px;
-  border-radius: 5px;
-}
-
-.highlight-specs .row div {
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-}
-
-.sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+.btn-pay {
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.sidebar-panel {
-  width: 400px;
-  background: #fff;
-  height: 100vh;
-  /* Sử dụng 100% chiều cao viewport */
-  padding: 20px;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  transform: translateX(0);
-  transition: transform 0.3s ease;
-}
-
-.sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.sidebar-header h5 {
-  font-size: 1.8rem;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-}
-
-.btn.btn-pay {
-  background-color: #2d53ff;
+  padding: 1rem;
+  background: var(--primary-gradient);
   color: white;
-}
-
-.sidebar-body {
-  font-size: 1.5rem;
-  height: calc(100% - 60px);
-  /* Chiều cao còn lại sau header */
-  overflow-y: auto;
-  /* Cho phép cuộn theo chiều dọc */
-  padding-right: 5px;
-  /* Thêm padding để tránh cuộn ngang */
-}
-
-.sidebar-image {
-  width: 100%;
-  height: auto;
-  margin-bottom: 15px;
-}
-
-.specs-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-.specs-table td {
-  padding: 10px;
-}
-
-.specs-table td:first-child {
-  font-weight: bold;
-  width: 50%;
-}
-
-.specs-table td i {
-  margin-right: 8px;
-}
-
-.specs-table tr:hover {
-  background-color: #f1f1f1;
-}
-
-.specs-table {
-  margin-bottom: 30px;
-}
-
-.spec-btn {
-  width: 100%;
-  height: auto;
-  margin-bottom: 30px;
-}
-
-.product-gallery-item {
-  padding-bottom: 10px;
-}
-
-.option-btn {
-  position: relative;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 5px;
-  border-radius: 5px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  text-align: center;
-  min-width: 90px;
+  transition: var(--transition);
+  margin-bottom: 1rem;
 }
 
-.option-btn.active {
-  border-color: #007bff;
-  background-color: #e7f1ff;
+.btn-pay:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
-.option-btn.disabled {
-  border-color: #cccccc;
-  background-color: #f0f0f0;
-  color: #999999;
-  cursor: not-allowed;
+/* ===== PRODUCT DESCRIPTION ===== */
+.modern-product-description {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: var(--border-radius-xl);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.check-icon {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  display: none;
-  color: #007bff;
+.description-header {
+  margin-bottom: 1.5rem;
 }
 
-.option-btn.active .check-icon {
-  display: block;
+.description-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
 }
 
-.color-btn {
+.description-title i {
+  color: #667eea;
+}
+
+.description-content {
+  color: #6b7280;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* ===== SIMILAR PRODUCTS ===== */
+.modern-similar-products {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: var(--border-radius-xl);
+  padding: 2rem;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.similar-header {
+  margin-bottom: 2rem;
+}
+
+.similar-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.similar-title i {
+  color: #667eea;
+}
+
+.similar-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.modern-similar-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: var(--transition);
+}
+
+.modern-similar-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+}
+
+.similar-card-inner {
+  height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.similar-product-media {
+  position: relative;
+  margin: 0;
+}
+
+.similar-image-wrapper {
+  position: relative;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
-.color-circle {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
+.similar-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: var(--transition);
 }
 
-.option-btn.active .check-icon {
-  display: block;
-}
-
-.check-icon {
-  display: none;
+.similar-overlay {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  background-color: #34d399;
-  color: #fff;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  font-size: 12px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--transition);
 }
 
-.product-gallery-item img {
-  max-height: 80px;
-  max-width: 80px;
-  width: auto;
-  height: auto;
-  object-fit: cover;
+.similar-image-wrapper:hover .similar-overlay {
+  opacity: 1;
+}
+
+.similar-compare-btn {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: none;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #667eea;
+  text-decoration: none;
+  font-size: 1.25rem;
+  transition: var(--transition);
+}
+
+.similar-compare-btn:hover {
+  background: white;
+  transform: scale(1.1);
+  text-decoration: none;
+  color: #667eea;
+}
+
+.similar-product-info {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.similar-brand {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #667eea;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.similar-product-name {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.similar-product-name a {
+  color: #1f2937;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.similar-product-name a:hover {
+  color: #667eea;
+  text-decoration: none;
+}
+
+.similar-product-price {
+  font-size: calc(1.25rem + 0.3rem);
+  font-weight: 700;
+  color: #dc2626;
+  margin-top: auto;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1024px) {
+  .modern-product-info {
+    padding-left: 0;
+    margin-top: 2rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .modern-btn {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .modern-product-details {
+    padding: 1.5rem;
+  }
+
+  .modern-product-title {
+    font-size: 1.75rem;
+  }
+
+  .price-main .current-price {
+    font-size: 1.5rem;
+  }
+
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .specs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .similar-products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .secondary-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern-product-details {
+    padding: 1rem;
+  }
+
+  .modern-product-title {
+    font-size: 1.5rem;
+  }
+
+  .thumbnail-wrapper {
+    justify-content: center;
+  }
+
+  .sidebar-panel,
+  .modal-content {
+    width: 95%;
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.modern-product-details,
+.modern-highlight-specs,
+.modern-product-description,
+.modern-similar-products {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.brand-badge {
+  animation: pulse 2s infinite;
+}
+
+/* ===== LOADING STATES ===== */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 </style>
