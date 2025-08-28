@@ -2,28 +2,24 @@
   <div>
     <div v-if="isLoading || (product && selectedVariant)" :key="$route.query.sp_id" class="modern-product-page">
       <main class="main">
-        <!-- Modern Breadcrumb -->
-        <nav aria-label="breadcrumb" class="modern-breadcrumb">
-          <div class="container">
-            <ol class="breadcrumb-list">
-              <li class="breadcrumb-item">
-                <NuxtLink to="/" class="breadcrumb-link">
-                  <i class="fas fa-home"></i>
-                  <span>Trang chủ</span>
-                </NuxtLink>
-              </li>
-              <li class="breadcrumb-item">
-                <NuxtLink to="/category-4cols" class="breadcrumb-link">
-                  <i class="fas fa-mobile-alt"></i>
-                  <span>Sản phẩm</span>
-                </NuxtLink>
-              </li>
-              <li class="breadcrumb-item active">
-                <span>{{ product.ten_san_pham || 'Sản phẩm' }}</span>
-              </li>
-            </ol>
-          </div>
-        </nav>
+        <!-- Enhanced Breadcrumb Navigation -->
+        <div class="container mx-auto px-6 py-4 max-w-8xl">
+          <nav class="bg-white/90 backdrop-blur-xl border border-white/30 shadow-lg rounded-2xl px-6 py-4 mb-2">
+            <div class="flex items-center gap-3 text-2xl">
+              <NuxtLink to="/" class="text-gray-500 hover:text-[#13ad75] transition-colors duration-200">
+                <i class="las la-home"></i>
+                Trang chủ
+              </NuxtLink>
+              <i class="las la-chevron-right text-gray-400"></i>
+              <NuxtLink to="/category-4cols" class="text-gray-500 hover:text-[#13ad75] transition-colors duration-200">
+                <i class="las la-mobile-alt"></i>
+                Sản phẩm
+              </NuxtLink>
+              <i class="las la-chevron-right text-gray-400"></i>
+              <span class="text-[#13ad75] font-medium">{{ product.ten_san_pham || 'Chi tiết sản phẩm' }}</span>
+            </div>
+          </nav>
+        </div>
 
         <div class="page-content">
           <div class="container">

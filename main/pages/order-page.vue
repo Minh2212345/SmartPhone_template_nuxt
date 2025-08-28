@@ -559,122 +559,193 @@
         </main>
       </div>
 
-      <!-- Enhanced Address Modal -->
-      <div v-if="showAddressModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-3xl w-full max-w-2xl shadow-2xl transform transition-all duration-300 scale-100">
-          <div class="p-8">
-            <div class="flex items-center justify-between mb-8">
-              <h2 class="text-2xl font-bold text-gray-900 flex items-center">
-                <i class="las la-map-marker-alt text-blue-500 text-3xl mr-3"></i>
-                {{ isEditingAddress ? 'Sửa địa chỉ' : 'Thêm địa chỉ mới' }}
-              </h2>
+      <!-- Enhanced Modern Address Modal -->
+      <div v-if="showAddressModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div class="bg-white/95 backdrop-blur-xl border border-white/30 rounded-3xl w-full max-w-4xl shadow-2xl transform transition-all duration-300 scale-100 overflow-hidden">
+          
+          <!-- Modal Header with Gradient -->
+          <div class="relative bg-gradient-to-r from-[#13ad75]/10 to-[#13ad75]/20 p-8 border-b border-white/20">
+            <div class="absolute inset-0 bg-gradient-to-r from-[#13ad75]/5 to-transparent"></div>
+            <div class="relative flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-gradient-to-br from-[#13ad75] to-[#13ad75]/80 rounded-2xl flex items-center justify-center shadow-lg">
+                  <i class="las la-map-marker-alt text-white text-3xl"></i>
+                </div>
+                <div>
+                  <h2 class="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                    {{ isEditingAddress ? 'Chỉnh sửa địa chỉ' : 'Thêm địa chỉ mới' }}
+                  </h2>
+                  <p class="text-gray-600 text-xl mt-1">Vui lòng điền đầy đủ thông tin địa chỉ giao hàng</p>
+                </div>
+              </div>
               <button 
-                class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
+                class="w-12 h-12 bg-white/80 hover:bg-white backdrop-blur-sm rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105 shadow-lg"
                 @click="closeAddressModal">
                 <i class="las la-times text-gray-600 text-xl"></i>
               </button>
             </div>
+          </div>
+
+          <!-- Modal Body with Step Design -->
+          <div class="p-8 space-y-8">
             
-            <div class="space-y-6">
+            <!-- Step 1: Detailed Address -->
+            <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/30 shadow-lg">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 bg-gradient-to-br from-[#13ad75] to-[#13ad75]/80 rounded-full flex items-center justify-center text-white font-bold">1</div>
+                <h3 class="text-2xl font-semibold text-gray-800">Địa chỉ chi tiết</h3>
+              </div>
+              
               <div>
-                <label class="block texl-2xl font-semibold text-gray-700 mb-1">
-                  <i class="las la-home mr-2"></i>
-                  Địa chỉ cụ thể
+                <label class="block text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                  <i class="las la-home text-[#13ad75] mr-2"></i>
+                  Số nhà, tên đường, khu vực
                 </label>
-                <input 
-                  v-model.trim="addressForm.diaChiCuThe" 
-                  type="text"
-                  placeholder="Số nhà, tên đường..."
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  :class="{ 'border-red-500 ring-red-500': addressErrors.diaChiCuThe }" 
-                  @input="clearAddressError('diaChiCuThe')" />
-                <p v-if="addressErrors.diaChiCuThe" class="mt-2 text-red-600 texl-2xl flex items-center">
-                  <i class="las la-exclamation-circle mr-1"></i>
+                <div class="relative">
+                  <input 
+                    v-model.trim="addressForm.diaChiCuThe" 
+                    type="text"
+                    placeholder="Ví dụ: 123 Nguyễn Văn Linh, Khu phố 1..."
+                    class="w-full px-4 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#13ad75]/50 focus:border-[#13ad75] transition-all duration-200 text-xl placeholder-gray-400"
+                    :class="{ 'border-red-500 ring-red-500': addressErrors.diaChiCuThe }" 
+                    @input="clearAddressError('diaChiCuThe')" />
+                  <div class="absolute inset-y-0 right-0 flex items-center pr-4">
+                    <i class="las la-map-marker-alt text-gray-400"></i>
+                  </div>
+                </div>
+                <p v-if="addressErrors.diaChiCuThe" class="mt-3 text-red-600 text-lg flex items-center bg-red-50 px-3 py-2 rounded-lg">
+                  <i class="las la-exclamation-circle mr-2"></i>
                   {{ addressErrors.diaChiCuThe }}
                 </p>
               </div>
+            </div>
+
+            <!-- Step 2: Administrative Divisions -->
+            <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/30 shadow-lg">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 bg-gradient-to-br from-[#13ad75] to-[#13ad75]/80 rounded-full flex items-center justify-center text-white font-bold">2</div>
+                <h3 class="text-2xl font-semibold text-gray-800">Thông tin hành chính</h3>
+              </div>
               
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label class="block texl-2xl font-semibold text-gray-700 mb-1">
-                    <i class="las la-map mr-2"></i>
-                    Thành phố/Tỉnh
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Province -->
+                <div class="space-y-3">
+                  <label class="block text-lg font-semibold text-gray-700 flex items-center">
+                    <i class="las la-map text-[#13ad75] mr-2"></i>
+                    Tỉnh/Thành phố
                   </label>
-                  <select 
-                    v-model="addressForm.thanhPhoCode"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    :class="{ 'border-red-500 ring-red-500': addressErrors.thanhPho }" 
-                    @change="fetchDistricts">
-                    <option value="">Chọn Thành phố/Tỉnh</option>
-                    <option v-for="province in provinces" :key="province.code" :value="province.code">
-                      {{ province.name }}
-                    </option>
-                  </select>
-                  <p v-if="addressErrors.thanhPho" class="mt-2 text-red-600 texl-2xl flex items-center">
-                    <i class="las la-exclamation-circle mr-1"></i>
+                  <div class="relative">
+                    <select 
+                      v-model="addressForm.thanhPhoCode"
+                      class="w-full px-4 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#13ad75]/50 focus:border-[#13ad75] transition-all duration-200 text-xl appearance-none cursor-pointer"
+                      :class="{ 'border-red-500 ring-red-500': addressErrors.thanhPho }" 
+                      @change="fetchDistricts">
+                      <option value="">Chọn Tỉnh/Thành phố</option>
+                      <option v-for="province in provinces" :key="province.code" :value="province.code">
+                        {{ province.name }}
+                      </option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                      <i class="las la-chevron-down text-gray-400"></i>
+                    </div>
+                  </div>
+                  <p v-if="addressErrors.thanhPho" class="text-red-600 text-lg flex items-center bg-red-50 px-3 py-2 rounded-lg">
+                    <i class="las la-exclamation-circle mr-2"></i>
                     {{ addressErrors.thanhPho }}
                   </p>
                 </div>
                 
-                <div>
-                  <label class="block texl-2xl font-semibold text-gray-700 mb-1">
-                    <i class="las la-building mr-2"></i>
+                <!-- District -->
+                <div class="space-y-3">
+                  <label class="block text-lg font-semibold text-gray-700 flex items-center">
+                    <i class="las la-building text-[#13ad75] mr-2"></i>
                     Quận/Huyện
                   </label>
-                  <select 
-                    v-model="addressForm.quanCode"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    :class="{ 'border-red-500 ring-red-500': addressErrors.quan }" 
-                    :disabled="!addressForm.thanhPhoCode"
-                    @change="fetchWards">
-                    <option value="">Chọn Quận/Huyện</option>
-                    <option v-for="district in districts" :key="district.code" :value="district.code">
-                      {{ district.name }}
-                    </option>
-                  </select>
-                  <p v-if="addressErrors.quan" class="mt-2 text-red-600 texl-2xl flex items-center">
-                    <i class="las la-exclamation-circle mr-1"></i>
+                  <div class="relative">
+                    <select 
+                      v-model="addressForm.quanCode"
+                      class="w-full px-4 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#13ad75]/50 focus:border-[#13ad75] transition-all duration-200 text-xl appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      :class="{ 'border-red-500 ring-red-500': addressErrors.quan }" 
+                      :disabled="!addressForm.thanhPhoCode"
+                      @change="fetchWards">
+                      <option value="">Chọn Quận/Huyện</option>
+                      <option v-for="district in districts" :key="district.code" :value="district.code">
+                        {{ district.name }}
+                      </option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                      <i class="las la-chevron-down text-gray-400"></i>
+                    </div>
+                  </div>
+                  <p v-if="addressErrors.quan" class="text-red-600 text-lg flex items-center bg-red-50 px-3 py-2 rounded-lg">
+                    <i class="las la-exclamation-circle mr-2"></i>
                     {{ addressErrors.quan }}
                   </p>
                 </div>
                 
-                <div>
-                  <label class="block texl-2xl font-semibold text-gray-700 mb-1">
-                    <i class="las la-map-pin mr-2"></i>
+                <!-- Ward -->
+                <div class="space-y-3">
+                  <label class="block text-lg font-semibold text-gray-700 flex items-center">
+                    <i class="las la-map-pin text-[#13ad75] mr-2"></i>
                     Phường/Xã
                   </label>
-                  <select 
-                    v-model="addressForm.phuongCode"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    :class="{ 'border-red-500 ring-red-500': addressErrors.phuong }" 
-                    :disabled="!addressForm.quanCode">
-                    <option value="">Chọn Phường/Xã</option>
-                    <option v-for="ward in wards" :key="ward.code" :value="ward.code">
-                      {{ ward.name }}
-                    </option>
-                  </select>
-                  <p v-if="addressErrors.phuong" class="mt-2 text-red-600 texl-2xl flex items-center">
-                    <i class="las la-exclamation-circle mr-1"></i>
+                  <div class="relative">
+                    <select 
+                      v-model="addressForm.phuongCode"
+                      class="w-full px-4 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#13ad75]/50 focus:border-[#13ad75] transition-all duration-200 text-xl appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      :class="{ 'border-red-500 ring-red-500': addressErrors.phuong }" 
+                      :disabled="!addressForm.quanCode">
+                      <option value="">Chọn Phường/Xã</option>
+                      <option v-for="ward in wards" :key="ward.code" :value="ward.code">
+                        {{ ward.name }}
+                      </option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                      <i class="las la-chevron-down text-gray-400"></i>
+                    </div>
+                  </div>
+                  <p v-if="addressErrors.phuong" class="text-red-600 text-lg flex items-center bg-red-50 px-3 py-2 rounded-lg">
+                    <i class="las la-exclamation-circle mr-2"></i>
                     {{ addressErrors.phuong }}
                   </p>
                 </div>
               </div>
             </div>
-            
-            <div class="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200">
+
+            <!-- Help Section -->
+            <div class="bg-gradient-to-r from-[#13ad75]/10 to-[#13ad75]/5 border border-[#13ad75]/20 rounded-2xl p-6">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-[#13ad75]/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <i class="las la-info-circle text-[#13ad75] text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-2 text-xl">Lưu ý quan trọng</h4>
+                  <ul class="text-gray-600 text-lg space-y-1">
+                    <li>• Vui lòng điền chính xác địa chỉ để đảm bảo giao hàng thành công</li>
+                    <li>• Địa chỉ này sẽ được sử dụng cho các đơn hàng tiếp theo</li>
+                    <li>• Bạn có thể đặt làm địa chỉ mặc định sau khi lưu</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Modal Footer with Enhanced Buttons -->
+          <div class="bg-gradient-to-r from-gray-50/80 to-white/80 backdrop-blur-sm p-8 border-t border-white/20">
+            <div class="flex justify-end gap-4">
               <button
-                class="px-8 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200 font-medium"
+                class="px-8 py-4 bg-white/80 backdrop-blur-sm text-gray-700 rounded-xl hover:bg-white hover:shadow-lg transition-all duration-200 font-semibold border border-gray-200 flex items-center gap-2 text-xl"
                 @click="closeAddressModal">
-                <i class="las la-times mr-2"></i>
-                Hủy
+                <i class="las la-times"></i>
+                Hủy bỏ
               </button>
               <button
-                class="px-8 py-3 bg-[#13ad75] text-white rounded-xl hover:bg-[#13ad75]/90 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="px-8 py-4 bg-gradient-to-r from-[#13ad75] to-[#13ad75]/90 text-white rounded-xl hover:shadow-xl hover:shadow-[#13ad75]/25 transition-all duration-200 font-semibold transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2 text-xl"
                 :disabled="isSavingAddress" 
                 @click="saveAddress">
-                <i v-if="isSavingAddress" class="las la-spinner la-spin mr-2"></i>
-                <i v-else class="las la-save mr-2"></i>
-                {{ isSavingAddress ? 'Đang lưu...' : 'Lưu địa chỉ' }}
+                <i v-if="isSavingAddress" class="las la-spinner la-spin"></i>
+                <i v-else class="las la-save"></i>
+                {{ isSavingAddress ? 'Đang lưu địa chỉ...' : 'Lưu địa chỉ' }}
               </button>
             </div>
           </div>
@@ -702,16 +773,28 @@
         </p>
       </div>
     </div>
+
+    <!-- ConfirmDialog Component -->
+    <ConfirmDialog ref="confirmDialog" />
+    
+    <!-- ToastNotification Component -->
+    <ToastNotification ref="toastNotification" />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import mitt from 'mitt';
+import ConfirmDialog from '~/components/base/ConfirmDialog.vue';
+import ToastNotification from '~/components/base/ToastNotification.vue';
 
 const emitter = mitt();
 
 export default {
+  components: {
+    ConfirmDialog,
+    ToastNotification
+  },
   data() {
     return {
       isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
@@ -800,7 +883,15 @@ export default {
   methods: {
     async lookupOrder() {
       if (!this.orderLookupId.trim()) {
-        alert('Vui lòng nhập mã đơn hàng.');
+        this.$refs.confirmDialog.show({
+          type: 'warning',
+          title: 'Thông báo',
+          message: 'Vui lòng nhập mã đơn hàng.',
+          confirmText: 'Đồng ý',
+          cancelText: 'Đóng',
+          onConfirm: () => {},
+          onCancel: () => {}
+        });
         return;
       }
       try {
@@ -809,7 +900,15 @@ export default {
         this.$router.push(`/invoice-status?orderId=${orderId}`);
       } catch (error) {
         console.error('Lỗi khi tra cứu đơn hàng:', error);
-        alert('Không tìm thấy đơn hàng với mã đã cho.');
+        this.$refs.confirmDialog.show({
+          type: 'error',
+          title: 'Lỗi tra cứu',
+          message: 'Không tìm thấy đơn hàng với mã đã cho.',
+          confirmText: 'Đồng ý',
+          cancelText: 'Đóng',
+          onConfirm: () => {},
+          onCancel: () => {}
+        });
       }
     },
     async fetchOrders(page = 0) {
@@ -840,7 +939,15 @@ export default {
 
       } catch (error) {
         console.error('Lỗi khi lấy lịch sử đơn hàng:', error);
-        alert(error.response?.data?.error || 'Lỗi khi lấy lịch sử đơn hàng');
+        this.$refs.confirmDialog.show({
+          type: 'error',
+          title: 'Lỗi tải dữ liệu',
+          message: error.response?.data?.error || 'Lỗi khi lấy lịch sử đơn hàng',
+          confirmText: 'Đồng ý',
+          cancelText: 'Đóng',
+          onConfirm: () => {},
+          onCancel: () => {}
+        });
       }
     },
     getStatusNameById(statusId) {
@@ -893,7 +1000,15 @@ export default {
         this.$router.push('/login');
       } catch (error) {
         console.error('Lỗi khi đăng xuất:', error);
-        alert('Lỗi khi đăng xuất');
+        this.$refs.confirmDialog.show({
+          type: 'error',
+          title: 'Lỗi đăng xuất',
+          message: 'Lỗi khi đăng xuất',
+          confirmText: 'Đồng ý',
+          cancelText: 'Đóng',
+          onConfirm: () => {},
+          onCancel: () => {}
+        });
       }
     },
     validateForm() {
@@ -962,7 +1077,15 @@ export default {
       } catch (error) {
         console.error('Lỗi khi lấy thông tin khách hàng:', error);
         this.showUpdatePrompt = true;
-        alert(error.response?.data || 'Lỗi khi lấy thông tin khách hàng');
+        this.$refs.confirmDialog.show({
+          type: 'error',
+          title: 'Lỗi tải thông tin',
+          message: error.response?.data || 'Lỗi khi lấy thông tin khách hàng',
+          confirmText: 'Đồng ý',
+          cancelText: 'Đóng',
+          onConfirm: () => {},
+          onCancel: () => {}
+        });
       }
     },
     async fetchAddresses() {
@@ -976,7 +1099,15 @@ export default {
         this.addresses = response.data;
       } catch (error) {
         console.error('Lỗi khi lấy danh sách địa chỉ:', error);
-        alert(error.response?.data?.error || 'Lỗi khi lấy danh sách địa chỉ');
+        this.$refs.confirmDialog.show({
+          type: 'error',
+          title: 'Lỗi tải địa chỉ',
+          message: error.response?.data?.error || 'Lỗi khi lấy danh sách địa chỉ',
+          confirmText: 'Đồng ý',
+          cancelText: 'Đóng',
+          onConfirm: () => {},
+          onCancel: () => {}
+        });
       }
     },
     async setDefaultAddress(addressId) {
@@ -990,10 +1121,16 @@ export default {
         localStorage.setItem('defaultAddress', this.defaultAddress);
         localStorage.setItem('defaultAddressId', this.defaultAddressId);
         await this.fetchAccountInfo();
-        alert(response.data || 'Cập nhật địa chỉ mặc định thành công!');
+        this.$refs.toastNotification.addToast({
+          type: 'success',
+          message: response.data || 'Cập nhật địa chỉ mặc định thành công!'
+        });
       } catch (error) {
         console.error('Lỗi khi đặt địa chỉ mặc định:', error);
-        alert(error.response?.data || 'Lỗi khi đặt địa chỉ mặc định');
+        this.$refs.toastNotification.addToast({
+          type: 'error',
+          message: error.response?.data || 'Lỗi khi đặt địa chỉ mặc định'
+        });
       }
     },
     async fetchProvinces() {
@@ -1002,7 +1139,15 @@ export default {
         this.provinces = response.data;
       } catch (error) {
         console.error('Lỗi khi lấy danh sách tỉnh/thành phố:', error);
-        alert('Không thể tải danh sách tỉnh/thành phố');
+        this.$refs.confirmDialog.show({
+          type: 'error',
+          title: 'Lỗi tải dữ liệu',
+          message: 'Không thể tải danh sách tỉnh/thành phố',
+          confirmText: 'Đồng ý',
+          cancelText: 'Đóng',
+          onConfirm: () => {},
+          onCancel: () => {}
+        });
       }
     },
     async fetchDistricts() {
@@ -1020,7 +1165,15 @@ export default {
         this.districts = response.data.districts || [];
       } catch (error) {
         console.error('Lỗi khi lấy danh sách quận/huyện:', error);
-        alert('Không thể tải danh sách quận/huyện');
+        this.$refs.confirmDialog.show({
+          type: 'error',
+          title: 'Lỗi tải dữ liệu',
+          message: 'Không thể tải danh sách quận/huyện',
+          confirmText: 'Đồng ý',
+          cancelText: 'Đóng',
+          onConfirm: () => {},
+          onCancel: () => {}
+        });
       }
     },
     async fetchWards() {
@@ -1035,7 +1188,15 @@ export default {
         this.wards = response.data.wards || [];
       } catch (error) {
         console.error('Lỗi khi lấy danh sách phường/xã:', error);
-        alert('Không thể tải danh sách phường/xã');
+        this.$refs.confirmDialog.show({
+          type: 'error',
+          title: 'Lỗi tải dữ liệu',
+          message: 'Không thể tải danh sách phường/xã',
+          confirmText: 'Đồng ý',
+          cancelText: 'Đóng',
+          onConfirm: () => {},
+          onCancel: () => {}
+        });
       }
     },
     addNewAddress() {
@@ -1055,7 +1216,15 @@ export default {
     editAddress(addressId) {
       const address = this.addresses.find(addr => addr.id === addressId);
       if (!address) {
-        alert('Không tìm thấy địa chỉ');
+        this.$refs.confirmDialog.show({
+          type: 'warning',
+          title: 'Thông báo',
+          message: 'Không tìm thấy địa chỉ',
+          confirmText: 'Đồng ý',
+          cancelText: 'Đóng',
+          onConfirm: () => {},
+          onCancel: () => {}
+        });
         return;
       }
       this.isEditingAddress = true;
@@ -1091,7 +1260,15 @@ export default {
       try {
         const idKhachHang = localStorage.getItem('customerId');
         if (!idKhachHang) {
-          alert('Không tìm thấy ID khách hàng');
+          this.$refs.confirmDialog.show({
+            type: 'warning',
+            title: 'Thông báo',
+            message: 'Không tìm thấy ID khách hàng',
+            confirmText: 'Đồng ý',
+            cancelText: 'Đóng',
+            onConfirm: () => {},
+            onCancel: () => {}
+          });
           this.isSavingAddress = false;
           return;
         }
@@ -1113,11 +1290,17 @@ export default {
 
         if (this.isEditingAddress) {
           const response = await axios.put(`http://localhost:8080/khach-hang/updateDchi/${this.addressForm.id}`, payload);
-          alert(response.data || 'Cập nhật địa chỉ thành công!');
+          this.$refs.toastNotification.addToast({
+            type: 'success',
+            message: response.data || 'Cập nhật địa chỉ thành công!'
+          });
         } else {
           const response = await axios.post(`http://localhost:8080/khach-hang/addDchiKhachHang`, payload);
           this.addresses.push(response.data);
-          alert('Thêm địa chỉ thành công!');
+          this.$refs.toastNotification.addToast({
+            type: 'success',
+            message: 'Thêm địa chỉ thành công!'
+          });
         }
 
         await this.fetchAddresses();
@@ -1127,28 +1310,46 @@ export default {
         this.closeAddressModal();
       } catch (error) {
         console.error('Lỗi khi lưu địa chỉ:', error);
-        alert(error.response?.data || 'Lỗi khi lưu địa chỉ');
+        this.$refs.toastNotification.addToast({
+          type: 'error',
+          message: error.response?.data || 'Lỗi khi lưu địa chỉ'
+        });
       } finally {
         this.isSavingAddress = false;
       }
     },
     async deleteAddress(addressId) {
-      if (!confirm('Bạn có chắc muốn xóa địa chỉ này?')) return;
-      try {
-        await axios.delete(`http://localhost:8080/dia-chi-khach-hang/delete/${addressId}`);
-        this.addresses = this.addresses.filter((address) => address.id !== addressId);
-        if (this.defaultAddressId === addressId) {
-          this.defaultAddressId = '';
-          this.defaultAddress = '';
-          localStorage.setItem('defaultAddress', '');
-          localStorage.setItem('defaultAddressId', '');
-          await this.updateAccountInfo();
-        }
-        alert('Xóa địa chỉ thành công');
-      } catch (error) {
-        console.error('Lỗi khi xóa địa chỉ:', error);
-        alert(error.response?.data?.error || 'Lỗi khi xóa địa chỉ');
-      }
+      this.$refs.confirmDialog.show({
+        type: 'danger',
+        title: 'Xác nhận xóa',
+        message: 'Bạn có chắc muốn xóa địa chỉ này?',
+        confirmText: 'Xóa',
+        cancelText: 'Hủy',
+        onConfirm: async () => {
+          try {
+            await axios.delete(`http://localhost:8080/dia-chi-khach-hang/delete/${addressId}`);
+            this.addresses = this.addresses.filter((address) => address.id !== addressId);
+            if (this.defaultAddressId === addressId) {
+              this.defaultAddressId = '';
+              this.defaultAddress = '';
+              localStorage.setItem('defaultAddress', '');
+              localStorage.setItem('defaultAddressId', '');
+              await this.updateAccountInfo();
+            }
+            this.$refs.toastNotification.addToast({
+              type: 'success',
+              message: 'Xóa địa chỉ thành công'
+            });
+          } catch (error) {
+            console.error('Lỗi khi xóa địa chỉ:', error);
+            this.$refs.toastNotification.addToast({
+              type: 'error',
+              message: error.response?.data?.error || 'Lỗi khi xóa địa chỉ'
+            });
+          }
+        },
+        onCancel: () => {}
+      });
     },
     async updateAccountInfo() {
       if (!this.validateForm()) return;
@@ -1157,7 +1358,15 @@ export default {
       try {
         const idKhachHang = localStorage.getItem('customerId');
         if (!idKhachHang) {
-          alert('Không tìm thấy ID khách hàng');
+          this.$refs.confirmDialog.show({
+            type: 'warning',
+            title: 'Thông báo',
+            message: 'Không tìm thấy ID khách hàng',
+            confirmText: 'Đồng ý',
+            cancelText: 'Đóng',
+            onConfirm: () => {},
+            onCancel: () => {}
+          });
           return;
         }
 
@@ -1198,12 +1407,18 @@ export default {
           customerName: this.customerName,
         });
 
-        alert('Cập nhật thông tin thành công');
+        this.$refs.toastNotification.addToast({
+          type: 'success',
+          message: 'Cập nhật thông tin thành công'
+        });
       } catch (error) {
         console.error('Lỗi khi cập nhật thông tin:', error);
         const errorMessage = error.response?.data || 'Lỗi khi cập nhật thông tin';
         this.errors.server = errorMessage;
-        alert(errorMessage);
+        this.$refs.toastNotification.addToast({
+          type: 'error',
+          message: errorMessage
+        });
       } finally {
         this.isUpdating = false;
       }
@@ -1214,15 +1429,30 @@ export default {
       return [diaChiCuThe, phuong, quan, thanhPho].filter(Boolean).join(', ');
     },
     async cancelOrder(orderId) {
-      if (!confirm('Bạn có chắc muốn hủy đơn hàng này?')) return;
-      try {
-        await axios.put(`http://localhost:8080/api/hoa-don/${orderId}/cancel-client`);
-        alert('Hủy đơn hàng thành công!');
-        this.fetchOrders(this.currentPage);
-      } catch (error) {
-        console.error('Lỗi khi hủy đơn hàng:', error);
-        alert(error.response?.data?.message || 'Lỗi khi hủy đơn hàng');
-      }
+      this.$refs.confirmDialog.show({
+        type: 'danger',
+        title: 'Xác nhận hủy đơn hàng',
+        message: 'Bạn có chắc muốn hủy đơn hàng này?',
+        confirmText: 'Hủy đơn hàng',
+        cancelText: 'Không hủy',
+        onConfirm: async () => {
+          try {
+            await axios.put(`http://localhost:8080/api/hoa-don/${orderId}/cancel-client`);
+            this.$refs.toastNotification.addToast({
+              type: 'success',
+              message: 'Hủy đơn hàng thành công!'
+            });
+            this.fetchOrders(this.currentPage);
+          } catch (error) {
+            console.error('Lỗi khi hủy đơn hàng:', error);
+            this.$refs.toastNotification.addToast({
+              type: 'error',
+              message: error.response?.data?.message || 'Lỗi khi hủy đơn hàng'
+            });
+          }
+        },
+        onCancel: () => {}
+      });
     },
   },
 };
