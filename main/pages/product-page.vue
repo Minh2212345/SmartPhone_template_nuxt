@@ -598,9 +598,9 @@ export default {
 <style scoped>
 /* ===== CSS CUSTOM PROPERTIES ===== */
 :root {
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --primary-gradient: linear-gradient(90deg, #002c69, #13ad75);
+  --secondary-gradient: linear-gradient(135deg, #002c69 0%, #13ad75 100%);
+  --success-gradient: linear-gradient(135deg, #13ad75 0%, #00f2fe 100%);
   --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
   --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
 
@@ -666,7 +666,7 @@ export default {
 }
 
 .breadcrumb-link:hover {
-  color: #667eea;
+  color: #002c69;
   text-decoration: none;
 }
 
@@ -727,7 +727,7 @@ export default {
   padding: 2rem;
   width: 100%;
   min-height: 400px;
-  border: 2px solid rgba(102, 126, 234, 0.1);
+  border: 2px solid rgba(0, 44, 105, 0.1);
 }
 
 .main-image {
@@ -761,25 +761,25 @@ export default {
 .zoom-btn {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border: 2px solid rgba(102, 126, 234, 0.2);
+  border: 2px solid rgba(0, 44, 105, 0.2);
   border-radius: 50%;
   width: 4rem;
   height: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #667eea;
+  color: #002c69;
   font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 44, 105, 0.2);
 }
 
 .zoom-btn:hover {
   background: white;
   transform: scale(1.15) rotate(10deg);
-  box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
-  border-color: #667eea;
+  box-shadow: 0 15px 35px rgba(0, 44, 105, 0.3);
+  border-color: #002c69;
 }
 
 /* ===== THUMBNAIL GALLERY ===== */
@@ -813,10 +813,10 @@ export default {
 }
 
 .thumbnail-item.active {
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.4), 0 15px 35px rgba(102, 126, 234, 0.2);
+  border-color: #002c69;
+  box-shadow: 0 0 0 4px rgba(0, 44, 105, 0.4), 0 15px 35px rgba(0, 44, 105, 0.2);
   transform: scale(1.1) translateY(-5px);
-  background: rgba(102, 126, 234, 0.05);
+  background: rgba(0, 44, 105, 0.05);
 }
 
 .thumbnail-image {
@@ -843,8 +843,8 @@ export default {
 
 .thumbnail-item:hover {
   transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.25);
-  border-color: rgba(102, 126, 234, 0.6);
+  box-shadow: 0 15px 30px rgba(0, 44, 105, 0.25);
+  border-color: rgba(0, 44, 105, 0.6);
 }
 
 .thumbnail-item:hover .thumbnail-image {
@@ -914,9 +914,9 @@ export default {
 .modern-price-section {
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(0, 44, 105, 0.1) 0%, rgba(19, 173, 117, 0.1) 100%);
   border-radius: var(--border-radius-lg);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(0, 44, 105, 0.2);
 }
 
 .price-container {
@@ -978,7 +978,7 @@ export default {
 }
 
 .options-title i {
-  color: #667eea;
+  color: #002c69;
 }
 
 .options-grid {
@@ -991,7 +991,7 @@ export default {
   position: relative;
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
-  border: 2px solid rgba(102, 126, 234, 0.2);
+  border: 2px solid rgba(0, 44, 105, 0.2);
   border-radius: var(--border-radius-lg);
   padding: 1rem;
   cursor: pointer;
@@ -1021,15 +1021,15 @@ export default {
 }
 
 .modern-option-btn.active {
-  border-color: #667eea;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3), 0 8px 25px rgba(102, 126, 234, 0.2);
+  border-color: #002c69;
+  background: linear-gradient(135deg, rgba(0, 44, 105, 0.15) 0%, rgba(19, 173, 117, 0.15) 100%);
+  box-shadow: 0 0 0 3px rgba(0, 44, 105, 0.3), 0 8px 25px rgba(0, 44, 105, 0.2);
   transform: translateY(-2px);
 }
 
 .color-option.active .color-circle {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.4), 0 6px 20px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  border-color: #002c69;
+  box-shadow: 0 0 0 3px rgba(0, 44, 105, 0.4), 0 6px 20px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.3);
   transform: scale(1.1);
 }
 
@@ -1125,8 +1125,9 @@ export default {
 
 .action-buttons {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .modern-btn {
@@ -1148,33 +1149,53 @@ export default {
 }
 
 .modern-btn.primary {
-  background: var(--primary-gradient);
-  color: white;
-  box-shadow: var(--shadow-lg);
+  background: linear-gradient(90deg, #002c69, #13ad75);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 44, 105, 0.3);
 }
 
 .modern-btn.secondary {
-  background: var(--secondary-gradient);
-  color: white;
-  box-shadow: var(--shadow-lg);
+  background: linear-gradient(90deg, #002c69, #13ad75);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 44, 105, 0.3);
 }
 
 .modern-btn.outline {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
-  color: #667eea;
-  border: 2px solid #667eea;
+  color: #002c69;
+  border: 2px solid #002c69;
 }
 
 .modern-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-2xl);
   text-decoration: none;
   color: white;
 }
 
+.modern-btn.primary:hover {
+  background: linear-gradient(90deg, #003d7a, #16c085);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 44, 105, 0.4);
+}
+
+.modern-btn.secondary:hover {
+  background: linear-gradient(90deg, #003d7a, #16c085);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 44, 105, 0.4);
+}
+
 .modern-btn.outline:hover {
-  color: #667eea;
+  color: #002c69;
 }
 
 .btn-shine {
@@ -1183,12 +1204,69 @@ export default {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: var(--transition);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: all 0.6s ease;
+}
+
+.modern-btn.primary .btn-shine {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+}
+
+.modern-btn.secondary .btn-shine {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
 }
 
 .modern-btn:hover .btn-shine {
   left: 100%;
+  transition: all 0.8s ease;
+}
+
+/* Enhanced button animations */
+.modern-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border-radius: var(--border-radius-lg);
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  min-width: 200px;
+}
+
+.modern-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.modern-btn:hover::before {
+  transform: translateX(100%);
+}
+
+.modern-btn i {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.modern-btn:hover i {
+  transform: scale(1.1);
+}
+
+.modern-btn span {
+  position: relative;
+  z-index: 1;
 }
 
 .secondary-actions {
@@ -1203,7 +1281,7 @@ export default {
   padding: 0.75rem 1.5rem;
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(0, 44, 105, 0.2);
   border-radius: var(--border-radius);
   color: #6b7280;
   text-decoration: none;
@@ -1211,9 +1289,21 @@ export default {
   transition: var(--transition);
 }
 
+.secondary-btn.specs-btn {
+  background: #002c69;
+  color: white;
+  border: 1px solid #002c69;
+}
+
+.secondary-btn.specs-btn:hover {
+  background: #001a4d;
+  color: white;
+  border-color: #001a4d;
+}
+
 .secondary-btn:hover {
-  background: rgba(102, 126, 234, 0.1);
-  color: #667eea;
+  background: rgba(0, 44, 105, 0.1);
+  color: #002c69;
   text-decoration: none;
 }
 
@@ -1221,7 +1311,7 @@ export default {
 .modern-product-meta {
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid rgba(102, 126, 234, 0.2);
+  border-top: 1px solid rgba(0, 44, 105, 0.2);
 }
 
 .meta-item {
@@ -1232,7 +1322,7 @@ export default {
 }
 
 .meta-item i {
-  color: #667eea;
+  color: #002c69;
   width: 1.25rem;
 }
 
@@ -1310,7 +1400,7 @@ export default {
 }
 
 .specs-title i {
-  color: #667eea;
+  color: #002c69;
 }
 
 .specs-grid {
@@ -1324,9 +1414,9 @@ export default {
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(0, 44, 105, 0.05) 0%, rgba(19, 173, 117, 0.05) 100%);
   border-radius: var(--border-radius-lg);
-  border: 1px solid rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(0, 44, 105, 0.1);
   transition: var(--transition);
 }
 
@@ -1364,22 +1454,6 @@ export default {
   font-size: 1rem;
   font-weight: 600;
   color: #1f2937;
-}
-
-.secondary-btn.specs-btn {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  color: white;
-  border: 2px solid #dc2626;
-  font-weight: 600;
-  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
-}
-
-.secondary-btn.specs-btn:hover {
-  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
-  color: white;
-  border-color: #b91c1c;
-  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
-  transform: translateY(-2px);
 }
 
 .secondary-btn.specs-btn i {
