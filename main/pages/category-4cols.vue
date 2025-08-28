@@ -1,25 +1,19 @@
 <template>
   <main class="main">
     <!-- eslint-disable -->
-    <!-- Modern Breadcrumb -->
-    <nav aria-label="breadcrumb" class="modern-breadcrumb">
-      <div class="container">
-        <ol class="breadcrumb-list">
-          <li class="breadcrumb-item">
-            <NuxtLink to="/" class="breadcrumb-link">
-              <i class="fas fa-home"></i>
-              <span>Trang chủ</span>
-            </NuxtLink>
-          </li>
-          <li class="breadcrumb-item active">
-            <span>
-              <i class="fas fa-mobile-alt"></i>
-              <span>Sản phẩm</span>
-            </span>
-          </li>
-        </ol>
-      </div>
-    </nav>
+    <!-- Enhanced Breadcrumb Navigation -->
+    <div class="container mx-auto px-6 py-4 max-w-8xl">
+      <nav class="bg-white/90 backdrop-blur-xl border border-white/30 shadow-lg rounded-2xl px-6 py-4 mb-2">
+        <div class="flex items-center gap-3 text-2xl">
+          <NuxtLink to="/" class="text-gray-500 hover:text-[#13ad75] transition-colors duration-200">
+            <i class="las la-home"></i>
+            Trang chủ
+          </NuxtLink>
+          <i class="las la-chevron-right text-gray-400"></i>
+          <span class="text-[#13ad75] font-medium">Sản phẩm</span>
+        </div>
+      </nav>
+    </div>
 
     <div class="page-content">
       <div class="container">
@@ -587,7 +581,7 @@ export default Category4Cols
 }
 
 .action-btn:hover {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95) 0%, rgba(16, 185, 129, 0.95) 100%);
+  background: rgba(16, 185, 129, 0.95);
   color: #ffffff;
   transform: scale(1.15) rotate(5deg);
   box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3), 0 4px 12px rgba(16, 185, 129, 0.2);
@@ -873,13 +867,11 @@ export default Category4Cols
 .page-link:hover {
   background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
   color: #ffffff;
-  border-color: transparent;
 }
 
 .page-item.active .page-link {
   background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
   color: #ffffff;
-  border-color: transparent;
 }
 
 .page-item.disabled .page-link {

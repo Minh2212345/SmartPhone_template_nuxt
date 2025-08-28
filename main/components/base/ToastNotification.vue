@@ -34,7 +34,7 @@ export default {
   setup() {
     const toasts = ref([]);
 
-    const addToast = ({ type, message, isLoading = false, duration = 2500 }) => {
+    const addToast = ({ type, message, isLoading = false, duration = 1500 }) => {
       const id = Date.now() + Math.random();
       toasts.value.push({ id, type, message, isLoading });
       if (!isLoading && duration > 0) {
@@ -82,7 +82,7 @@ export default {
 :root {
   /* Modern Color Palette - Bright & Vibrant */
   --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  --success-gradient: linear-gradient(135deg, #13ad75 0%, #38ef7d 100%);
   --error-gradient: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
   --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -117,7 +117,7 @@ export default {
   flex-direction: column;
   min-width: 300px;
   max-width: 400px;
-  border-radius: 20px;
+  border-radius: 10px;
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-2xl);
   font-family: 'Inter', sans-serif;
@@ -126,11 +126,6 @@ export default {
   pointer-events: auto;
   transform: translateZ(0);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.toast-notification:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.35);
 }
 
 .toast-content {
@@ -204,7 +199,7 @@ export default {
 }
 
 .title-success {
-  color: #11998e;
+  color: #13ad75;
 }
 
 .title-error {
@@ -278,19 +273,19 @@ export default {
 /* Toast Type Styles */
 .toast-success {
   background: #ffffff;
-  border-left: 5px solid #11998e;
+  border-left: 5px solid #13ad75;
 }
 
 .toast-success .toast-icon-wrapper {
-  background: #11998e;
+  background: #13ad75;
 }
 
 .toast-success .toast-icon-wrapper::before {
-  background: #11998e;
+  background: #13ad75;
 }
 
 .toast-success .toast-progress {
-  background: #11998e;
+  background: #13ad75;
 }
 
 .toast-error {

@@ -19,16 +19,35 @@
 
     <!-- ChatBox -->
     <ChatBox />
+    
+    <!-- Global Confirm Dialog -->
+    <ConfirmDialog ref="confirmDialog" />
+    
+    <!-- Global Toast Notification -->
+    <ToastNotification ref="toastNotification" />
   </div>
 </template>
 
 <script>
 import ChatBox from '~/components/base/ChatBox.vue';
+import ConfirmDialog from '~/components/base/ConfirmDialog.vue';
+import ToastNotification from '~/components/base/ToastNotification.vue';
+import { useConfirm } from '~/composables/useConfirm';
 
 export default {
   name: 'DefaultLayout',
   components: {
     ChatBox,
+    ConfirmDialog,
+    ToastNotification,
+  },
+  mounted() {
+    // Register the confirm dialog globally
+    const { setConfirmRef } = useConfirm();
+    setConfirmRef(this.$refs.confirmDialog);
+    
+    // Make toast notification globally available
+    this.$root.$toast = this.$refs.toastNotification;
   },
 };
 </script>

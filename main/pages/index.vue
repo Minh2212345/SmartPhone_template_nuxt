@@ -148,7 +148,7 @@
               <div class="side-banner-item rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group">
                 <div class="relative overflow-hidden">
                   <img src="/assets/images/banners/banner-1.jpg" alt="Banner 1" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
-                  <div class="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-green-600/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div class="flex items-center justify-center h-full text-center p-4">
                       <div class="text-white">
                         <h4 class="font-bold text-lg mb-2">Khuyến mãi đặc biệt</h4>
@@ -165,7 +165,7 @@
               <div class="side-banner-item rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group">
                 <div class="relative overflow-hidden">
                   <img src="/assets/images/banners/banner-2.jpg" alt="Banner 2" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
-                  <div class="absolute inset-0 bg-gradient-to-r from-blue-600/80 to-cyan-600/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div class="flex items-center justify-center h-full text-center p-4">
                       <div class="text-white">
                         <h4 class="font-bold text-lg mb-2">Sản phẩm mới</h4>
@@ -182,7 +182,7 @@
               <div class="side-banner-item rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group">
                 <div class="relative overflow-hidden">
                   <img src="/assets/images/banners/banner-3.jpg" alt="Banner 3" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
-                  <div class="absolute inset-0 bg-gradient-to-r from-green-600/80 to-teal-600/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div class="flex items-center justify-center h-full text-center p-4">
                       <div class="text-white">
                         <h4 class="font-bold text-lg mb-2">Bảo hành mở rộng</h4>
@@ -1198,7 +1198,6 @@ export default IndexPage
   left: 0;
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: linear-gradient(to right, rgba(19, 173, 117, 0.9), rgba(15, 138, 95, 0.9));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1212,14 +1211,6 @@ export default IndexPage
 
 .side-banner-item:hover .absolute {
   opacity: 1;
-}
-
-.side-banner-item:nth-child(2) .absolute {
-  background: linear-gradient(to right, rgba(19, 173, 117, 0.9), rgba(0, 44, 105, 0.9));
-}
-
-.side-banner-item:nth-child(3) .absolute {
-  background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
 }
 
 .side-banner-item .text-white {

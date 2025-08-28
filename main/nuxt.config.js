@@ -38,7 +38,7 @@ export default {
       { rel: 'stylesheet', href: '/assets/css/plugins/owl-carousel/owl.carousel.css' },
       { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap' },
-      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css' },
+      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css' },
       { rel: 'stylesheet', href: '/assets/css/style.css' },
       { rel: 'stylesheet', href: '/assets/css/skins/skin-demo-4.css' },
       { rel: 'stylesheet', href: '/assets/css/demos/demo-4.css' },

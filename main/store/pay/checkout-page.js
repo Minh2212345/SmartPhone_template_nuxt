@@ -17,6 +17,8 @@ export default {
       showConfirmationModal: false,
       isLoading: false,
       selectedStoreIndex: null,
+      toasts: [],
+      toastIdCounter: 0,
       provinces: [],
       districts: [],
       wards: [],
@@ -107,22 +109,35 @@ export default {
             console.log('Retrieved pendingHoaDon:', pendingHoaDon);
             if (pendingHoaDon && pendingHoaDon.idHD && pendingHoaDon.hoaDonRequest) {
               this.invoiceId = pendingHoaDon.idHD;
+              
+              // Set step to 3 (payment completed) and hide modal
+              this.currentStep = 3;
+              this.showConfirmationModal = false;
+              this.isLoading = false;
+              
+              // Clean up URL params without redirecting
+              this.$router.replace({ path: '/checkout-page', query: {} });
+              
+              // Submit the form and let submitForm handle the toast and redirect
               await this.submitForm(pendingHoaDon.hoaDonRequest);
-              this.showToast('success', `Thanh toán VNPAY thành công! Đơn hàng #${this.invoiceId} đã được xác nhận.`);
-              localStorage.removeItem('pendingHoaDon');
-              localStorage.removeItem('invoiceId');
-              localStorage.removeItem('pendingInvoiceId');
-              this.invoiceId = null;
-              this.$router.replace({ path: '/cart-page', query: {} }); // Xóa query params
+              
             } else {
               console.error('Invalid pendingHoaDon:', pendingHoaDon);
-              this.showToast('error', 'Không tìm thấy thông tin hóa đơn để hoàn tất thanh toán');
-              this.$router.replace({ path: '/cart-page', query: {} });
+              this.$refs.toastNotification.addToast({
+                type: 'error',
+                message: 'Không tìm thấy thông tin hóa đơn để hoàn tất thanh toán',
+                duration: 5000
+              });
+              this.$router.replace({ path: '/checkout-page', query: {} });
             }
           } else {
             console.error('VNPAY Payment Failed:', response.data);
-            this.showToast('error', response.data.message || 'Thanh toán VNPAY thất bại!');
-            this.$router.replace({ path: '/cart-page', query: {} });
+            this.$refs.toastNotification.addToast({
+              type: 'error',
+              message: response.data.message || 'Thanh toán VNPay thất bại!',
+              duration: 5000
+            });
+            this.$router.replace({ path: '/checkout-page', query: {} });
           }
         } catch (error) {
           console.error('VNPAY Callback Error:', error);
@@ -134,8 +149,12 @@ export default {
           } else {
             console.error('Error setting up request:', error.message);
           }
-          this.showToast('error', 'Lỗi khi kiểm tra trạng thái thanh toán VNPAY: ' + error.message);
-          this.$router.replace({ path: '/cart-page', query: {} });
+          this.$refs.toastNotification.addToast({
+            type: 'error',
+            message: 'Lỗi khi kiểm tra trạng thái thanh toán VNPay: ' + error.message,
+            duration: 5000
+          });
+          this.$router.replace({ path: '/checkout-page', query: {} });
         }
       }
     } catch (error) {
@@ -159,7 +178,11 @@ export default {
         const response = await axios.post('http://localhost:8080/api/client/hoa-don-cho', {}, { params });
         this.invoiceId = response.data.id;
         localStorage.setItem('invoiceId', this.invoiceId);
-        this.showToast('success', 'Tạo hóa đơn mới thành công!');
+        this.$refs.toastNotification.addToast({
+          type: 'success',
+          message: 'Tạo hóa đơn mới thành công!',
+          duration: 3000
+        });
       } catch (error) {
         this.handleError(error, 'Lỗi khi tạo hóa đơn mới');
         this.$router.push('/cart-page');
@@ -257,7 +280,11 @@ export default {
           await axios.post(`http://localhost:8080/khach-hang/addDchiKhachHang`, addressData);
         }
         await this.fetchAddresses();
-        this.showToast('success', 'Địa chỉ đã được lưu thành công!');
+        this.$refs.toastNotification.addToast({
+          type: 'success',
+          message: 'Địa chỉ đã được lưu thành công!',
+          duration: 3000
+        });
         this.selectedAddressId = null;
         this.selectedAddress = {};
         this.activeTab = 1;
@@ -273,7 +300,11 @@ export default {
       if (confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) {
         try {
           await axios.delete(`http://localhost:8080/khach-hang/client/deleteDiaChi/${addressId}`);
-          this.showToast('success', 'Đã gửi yêu cầu xóa địa chỉ!');
+          this.$refs.toastNotification.addToast({
+            type: 'success',
+            message: 'Đã gửi yêu cầu xóa địa chỉ!',
+            duration: 3000
+          });
 
           // Nếu địa chỉ bị xóa là địa chỉ đang được chọn, hãy xóa lựa chọn đó đi
           if (this.selectedAddressId === addressId) {
@@ -393,10 +424,23 @@ export default {
           timeout: 30000
         });
         console.log('Submit Response:', response.data);
-        this.showToast('success', `Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận.`);
-        localStorage.removeItem('invoiceId');
-        this.invoiceId = null;
-        this.$router.push('/cart-page');
+        
+        // Show success toast and redirect for both COD and VNPay
+        this.$refs.toastNotification.addToast({
+          type: 'success',
+          message: `🎉 Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Bạn sẽ nhận được email thông báo chi tiết.`,
+          duration: 4000
+        });
+        
+        // Delay redirect to allow toast to show
+        setTimeout(() => {
+          localStorage.removeItem('invoiceId');
+          localStorage.removeItem('pendingHoaDon');
+          localStorage.removeItem('pendingInvoiceId');
+          this.invoiceId = null;
+          this.$router.push('/order-page'); // Redirect to order page
+        }, 4000); // Wait 4 seconds before redirect
+        
       } catch (error) {
         console.error('Submit Error:', error);
         if (error.response) {
@@ -407,7 +451,11 @@ export default {
         } else {
           console.error('Error setting up request:', error.message);
         }
-        this.showToast('error', 'Lỗi khi hoàn tất hóa đơn: ' + (error.response?.data?.message || error.message));
+        this.$refs.toastNotification.addToast({
+          type: 'error',
+          message: 'Lỗi khi hoàn tất hóa đơn: ' + (error.response?.data?.message || error.message),
+          duration: 5000
+        });
       } finally {
         this.isLoading = false;
       }
@@ -461,7 +509,11 @@ export default {
     },
     handleError(error, defaultMessage) {
       const message = error.response?.data || error.message || defaultMessage || 'Đã xảy ra lỗi không xác định';
-      this.showToast('error', message);
+      this.$refs.toastNotification.addToast({
+        type: 'error',
+        message: message,
+        duration: 5000
+      });
     },
     setDeliveryMethod(method) {
       this.deliveryMethod = method;
@@ -491,24 +543,39 @@ export default {
           this.calculatedDiscount = this.appliedDiscount.soTienGiamToiDa;
         }
         this.order.total = this.order.subtotal - this.calculatedDiscount;
-        this.showToast('success', 'Mã giảm giá đã được áp dụng!');
+        this.$refs.toastNotification.addToast({
+          type: 'success',
+          message: 'Mã giảm giá đã được áp dụng!',
+          duration: 3000
+        });
       } catch (error) {
         this.handleError(error, 'Mã giảm giá không hợp lệ');
       }
     },
     showToast(type, message) {
-      // Replace with your actual toast notification implementation
-      if (type === 'success') {
-        alert(`SUCCESS: ${message}`);
-      } else {
-        alert(`ERROR: ${message}`);
+      // Use the ToastNotification component
+      this.$refs.toastNotification.addToast({
+        type: type,
+        message: message,
+        duration: type === 'error' ? 5000 : 3000
+      });
+    },
+    
+    removeToast(toastId) {
+      const index = this.toasts.findIndex(toast => toast.id === toastId);
+      if (index > -1) {
+        this.toasts.splice(index, 1);
       }
     },
     nextStep() {
       console.log('Nút Tiếp tục được nhấn, currentStep:', this.currentStep);
       if (this.order.items.length === 0) {
         console.log('Giỏ hàng trống');
-        this.showToast('error', 'Giỏ hàng trống, vui lòng kiểm tra lại!');
+        this.$refs.toastNotification.addToast({
+          type: 'error',
+          message: 'Giỏ hàng trống, vui lòng kiểm tra lại!',
+          duration: 4000
+        });
         return;
       }
       if (this.currentStep < this.steps.length) {
@@ -524,7 +591,11 @@ export default {
     },
     async confirmOrder() {
       if (!this.paymentMethod) {
-        this.showToast('error', 'Vui lòng chọn phương thức thanh toán!');
+        this.$refs.toastNotification.addToast({
+          type: 'error',
+          message: 'Vui lòng chọn phương thức thanh toán!',
+          duration: 4000
+        });
         return;
       }
       this.showConfirmationModal = true;
@@ -575,18 +646,18 @@ export default {
             throw new Error('Không nhận được URL thanh toán từ VNPAY!');
           }
         } else if (this.paymentMethod === 'COD') {
-          await this.submitForm();
           this.showConfirmationModal = false;
-          this.showToast('success', `Đặt hàng thành công! Bạn sẽ nhận được email xác nhận đơn hàng.`);
-          localStorage.removeItem('invoiceId');
-          this.invoiceId = null;
-          this.$router.push('/cart-page');
+          await this.submitForm();
         } else {
           throw new Error('Phương thức thanh toán không hợp lệ!');
         }
       } catch (error) {
         console.error('Submit Order Error:', error);
-        this.showToast('error', 'Lỗi khi thực hiện thanh toán: ' + error.message);
+        this.$refs.toastNotification.addToast({
+          type: 'error',
+          message: 'Lỗi khi thực hiện thanh toán: ' + error.message,
+          duration: 5000
+        });
         this.showConfirmationModal = false;
       } finally {
         this.isLoading = false;
@@ -595,6 +666,14 @@ export default {
     setPaymentMethod(method) {
       this.paymentMethod = method;
       console.log('Phương thức thanh toán được chọn:', method);
+    },
+    getStepDescription(stepIndex) {
+      const descriptions = [
+        'Nhập thông tin giao hàng và địa chỉ nhận hàng',
+        'Kiểm tra lại thông tin đơn hàng và xác nhận',
+        'Chọn phương thức thanh toán và hoàn tất đơn hàng'
+      ];
+      return descriptions[stepIndex] || '';
     }
   }
 }
