@@ -188,7 +188,7 @@
                           <div class="btn-shine"></div>
                         </button>
                         <NuxtLink to="/cart-page" class="modern-btn secondary">
-                          <i class="fas fa-bolt"></i>
+                          <i class="fas fa-credit-card"></i>
                           <span>Mua ngay</span>
                           <div class="btn-shine"></div>
                         </NuxtLink>
@@ -1140,7 +1140,7 @@ export default {
   border: none;
   border-radius: var(--border-radius-lg);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.3rem;
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition);
@@ -1149,10 +1149,10 @@ export default {
 }
 
 .modern-btn.primary {
-  background: linear-gradient(90deg, #002c69, #13ad75);
+  background: #13ad75;
   color: #ffffff;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.3rem;
   text-decoration: none;
   border-radius: 0.75rem;
   transition: all 0.3s ease;
@@ -1160,10 +1160,10 @@ export default {
 }
 
 .modern-btn.secondary {
-  background: linear-gradient(90deg, #002c69, #13ad75);
+  background: #13ad75;
   color: #ffffff;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.3rem;
   text-decoration: none;
   border-radius: 0.75rem;
   transition: all 0.3s ease;
@@ -1183,13 +1183,13 @@ export default {
 }
 
 .modern-btn.primary:hover {
-  background: linear-gradient(90deg, #003d7a, #16c085);
+  background: #16c085;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 44, 105, 0.4);
 }
 
 .modern-btn.secondary:hover {
-  background: linear-gradient(90deg, #003d7a, #16c085);
+  background: #16c085;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 44, 105, 0.4);
 }
@@ -1443,7 +1443,7 @@ export default {
 
 .spec-label {
   display: block;
-  font-size: 0.875rem;
+  font-size: 1.6rem;
   font-weight: 600;
   color: #6b7280;
   margin-bottom: 0.25rem;
@@ -1451,7 +1451,7 @@ export default {
 
 .spec-value {
   display: block;
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: #1f2937;
 }

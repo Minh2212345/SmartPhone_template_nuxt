@@ -254,10 +254,8 @@
                       </span>
                     </div>
                     <div class="product-image-wrapper">
-                      <NuxtLink :to="`/product-page?sp_id=${product.id}`">
-                        <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
-                          class="product-image" />
-                      </NuxtLink>
+                      <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
+                        class="product-image" />
                     </div>
                     <div class="floating-actions">
                       <button class="action-btn wishlist-btn" title="Yêu thích">
@@ -266,9 +264,9 @@
                       <NuxtLink to="/compare-page" class="action-btn compare-btn" title="So sánh">
                         <i class="fas fa-balance-scale"></i>
                       </NuxtLink>
-                      <button class="action-btn quickview-btn" title="Xem nhanh">
+                      <NuxtLink :to="`/product-page?sp_id=${product.id}`" class="action-btn quickview-btn" title="Xem nhanh">
                         <i class="fas fa-eye"></i>
-                      </button>
+                      </NuxtLink>
                     </div>
                   </figure>
                   <div class="product-info">
@@ -291,10 +289,6 @@
                     <div class="product-price">
                       <span class="current-price">{{ formatPrice(product.giaBan || 0) }} VND</span>
                     </div>
-                    <button class="add-to-cart-btn">
-                      <span>Thêm vào giỏ</span>
-                      <i class="fas fa-shopping-cart"></i>
-                    </button>
                   </div>
                 </div>
               </div>
@@ -502,10 +496,8 @@
                       </span>
                     </div>
                     <div class="product-image-wrapper">
-                      <NuxtLink :to="`/product-page?sp_id=${product.id}`">
-                        <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
-                          class="product-image" />
-                      </NuxtLink>
+                      <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
+                        class="product-image" />
                     </div>
                     <div class="floating-actions">
                       <button class="action-btn wishlist-btn" title="Yêu thích">
@@ -514,9 +506,9 @@
                       <NuxtLink to="/compare-page" class="action-btn compare-btn" title="So sánh">
                         <i class="fas fa-balance-scale"></i>
                       </NuxtLink>
-                      <button class="action-btn quickview-btn" title="Xem nhanh">
+                      <NuxtLink :to="`/product-page?sp_id=${product.id}`" class="action-btn quickview-btn" title="Xem nhanh">
                         <i class="fas fa-eye"></i>
-                      </button>
+                      </NuxtLink>
                     </div>
                   </figure>
                   <div class="product-info">
@@ -540,10 +532,6 @@
                       <span v-if="product.hasDiscount" class="old-price">{{ formatPrice(product.giaBan || 0) }} VND</span>
                       <span class="current-price">{{ formatPrice(product.giaSauKhiGiam || product.giaBan || 0) }} VND</span>
                     </div>
-                    <button class="add-to-cart-btn">
-                      <span>Thêm vào giỏ</span>
-                      <i class="fas fa-shopping-cart"></i>
-                    </button>
                   </div>
                 </div>
               </div>
@@ -591,7 +579,7 @@
         </div>
         <div class="products">
           <div class="row justify-content-center">
-            <div v-for="product in recommendedProducts" :key="product.id" class="col-6 col-md-4 col-lg-3 col-xl-2">
+              <div v-for="product in recommendedProducts" :key="product.id" class="col-6 col-md-4 col-lg-3 col-xl-2">
               <div class="modern-product-card">
                 <div class="product-card-inner">
                   <figure class="product-media">
@@ -609,10 +597,8 @@
                       </span>
                     </div>
                     <div class="product-image-wrapper">
-                      <NuxtLink :to="`/product-page?sp_id=${product.id}`">
-                        <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
-                          class="product-image" />
-                      </NuxtLink>
+                      <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
+                        class="product-image" />
                     </div>
                     <div class="floating-actions">
                       <button class="action-btn wishlist-btn" title="Yêu thích">
@@ -621,9 +607,9 @@
                       <NuxtLink to="/compare-page" class="action-btn compare-btn" title="So sánh">
                         <i class="fas fa-balance-scale"></i>
                       </NuxtLink>
-                      <button class="action-btn quickview-btn" title="Xem nhanh">
+                      <NuxtLink :to="`/product-page?sp_id=${product.id}`" class="action-btn quickview-btn" title="Xem nhanh">
                         <i class="fas fa-eye"></i>
-                      </button>
+                      </NuxtLink>
                     </div>
                   </figure>
                   <div class="product-info">
@@ -647,10 +633,6 @@
                       <span v-if="product.hasDiscount" class="old-price">{{ formatPrice(product.giaBan || 0) }} VND</span>
                       <span class="current-price">{{ formatPrice(product.giaSauKhiGiam || product.giaBan || 0) }} VND</span>
                     </div>
-                    <button class="add-to-cart-btn">
-                      <span>Thêm vào giỏ</span>
-                      <i class="fas fa-shopping-cart"></i>
-                    </button>
                   </div>
                 </div>
               </div>
@@ -694,18 +676,20 @@ export default IndexPage
 }
 
 .section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #1a202c;
-  margin: 0 0 0.5rem 0;
-  background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
+  font-size: 4.5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  line-height: 1.1;
+  background: linear-gradient(135deg, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .section-subtitle {
-  font-size: 1.125rem;
+  font-size: 2.125rem;
   color: #4a5568;
   margin: 0;
   font-weight: 400;
@@ -728,29 +712,31 @@ export default IndexPage
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 0.75rem;
-  background: #ffffff;
+  background: white;
   color: #4a5568;
-  text-decoration: none;
+  font-size: 2rem;
   font-weight: 500;
+  border-radius: 50px;
+  cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .filter-tab:hover {
-  background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
-  color: #ffffff;
+  background: linear-gradient(to right, rgba(19, 173, 117, 0.9), rgba(15, 138, 95, 0.9));
+  color: #ffffff !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .filter-tab.active {
-  background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
-  color: #ffffff;
+  background: linear-gradient(to right, rgba(19, 173, 117, 0.9), rgba(15, 138, 95, 0.9));
+  color: #ffffff !important;
   border-color: transparent;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
@@ -760,17 +746,18 @@ export default IndexPage
 }
 
 .view-more-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
+  background: linear-gradient(to right, rgba(19, 173, 117, 0.9), rgba(15, 138, 95, 0.9));
   color: #ffffff;
   text-decoration: none;
   border-radius: 0.75rem;
+  font-size: 1.5rem;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .view-more-btn:hover {
@@ -781,29 +768,50 @@ export default IndexPage
 /* Modern Product Cards */
 .modern-product-card {
   margin-bottom: 1.5rem;
+  perspective: 1000px;
 }
 
 .product-card-inner {
-  background: #ffffff;
-  border-radius: 1rem;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 1.5rem;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 16px rgba(0, 0, 0, 0.04);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
 }
 
 .product-card-inner:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform: translateY(-12px) rotateX(5deg);
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.15), 0 15px 35px rgba(0, 0, 0, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.product-card-inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.8), rgba(16, 185, 129, 0.8), rgba(245, 101, 101, 0.8));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card-inner:hover::before {
+  opacity: 1;
 }
 
 .product-media {
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
 }
 
 .product-labels {
@@ -816,94 +824,146 @@ export default IndexPage
 .product-label {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 1.75rem;
+  font-weight: 700;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.05);
+  animation: pulse 3s infinite;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.product-label:hover::before {
+  left: 100%;
 }
 
 .label-new {
-  background: rgba(59, 130, 246, 0.9);
+  background: linear-gradient(135deg, rgba(19, 173, 117, 0.95) 0%, rgba(15, 138, 95, 0.95) 100%);
   color: #ffffff;
+  border-color: rgba(19, 173, 117, 0.3);
 }
 
 .label-discount {
-  background: rgba(239, 68, 68, 0.9);
+  background: linear-gradient(135deg, rgba(245, 101, 101, 0.95) 0%, rgba(251, 113, 133, 0.95) 100%);
   color: #ffffff;
+  border-color: rgba(245, 101, 101, 0.3);
 }
 
 .product-image-wrapper {
   position: relative;
   overflow: hidden;
   aspect-ratio: 1;
-  background-color: #ffffff;
+  background: radial-gradient(circle at center, #ffffff 0%, #f8fafc 100%);
+  border-radius: 1rem;
+  margin: 0.75rem;
 }
 
 .product-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 1rem;
-  transition: transform 0.3s ease;
-  background-color: #ffffff;
+  padding: 1.5rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .product-card-inner:hover .product-image {
-  transform: scale(1.05);
+  transform: scale(1.08) rotate(2deg);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
 }
 
 /* Floating Actions */
 .floating-actions {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 1rem;
+  right: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
   opacity: 0;
-  transform: translateX(20px);
-  transition: all 0.3s ease;
-  z-index: 10;
+  transform: translateX(30px) scale(0.8);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 15;
 }
 
 .product-card-inner:hover .floating-actions {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateX(0) scale(1);
 }
 
 .action-btn {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: none;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
   color: #4a5568;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-decoration: none;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
 }
 
 .action-btn:hover {
-  background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
+  background: linear-gradient(135deg, rgba(19, 173, 117, 0.95) 0%, rgba(15, 138, 95, 0.95) 100%);
   color: #ffffff;
-  transform: scale(1.1);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 8px 25px rgba(19, 173, 117, 0.3), 0 4px 12px rgba(15, 138, 95, 0.2);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.action-btn.wishlist-btn:hover {
+  background: linear-gradient(135deg, rgba(245, 101, 101, 0.95) 0%, rgba(251, 113, 133, 0.95) 100%);
+  box-shadow: 0 8px 25px rgba(245, 101, 101, 0.3), 0 4px 12px rgba(251, 113, 133, 0.2);
+}
+
+.action-btn.compare-btn:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.95) 0%, rgba(139, 92, 246, 0.95) 100%);
+  box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3), 0 4px 12px rgba(139, 92, 246, 0.2);
 }
 
 /* Product Info */
 .product-info {
-  padding: 1rem;
+  padding: 1.5rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.product-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
 }
 
 .product-brand {
@@ -911,113 +971,171 @@ export default IndexPage
 }
 
 .brand-badge {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: 0.375rem;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 25px;
+  font-size: 1.75rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.brand-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
 .product-name {
-  margin: 0 0 0.75rem 0;
-  flex-grow: 1;
-}
-
-.product-name a {
-  color: #1a202c;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.4;
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0.75rem 0;
+  line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.product-name:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.product-name a {
+  color: #1a202c;
+  text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .product-name a:hover {
-  color: #2563eb;
+  color: #13ad75;
 }
 
 .product-rating {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
 }
 
 .stars {
   display: flex;
-  gap: 2px;
+  gap: 3px;
 }
 
 .stars i {
   color: #fbbf24;
-  font-size: 0.875rem;
+  font-size: 1.1rem;
+  filter: drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3));
+  transition: all 0.2s ease;
+}
+
+.stars i:hover {
+  transform: scale(1.2);
+  color: #f59e0b;
 }
 
 .rating-text {
-  font-size: 0.875rem;
-  color: #718096;
-  font-weight: 500;
+  font-size: 1.875rem;
+  color: #4a5568;
+  font-weight: 600;
+  background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .product-price {
   margin-bottom: 1rem;
-}
-
-.old-price {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #9ca3af;
-  text-decoration: line-through;
-  margin-right: 0.5rem;
-}
-
-.current-price {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #2563eb;
-}
-
-.add-to-cart-btn {
-  width: 100%;
-  padding: 0.75rem;
-  background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
-  color: #ffffff;
-  border: none;
-  border-radius: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.15);
   position: relative;
   overflow: hidden;
 }
 
-.add-to-cart-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+.product-price::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(16, 185, 129, 0.03) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.add-to-cart-btn:active {
-  transform: translateY(0);
+.product-price:hover::before {
+  opacity: 1;
 }
+
+.old-price {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #ef4444;
+  text-decoration: line-through;
+  margin-right: 0.75rem;
+  opacity: 0.9;
+}
+
+.current-price {
+  font-size: 2.4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.2));
+  transition: all 0.3s ease;
+}
+
+.current-price:hover {
+  transform: scale(1.02);
+  filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+}
+
 
 /* Hero Section Styles */
 .intro-slide {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  position: relative;
+}
+
+.intro-slide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.1) 50%, rgba(5, 150, 105, 0.1) 100%);
+  z-index: 1;
+}
+
+.intro-content {
+  position: relative;
+  z-index: 2;
 }
 
 .hero-slide-1,
@@ -1078,28 +1196,18 @@ export default IndexPage
   right: 0;
   bottom: 0;
   left: 0;
-}
-
-.side-banner-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.side-banner-item:hover img {
-  transform: scale(1.1);
-}
-
-.side-banner-item .absolute {
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
+  background: linear-gradient(to right, rgba(19, 173, 117, 0.9), rgba(15, 138, 95, 0.9));
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   text-align: center;
-  padding: 1rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .side-banner-item:hover .absolute {
@@ -1115,45 +1223,65 @@ export default IndexPage
 }
 
 .side-banner-item .text-white {
-  color: rgb(255, 255, 255);
+  color: rgb(255, 255, 255) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.side-banner-item * {
+  color: rgb(255, 255, 255) !important;
+}
+
+.side-banner-item h1,
+.side-banner-item h2,
+.side-banner-item h3,
+.side-banner-item h4,
+.side-banner-item h5,
+.side-banner-item h6,
+.side-banner-item p,
+.side-banner-item span,
+.side-banner-item div {
+  color: rgb(255, 255, 255) !important;
 }
 
 .side-banner-item .font-bold {
-  font-weight: 700;
+  font-weight: 900;
 }
 
 .side-banner-item .text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  font-weight: 800;
 }
 
 .side-banner-item .mb-2 {
-  margin-bottom: 0.5rem;
-}
-
-.side-banner-item .text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-.side-banner-item .mb-3 {
   margin-bottom: 0.75rem;
 }
 
+.side-banner-item .text-sm {
+  font-size: 1.8rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.side-banner-item .mb-3 {
+  margin-bottom: 1rem;
+}
+
 .side-banner-item .bg-white {
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: rgb(255, 255, 255) !important;
 }
 
 .side-banner-item .text-blue-900 {
-  color: rgb(30, 58, 138);
+  color: rgb(255, 255, 255) !important;
 }
 
 .side-banner-item .text-blue-600 {
-  color: rgb(37, 99, 235);
+  color: rgb(255, 255, 255) !important;
 }
 
 .side-banner-item .text-green-600 {
-  color: rgb(22, 163, 74);
+  color: rgb(255, 255, 255) !important;
 }
 
 .side-banner-item .px-4 {
@@ -1170,12 +1298,26 @@ export default IndexPage
   font-weight: 600;
 }
 
+.side-banner-item button {
+  font-size: 1.4rem;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  color: rgb(255, 255, 255) !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
 .side-banner-item button:hover {
-  background-color: rgb(243, 244, 246);
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  color: rgb(255, 255, 255) !important;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.8);
 }
 
 .side-banner-item .rounded-lg {
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
 }
 
 /* Responsive adjustments */
@@ -1284,27 +1426,33 @@ export default IndexPage
 }
 
 .intro-subtitle {
+  font-size: 2.25rem;
   color: rgba(255, 255, 255, 0.9);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 1.25rem;
-  font-weight: 600;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  line-height: 1.5;
 }
 
 .intro-title {
-  color: #ffffff;
-  line-height: 1.2;
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 4.5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  line-height: 1.1;
+  background: linear-gradient(135deg, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .intro-price .intro-old-price {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 1.125rem;
+  font-size: 2.125rem;
 }
 
 .intro-price .text-white {
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 700;
   color: #ffffff;
 }
@@ -1315,17 +1463,18 @@ export default IndexPage
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  border-radius: 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  color: white;
+  font-size: 1.95rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
   animation: pulse 2s infinite;
 }
 
 .badge-new {
-  background: rgba(0, 44, 105, 0.2);
+  background: rgba(59, 130, 246, 0.2);
   color: #e6f3ff;
 }
 
@@ -1360,7 +1509,7 @@ export default IndexPage
   align-items: center;
   gap: 0.5rem;
   color: rgba(255, 255, 255, 0.9);
-  font-size: 0.875rem;
+  font-size: 1.95rem;
   font-weight: 500;
 }
 
@@ -1369,54 +1518,88 @@ export default IndexPage
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* Hero buttons */
-.hero-buttons {
+.feature-highlig.hero-buttons {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.hero-buttons a {
+  color: white !important;
+  text-decoration: none !important;
+}
+
+.hero-buttons a span {
+  color: white !important;
+}
+
+.hero-buttons a i {
+  color: white !important;
+}
+
+.hero-btn {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 2.1rem;
+  font-weight: 600;
+  cursor: cursor;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.hero-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .btn-hero-primary {
-  background: linear-gradient(90deg, #002c69, #13ad75);
-  color: #ffffff;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #13ad75, #0f8a5f) !important;
+  color: white !important;
+  border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
   font-weight: 600;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 44, 105, 0.3);
+  box-shadow: 0 4px 15px rgba(19, 173, 117, 0.3);
 }
 
 .btn-hero-primary:hover {
-  background: linear-gradient(90deg, #003d7a, #16c085);
+  background: linear-gradient(135deg, #0f8a5f, #0d7a56) !important;
+  color: white !important;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 44, 105, 0.4);
+  box-shadow: 0 10px 25px rgba(19, 173, 117, 0.4);
 }
 
 .btn-hero-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: white !important;
+  border: 2px solid rgba(255, 255, 255, 0.4);
   padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   font-weight: 600;
-  text-decoration: none;
+  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
+  text-decoration: none;
   backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
 }
 
 .btn-hero-secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.6);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
 }
 
 /* Floating phone animation */
@@ -1487,7 +1670,7 @@ export default IndexPage
   right: 1.5rem;
   width: 50px;
   height: 50px;
-  background: linear-gradient(to right, rgba(0, 44, 105, 0.9), rgba(19, 173, 117, 0.9));
+  background: linear-gradient(to right, rgba(19, 173, 117, 0.9), rgba(15, 138, 95, 0.9));
   color: #ffffff;
   border: none;
   border-radius: 50%;
@@ -1508,17 +1691,39 @@ export default IndexPage
 /* Additional Product Card Styles */
 .product-7,
 .product-2 {
-  background: white;
-  border-radius: 0.5rem;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 1.5rem;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 16px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.product-7::before,
+.product-2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.8), rgba(16, 185, 129, 0.8), rgba(245, 101, 101, 0.8));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-7:hover::before,
+.product-2:hover::before {
+  opacity: 1;
 }
 
 .product-7:hover,
 .product-2:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-12px) rotateX(5deg);
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.15), 0 15px 35px rgba(0, 0, 0, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
 .product-image {
@@ -1540,7 +1745,7 @@ export default IndexPage
 }
 
 .product-cat a:hover {
-  color: #2563eb;
+  color: #13ad75;
 }
 
 .product-title a {
@@ -1552,7 +1757,7 @@ export default IndexPage
 }
 
 .product-title a:hover {
-  color: #2563eb;
+  color: #13ad75;
 }
 
 .product-price {

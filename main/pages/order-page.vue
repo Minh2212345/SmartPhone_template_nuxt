@@ -1,76 +1,125 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col">
-    <div v-if="isLoggedIn" class="container mx-auto px-4 py-6">
-      <!-- Profile Header -->
-      <header class="bg-white shadow-sm rounded-2xl p-6 mb-6 flex items-center gap-6">
-        <img src="/assets/images/icons/ava-profile.png" class="h-24 w-24 rounded-full object-cover" alt="Avatar" />
-        <div class="flex-1 flex justify-between items-center">
-          <div>
-            <h1 class="text-3xl font-bold text-gray-900">{{ customerName }}</h1>
-            <p class="text-lg text-gray-600">{{ phoneNumber }}</p>
-            <p class="text-sm text-gray-500">Cập nhật: {{ formatDate(updateAt) }}</p>
-          </div>
-          <div class="flex gap-12">
-            <div class="text-center">
-              <i class="las la-shopping-cart text-3xl text-blue-600 mb-2"></i>
-              <p class="text-2xl font-semibold text-blue-600">{{ totalOrders }}</p>
-              <p class="text-base text-gray-600">Tổng đơn hàng</p>
+  <div class="min-h-screen" style="  background: linear-gradient(135deg, #e6f3ff 0%, #e6f9f0 100%);">
+    <div v-if="isLoggedIn" class="container mx-auto px-6 py-8 max-w-8xl">
+      <!-- Enhanced Profile Header with Glassmorphism -->
+      <header class="bg-white/90 backdrop-blur-xl border border-white/30 shadow-xl rounded-3xl p-8 mb-2 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#13ad75]/10 to-[#13ad75]/15"></div>
+        <div class="relative flex items-center gap-8">
+          <div class="relative">
+            <img src="/assets/images/icons/ava-profile.png" 
+                 class="h-28 w-28 rounded-full object-cover border-4 border-white shadow-lg" 
+                 alt="Avatar" />
+            <div class="absolute -bottom-2 -right-2 bg-green-500 w-8 h-8 rounded-full border-4 border-white flex items-center justify-center">
+              <i class="las la-check text-white texl-2xl"></i>
             </div>
-            <div class="text-center">
-              <i class="las la-money-bill-wave text-3xl text-blue-600 mb-2"></i>
-              <p class="text-2xl font-semibold text-blue-600">{{ totalSpent }} VNĐ</p>
-              <p class="text-base text-gray-600">Tổng chi tiêu</p>
+          </div>
+          
+          <div class="flex-1">
+            <div class="flex items-center gap-4 mb-2">
+              <h1 class="text-5xl font-bold text-gray-900">{{ customerName }}</h1>
+              <span class="px-3 py-1 text-2xl bg-[#13ad75]/20 text-[#13ad75] rounded-full text-base font-medium border border-[#13ad75]/30">
+                Khách hàng VIP
+              </span>
+            </div>
+            <div class="flex items-center gap-6 text-gray-600">
+              <div class="flex items-center gap-2">
+                <i class="las la-phone text-[#13ad75]"></i>
+                <span class="text-xl font-medium">{{ phoneNumber }}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i class="las la-clock text-gray-400"></i>
+                <span class="text-xl">Cập nhật: {{ formatDate(updateAt) }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Stats Cards -->
+          <div class="flex gap-8">
+            <div class="flex items-center justify-center text-center bg-white/60 backdrop-blur-sm rounded-2xl p-3 border border-white/30 hover:bg-white/70 transition-all duration-300 hover:shadow-lg hover:scale-105 gap-4">
+              <div class="flex items-center justify-center w-12 h-12 bg-[#13ad75]/20 rounded-xl shadow-sm">
+                <i class="las la-shopping-cart text-2xl text-[#13ad75]"></i>
+              </div>
+              <div>
+                <p class="text-3xl font-bold text-[#13ad75]">{{ totalOrders }}</p>
+                <p class="text-2xl text-gray-600 font-medium">Tổng đơn hàng</p>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      <!-- Main Content -->
-      <div class="flex gap-6">
-        <!-- Sidebar -->
-        <aside class="w-84 bg-white shadow-sm rounded-2xl p-4">
-          <nav class="space-y-1">
-            <button v-for="tab in tabs" :key="tab.id"
-              class="w-full px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors duration-200 flex items-center"
-              :class="{ 'bg-blue-50 text-blue-700 font-medium': activeTab === tab.id }" @click="activeTab = tab.id">
-              <i :class="tab.icon" class="mr-3 text-xl"></i>
-              {{ tab.name }}
-            </button>
-            <button
-              class="w-full px-4 py-3 text-left text-gray-700 hover:bg-red-50 hover:text-red-700 rounded-lg transition-colors duration-200 flex items-center"
-              @click="handleLogout">
-              <i class="las la-sign-out-alt mr-3 text-xl"></i>
-              Đăng xuất
-            </button>
+      <div class="flex gap-8">
+        <!-- Enhanced Sidebar Navigation -->
+        <aside class="space-y-2" style="width: 300px;">
+          <nav class="bg-white/90 backdrop-blur-xl border border-white/30 shadow-xl rounded-2xl p-2 sticky top-8">
+            <div class="space-y-1">
+              <button 
+                v-for="tab in tabs" 
+                :key="tab.id"
+                class="w-full px-6 py-4 text-left rounded-xl transition-all duration-300 flex items-center group hover:scale-105 transform"
+                :class="activeTab === tab.id 
+                  ? 'bg-[#13ad75] text-white shadow-lg shadow-[#13ad75]/25' 
+                  : 'text-gray-700 hover:bg-[#13ad75]/10 hover:text-[#13ad75]'"
+                @click="activeTab = tab.id">
+                <i :class="tab.icon" 
+                   class="text-xl mr-4 transition-transform group-hover:scale-110"
+                   :style="activeTab === tab.id ? 'color: white' : ''"></i>
+                <span class="font-medium text-2xl">{{ tab.name }}</span>
+                <i v-if="activeTab === tab.id" class="las la-chevron-right ml-auto"></i>
+              </button>
+              
+              <div class="border-t border-gray-200 my-4"></div>
+              
+              <button
+                class="w-full px-6 py-4 text-left text-red-600 hover:bg-red-50 rounded-xl transition-all duration-300 flex items-center group hover:scale-105 transform"
+                @click="handleLogout">
+                <i class="las la-sign-out-alt text-xl mr-4 transition-transform group-hover:scale-110"></i>
+                <span class="font-medium text-2xl">Đăng xuất</span>
+              </button>
+            </div>
           </nav>
         </aside>
 
-        <!-- Content Area -->
-        <main class="flex-1 bg-white shadow-sm rounded-2xl p-6 overflow-y-auto">
+        <!-- Enhanced Main Content Area -->
+        <main class="flex-1 bg-white/90 backdrop-blur-xl border border-white/30 shadow-xl rounded-2xl overflow-hidden">
+          
           <!-- Overview Tab -->
-          <div v-if="activeTab === 'overview'" class="space-y-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div class="bg-gray-50 p-6 rounded-xl text-center">
-                <h3 class="text-xl font-medium text-gray-800 mb-3">Đơn hàng gần đây</h3>
-                <p class="text-gray-600 mb-4">Bạn chưa có đơn hàng nào hôm nay? Hãy bắt đầu mua sắm!</p>
-                <button
-                  class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium">
-                  Đăng ký ngay
+          <div v-if="activeTab === 'overview'" class="p-8">
+            <div class="mb-2">
+              <h2 class="text-6xl font-bold text-gray-900 mb-2">Tổng quan tài khoản</h2>
+              <p class="text-2xl text-gray-600">Xem tình hình hoạt động và thông tin tài khoản của bạn</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div class="bg-[#13ad75]/10 border border-[#13ad75]/30 rounded-2xl p-8 text-center group hover:shadow-lg transition-all duration-300">
+                <div class="w-16 h-16 bg-gradient-to-br from-[#13ad75] to-[#13ad75] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <i class="las la-shopping-bag text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-1">Đơn hàng gần đây</h3>
+                <p class="text-2xl text-gray-600 mb-6">Bạn chưa có đơn hàng nào hôm nay? Hãy bắt đầu mua sắm!</p>
+                <button class="px-8 py-3 bg-gradient-to-r from-[#13ad75] to-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-medium transform hover:scale-105 text-2xl">
+                  Bắt đầu mua sắm
                 </button>
               </div>
-              <div class="bg-gray-50 p-6 rounded-xl text-center">
-                <h3 class="text-xl font-medium text-gray-800 mb-3">Ưu đãi của bạn</h3>
-                <p class="text-gray-600 mb-4">Bạn chưa có ưu đãi nào</p>
-                <button
-                  class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium">
-                  Đăng ký ngay
+              
+              <div class="bg-[#13ad75]/10 border border-[#13ad75]/30 rounded-2xl p-8 text-center group hover:shadow-lg transition-all duration-300">
+                <div class="w-16 h-16 bg-gradient-to-br from-[#13ad75] to-[#13ad75] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <i class="las la-gift text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-1">Ưu đãi của bạn</h3>
+                <p class="text-2xl text-gray-600 mb-6">Bạn chưa có ưu đãi nào</p>
+                <button class="px-8 py-3 bg-gradient-to-r from-[#13ad75] to-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-medium transform hover:scale-105 text-2xl">
+                  Khám phá ưu đãi
                 </button>
               </div>
-              <div class="lg:col-span-2 bg-gray-50 p-6 rounded-xl text-center">
-                <h3 class="text-xl font-medium text-gray-800 mb-3">Sản phẩm yêu thích</h3>
-                <p class="text-gray-600 mb-4">Bạn chưa có sản phẩm yêu thích? Hãy khám phá ngay!</p>
-                <button
-                  class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200 font-medium">
+              
+              <div class="lg:col-span-2 bg-[#13ad75]/10 border border-[#13ad75]/20 rounded-2xl p-8 text-center group hover:shadow-lg transition-all duration-300">
+                <div class="w-16 h-16 bg-gradient-to-br from-[#13ad75] to-[#13ad75] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <i class="las la-heart text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-1">Sản phẩm yêu thích</h3>
+                <p class="text-2xl text-gray-600 mb-6">Bạn chưa có sản phẩm yêu thích? Hãy khám phá ngay!</p>
+                <button class="px-8 py-3 bg-gradient-to-r from-[#13ad75] to-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-medium transform hover:scale-105 text-2xl">
                   Xem sản phẩm
                 </button>
               </div>
@@ -78,272 +127,430 @@
           </div>
 
           <!-- Order History Tab -->
-          <div v-if="activeTab === 'history'" class="space-y-6">
-            <div class="flex gap-6 border-b border-gray-200 pb-2 overflow-x-auto">
-              <button v-for="status in orderStatuses" :key="status.id"
-                class="px-6 py-2 text-gray-700 hover:text-blue-700 whitespace-nowrap transition-colors duration-200"
-                :class="{ 'text-blue-700 font-medium border-b-2 border-blue-600': activeStatus === status.id }"
+          <div v-if="activeTab === 'history'" class="p-8">
+            <div class="mb-2">
+              <h2 class="text-6xl font-bold text-gray-900 mb-2">Lịch sử đơn hàng</h2>
+              <p class="text-2xl text-gray-600">Theo dõi tất cả đơn hàng của bạn</p>
+            </div>
+
+            <!-- Status Filter Tabs -->
+            <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-2 mb-2 inline-flex space-x-1 border border-white/30">
+              <button 
+                v-for="status in orderStatuses" 
+                :key="status.id"
+                class="px-6 py-3 rounded-xl font-medium transition-all duration-200 whitespace-nowrap text-2xl"
+                :class="activeStatus === status.id 
+                  ? 'bg-[#13ad75] text-white shadow-md shadow-[#13ad75]/25' 
+                  : 'text-gray-600 hover:text-[#13ad75] hover:bg-white/70'"
                 @click="activeStatus = status.id">
                 {{ status.name }}
               </button>
             </div>
-            <div class="overflow-x-auto border border-gray-200 rounded-lg">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th class="py-3 px-6 text-left text-sm font-medium text-gray-700">Mã đơn hàng</th>
-                    <th class="py-3 px-6 text-left text-sm font-medium text-gray-700">Ngày đặt</th>
-                    <th class="py-3 px-6 text-left text-sm font-medium text-gray-700">Trạng thái</th>
-                    <th class="py-3 px-6 text-left text-sm font-medium text-gray-700">Tổng tiền</th>
-                    <th class="py-3 px-6 text-left text-sm font-medium text-gray-700">Tra cứu</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                  <tr v-for="order in filteredOrders" :key="order.id" class="hover:bg-gray-50">
-                    <td class="py-4 px-6">{{ order.ma }}</td>
-                    <td class="py-4 px-6">{{ formatDate(order.ngayTao) }}</td>
-                    <td class="py-4 px-6">
-                      <span v-if="order.trangThai === 0">{{ getStatusNameById(order.trangThai) }} - {{ formatDate(order.ngayTao) }}</span>
-                      <span v-else>{{ getStatusNameById(order.trangThai) }}</span>
-                    </td>
-                    <td class="py-4 px-6">{{ formatCurrency(order.tongTienSauGiam) }}</td>
-                    <td class="py-4 px-6">
-                      <NuxtLink
-                        class="px-4 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium"
-                        :to="'/invoice-status?orderId=' + order.id">
-                        Tra cứu
-                      </NuxtLink>
-                      <button
-                        v-if="order.trangThai === 0"
-                        @click="cancelOrder(order.id)"
-                        class="ml-2 px-4 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200 font-medium">
-                        Hủy đơn
-                      </button>
-                    </td>
-                  </tr>
-                  <tr v-if="filteredOrders.length === 0">
-                    <td colspan="5" class="py-6 text-center text-gray-500">Chưa có đơn hàng nào</td>
-                  </tr>
-                </tbody>
-              </table>
+            <!-- Enhanced Orders Table -->
+            <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+              <div class="overflow-x-auto">
+                <table class="min-w-full">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-8 py-6 text-left text-2xl font-semibold text-gray-700">Mã đơn hàng</th>
+                      <th class="px-8 py-6 text-left text-2xl font-semibold text-gray-700">Ngày đặt</th>
+                      <th class="px-8 py-6 text-left text-2xl font-semibold text-gray-700">Trạng thái</th>
+                      <th class="px-8 py-6 text-left text-2xl font-semibold text-gray-700">Tổng tiền</th>
+                      <th class="px-8 py-6 text-left text-2xl font-semibold text-gray-700">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200">
+                    <tr v-for="order in filteredOrders" :key="order.id" 
+                        class="hover:bg-gray-50 transition-colors duration-200"
+                        :class="{ 'bg-red-50': order.trangThai === 4 }">
+                      <td class="px-8 py-6">
+                        <div class="font-semibold text-[#13ad75] text-2xl">#{{ order.ma }}</div>
+                      </td>
+                      <td class="px-8 py-6 text-gray-600 text-2xl">{{ formatDate(order.ngayTao) }}</td>
+                      <td class="px-8 py-6">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-2xl font-medium"
+                              :class="{
+                                'bg-yellow-100 text-yellow-800': order.trangThai === 0,
+                                'bg-blue-100 text-blue-800': order.trangThai === 1,
+                                'bg-purple-100 text-purple-800': order.trangThai === 2,
+                                'bg-green-100 text-green-800': order.trangThai === 3,
+                                'bg-red-100 text-red-800': order.trangThai === 4
+                              }">
+                          <div class="w-2 h-2 rounded-full mr-2"
+                               :class="{
+                                 'bg-yellow-400': order.trangThai === 0,
+                                 'bg-blue-400': order.trangThai === 1,
+                                 'bg-purple-400': order.trangThai === 2,
+                                 'bg-green-400': order.trangThai === 3,
+                                 'bg-red-400': order.trangThai === 4
+                               }"></div>
+                          {{ getStatusNameById(order.trangThai) }}
+                        </span>
+                      </td>
+                      <td class="px-8 py-6">
+                        <span class="font-semibold text-gray-900 text-2xl">{{ formatCurrency(order.tongTienSauGiam) }}</span>
+                      </td>
+                      <td class="px-8 py-6">
+                        <div class="flex gap-3">
+                          <NuxtLink
+                            class="inline-flex items-center px-4 py-2 bg-[#13ad75] text-white rounded-lg hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-medium transform hover:scale-105 text-2xl"
+                            :to="'/invoice-status?orderId=' + order.id">
+                            <i class="las la-search mr-2"></i>
+                            Tra cứu
+                          </NuxtLink>
+                          <button
+                            v-if="order.trangThai === 0"
+                            @click="cancelOrder(order.id)"
+                            class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:scale-105 text-2xl">
+                            <i class="las la-times mr-2"></i>
+                            Hủy đơn
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr v-if="filteredOrders.length === 0">
+                      <td colspan="5" class="px-8 py-16 text-center text-gray-500">
+                        <div class="flex flex-col items-center">
+                          <i class="las la-shopping-cart text-6xl text-gray-300 mb-4"></i>
+                          <h3 class="text-xl font-medium text-gray-900 mb-2">Chưa có đơn hàng nào</h3>
+                          <p class="text-2xl text-gray-500">Hãy bắt đầu mua sắm để xem đơn hàng ở đây</p>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <!-- Pagination -->
-            <div class="flex justify-center items-center gap-4 mt-4">
-              <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 0"
-                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:opacity-50">
-                Trước
-              </button>
-              <span class="text-gray-700">Trang {{ currentPage + 1 }} / {{ totalPages }}</span>
-              <button @click="goToPage(currentPage + 1)" :disabled="currentPage >= totalPages - 1"
-                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:opacity-50">
-                Sau
-              </button>
+
+            <!-- Enhanced Pagination -->
+            <div class="flex justify-between items-center mt-2">
+              <p class="text-gray-600">
+                Hiển thị {{ filteredOrders.length }} / {{ totalElements }} đơn hàng
+              </p>
+              
+              <div class="flex items-center gap-4">
+                <button 
+                  @click="goToPage(currentPage - 1)" 
+                  :disabled="currentPage === 0"
+                  class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
+                  <i class="las la-chevron-left mr-2"></i>
+                  Trước
+                </button>
+                
+                <div class="flex items-center gap-2">
+                  <span class="text-gray-700 font-medium">
+                    Trang {{ currentPage + 1 }} / {{ totalPages }}
+                  </span>
+                </div>
+                
+                <button 
+                  @click="goToPage(currentPage + 1)" 
+                  :disabled="currentPage >= totalPages - 1"
+                  class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
+                  Sau
+                  <i class="las la-chevron-right ml-2"></i>
+                </button>
+              </div>
             </div>
-            <p class="text-center text-gray-500 mt-4">Hiển thị {{ filteredOrders.length }} / {{ totalElements }} đơn
-              hàng</p>
           </div>
 
-          
-
           <!-- Order Lookup Tab -->
-          <div v-if="activeTab === 'order-lookup'" class="space-y-6">
-            <h2 class="text-xl font-medium text-gray-800">Tra cứu đơn hàng</h2>
-            <div class="flex gap-4">
-              <input v-model="orderLookupId" type="text" placeholder="Nhập mã đơn hàng" class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-600" @keyup.enter="lookupOrder" />
-              <button @click="lookupOrder" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium">
-                Tìm kiếm
-              </button>
+          <div v-if="activeTab === 'order-lookup'" class="p-8">
+            <div class="mb-2">
+              <h2 class="text-6xl font-bold text-gray-900 mb-2">Tra cứu đơn hàng</h2>
+              <p class="text-2xl text-gray-600">Nhập mã đơn hàng để xem chi tiết</p>
+            </div>
+            
+            <div class="max-w-100">
+              <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
+                <div class="flex gap-4">
+                  <div class="flex-1 relative">
+                    <i class="las la-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl"></i>
+                    <input 
+                      v-model="orderLookupId" 
+                      type="text" 
+                      placeholder="Nhập mã đơn hàng..." 
+                      class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xl"
+                      @keyup.enter="lookupOrder" />
+                  </div>
+                  <button 
+                    @click="lookupOrder" 
+                    class="px-8 py-4 bg-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-medium transform hover:scale-105 text-2xl">
+                    <i class="las la-search mr-2"></i>
+                    Tìm kiếm
+                  </button>
+                </div>
+                
+                <div class="mt-2 p-4 bg-[#13ad75]/10 border border-[#13ad75]/30 rounded-xl">
+                  <div class="flex items-start gap-3">
+                    <i class="las la-info-circle text-[#13ad75] text-2xl mt-0.5"></i>
+                    <div>
+                      <h4 class="font-medium text-gray-600 mb-1 text-3xl">Hướng dẫn tra cứu</h4>
+                      <p class="text-gray-600 font-medium text-xl">Mã đơn hàng thường có định dạng như: HD001, HD002... Bạn có thể tìm thấy mã này trong email xác nhận hoặc SMS.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Account Tab -->
-          <div v-if="activeTab === 'account'" class="space-y-6">
-            <div v-if="showUpdatePrompt"
-              class="bg-blue-100 text-blue-800 p-4 rounded-lg flex justify-between items-center">
-              <span class="font-medium">Vui lòng cập nhật thông tin để có trải nghiệm tốt hơn.</span>
-              <button class="text-blue-800 font-medium underline hover:no-underline" @click="updateAccountInfo">Cập
-                nhật</button>
+          <div v-if="activeTab === 'account'" class="p-8">
+            <div class="mb-2">
+              <h2 class="text-6xl font-bold text-gray-900 mb-2">Thông tin tài khoản</h2>
+              <p class="text-2xl text-gray-600">Quản lý thông tin cá nhân và cài đặt tài khoản</p>
             </div>
-            <div class="bg-gray-50 p-6 rounded-xl">
-              <h2 class="text-xl font-medium text-gray-800 mb-6">Thông tin cá nhân</h2>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex flex-col">
-                  <label class="text-sm font-medium text-gray-700 mb-2">Họ và tên</label>
-                  <input v-model.trim="fullName" type="text"
-                    class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    :class="{ 'border-red-600': errors.fullName }" @input="clearError('fullName')" />
-                  <p v-if="errors.fullName" class="mt-1 text-red-600 text-sm">{{ errors.fullName }}</p>
+
+            <!-- Update Prompt -->
+            <div v-if="showUpdatePrompt"
+                 class="bg-[#13ad75]/10 border border-[#13ad75]/30 rounded-2xl p-6 mb-2 flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-[#13ad75] rounded-full flex items-center justify-center">
+                  <i class="las la-exclamation text-white text-xl"></i>
                 </div>
-                <div class="flex flex-col">
-                  <label class="text-sm font-medium text-gray-700 mb-2">Số điện thoại</label>
-                  <input v-model.trim="phone" type="text"
-                    class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    :class="{ 'border-red-600': errors.phone }" @input="clearError('phone')" />
-                  <p v-if="errors.phone" class="mt-1 text-red-600 text-sm">{{ errors.phone }}</p>
+                <div>
+                  <h4 class="font-semibold text-gray-600 mb-1 text-2xl">Cập nhật thông tin</h4>
+                  <p class="text-gray-600 text-2xl">Vui lòng cập nhật thông tin để có trải nghiệm tốt hơn.</p>
                 </div>
-                <div class="flex flex-col">
-                  <label class="text-sm font-medium text-gray-700 mb-2">Giới tính</label>
-                  <div class="flex gap-6">
-                    <label class="flex items-center text-gray-700">
-                      <input v-model="gender" type="radio" :value="true" class="mr-2 focus:ring-blue-600" />
-                      Nam
-                    </label>
-                    <label class="flex items-center text-gray-700">
-                      <input v-model="gender" type="radio" :value="false" class="mr-2 focus:ring-blue-600" />
-                      Nữ
-                    </label>
+              </div>
+              <button 
+                class="px-6 py-3 bg-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-medium transform hover:scale-105 text-2xl" 
+                @click="updateAccountInfo">
+                Cập nhật ngay
+              </button>
+            </div>
+
+            <div class="space-y-8">
+              <!-- Personal Information -->
+              <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
+                <h3 class="text-3xl font-semibold text-gray-900 mb-6 flex items-center">
+                  <i class="las la-user-circle text-[#13ad75] text-3xl mr-3"></i>
+                  Thông tin cá nhân
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block texl-2xl font-semibold text-gray-700 mb-1">Họ và tên</label>
+                    <input 
+                      v-model.trim="fullName" 
+                      type="text"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xl"
+                      :class="{ 'border-red-500 ring-red-500': errors.fullName }" 
+                      @input="clearError('fullName')" />
+                    <p v-if="errors.fullName" class="mt-2 text-red-600 texl-2xl flex items-center">
+                      <i class="las la-exclamation-circle mr-1"></i>
+                      {{ errors.fullName }}
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <label class="block texl-2xl font-semibold text-gray-700 mb-1">Số điện thoại</label>
+                    <input 
+                      v-model.trim="phone" 
+                      type="text"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xl"
+                      :class="{ 'border-red-500 ring-red-500': errors.phone }" 
+                      @input="clearError('phone')" />
+                    <p v-if="errors.phone" class="mt-2 text-red-600 texl-2xl flex items-center">
+                      <i class="las la-exclamation-circle mr-1"></i>
+                      {{ errors.phone }}
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <label class="block texl-2xl font-semibold text-gray-700 mb-1">Giới tính</label>
+                    <div class="flex gap-6">
+                      <label class="flex items-center text-gray-700 cursor-pointer">
+                        <input v-model="gender" type="radio" :value="true" class="mr-3 w-4 h-4 text-[#13ad75] focus:ring-[#13ad75]" />
+                        <span class="font-medium text-xl">Nam</span>
+                      </label>
+                      <label class="flex items-center text-gray-700 cursor-pointer">
+                        <input v-model="gender" type="radio" :value="false" class="mr-3 w-4 h-4 text-[#13ad75] focus:ring-[#13ad75]" />
+                        <span class="font-medium text-xl">Nữ</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label class="block texl-2xl font-semibold text-gray-700 mb-1">Ngày sinh</label>
+                    <input 
+                      v-model="birthDate" 
+                      type="date"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#13ad75] focus:border-transparent transition-all duration-200 text-xl" />
+                  </div>
+                  
+                  <div>
+                    <label class="block texl-2xl font-semibold text-gray-700 mb-1">Địa chỉ mặc định</label>
+                    <input 
+                      v-model="defaultAddress" 
+                      type="text"
+                      class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-xl text-gray-600 text-xl" 
+                      disabled />
+                  </div>
+                  
+                  <div>
+                    <label class="block texl-2xl font-semibold text-gray-700 mb-1">Email</label>
+                    <input 
+                      v-model.trim="email" 
+                      type="email"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xl"
+                      :class="{ 'border-red-500 ring-red-500': errors.email }" 
+                      @input="clearError('email')" />
+                    <p v-if="errors.email" class="mt-2 text-red-600 texl-2xl flex items-center">
+                      <i class="las la-exclamation-circle mr-1"></i>
+                      {{ errors.email }}
+                    </p>
                   </div>
                 </div>
-                <div class="flex flex-col">
-                  <label class="text-sm font-medium text-gray-700 mb-2">Ngày sinh</label>
-                  <input v-model="birthDate" type="date"
-                    class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" />
+                
+                <div class="mt-4 flex justify-end">
+                  <button
+                    class="px-8 py-3 bg-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-medium transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                    :disabled="isUpdating" 
+                    @click="updateAccountInfo">
+                    <i v-if="isUpdating" class="las la-spinner la-spin mr-2"></i>
+                    <i v-else class="las la-save mr-2"></i>
+                    {{ isUpdating ? 'Đang cập nhật...' : 'Cập nhật thông tin' }}
+                  </button>
                 </div>
-                <div class="flex flex-col">
-                  <label class="text-sm font-medium text-gray-700 mb-2">Địa chỉ mặc định</label>
-                  <input v-model="defaultAddress" type="text"
-                    class="border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 text-gray-600" disabled />
-                </div>
-                <div class="flex flex-col">
-                  <label class="text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <input v-model.trim="email" type="email"
-                    class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    :class="{ 'border-red-600': errors.email }" @input="clearError('email')" />
-                  <p v-if="errors.email" class="mt-1 text-red-600 text-sm">{{ errors.email }}</p>
-                </div>
-              </div>
-              <div class="mt-6 flex justify-end">
-                <button
-                  class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium"
-                  :disabled="isUpdating" @click="updateAccountInfo">
-                  {{ isUpdating ? 'Đang cập nhật...' : 'Cập nhật thông tin' }}
-                </button>
-              </div>
-            </div>
-            <div class="bg-gray-50 p-6 rounded-xl">
-              <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-medium text-gray-800">Sổ địa chỉ</h2>
-                <span class="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full">{{ addresses.length }} địa
-                  chỉ</span>
               </div>
 
-              <!-- Address Card Slider -->
-              <div v-if="addresses.length > 0" class="relative">
-                <div class="flex overflow-x-auto pb-4 -mx-2 scrollbar-hide" ref="slider">
-                  <div v-for="address in addresses" :key="address.id"
-                    class="flex-none mx-2 bg-white rounded-lg border border-gray-200 p-5 hover:shadow-sm transition-shadow duration-300"
-                    style="width: 1230px;">
+              <!-- Address Management -->
+              <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-3xl font-semibold text-gray-900 flex items-center">
+                    <i class="las la-map-marker-alt text-[#13ad75] text-3xl mr-3"></i>
+                    Sổ địa chỉ
+                  </h3>
+                  <div class="flex items-center gap-4">
+                    <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full texl-2xl font-medium">
+                      {{ addresses.length }} địa chỉ
+                    </span>
+                    <button
+                      class="px-6 py-3 bg-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-medium transform hover:scale-105 flex items-center"
+                      @click="addNewAddress">
+                      <i class="las la-plus mr-2"></i>
+                      Thêm địa chỉ mới
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Address Cards -->
+                <div v-if="addresses.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div v-for="(address, index) in addresses" :key="address.id"
+                       class="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all duration-300 group"
+                       :class="index % 2 === 0 ? 'bg-[#13ad75]/5' : 'bg-[#002c69]/5'">
                     <div class="flex justify-between items-start mb-4">
                       <div class="flex items-start gap-4 flex-1">
-                        <svg class="w-5 h-5 text-blue-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                             :class="index % 2 === 0 ? 'bg-[#13ad75]/20 group-hover:bg-[#13ad75]/30' : 'bg-[#13ad75]/15 group-hover:bg-[#13ad75]/25'">
+                          <i class="las la-map-marker-alt text-[#13ad75]"></i>
+                        </div>
                         <p class="text-gray-800 leading-relaxed">{{ formatAddress(address) }}</p>
                       </div>
                       <span v-if="defaultAddressId === address.id"
-                        class="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
+                            class="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full border border-green-200">
                         Mặc định
                       </span>
                     </div>
-                    <div class="flex justify-end gap-4 pt-4 border-t border-gray-200">
+                    
+                    <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
                       <button v-if="defaultAddressId !== address.id"
-                        class="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors duration-200"
-                        @click="setDefaultAddress(address.id)">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
+                              class="flex items-center gap-2 px-4 py-2 texl-2xl text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-all duration-200"
+                              @click="setDefaultAddress(address.id)">
+                        <i class="las la-check"></i>
                         Đặt mặc định
                       </button>
                       <button
-                        class="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors duration-200"
+                        class="flex items-center gap-2 px-4 py-2 texl-2xl text-[#13ad75] hover:text-[#13ad75] hover:bg-[#13ad75]/10 rounded-lg transition-all duration-200"
                         @click="editAddress(address.id)">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
+                        <i class="las la-edit"></i>
                         Sửa
                       </button>
                       <button
-                        class="flex items-center gap-1 text-sm text-red-600 hover:text-red-700 transition-colors duration-200"
+                        class="flex items-center gap-2 px-4 py-2 texl-2xl text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200"
                         @click="deleteAddress(address.id)">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
+                        <i class="las la-trash"></i>
                         Xóa
                       </button>
                     </div>
                   </div>
                 </div>
 
-                <!-- Navigation Arrows -->
-                <button v-if="addresses.length > 3" @click="scrollSlider(-1)"
-                  class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 z-10">
-                  <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <button v-if="addresses.length > 3" @click="scrollSlider(1)"
-                  class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 z-10">
-                  <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
+                <div v-if="addresses.length === 0" class="text-center py-16 bg-[#13ad75]/5 rounded-2xl border-2 border-dashed border-gray-300">
+                  <i class="las la-map-marker-alt text-6xl text-gray-300 mb-4"></i>
+                  <h4 class="text-xl font-semibold text-gray-800 mb-2">Chưa có địa chỉ giao hàng</h4>
+                  <p class="text-gray-600 mb-8">Thêm địa chỉ để việc đặt hàng trở nên thuận tiện hơn.</p>
+                  <button
+                    class="px-8 py-3 bg-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-medium transform hover:scale-105"
+                    @click="addNewAddress">
+                    <i class="las la-plus mr-2"></i>
+                    Thêm địa chỉ đầu tiên
+                  </button>
+                </div>
               </div>
 
-              <div v-if="addresses.length === 0" class="text-center py-12 bg-white rounded-lg border border-gray-200">
-                <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <h3 class="text-lg font-medium text-gray-800 mb-2">Chưa có địa chỉ giao hàng</h3>
-                <p class="text-gray-600 mb-6">Thêm địa chỉ để việc đặt hàng trở nên thuận tiện hơn.</p>
-                <button
-                  class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium"
-                  @click="addNewAddress">
-                  Thêm địa chỉ mới
-                </button>
-              </div>
-
-              <button v-if="addresses.length > 0"
-                class="mt-6 w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium flex items-center justify-center gap-2"
-                @click="addNewAddress">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                Thêm địa chỉ mới
-              </button>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div class="bg-gray-50 p-6 rounded-xl">
-                <h2 class="text-xl font-medium text-gray-800 mb-4">Mật khẩu</h2>
-                <p class="text-gray-600 mb-4">Cập nhật lần cuối: 16/10/2024 21:10</p>
-                <button class="text-blue-600 font-medium underline hover:no-underline">Thay đổi mật khẩu</button>
-              </div>
-              <div class="bg-gray-50 p-6 rounded-xl">
-                <h2 class="text-xl font-medium text-gray-800 mb-4">Tài khoản liên kết</h2>
-                <div class="space-y-4">
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                      <img src="https://cdn-static.smember.com.vn/_next/static/media/logo-google.b6f9570f.svg"
-                        alt="Google Icon" class="h-5 w-5" />
-                      <span class="text-gray-700">Google - Đã liên kết</span>
+              <!-- Security Settings -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
+                  <h3 class="text-3xl font-semibold text-gray-900 mb-6 flex items-center">
+                    <i class="las la-lock text-[#13ad75] text-3xl mr-3"></i>
+                    Mật khẩu & Bảo mật
+                  </h3>
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between py-4 px-6 bg-gray-50 rounded-xl">
+                      <div>
+                        <h4 class="font-medium text-gray-900">Mật khẩu</h4>
+                        <p class="texl-2xl text-gray-600">Cập nhật lần cuối: 16/10/2024 21:10</p>
+                      </div>
+                      <button class="px-4 py-2 text-[#002c69] hover:text-[#002c69] font-medium bg-[#002c69]/10 hover:bg-[#002c69]/20 rounded-lg transition-all duration-200">
+                        Thay đổi
+                      </button>
                     </div>
-                    <button class="text-red-600 font-medium underline hover:no-underline">Hủy liên kết</button>
+                    <div class="flex items-center justify-between py-4 px-6 bg-gray-50 rounded-xl">
+                      <div>
+                        <h4 class="font-medium text-gray-900">Xác thực 2 lớp</h4>
+                        <p class="texl-2xl text-gray-600">Tăng cường bảo mật tài khoản</p>
+                      </div>
+                      <button class="px-4 py-2 text-gray-600 hover:text-[#13ad75] font-medium bg-gray-100 hover:bg-[#13ad75]/10 rounded-lg transition-all duration-200">
+                        Bật
+                      </button>
+                    </div>
                   </div>
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                      <img src="https://cdn-static.smember.com.vn/_next/static/media/logo-zalo.120d889f.svg"
-                        alt="Zalo Icon" class="h-5 w-5" />
-                      <span class="text-gray-700">Zalo</span>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
+                  <h3 class="text-3xl font-semibold text-gray-900 mb-6 flex items-center">
+                    <i class="las la-link text-[#13ad75] text-3xl mr-3"></i>
+                    Tài khoản liên kết
+                  </h3>
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between py-4 px-6 bg-green-50 rounded-xl border border-green-200">
+                      <div class="flex items-center gap-4">
+                        <img src="https://cdn-static.smember.com.vn/_next/static/media/logo-google.b6f9570f.svg"
+                             alt="Google" class="h-8 w-8" />
+                        <div>
+                          <h4 class="font-medium text-gray-900">Google</h4>
+                          <p class="texl-2xl text-green-600">Đã liên kết</p>
+                        </div>
+                      </div>
+                      <button class="px-4 py-2 text-red-600 hover:text-red-700 font-medium bg-red-50 hover:bg-red-100 rounded-lg transition-all duration-200">
+                        Hủy liên kết
+                      </button>
                     </div>
-                    <button class="text-blue-600 font-medium underline hover:no-underline">Liên kết</button>
+                    <div class="flex items-center justify-between py-4 px-6 bg-gray-50 rounded-xl">
+                      <div class="flex items-center gap-4">
+                        <img src="https://cdn-static.smember.com.vn/_next/static/media/logo-zalo.120d889f.svg"
+                             alt="Zalo" class="h-8 w-8" />
+                        <div>
+                          <h4 class="font-medium text-gray-900">Zalo</h4>
+                          <p class="texl-2xl text-gray-500">Chưa liên kết</p>
+                        </div>
+                      </div>
+                      <button class="px-4 py-2 text-[#002c69] hover:text-[#002c69] font-medium bg-[#002c69]/10 hover:bg-[#002c69]/20 rounded-lg transition-all duration-200">
+                        Liên kết
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -352,81 +559,147 @@
         </main>
       </div>
 
-      <!-- Address Modal -->
-      <div v-if="showAddressModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-xl w-full max-w-md shadow-xl">
-          <h2 class="text-xl font-medium text-gray-800 mb-6">{{ isEditingAddress ? 'Sửa địa chỉ' : 'Thêm địa chỉ mới' }}
-          </h2>
-          <div class="space-y-4">
-            <div class="flex flex-col">
-              <label class="text-sm font-medium text-gray-700 mb-2">Địa chỉ cụ thể</label>
-              <input v-model.trim="addressForm.diaChiCuThe" type="text"
-                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                :class="{ 'border-red-600': addressErrors.diaChiCuThe }" @input="clearAddressError('diaChiCuThe')" />
-              <p v-if="addressErrors.diaChiCuThe" class="mt-1 text-red-600 text-sm">{{ addressErrors.diaChiCuThe }}</p>
+      <!-- Enhanced Address Modal -->
+      <div v-if="showAddressModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl w-full max-w-2xl shadow-2xl transform transition-all duration-300 scale-100">
+          <div class="p-8">
+            <div class="flex items-center justify-between mb-8">
+              <h2 class="text-2xl font-bold text-gray-900 flex items-center">
+                <i class="las la-map-marker-alt text-blue-500 text-3xl mr-3"></i>
+                {{ isEditingAddress ? 'Sửa địa chỉ' : 'Thêm địa chỉ mới' }}
+              </h2>
+              <button 
+                class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
+                @click="closeAddressModal">
+                <i class="las la-times text-gray-600 text-xl"></i>
+              </button>
             </div>
-            <div class="flex flex-col">
-              <label class="text-sm font-medium text-gray-700 mb-2">Thành phố/Tỉnh</label>
-              <select v-model="addressForm.thanhPhoCode"
-                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                :class="{ 'border-red-600': addressErrors.thanhPho }" @change="fetchDistricts">
-                <option value="">Chọn Thành phố/Tỉnh</option>
-                <option v-for="province in provinces" :key="province.code" :value="province.code">
-                  {{ province.name }}
-                </option>
-              </select>
-              <p v-if="addressErrors.thanhPho" class="mt-1 text-red-600 text-sm">{{ addressErrors.thanhPho }}</p>
+            
+            <div class="space-y-6">
+              <div>
+                <label class="block texl-2xl font-semibold text-gray-700 mb-1">
+                  <i class="las la-home mr-2"></i>
+                  Địa chỉ cụ thể
+                </label>
+                <input 
+                  v-model.trim="addressForm.diaChiCuThe" 
+                  type="text"
+                  placeholder="Số nhà, tên đường..."
+                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  :class="{ 'border-red-500 ring-red-500': addressErrors.diaChiCuThe }" 
+                  @input="clearAddressError('diaChiCuThe')" />
+                <p v-if="addressErrors.diaChiCuThe" class="mt-2 text-red-600 texl-2xl flex items-center">
+                  <i class="las la-exclamation-circle mr-1"></i>
+                  {{ addressErrors.diaChiCuThe }}
+                </p>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label class="block texl-2xl font-semibold text-gray-700 mb-1">
+                    <i class="las la-map mr-2"></i>
+                    Thành phố/Tỉnh
+                  </label>
+                  <select 
+                    v-model="addressForm.thanhPhoCode"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    :class="{ 'border-red-500 ring-red-500': addressErrors.thanhPho }" 
+                    @change="fetchDistricts">
+                    <option value="">Chọn Thành phố/Tỉnh</option>
+                    <option v-for="province in provinces" :key="province.code" :value="province.code">
+                      {{ province.name }}
+                    </option>
+                  </select>
+                  <p v-if="addressErrors.thanhPho" class="mt-2 text-red-600 texl-2xl flex items-center">
+                    <i class="las la-exclamation-circle mr-1"></i>
+                    {{ addressErrors.thanhPho }}
+                  </p>
+                </div>
+                
+                <div>
+                  <label class="block texl-2xl font-semibold text-gray-700 mb-1">
+                    <i class="las la-building mr-2"></i>
+                    Quận/Huyện
+                  </label>
+                  <select 
+                    v-model="addressForm.quanCode"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    :class="{ 'border-red-500 ring-red-500': addressErrors.quan }" 
+                    :disabled="!addressForm.thanhPhoCode"
+                    @change="fetchWards">
+                    <option value="">Chọn Quận/Huyện</option>
+                    <option v-for="district in districts" :key="district.code" :value="district.code">
+                      {{ district.name }}
+                    </option>
+                  </select>
+                  <p v-if="addressErrors.quan" class="mt-2 text-red-600 texl-2xl flex items-center">
+                    <i class="las la-exclamation-circle mr-1"></i>
+                    {{ addressErrors.quan }}
+                  </p>
+                </div>
+                
+                <div>
+                  <label class="block texl-2xl font-semibold text-gray-700 mb-1">
+                    <i class="las la-map-pin mr-2"></i>
+                    Phường/Xã
+                  </label>
+                  <select 
+                    v-model="addressForm.phuongCode"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    :class="{ 'border-red-500 ring-red-500': addressErrors.phuong }" 
+                    :disabled="!addressForm.quanCode">
+                    <option value="">Chọn Phường/Xã</option>
+                    <option v-for="ward in wards" :key="ward.code" :value="ward.code">
+                      {{ ward.name }}
+                    </option>
+                  </select>
+                  <p v-if="addressErrors.phuong" class="mt-2 text-red-600 texl-2xl flex items-center">
+                    <i class="las la-exclamation-circle mr-1"></i>
+                    {{ addressErrors.phuong }}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div class="flex flex-col">
-              <label class="text-sm font-medium text-gray-700 mb-2">Quận/Huyện</label>
-              <select v-model="addressForm.quanCode"
-                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                :class="{ 'border-red-600': addressErrors.quan }" :disabled="!addressForm.thanhPhoCode"
-                @change="fetchWards">
-                <option value="">Chọn Quận/Huyện</option>
-                <option v-for="district in districts" :key="district.code" :value="district.code">
-                  {{ district.name }}
-                </option>
-              </select>
-              <p v-if="addressErrors.quan" class="mt-1 text-red-600 text-sm">{{ addressErrors.quan }}</p>
+            
+            <div class="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200">
+              <button
+                class="px-8 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200 font-medium"
+                @click="closeAddressModal">
+                <i class="las la-times mr-2"></i>
+                Hủy
+              </button>
+              <button
+                class="px-8 py-3 bg-[#13ad75] text-white rounded-xl hover:bg-[#13ad75]/90 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                :disabled="isSavingAddress" 
+                @click="saveAddress">
+                <i v-if="isSavingAddress" class="las la-spinner la-spin mr-2"></i>
+                <i v-else class="las la-save mr-2"></i>
+                {{ isSavingAddress ? 'Đang lưu...' : 'Lưu địa chỉ' }}
+              </button>
             </div>
-            <div class="flex flex-col">
-              <label class="text-sm font-medium text-gray-700 mb-2">Phường/Xã</label>
-              <select v-model="addressForm.phuongCode"
-                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                :class="{ 'border-red-600': addressErrors.phuong }" :disabled="!addressForm.quanCode">
-                <option value="">Chọn Phường/Xã</option>
-                <option v-for="ward in wards" :key="ward.code" :value="ward.code">
-                  {{ ward.name }}
-                </option>
-              </select>
-              <p v-if="addressErrors.phuong" class="mt-1 text-red-600 text-sm">{{ addressErrors.phuong }}</p>
-            </div>
-          </div>
-          <div class="flex justify-end gap-4 mt-6">
-            <button
-              class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition duration-200 font-medium"
-              @click="closeAddressModal">
-              Hủy
-            </button>
-            <button
-              class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium"
-              :disabled="isSavingAddress" @click="saveAddress">
-              {{ isSavingAddress ? 'Đang lưu...' : 'Lưu' }}
-            </button>
           </div>
         </div>
       </div>
     </div>
-    <div v-else class="flex items-center justify-center min-h-screen bg-gray-50">
-      <div class="bg-white p-8 rounded-xl shadow-sm text-center max-w-md w-full">
-        <h2 class="text-2xl font-medium text-gray-800 mb-4">Vui lòng đăng nhập</h2>
-        <p class="text-gray-600 mb-6">Bạn cần đăng nhập để xem thông tin tài khoản.</p>
+
+    <!-- Login Prompt for Non-logged Users -->
+    <div v-else class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+      <div class="bg-white/90 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl p-12 text-center max-w-md w-full mx-4">
+        <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="las la-lock text-3xl text-blue-600"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Đăng nhập tài khoản</h2>
+        <p class="text-gray-600 mb-8">Bạn cần đăng nhập để xem thông tin tài khoản và đơn hàng của mình.</p>
         <button
-          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium"
+          class="w-full px-8 py-4 bg-[#13ad75] text-white rounded-xl hover:bg-[#13ad75]/90 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
           @click="$router.push('/login')">
-          Đăng nhập
+          <i class="las la-sign-in-alt mr-2"></i>
+          Đăng nhập ngay
         </button>
+        <p class="text-gray-500 texl-2xl mt-6">
+          Chưa có tài khoản? 
+          <a href="/register" class="text-[#13ad75] hover:text-[#13ad75]/80 font-medium">Đăng ký tại đây</a>
+        </p>
       </div>
     </div>
   </div>
@@ -443,7 +716,7 @@ export default {
     return {
       isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
       activeTab: 'account',
-      activeStatus: null, // Changed to null to represent 'all'
+      activeStatus: null,
       activeWarrantyStatus: 'all',
       customerName: localStorage.getItem('customerName') || 'Khách hàng',
       phoneNumber: localStorage.getItem('phoneNumber') || 'Chưa có số điện thoại',
@@ -475,6 +748,7 @@ export default {
         thanhPhoCode: ''
       },
       addressErrors: {},
+      orderLookupId: '',
       tabs: [
         { id: 'overview', name: 'Tổng quan', icon: 'las la-home' },
         { id: 'history', name: 'Lịch sử mua hàng', icon: 'las la-history' },
@@ -489,19 +763,7 @@ export default {
         { id: 3, name: 'Hoàn thành' },
         { id: 4, name: 'Đã hủy' },
       ],
-      warrantyStatuses: [
-        { id: 'all', name: 'Tất cả' },
-        { id: 'received', name: 'Đã tiếp nhận' },
-        { id: 'coordinating', name: 'Đang điều phối' },
-        { id: 'repairing', name: 'Đang sửa' },
-        { id: 'repaired', name: 'Đã sửa xong' },
-        { id: 'returned', name: 'Đã trả máy' },
-      ],
       orders: [],
-      warranties: [
-        { id: 1, warrantyId: 'BH123456', date: '01/07/2025', status: 'Đang sửa', product: 'iPhone 14' },
-        { id: 2, warrantyId: 'BH123457', date: '30/06/2025', status: 'Đã trả máy', product: 'Samsung Galaxy S23' },
-      ],
       currentPage: 0,
       totalPages: 0,
       totalElements: 0,
@@ -509,10 +771,8 @@ export default {
   },
   computed: {
     filteredOrders() {
-      // This computed property is no longer needed as filtering is done on the backend
       return this.orders;
     },
-    
   },
   watch: {
     activeTab(newTab) {
@@ -562,7 +822,7 @@ export default {
 
         const params = {
           page: page,
-          size: 5, // Or any other page size you prefer
+          size: 5,
           idKhachHang: idKhachHang,
           trangThai: this.activeStatus,
           startDate: this.startDate ? new Date(this.startDate).toISOString() : null,
@@ -594,61 +854,6 @@ export default {
     goToPage(page) {
       if (page >= 0 && page < this.totalPages) {
         this.fetchOrders(page);
-      }
-    },
-
-    scrollSlider(direction) {
-      const slider = this.$refs.slider;
-      const scrollAmount = 1250; // Khoảng cách cuộn mỗi lần (tương đương với chiều rộng card + margin)
-      slider.scrollBy({
-        left: direction * scrollAmount,
-        behavior: 'smooth'
-      });
-    },
-    async handleLogin() {
-      if (!this.loginInput || !this.password) {
-        alert('Tên đăng nhập hoặc email và mật khẩu không được để trống');
-        return;
-      }
-
-      try {
-        const response = await axios.post('http://localhost:8080/tai-khoan/dang-nhap-Web', {
-          tenDangNhap: this.loginInput,
-          email: this.loginInput,
-          matKhau: this.password,
-        });
-
-        if (response.data && response.data.idKhachHang) {
-          const { idKhachHang, tenDangNhap, idTaiKhoan, role } = response.data;
-
-          localStorage.setItem('customerId', idKhachHang);
-          localStorage.setItem('accountId', idTaiKhoan);
-          localStorage.setItem('customerName', tenDangNhap);
-          localStorage.setItem('role', role);
-          localStorage.setItem('isLoggedIn', 'true');
-
-          this.isLoggedIn = true;
-
-          emitter.emit('loginStatusChanged', {
-            isLoggedIn: true,
-            customerName: tenDangNhap,
-          });
-
-          await this.fetchAccountInfo();
-          await this.fetchAddresses();
-
-          alert(response.data.message || 'Đăng nhập thành công!');
-          this.$router.push('/account');
-        } else {
-          alert('Không tìm thấy thông tin khách hàng từ phản hồi đăng nhập');
-        }
-      } catch (error) {
-        console.error('Lỗi đăng nhập:', error);
-        const errorMessage =
-          error.response?.data?.error ||
-          error.response?.data?.message ||
-          'Lỗi kết nối đến máy chủ';
-        alert(errorMessage);
       }
     },
     async handleLogout() {
@@ -721,11 +926,6 @@ export default {
         month: '2-digit',
         year: 'numeric',
       });
-    },
-    getStatusName(statusId) {
-      const statusList = this.activeTab === 'history' ? this.orderStatuses : this.warrantyStatuses;
-      const status = statusList.find((s) => s.id === statusId);
-      return status ? status.name : '';
     },
     async fetchAccountInfo() {
       try {
@@ -1029,56 +1229,135 @@ export default {
 </script>
 
 <style scoped>
-/* Custom scrollbar hide */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+/* Modern glassmorphism effects */
+.backdrop-blur-xl {
+  backdrop-filter: blur(20px);
 }
 
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+/* Enhanced transitions and animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Card slider styling */
-.flex-none {
-  flex: none;
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s ease-out;
 }
 
-/* Navigation arrows styling */
-.absolute {
-  position: absolute;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.translate-y-1\/2 {
-  transform: translateY(-50%);
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
 }
 
-/* General styling */
-*,
-*:before,
-*:after {
-  font-size: 1.5rem !important;
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
 }
 
-i,
-svg {
-  font-size: 1.2rem !important;
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
-button,
-input,
-select,
-label {
-  font-size: 1.5rem !important;
+/* Responsive typography */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .text-6xl {
+    font-size: 2rem;
+  }
+  
+  .text-3xl {
+    font-size: 1.75rem;
+  }
+  
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
 }
 
-.cancelled-order {
-  background-color: #fee2e2; /* A more prominent red background */
-  color: #b91c1c; /* Darker red text */
-  opacity: 1; /* Ensure full opacity */
+/* Enhanced focus states */
+input:focus, select:focus, textarea:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.cancelled-order:hover {
-  background-color: #fecaca; /* Slightly darker red on hover */
+/* Loading spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
-</style>
+
+.la-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Gradient text effects */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced button hover effects */
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Card hover effects */
+.group:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Status badge animations */
+.status-badge {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .flex {
+    flex-direction: column;
+  }
+  
+  .gap-8 {
+    gap: 1rem;
+  }
+  
+  aside {
+    width: 100%;
+    position: static;
+  }
+  
+  .sticky {
+    position: static;
+  }
+}</style>
