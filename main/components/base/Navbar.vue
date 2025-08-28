@@ -1,24 +1,26 @@
 <template>
-  <nav class="navbar">
-    <div class="container">
-      <!-- Logo Section -->
-      <div class="logo-container">
-        <NuxtLink to="/">
-          <img src="/assets/images/demos/demo-4/logo.png" alt="Mobile World Logo" class="logo-img" />
-        </NuxtLink>
-      </div>
+  <div>
+    <ToastNotification ref="toast" />
+    <nav class="navbar">
+      <div class="container">
+        <!-- Logo Section -->
+        <div class="logo-container">
+          <NuxtLink to="/">
+            <img src="/assets/images/demos/demo-4/logo.png" alt="Mobile World Logo" class="logo-img" />
+          </NuxtLink>
+        </div>
 
-      <!-- Navigation Links -->
-      <div class="nav-links">
-        <NuxtLink to="/" class="nav-link">Trang chủ</NuxtLink>
-        <NuxtLink to="/category-4cols" class="nav-link">Sản phẩm</NuxtLink>
-        <NuxtLink to="/compare-page" class="nav-link">So sánh</NuxtLink>
-        <NuxtLink to="/order-page" class="nav-link">Đơn hàng</NuxtLink>
-        <a href="#" class="nav-link">Hỗ trợ</a>
-      </div>
+        <!-- Navigation Links -->
+        <div class="nav-links">
+          <NuxtLink to="/" class="nav-link">Trang chủ</NuxtLink>
+          <NuxtLink to="/category-4cols" class="nav-link">Sản phẩm</NuxtLink>
+          <NuxtLink to="/compare-page" class="nav-link">So sánh</NuxtLink>
+          <NuxtLink to="/order-page" class="nav-link">Đơn hàng</NuxtLink>
+          <a href="#" class="nav-link">Hỗ trợ</a>
+        </div>
 
-      <!-- Action Buttons -->
-      <div class="nav-actions">
+        <!-- Action Buttons -->
+        <div class="nav-actions">
         <!-- User Account Section -->
         <div v-if="isLoggedIn" class="user-account-section">
           <!-- User Profile Dropdown -->
@@ -100,16 +102,21 @@
       </div>
     </div>
   </nav>
+</div>
 </template>
 
 <script>
 import axios from 'axios';
 import mitt from 'mitt';
+import ToastNotification from '~/components/base/ToastNotification.vue';
 
 const emitter = mitt();
 
 export default {
   name: 'Navbar',
+  components: {
+    ToastNotification,
+  },
   data() {
     return {
       cartItemCount: 0,
@@ -134,6 +141,10 @@ export default {
     document.removeEventListener('click', this.handleClickOutside);
   },
   methods: {
+    showToast(type, message) {
+      this.$refs.toast.addToast({ type, message });
+    },
+    
     async fetchCartItemCount() {
       try {
         this.invoiceId = this.$route.query.invoiceId || localStorage.getItem('invoiceId');
@@ -174,7 +185,7 @@ export default {
       this.customerName = '';
       this.cartItemCount = 0;
       emitter.emit('loginStatusChanged', { isLoggedIn: false, customerName: '' });
-      alert('Đăng xuất thành công!');
+      this.showToast('success', 'Đăng xuất thành công!');
       this.$router.push('/');
     },
   },
