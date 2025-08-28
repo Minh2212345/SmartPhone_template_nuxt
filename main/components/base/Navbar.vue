@@ -49,7 +49,7 @@
               <div class="dropdown-items">
                 <a href="#" class="dropdown-item">
                   <i class="fas fa-user-circle"></i>
-                  <span>Thông tin cá nhân</span>
+                  <NuxtLink to="/order-page" >Thông tin cá nhân</NuxtLink>
                 </a>
                 <a href="/order-page" class="dropdown-item">
                   <i class="fas fa-shopping-bag"></i>
@@ -207,7 +207,7 @@ export default {
 }
 
 .logo-img {
-  height: 90px;
+  height: 110px;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
   transition: transform 0.3s ease, filter 0.3s ease;
 }
@@ -226,7 +226,7 @@ export default {
 .nav-link {
   color: #ffffff;
   font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 500;
   text-decoration: none;
   padding: 0.5rem 1rem;
@@ -279,7 +279,7 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -292,7 +292,7 @@ export default {
 .user-name {
   color: #ffffff;
   font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -300,13 +300,13 @@ export default {
 .user-status {
   color: rgba(255, 255, 255, 0.8);
   font-family: 'Inter', sans-serif;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   font-weight: 400;
 }
 
 .dropdown-arrow {
   color: rgba(255, 255, 255, 0.8);
-  font-size: 0.8rem;
+  font-size: 1rem;
   transition: transform 0.3s ease;
 }
 
@@ -355,7 +355,7 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -363,7 +363,7 @@ export default {
   margin: 0;
   color: #1f2937;
   font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 600;
 }
 
@@ -371,7 +371,7 @@ export default {
   margin: 0.25rem 0 0 0;
   color: #6b7280;
   font-family: 'Inter', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 400;
 }
 
@@ -392,7 +392,7 @@ export default {
   padding: 0.75rem 1rem;
   color: #374151;
   font-family: 'Inter', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 500;
   text-decoration: none;
   border-radius: 8px;
@@ -466,7 +466,7 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
@@ -479,7 +479,7 @@ export default {
 .login-title {
   color: #ffffff;
   font-family: 'Inter', sans-serif;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -487,7 +487,7 @@ export default {
 .login-subtitle {
   color: rgba(255, 255, 255, 0.8);
   font-family: 'Inter', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.95rem;
   font-weight: 400;
 }
 
@@ -518,7 +518,7 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   box-shadow: 0 4px 12px rgba(4, 120, 87, 0.3);
 }
 
@@ -528,7 +528,7 @@ export default {
   right: -6px;
   background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
   color: #ffffff;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 600;
   min-width: 18px;
   height: 18px;
@@ -549,7 +549,7 @@ export default {
 .cart-title {
   color: #ffffff;
   font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 600;
   line-height: 1.2;
 }
