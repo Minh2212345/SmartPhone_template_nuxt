@@ -33,17 +33,52 @@ export default {
   name: 'ToastNotification',
   setup() {
     const toasts = ref([]);
+    const maxToasts = 5; // Maximum number of toasts to show at once
 
     const addToast = ({ type, message, isLoading = false, duration = 1500 }) => {
-      const id = Date.now() + Math.random();
-      toasts.value.push({ id, type, message, isLoading });
+      // Check for duplicate messages within the last 500ms
+      const now = Date.now();
+      const isDuplicate = toasts.value.some(toast => 
+        toast.message === message && 
+        toast.type === type && 
+        (now - toast.timestamp) < 500
+      );
+      
+      if (isDuplicate) {
+        return; // Don't add duplicate toast
+      }
+
+      const id = now + Math.random();
+      const newToast = { id, type, message, isLoading, timestamp: now };
+      
+      // Add new toast at the beginning of array (top position)
+      toasts.value.unshift(newToast);
+      
+      // Remove excess toasts if we exceed the maximum
+      if (toasts.value.length > maxToasts) {
+        const excessToasts = toasts.value.splice(maxToasts);
+        excessToasts.forEach(toast => {
+          if (toast.timeoutId) {
+            clearTimeout(toast.timeoutId);
+          }
+        });
+      }
+      
       if (!isLoading && duration > 0) {
-        setTimeout(() => removeToast(id), duration);
+        const timeoutId = setTimeout(() => removeToast(id), duration);
+        newToast.timeoutId = timeoutId;
       }
     };
 
     const removeToast = (id) => {
-      toasts.value = toasts.value.filter((toast) => toast.id !== id);
+      const index = toasts.value.findIndex((toast) => toast.id === id);
+      if (index > -1) {
+        const toast = toasts.value[index];
+        if (toast.timeoutId) {
+          clearTimeout(toast.timeoutId);
+        }
+        toasts.value.splice(index, 1);
+      }
     };
 
     const toastTitle = computed(() => (type) => {
@@ -106,9 +141,10 @@ export default {
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   max-width: 90%;
   pointer-events: none;
+  align-items: flex-end;
+  /* Remove gap to handle spacing individually */
 }
 
 .toast-notification {
@@ -122,10 +158,11 @@ export default {
   box-shadow: var(--shadow-2xl);
   font-family: 'Inter', sans-serif;
   overflow: hidden;
-  margin-top: 1rem;
   pointer-events: auto;
   transform: translateZ(0);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Add consistent margin for spacing */
+  margin-bottom: 1.5rem;
 }
 
 .toast-content {
@@ -341,16 +378,20 @@ export default {
 
 /* Enhanced Transition Animations */
 .toast-slide-enter-active {
-  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .toast-slide-leave-active {
-  transition: all 0.4s cubic-bezier(0.4, 0, 1, 1);
+  transition: all 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+}
+
+.toast-slide-move {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .toast-slide-enter-from {
   opacity: 0;
-  transform: translateX(100%) scale(0.8) rotateY(45deg);
+  transform: translateX(100%) scale(0.9) rotateY(15deg);
 }
 
 .toast-slide-enter-to {
@@ -365,7 +406,7 @@ export default {
 
 .toast-slide-leave-to {
   opacity: 0;
-  transform: translateX(100%) scale(0.8) rotateY(-45deg);
+  transform: translateX(100%) scale(0.9) rotateY(-15deg);
 }
 
 /* Floating Animation */
