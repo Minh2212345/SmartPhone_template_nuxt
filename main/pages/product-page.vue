@@ -81,7 +81,7 @@
                         {{ product.ten_san_pham + " | Chính Hãng VN/A" }}
                       </h1>
                       <div class="product-subtitle">
-                        {{ selectedVariant.bo_nho_trong_dung_luong }} - {{ selectedVariant.mau_sac }}
+                        {{ selectedVariant.ram_dung_luong }}/{{ selectedVariant.bo_nho_trong_dung_luong }} - {{ selectedVariant.mau_sac }}
                       </div>
                     </div>
 
@@ -138,7 +138,7 @@
                     <div class="modern-options-section">
                       <h5 class="options-title">
                         <i class="fas fa-memory"></i>
-                        Chọn bộ nhớ
+                        Chọn phiên bản (RAM/Bộ nhớ trong)
                       </h5>
                       <div class="options-grid">
                         <div v-for="memory in uniqueMemories" :key="memory" class="modern-option-btn memory-option"
@@ -147,7 +147,7 @@
                             disabled: !isMemoryAvailable(memory),
                           }" @click="isMemoryAvailable(memory) && selectMemory(memory)">
                           <div class="option-content">
-                            <span class="option-text">{{ memory }}</span>
+                            <span class="option-text">{{ getVariantDisplayText(memory) }}</span>
                             <div class="option-check">
                               <i class="fas fa-check"></i>
                             </div>
@@ -823,6 +823,15 @@ export default {
         this.zoomX = 50
         this.zoomY = 50
       }
+    },
+
+    getVariantDisplayText(memory) {
+      // Find the variant with this memory size to get the RAM info
+      const variant = this.variants?.find(v => v.bo_nho_trong_dung_luong === memory)
+      if (variant && variant.ram_dung_luong) {
+        return `${variant.ram_dung_luong}/${memory}`
+      }
+      return memory
     },
   },
   computed: {
