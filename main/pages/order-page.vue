@@ -258,10 +258,10 @@
           <div v-if="activeTab === 'order-lookup'" class="p-8">
             <div class="mb-2">
               <h2 class="text-6xl font-bold text-gray-900 mb-2">Tra cứu đơn hàng</h2>
-              <p class="text-2xl text-gray-600">Nhập mã đơn hàng để xem chi tiết</p>
+              <p class="text-2xl text-gray-600">Tìm kiếm đơn hàng cụ thể hoặc xem tất cả đơn hàng</p>
             </div>
             
-            <div class="max-w-100">
+            <div class="max-w-100 mb-2">
               <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
                 <div class="flex gap-4">
                   <div class="flex-1 relative">
@@ -269,7 +269,7 @@
                     <input 
                       v-model="orderLookupId" 
                       type="text" 
-                      placeholder="Nhập mã đơn hàng..." 
+                      placeholder="Nhập mã đơn hàng để tìm kiếm cụ thể..." 
                       class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xl"
                       @keyup.enter="lookupOrder" />
                   </div>
@@ -292,6 +292,7 @@
                 </div>
               </div>
             </div>
+
           </div>
 
           <!-- Account Tab -->
@@ -417,74 +418,186 @@
 
               <!-- Address Management -->
               <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
-                <div class="flex items-center justify-between mb-4">
-                  <h3 class="text-3xl font-semibold text-gray-900 flex items-center">
-                    <i class="las la-map-marker-alt text-[#13ad75] text-3xl mr-3"></i>
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="text-4xl font-bold text-gray-900 flex items-center">
+                    <i class="las la-map-marker-alt text-[#13ad75] text-4xl mr-4"></i>
                     Sổ địa chỉ
                   </h3>
                   <div class="flex items-center gap-4">
-                    <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full texl-2xl font-medium">
-                      {{ addresses.length }} địa chỉ
-                    </span>
+                    <!-- Address Count with Dropdown -->
+                    <div class="relative address-dropdown-container">
+                      <button
+                        @click="toggleAddressDropdown"
+                        class="px-4 py-2 bg-[#13ad75]/10 text-[#13ad75] rounded-xl text-xl font-semibold border border-[#13ad75]/30 hover:bg-[#13ad75]/20 transition-all duration-200 flex items-center gap-2 hover:scale-105 transform">
+                        <i class="las la-list text-xl"></i>
+                        {{ addresses.length }} địa chỉ
+                        <i class="las la-chevron-down text-sm transition-transform duration-200" :class="{ 'rotate-180': showAddressDropdown }"></i>
+                      </button>
+                      
+                      <!-- Address Dropdown -->
+                      <div v-if="showAddressDropdown" 
+                           class="absolute top-full right-0 mt-2 w-96 bg-white/95 backdrop-blur-xl border border-white/30 rounded-2xl shadow-2xl z-50 overflow-hidden">
+                        <!-- Search Input -->
+                        <div class="p-4 border-b border-gray-200/50">
+                          <div class="relative">
+                            <i class="las la-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg"></i>
+                            <input 
+                              ref="addressSearchInput"
+                              v-model="addressSearchQuery"
+                              type="text" 
+                              placeholder="Tìm kiếm địa chỉ..." 
+                              class="w-full pl-10 pr-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#13ad75]/50 focus:border-[#13ad75] transition-all duration-200 text-lg"
+                              @click.stop />
+                          </div>
+                        </div>
+                        
+                        <!-- Address List -->
+                        <div class="max-h-80 overflow-y-auto">
+                          <div v-for="(address, index) in filteredAddresses" :key="address.id"
+                               class="p-4 hover:bg-[#13ad75]/10 transition-all duration-200 cursor-pointer border-b border-gray-100/50 last:border-b-0"
+                               @click="selectAddress(address)">
+                            <div class="flex items-start gap-3">
+                              <div class="w-10 h-10 bg-[#13ad75]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="las la-map-marker-alt text-[#13ad75] text-lg"></i>
+                              </div>
+                              <div class="flex-1 min-w-0">
+                                <p class="text-gray-800 font-semibold text-xl leading-relaxed">{{ formatAddress(address) }}</p>
+                                <div class="flex items-center gap-3 mt-3">
+                                  <span v-if="defaultAddressId === address.id"
+                                        class="bg-green-100 text-green-700 text-sm font-semibold px-3 py-1 rounded-full border border-green-200">
+                                    <i class="las la-check mr-1"></i>
+                                    Mặc định
+                                  </span>
+                                  <span class="text-lg text-gray-500 font-medium">Địa chỉ {{ addresses.findIndex(addr => addr.id === address.id) + 1 }}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div v-if="filteredAddresses.length === 0" class="p-8 text-center text-gray-500">
+                            <i class="las la-search text-4xl mb-4"></i>
+                            <p class="text-xl font-medium">Không tìm thấy địa chỉ phù hợp</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
                     <button
-                      class="px-6 py-3 bg-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-medium transform hover:scale-105 flex items-center"
+                      class="px-6 py-3 bg-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-semibold transform hover:scale-105 flex items-center text-xl"
                       @click="addNewAddress">
-                      <i class="las la-plus mr-2"></i>
+                      <i class="las la-plus mr-2 text-xl"></i>
                       Thêm địa chỉ mới
                     </button>
                   </div>
                 </div>
 
-                <!-- Address Cards -->
-                <div v-if="addresses.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div v-for="(address, index) in addresses" :key="address.id"
-                       class="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all duration-300 group"
-                       :class="index % 2 === 0 ? 'bg-[#13ad75]/5' : 'bg-[#002c69]/5'">
-                    <div class="flex justify-between items-start mb-4">
-                      <div class="flex items-start gap-4 flex-1">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-                             :class="index % 2 === 0 ? 'bg-[#13ad75]/20 group-hover:bg-[#13ad75]/30' : 'bg-[#13ad75]/15 group-hover:bg-[#13ad75]/25'">
-                          <i class="las la-map-marker-alt text-[#13ad75]"></i>
+                <!-- Address Cards with Fixed Height Container -->
+                <div v-if="addresses.length > 0" class="min-h-[300px]">
+                  <!-- Single Address Display -->
+                  <div class="grid grid-cols-1 gap-6 mb-2">
+                    <div v-for="(address, index) in paginatedAddresses" :key="address.id"
+                         class="border border-gray-200 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 group bg-[#13ad75]/5">
+                      <div class="flex justify-between items-start mb-2">
+                        <div class="flex items-start gap-6 flex-1">
+                          <div class="w-14 h-14 rounded-full flex items-center justify-center transition-colors bg-[#13ad75]/20 group-hover:bg-[#13ad75]/30">
+                            <i class="las la-map-marker-alt text-[#13ad75] text-2xl"></i>
+                          </div>
+                          <div class="flex-1">
+                            <p class="text-gray-800 leading-relaxed text-3xl font-semibold mb-1">{{ formatAddress(address) }}</p>
+                            <div class="flex items-center gap-6 text-2xl text-gray-500">
+                              <span class="flex items-center gap-2">
+                                <i class="las la-clock text-[#13ad75]"></i>
+                                Cập nhật: {{ formatDate(address.updateAt) }}
+                              </span>
+                              <span class="flex items-center gap-2">
+                                <i class="las la-hashtag text-[#13ad75]"></i>
+                                Địa chỉ #{{ currentAddressPage + 1 }}
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                        <p class="text-gray-800 leading-relaxed">{{ formatAddress(address) }}</p>
+                        <span v-if="defaultAddressId === address.id"
+                              class="bg-green-100 text-green-700 text-lg font-semibold px-4 py-2 rounded-full border border-green-200">
+                          <i class="las la-check mr-1"></i>
+                          Mặc định
+                        </span>
                       </div>
-                      <span v-if="defaultAddressId === address.id"
-                            class="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full border border-green-200">
-                        Mặc định
+                      
+                      <div class="flex justify-end gap-4 pt-2 border-t border-gray-200">
+                        <button v-if="defaultAddressId !== address.id"
+                                class="flex items-center gap-2 px-6 py-3 text-2xl font-medium text-green-600 hover:text-green-700 hover:bg-green-50 rounded-xl transition-all duration-200 hover:scale-105 transform"
+                                @click="setDefaultAddress(address.id)">
+                          <i class="las la-check text-2xl"></i>
+                          Đặt mặc định
+                        </button>
+                        <button
+                          class="flex items-center gap-2 px-6 py-3 text-2xl font-medium text-[#13ad75] hover:text-[#13ad75] hover:bg-[#13ad75]/10 rounded-xl transition-all duration-200 hover:scale-105 transform"
+                          @click="editAddress(address.id)">
+                          <i class="las la-edit text-2xl"></i>
+                          Sửa
+                        </button>
+                        <button
+                          class="flex items-center gap-2 px-6 py-3 text-2xl font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200 hover:scale-105 transform"
+                          @click="deleteAddress(address.id)">
+                          <i class="las la-trash text-2xl"></i>
+                          Xóa
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Address Pagination Controls -->
+                  <div v-if="hasMultipleAddresses" class="flex justify-between items-center bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/30">
+                    <div class="flex items-center gap-3 text-gray-600">
+                      <i class="las la-map-marker-alt text-[#13ad75] text-2xl"></i>
+                      <span class="text-2xl font-semibold">
+                        Địa chỉ {{ currentAddressPage + 1 }} / {{ totalAddressPages }}
                       </span>
                     </div>
                     
-                    <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
-                      <button v-if="defaultAddressId !== address.id"
-                              class="flex items-center gap-2 px-4 py-2 texl-2xl text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-all duration-200"
-                              @click="setDefaultAddress(address.id)">
-                        <i class="las la-check"></i>
-                        Đặt mặc định
+                    <div class="flex items-center gap-4">
+                      <button 
+                        @click="prevAddressPage" 
+                        :disabled="currentAddressPage === 0"
+                        class="flex items-center gap-3 px-6 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 text-gray-700 rounded-xl hover:bg-white hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-xl font-semibold"
+                        :class="{ 'hover:scale-105 transform': currentAddressPage > 0 }">
+                        <i class="las la-chevron-left text-xl"></i>
+                        Trước
                       </button>
-                      <button
-                        class="flex items-center gap-2 px-4 py-2 texl-2xl text-[#13ad75] hover:text-[#13ad75] hover:bg-[#13ad75]/10 rounded-lg transition-all duration-200"
-                        @click="editAddress(address.id)">
-                        <i class="las la-edit"></i>
-                        Sửa
-                      </button>
-                      <button
-                        class="flex items-center gap-2 px-4 py-2 texl-2xl text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200"
-                        @click="deleteAddress(address.id)">
-                        <i class="las la-trash"></i>
-                        Xóa
+                      
+                      <div class="flex items-center gap-2">
+                        <button 
+                          v-for="page in totalAddressPages" 
+                          :key="page - 1"
+                          @click="goToAddressPage(page - 1)"
+                          class="w-12 h-12 rounded-xl font-semibold transition-all duration-200 text-xl"
+                          :class="currentAddressPage === page - 1 
+                            ? 'bg-[#13ad75] text-white shadow-lg shadow-[#13ad75]/25' 
+                            : 'bg-white/80 text-gray-600 hover:bg-[#13ad75]/10 hover:text-[#13ad75] border border-gray-200 hover:scale-105 transform'">
+                          {{ page }}
+                        </button>
+                      </div>
+                      
+                      <button 
+                        @click="nextAddressPage" 
+                        :disabled="currentAddressPage >= totalAddressPages - 1"
+                        class="flex items-center gap-3 px-6 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 text-gray-700 rounded-xl hover:bg-white hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-xl font-semibold"
+                        :class="{ 'hover:scale-105 transform': currentAddressPage < totalAddressPages - 1 }">
+                        Sau
+                        <i class="las la-chevron-right text-xl"></i>
                       </button>
                     </div>
                   </div>
                 </div>
 
-                <div v-if="addresses.length === 0" class="text-center py-16 bg-[#13ad75]/5 rounded-2xl border-2 border-dashed border-gray-300">
-                  <i class="las la-map-marker-alt text-6xl text-gray-300 mb-4"></i>
-                  <h4 class="text-xl font-semibold text-gray-800 mb-2">Chưa có địa chỉ giao hàng</h4>
-                  <p class="text-gray-600 mb-8">Thêm địa chỉ để việc đặt hàng trở nên thuận tiện hơn.</p>
+                <div v-if="addresses.length === 0" class="text-center py-20 bg-[#13ad75]/5 rounded-2xl border-2 border-dashed border-gray-300">
+                  <i class="las la-map-marker-alt text-8xl text-gray-300 mb-2"></i>
+                  <h4 class="text-3xl font-bold text-gray-800 mb-4">Chưa có địa chỉ giao hàng</h4>
+                  <p class="text-xl text-gray-600 mb-10">Thêm địa chỉ để việc đặt hàng trở nên thuận tiện hơn.</p>
                   <button
-                    class="px-8 py-3 bg-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-medium transform hover:scale-105"
+                    class="px-10 py-4 bg-[#13ad75] text-white rounded-xl hover:shadow-lg hover:shadow-[#13ad75]/25 transition-all duration-200 font-semibold transform hover:scale-105 text-xl"
                     @click="addNewAddress">
-                    <i class="las la-plus mr-2"></i>
+                    <i class="las la-plus mr-3 text-xl"></i>
                     Thêm địa chỉ đầu tiên
                   </button>
                 </div>
@@ -850,16 +963,39 @@ export default {
       currentPage: 0,
       totalPages: 0,
       totalElements: 0,
+      // Address pagination
+      currentAddressPage: 0,
+      addressesPerPage: 1,
+      // Address search and dropdown
+      showAddressDropdown: false,
+      addressSearchQuery: '',
     };
   },
   computed: {
     filteredOrders() {
       return this.orders;
     },
+    paginatedAddresses() {
+      const start = this.currentAddressPage * this.addressesPerPage;
+      const end = start + this.addressesPerPage;
+      return this.addresses.slice(start, end);
+    },
+    totalAddressPages() {
+      return Math.ceil(this.addresses.length / this.addressesPerPage);
+    },
+    hasMultipleAddresses() {
+      return this.addresses.length > 1;
+    },
+    filteredAddresses() {
+      if (!this.addressSearchQuery) return this.addresses;
+      return this.addresses.filter(address => 
+        this.formatAddress(address).toLowerCase().includes(this.addressSearchQuery.toLowerCase())
+      );
+    },
   },
   watch: {
     activeTab(newTab) {
-      if (newTab === 'history') {
+      if (newTab === 'history' || newTab === 'order-lookup' || newTab === 'overview' || newTab === 'account') {
         this.fetchOrders();
       }
     },
@@ -872,12 +1008,17 @@ export default {
       this.fetchAccountInfo();
       this.fetchAddresses();
       this.fetchProvinces();
-      if (this.activeTab === 'history') {
-        this.fetchOrders();
-      }
+      // Fetch orders for all tabs that need order data
+      this.fetchOrders();
     } else {
       this.$router.push('/login');
     }
+    
+    // Add click outside handler for address dropdown
+    document.addEventListener('click', this.handleClickOutside);
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.handleClickOutside);
   },
 
   methods: {
@@ -961,6 +1102,51 @@ export default {
     goToPage(page) {
       if (page >= 0 && page < this.totalPages) {
         this.fetchOrders(page);
+      }
+    },
+    // Address pagination methods
+    goToAddressPage(page) {
+      if (page >= 0 && page < this.totalAddressPages) {
+        this.currentAddressPage = page;
+      }
+    },
+    nextAddressPage() {
+      if (this.currentAddressPage < this.totalAddressPages - 1) {
+        this.currentAddressPage++;
+      }
+    },
+    prevAddressPage() {
+      if (this.currentAddressPage > 0) {
+        this.currentAddressPage--;
+      }
+    },
+    // Address search and dropdown methods
+    toggleAddressDropdown() {
+      this.showAddressDropdown = !this.showAddressDropdown;
+      if (this.showAddressDropdown) {
+        this.addressSearchQuery = '';
+        this.$nextTick(() => {
+          const searchInput = this.$refs.addressSearchInput;
+          if (searchInput) searchInput.focus();
+        });
+      }
+    },
+    selectAddress(address) {
+      const originalIndex = this.addresses.findIndex(addr => addr.id === address.id);
+      if (originalIndex !== -1) {
+        this.currentAddressPage = originalIndex;
+      }
+      this.showAddressDropdown = false;
+      this.addressSearchQuery = '';
+    },
+    closeAddressDropdown() {
+      this.showAddressDropdown = false;
+      this.addressSearchQuery = '';
+    },
+    handleClickOutside(event) {
+      const dropdown = this.$el?.querySelector('.address-dropdown-container');
+      if (dropdown && !dropdown.contains(event.target)) {
+        this.closeAddressDropdown();
       }
     },
     async handleLogout() {

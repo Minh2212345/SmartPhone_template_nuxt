@@ -31,15 +31,24 @@
                   <div class="modern-product-gallery">
                     <div class="main-image-container">
                       <figure class="main-product-image">
-                        <div class="image-wrapper">
+                        <div class="image-wrapper" 
+                             @mousemove="handleImageZoom" 
+                             @mouseleave="resetImageZoom"
+                             @click="toggleZoom">
                           <img id="product-zoom"
                             :src="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
                             :data-zoom-image="selectedVariant.anh_san_pham_url || '/assets/images/placeholder.jpg'"
-                            alt="product image" class="main-image" />
-                          <div class="image-overlay">
-                            <button class="zoom-btn">
+                            alt="product image" 
+                            class="main-image"
+                            :class="{ 'zoomed': isImageZoomed }"
+                            :style="imageZoomStyle" />
+                          <div class="image-overlay" v-show="!isImageZoomed">
+                            <button class="zoom-btn" @click.stop="toggleZoom">
                               <i class="fas fa-search-plus"></i>
                             </button>
+                          </div>
+                          <div class="zoom-indicator" v-show="isImageZoomed">
+                            <span>Click để thoát zoom</span>
                           </div>
                         </div>
                       </figure>
@@ -47,10 +56,10 @@
                       <!-- Thumbnail Gallery -->
                       <div class="thumbnail-gallery">
                         <div class="thumbnail-wrapper">
-                          <div v-for="color in uniqueColors" :key="color.name" class="thumbnail-item"
-                            :class="{ active: selectedVariant.mau_sac === color.name }"
-                            @click="selectColor(color.name)">
-                            <img :src="getImageForColor(color.name)" :alt="color.name" class="thumbnail-image" />
+                          <div v-for="color in uniqueColors" :key="color" class="thumbnail-item"
+                            :class="{ active: selectedVariant.mau_sac === color }"
+                            @click="selectColor(color)">
+                            <img :src="getImageForColor(color)" :alt="color" class="thumbnail-image" />
                             <div class="thumbnail-overlay"></div>
                           </div>
                         </div>
@@ -79,11 +88,11 @@
                     <!-- Product Rating -->
                     <div class="product-rating-section">
                       <div class="rating-stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
                       </div>
                       <span class="rating-text">(4.8 - 256 đánh giá)</span>
                     </div>
@@ -154,16 +163,16 @@
                         Chọn màu sắc
                       </h5>
                       <div class="options-grid">
-                        <div v-for="color in uniqueColors" :key="color.name" class="modern-option-btn color-option"
-                          :class="{ active: selectedVariant.mau_sac === color.name }" @click="selectColor(color.name)">
+                        <div v-for="color in uniqueColors" :key="color" class="modern-option-btn color-option"
+                          :class="{ active: selectedVariant.mau_sac === color }" @click="selectColor(color)">
                           <div class="option-content">
                             <div class="color-preview">
-                              <span class="color-circle" :style="{ backgroundColor: color.hex }"></span>
+                              <span class="color-circle" :style="{ backgroundColor: colorMap[color] || '#cccccc' }"></span>
                             </div>
                             <div class="color-info">
-                              <span class="color-name">{{ color.name }}</span>
-                              <span class="color-price" v-if="getPriceForColor(color.name) !== null">
-                                {{ formatPrice(getPriceForColor(color.name)) }} VND
+                              <span class="color-name">{{ color }}</span>
+                              <span class="color-price" v-if="getPriceForColor(color) !== null">
+                                {{ formatPrice(getPriceForColor(color)) }} VND
                               </span>
                               <span class="color-price" v-else>Liên hệ</span>
                             </div>
@@ -380,30 +389,134 @@
               </div>
             </div>
 
+            <!-- Product Reviews -->
+            <div class="modern-product-reviews">
+              <div class="reviews-header">
+                <h2 class="reviews-title">
+                  <i class="fas fa-star"></i>
+                  Đánh giá sản phẩm
+                </h2>
+              </div>
+
+              <!-- Review Summary -->
+              <div class="review-summary">
+                <div class="rating-overview">
+                  <div class="overall-rating">
+                    <div class="rating-number">{{ reviewStats.averageRating }}</div>
+                    <div class="rating-stars">
+                      <i v-for="n in 5" :key="n" class="fas fa-star" 
+                         :class="{ active: n <= Math.floor(reviewStats.averageRating) }"></i>
+                    </div>
+                    <div class="rating-text">{{ reviewStats.totalReviews }} đánh giá</div>
+                  </div>
+                  <div class="rating-breakdown">
+                    <div v-for="item in reviewStats.ratingDistribution" :key="item.stars" class="rating-bar">
+                      <span class="star-count">{{ item.stars }} sao</span>
+                      <div class="progress-bar">
+                        <div class="progress-fill" :style="{ width: item.percentage + '%' }"></div>
+                      </div>
+                      <span class="review-count">{{ item.count }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Individual Reviews -->
+              <div class="reviews-list">
+                <div v-for="review in fakeReviews" :key="review.id" class="review-card">
+                  <div class="review-header">
+                    <div class="reviewer-info">
+                      <img :src="review.avatar" :alt="review.userName" class="reviewer-avatar" />
+                      <div class="reviewer-details">
+                        <div class="reviewer-name">
+                          {{ review.userName }}
+                          <span v-if="review.verified" class="verified-badge">
+                            <i class="fas fa-check-circle"></i>
+                            Đã mua hàng
+                          </span>
+                        </div>
+                        <div class="review-date">{{ formatReviewDate(review.date) }}</div>
+                      </div>
+                    </div>
+                    <div class="review-rating">
+                      <div class="stars">
+                        <i v-for="(filled, index) in renderStars(review.rating)" :key="index" 
+                           class="fas fa-star" :class="{ active: filled }"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="review-content">
+                    <h4 class="review-title">{{ review.title }}</h4>
+                    <p class="review-text">{{ review.content }}</p>
+                    <div class="review-actions">
+                      <button class="helpful-btn">
+                        <i class="fas fa-thumbs-up"></i>
+                        Hữu ích ({{ review.helpful }})
+                      </button>
+                      <button class="reply-btn">
+                        <i class="fas fa-reply"></i>
+                        Trả lời
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Write Review Button -->
+              <div class="write-review-section">
+                <button class="write-review-btn">
+                  <i class="fas fa-edit"></i>
+                  Viết đánh giá của bạn
+                </button>
+              </div>
+            </div>
+
             <!-- Similar Products -->
             <div class="modern-similar-products">
               <div class="similar-header">
                 <h2 class="similar-title">
-                  <i class="fas fa-heart"></i>
-                  Những sản phẩm tương tự
+                  <div class="title-icon">
+                    <i class="fas fa-heart"></i>
+                  </div>
+                  <div class="title-content">
+                    <span class="title-main">Những sản phẩm tương tự</span>
+                    <span class="title-subtitle">Khám phá thêm những lựa chọn tuyệt vời</span>
+                  </div>
                 </h2>
               </div>
               <div class="similar-products-grid">
                 <div v-for="similarProduct in similarProducts" :key="similarProduct.id" class="modern-similar-card">
                   <div class="similar-card-inner">
-                    <figure class="similar-product-media">
+                    <!-- Product Image -->
+                    <div class="similar-product-media">
                       <div class="similar-image-wrapper">
                         <NuxtLink :to="`/product-page?sp_id=${similarProduct.id}`">
                           <img :src="similarProduct.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
                             class="similar-product-image" />
                         </NuxtLink>
                         <div class="similar-overlay">
-                          <NuxtLink to="/compare-page" class="similar-compare-btn" title="So sánh">
-                            <i class="fas fa-balance-scale"></i>
-                          </NuxtLink>
+                          <div class="similar-actions">
+                            <button class="similar-action-btn wishlist-btn" title="Yêu thích">
+                              <i class="fas fa-heart"></i>
+                            </button>
+                            <NuxtLink to="/compare-page" class="similar-action-btn compare-btn" title="So sánh">
+                              <i class="fas fa-balance-scale"></i>
+                            </NuxtLink>
+                            <button class="similar-action-btn quick-view-btn" title="Xem nhanh">
+                              <i class="fas fa-eye"></i>
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </figure>
+                      <div class="similar-badge-container">
+                        <span class="similar-badge new-badge">
+                          <i class="fas fa-star"></i>
+                          Mới
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Product Info -->
                     <div class="similar-product-info">
                       <div class="similar-brand">
                         {{ manufacturerMap[similarProduct.tenNhaSanXuat] || similarProduct.tenNhaSanXuat || 'Unknown' }}
@@ -413,7 +526,29 @@
                           similarProduct.tenSanPham
                           }}</a>
                       </h3>
-                      <div class="similar-product-price">{{ formatPrice(similarProduct.giaBan || 0) }} VND</div>
+                      
+                      <!-- Product Rating -->
+                      <div class="similar-rating">
+                        <div class="rating-stars">
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                        </div>
+                        <span class="rating-count">(4.8)</span>
+                      </div>
+
+                      <!-- Product Price -->
+                      <div class="similar-price-container">
+                        <div class="similar-current-price">{{ formatPrice(similarProduct.giaBan || 0) }} VND</div>
+                      </div>
+
+                      <!-- View More Button -->
+                      <button class="similar-view-btn" @click="handleProductChange(similarProduct.id)">
+                        <i class="fas fa-eye"></i>
+                        <span>Xem thêm</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -423,12 +558,15 @@
         </div>
       </main>
     </div>
+
+
     <ToastNotification ref="toastNotification" />
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { emitCartUpdate } from '~/utils/eventBus.js'
 import ProductPage from '../store/product/product-page.js'
 import ToastNotification from '../components/base/ToastNotification.vue'
 
@@ -441,6 +579,9 @@ export default {
     return {
       showSidebar: false,
       showBuyNowModal: false,
+      isImageZoomed: false,
+      zoomX: 50,
+      zoomY: 50,
       orderInfo: {
         name: '',
         phone: '',
@@ -552,6 +693,9 @@ export default {
           );
         }
 
+        // Emit cart update event to sync with navbar
+        emitCartUpdate();
+        
         this.$refs.toastNotification?.addToast({
           type: 'success',
           message: `Sản phẩm "${this.product.ten_san_pham}" đã được thêm vào giỏ hàng!`,
@@ -587,7 +731,50 @@ export default {
         return false
       }
     },
+
+    // Direct Image Zoom Methods
+    toggleZoom() {
+      this.isImageZoomed = !this.isImageZoomed
+      if (!this.isImageZoomed) {
+        this.zoomX = 50
+        this.zoomY = 50
+      }
+    },
+
+    handleImageZoom(event) {
+      if (!this.isImageZoomed) return
+      
+      const container = event.currentTarget
+      const rect = container.getBoundingClientRect()
+      const x = event.clientX - rect.left
+      const y = event.clientY - rect.top
+      
+      this.zoomX = (x / rect.width) * 100
+      this.zoomY = (y / rect.height) * 100
+    },
+
+    resetImageZoom() {
+      if (this.isImageZoomed) {
+        this.zoomX = 50
+        this.zoomY = 50
+      }
+    },
   },
+  computed: {
+    imageZoomStyle() {
+      if (!this.isImageZoomed) {
+        return {
+          transform: 'scale(1)',
+          transformOrigin: 'center center'
+        }
+      }
+      return {
+        transform: 'scale(2.5)',
+        transformOrigin: `${this.zoomX}% ${this.zoomY}%`,
+        transition: 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+      }
+    }
+  }
 }
 </script>
 
@@ -1685,21 +1872,22 @@ export default {
   font-size: 1rem;
 }
 
-/* ===== SIMILAR PRODUCTS ===== */
-.modern-similar-products {
+/* ===== PRODUCT REVIEWS ===== */
+.modern-product-reviews {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: var(--border-radius-xl);
   padding: 2rem;
+  margin-bottom: 2rem;
   box-shadow: var(--shadow-xl);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.similar-header {
+.reviews-header {
   margin-bottom: 2rem;
 }
 
-.similar-title {
+.reviews-title {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -1709,57 +1897,372 @@ export default {
   margin: 0;
 }
 
-.similar-title i {
-  color: #667eea;
+.reviews-title i {
+  color: #fbbf24;
+}
+
+.review-summary {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.rating-overview {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.overall-rating {
+  text-align: center;
+}
+
+.rating-number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #1f2937;
+  line-height: 1;
+}
+
+.rating-stars {
+  margin: 0.5rem 0;
+}
+
+.rating-stars i {
+  color: #d1d5db;
+  font-size: 1.25rem;
+  margin: 0 2px;
+}
+
+.rating-stars i.active {
+  color: #fbbf24;
+}
+
+.rating-text {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.rating-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rating-bar {
+  display: grid;
+  grid-template-columns: 60px 1fr 40px;
+  gap: 1rem;
+  align-items: center;
+}
+
+.star-count {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.review-count {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+  text-align: right;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.review-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: var(--transition);
+}
+
+.review-card:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.reviewer-info {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.reviewer-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+}
+
+.reviewer-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.reviewer-name {
+  font-weight: 600;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #dcfce7;
+  color: #166534;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.verified-badge i {
+  font-size: 0.75rem;
+}
+
+.review-date {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.review-rating .stars {
+  display: flex;
+  gap: 2px;
+}
+
+.review-rating .stars i {
+  color: #d1d5db;
+  font-size: 1rem;
+}
+
+.review-rating .stars i.active {
+  color: #fbbf24;
+}
+
+.review-content {
+  margin-left: 64px;
+}
+
+.review-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+}
+
+.review-text {
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.review-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.helpful-btn,
+.reply-btn {
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.helpful-btn:hover,
+.reply-btn:hover {
+  background: #f3f4f6;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.write-review-section {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.write-review-btn {
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-lg);
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.write-review-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ===== SIMILAR PRODUCTS ===== */
+.modern-similar-products {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: var(--border-radius-xl);
+  padding: 2rem;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 2rem;
+}
+
+.similar-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.similar-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0;
+}
+
+.title-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--primary-gradient);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  animation: pulse 2s infinite;
+}
+
+.title-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.title-main {
+  font-size: 2.75rem;
+  font-weight: 700;
+  color: #1f2937 !important;
+}
+
+.title-subtitle {
+  font-size: 1.5rem;
+  color: #6b7280;
+  font-weight: 400;
 }
 
 .similar-products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .modern-similar-card {
   background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
   border-radius: var(--border-radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08), 0 3px 10px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   transition: var(--transition);
+  position: relative;
+  min-height: 280px;
+  height: auto;
 }
 
 .modern-similar-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.08);
+  border-color: rgba(19, 173, 117, 0.3);
 }
 
 .similar-card-inner {
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .similar-product-media {
   position: relative;
-  margin: 0;
+  flex-shrink: 0;
 }
 
 .similar-image-wrapper {
   position: relative;
   aspect-ratio: 1;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 0.75rem;
+  overflow: hidden;
 }
 
 .similar-product-image {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
   transition: var(--transition);
+  border-radius: 6px;
+}
+
+.modern-similar-card:hover .similar-product-image {
+  transform: scale(1.05);
 }
 
 .similar-overlay {
@@ -1768,43 +2271,91 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: linear-gradient(135deg, rgba(0, 44, 105, 0.85) 0%, rgba(19, 173, 117, 0.85) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   transition: var(--transition);
+  backdrop-filter: blur(8px);
 }
 
 .similar-image-wrapper:hover .similar-overlay {
   opacity: 1;
 }
 
-.similar-compare-btn {
-  background: rgba(255, 255, 255, 0.9);
+.similar-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.similar-action-btn {
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border: none;
   border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
+  width: 2.25rem;
+  height: 2.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #667eea;
+  color: #374151;
   text-decoration: none;
-  font-size: 1.25rem;
+  font-size: 0.875rem;
   transition: var(--transition);
+  cursor: pointer;
 }
 
-.similar-compare-btn:hover {
+.similar-action-btn:hover {
   background: white;
-  transform: scale(1.1);
+  transform: scale(1.15);
   text-decoration: none;
-  color: #667eea;
+  box-shadow: var(--shadow-md);
+}
+
+.wishlist-btn:hover {
+  color: #ef4444;
+}
+
+.compare-btn:hover {
+  color: #3b82f6;
+}
+
+.quick-view-btn:hover {
+  color: #13ad75;
+}
+
+.similar-badge-container {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 2;
+}
+
+.similar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.new-badge {
+  background: linear-gradient(135deg, rgba(19, 173, 117, 0.9) 0%, rgba(0, 242, 254, 0.9) 100%);
+  color: white;
+  animation: pulse 2s infinite;
 }
 
 .similar-product-info {
-  padding: 1.5rem;
+  padding: 1rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -1812,18 +2363,27 @@ export default {
 }
 
 .similar-brand {
-  font-size: 0.875rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #667eea;
+  color: #13ad75;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
 }
 
 .similar-product-name {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1.4rem;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.6rem;
+  height: auto;
 }
 
 .similar-product-name a {
@@ -1833,15 +2393,85 @@ export default {
 }
 
 .similar-product-name a:hover {
-  color: #667eea;
+  color: #13ad75;
   text-decoration: none;
 }
 
-.similar-product-price {
-  font-size: calc(1.25rem + 0.3rem);
+.similar-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.25rem 0;
+}
+
+.similar-rating .rating-stars {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.similar-rating .rating-stars i {
+  color: #fbbf24;
+  font-size: 1rem;
+}
+
+.rating-count {
+  font-size: 1rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.similar-price-container {
+  margin: 0.5rem 0;
+}
+
+.similar-current-price {
+  font-size: 1.5rem;
   font-weight: 700;
   color: #dc2626;
+}
+
+.similar-view-btn {
+  background: rgba(19, 173, 117, 0.9);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  cursor: pointer;
+  transition: var(--transition);
   margin-top: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.similar-view-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.similar-view-btn:hover::before {
+  left: 100%;
+}
+
+.similar-view-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(19, 173, 117, 0.4);
+  background: rgba(19, 173, 117, 1);
+}
+
+.similar-view-btn:active {
+  transform: translateY(0);
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
@@ -1882,11 +2512,48 @@ export default {
   }
 
   .similar-products-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+    max-width: 700px;
+  }
+
+  .modern-similar-card {
+    min-height: 260px;
+    height: auto;
+  }
+
+  .similar-product-info {
+    padding: 0.75rem;
+  }
+
+  .title-content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .similar-title {
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   .secondary-actions {
     flex-direction: column;
+  }
+
+  .rating-overview {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .review-content {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+
+  .rating-bar {
+    grid-template-columns: 50px 1fr 30px;
+    gap: 0.75rem;
   }
 }
 
@@ -1969,6 +2636,166 @@ export default {
 
   100% {
     background-position: 200% 0;
+  }
+}
+
+/* ===== DIRECT IMAGE ZOOM ===== */
+.zoom-indicator {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 10;
+  animation: fadeInDown 0.3s ease-out;
+}
+
+.main-image.zoomed {
+  cursor: zoom-out;
+}
+
+.image-wrapper.zoomed {
+  overflow: visible;
+  z-index: 100;
+}
+
+/* ===== IMPROVED HOVER ANIMATIONS ===== */
+.main-image {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: zoom-in;
+}
+
+.main-image:hover {
+  transform: scale(1.08) rotate(0.5deg);
+  filter: brightness(1.05) contrast(1.05);
+}
+
+.image-wrapper {
+  position: relative;
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  width: 100%;
+  min-height: 400px;
+  border: 2px solid rgba(0, 44, 105, 0.1);
+  cursor: zoom-in;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.image-wrapper:hover {
+  border-color: rgba(19, 173, 117, 0.4);
+  box-shadow: 0 15px 35px rgba(19, 173, 117, 0.15);
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.image-wrapper:hover .image-overlay {
+  opacity: 1;
+}
+
+.zoom-btn {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(0, 44, 105, 0.2);
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #002c69;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 10px 25px rgba(0, 44, 105, 0.2);
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.zoom-btn:hover {
+  background: white;
+  transform: scale(1.2) rotate(15deg);
+  box-shadow: 0 20px 40px rgba(0, 44, 105, 0.3);
+  border-color: #13ad75;
+  color: #13ad75;
+}
+
+.thumbnail-item {
+  position: relative;
+  width: 9rem;
+  height: 9rem;
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.thumbnail-item:hover {
+  transform: translateY(-8px) scale(1.08);
+  box-shadow: 0 20px 40px rgba(0, 44, 105, 0.25);
+  border-color: rgba(0, 44, 105, 0.6);
+}
+
+.thumbnail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  padding: 1rem;
+}
+
+.thumbnail-item:hover .thumbnail-image {
+  transform: scale(1.05);
+  filter: brightness(1.1) contrast(1.05);
+}
+
+/* ===== ZOOM ANIMATIONS ===== */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 10px 25px rgba(0, 44, 105, 0.2);
+  }
+  50% {
+    box-shadow: 0 15px 35px rgba(19, 173, 117, 0.3);
   }
 }
 </style>

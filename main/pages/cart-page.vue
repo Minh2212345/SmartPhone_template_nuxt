@@ -27,7 +27,7 @@
             <i class="las la-shopping-cart text-4xl text-white"></i>
           </div>
           <div class="flex-1">
-            <h1 class="text-6xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-1">Giỏ hàng của bạn</h1>
+            <h1 class="text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-1">Giỏ hàng của bạn</h1>
             <p class="text-3xl text-gray-600" style="font-family: 'Inter', sans-serif;">Xem lại các sản phẩm đã chọn và tiến hành thanh toán</p>
           </div>
           <!-- Cart Stats -->
@@ -48,7 +48,7 @@
         <main class="flex-1 bg-white/90 backdrop-blur-xl border border-white/30 shadow-xl rounded-2xl overflow-hidden">
           <div class="p-8">
             <div class="mb-2">
-              <h2 class="text-6xl font-bold text-gray-900 mb-2">Giỏ hàng chi tiết</h2>
+              <h2 class="text-5xl font-bold text-gray-900 mb-2">Giỏ hàng chi tiết</h2>
               <p class="text-3xl text-gray-600">Quản lý các sản phẩm trong giỏ hàng của bạn</p>
             </div>
 
@@ -315,6 +315,7 @@
 
 <script>
 import axios from 'axios';
+import { emitCartUpdate } from '~/utils/eventBus.js';
 import ToastNotification from '../components/base/ToastNotification.vue';
 
 export default {
@@ -536,6 +537,8 @@ export default {
         }
         // After adding/removing, re-fetch the cart to update the UI
         await this.fetchCart();
+        // Emit cart update event to sync with navbar
+        emitCartUpdate();
       } catch (error) {
         this.handleError(error, 'Lỗi khi cập nhật số lượng');
       }
@@ -552,6 +555,8 @@ export default {
         });
         // Gọi fetchCart để cập nhật giỏ ngay lập tức
         await this.fetchCart();
+        // Emit cart update event to sync with navbar
+        emitCartUpdate();
         this.$refs.toastNotification?.addToast({
           type: 'success',
           message: `Đã xóa sản phẩm "${item.tenSanPham}" khỏi giỏ hàng!`,
@@ -575,6 +580,8 @@ export default {
         await Promise.all(promises);
         // Gọi fetchCart để cập nhật giỏ ngay lập tức
         await this.fetchCart();
+        // Emit cart update event to sync with navbar
+        emitCartUpdate();
         this.$refs.toastNotification?.addToast({
           type: 'success',
           message: 'Đã xóa các sản phẩm đã chọn!',
@@ -666,6 +673,7 @@ export default {
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2; /* Standard property for compatibility */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

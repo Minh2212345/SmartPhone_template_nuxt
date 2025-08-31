@@ -1,3 +1,5 @@
+import { emitCartUpdate } from '~/utils/eventBus.js';
+
 export default {
   name: 'Category4Cols',
   data() {
@@ -21,6 +23,7 @@ export default {
         4: 'Oppo',
       },
       uniqueColors: [],
+      colorMap: {}, // Dynamic color mapping from API
       invoiceId: null,
     };
   },
@@ -92,7 +95,7 @@ export default {
           },
         }),
         $axios.get('/api/price-range'),
-        $axios.get('/api/colors'),
+        $axios.get('/api/mau-sac/all'),
       ]);
 
       const manufacturerMap = {
@@ -101,6 +104,16 @@ export default {
         3: 'Xiaomi',
         4: 'Oppo',
       };
+
+      // Build dynamic color mapping from API
+      const colorMap = {};
+      if (colorsResponse.data && Array.isArray(colorsResponse.data)) {
+        colorsResponse.data.forEach(color => {
+          if (color.mauSac && color.maMau && !color.deleted) {
+            colorMap[color.mauSac] = color.maMau;
+          }
+        });
+      }
 
       const products = Array.isArray(productsResponse.data.products)
         ? productsResponse.data.products.map((product) => ({
@@ -124,7 +137,8 @@ export default {
         maxPrice: maxPrice || priceRangeResponse.data.maxPrice || 0,
         minPriceLimit: priceRangeResponse.data.minPrice || 0,
         maxPriceLimit: priceRangeResponse.data.maxPrice || 0,
-        uniqueColors: colorsResponse.data.colors || [],
+        uniqueColors: colorsResponse.data || [],
+        colorMap: colorMap,
       };
     } catch (err) {
       console.error('Error fetching initial data:', err.message);
@@ -142,6 +156,7 @@ export default {
         minPriceLimit: 0,
         maxPriceLimit: 0,
         uniqueColors: [],
+        colorMap: {},
       };
     }
   },
@@ -163,7 +178,7 @@ export default {
         },
       }),
       this.$axios.get('/api/price-range'),
-      this.$axios.get('/api/colors'),
+      this.$axios.get('/api/mau-sac/all'),
     ]);
 
     this.products = Array.isArray(productsResponse.data.products)
@@ -185,7 +200,17 @@ export default {
     this.minPriceLimit = priceRangeResponse.data.minPrice || 0;
     this.maxPriceLimit = priceRangeResponse.data.maxPrice || 0;
 
-    this.uniqueColors = colorsResponse.data.colors || [];
+    this.uniqueColors = colorsResponse.data || [];
+
+    // Build dynamic color mapping from API
+    this.colorMap = {};
+    if (colorsResponse.data && Array.isArray(colorsResponse.data)) {
+      colorsResponse.data.forEach(color => {
+        if (color.mauSac && color.maMau && !color.deleted) {
+          this.colorMap[color.mauSac] = color.maMau;
+        }
+      });
+    }
 
     this.$router.push({
       path: '/category-4cols',
@@ -233,32 +258,8 @@ export default {
       return price.toLocaleString('vi-VN');
     },
     getColorCode(mauSac) {
-      const colorMap = {
-        'Xanh Mộng Kết': '#a3d2ca',
-        'Xanh Lưu Ly': '#b3cde0',
-        'Hồng': '#f4c2c2',
-        'Đen': '#333333',
-        'Trắng': '#c1b8b8',
-        'Bạc': '#c0c0c0',
-        'Cam': '#ffa500',
-        'Đỏ': '#ff0000',
-        'Gold': '#ffd700',
-        'Kem': '#fffdd0',
-        'Tím': '#800080',
-        'Tím Đậm': '#4b0082',
-        'Titan tự nhiên': '#8a8987',
-        'Vàng': '#ffff00',
-        'Xám': '#808080',
-        'Xanh Bạc Hà': '#98ff98',
-        'Xanh Dương': '#0000ff',
-        'Xanh Dương Đậm': '#00008b',
-        'Xanh Dương Nhạt': '#add8e6',
-        'Xanh Lá': '#008000',
-        'Vàng đồng': '#b8860b',
-        'Nâu': '#8b4513',
-        'Không xác định': '#cccccc',
-      };
-      return colorMap[mauSac] || '#cccccc';
+      // Use dynamic color mapping from API
+      return this.colorMap[mauSac] || '#cccccc';
     },
     toggleColor(color) {
       if (this.selectedColors.includes(color)) {
@@ -340,6 +341,9 @@ export default {
           chiTietGioHangDTO
         );
 
+        // Emit cart update event to sync with navbar
+        emitCartUpdate();
+        
         console.log(`Sản phẩm "${product.tenSanPham}" đã được thêm vào giỏ hàng!`)
         alert(`Sản phẩm "${product.tenSanPham}" đã được thêm vào giỏ hàng!`)
 

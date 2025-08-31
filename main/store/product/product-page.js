@@ -13,31 +13,77 @@ export default {
         3: 'Xiaomi',
         4: 'OPPO',
       },
-      colorMap: {
-        'Xanh Mộng Kết': '#a3d2ca',
-        'Xanh Lưu Ly': '#b3cde0',
-        Hồng: '#f4c2c2',
-        Đen: '#333333',
-        Trắng: '#ffffff',
-        Bạc: '#c0c0c0',
-        Cam: '#ffa500',
-        Đỏ: '#ff0000',
-        Gold: '#ffd700',
-        Kem: '#fffdd0',
-        Tím: '#800080',
-        'Tím Đậm': '#4b0082',
-        'Titan tự nhiên': '#8a8987',
-        Vàng: '#ffff00',
-        Xám: '#808080',
-        'Xanh Bạc Hà': '#98ff98',
-        'Xanh Dương': '#0000ff',
-        'Xanh Dương Đậm': '#00008b',
-        'Xanh Dương Nhạt': '#add8e6',
-        'Xanh Lá': '#008000',
-        'Vàng đồng': '#b8860b',
-        Nâu: '#8b4513',
-      },
+      colorMap: {}, // Dynamic color mapping from API
       isLoading: false,
+      reviews: [],
+      reviewStats: {
+        averageRating: 4.8,
+        totalReviews: 256,
+        ratingDistribution: [
+          { stars: 5, count: 180, percentage: 70 },
+          { stars: 4, count: 51, percentage: 20 },
+          { stars: 3, count: 15, percentage: 6 },
+          { stars: 2, count: 8, percentage: 3 },
+          { stars: 1, count: 2, percentage: 1 }
+        ]
+      },
+      fakeReviews: [
+        {
+          id: 1,
+          userName: 'Nguyễn Văn A',
+          avatar: 'https://i.pravatar.cc/150?img=1',
+          rating: 5,
+          date: '2024-01-15',
+          title: 'Sản phẩm tuyệt vời!',
+          content: 'Mình đã sử dụng sản phẩm này được 2 tháng rồi, chất lượng rất tốt. Camera chụp ảnh đẹp, pin trâu, hiệu năng mượt mà. Rất hài lòng với sự lựa chọn này.',
+          helpful: 24,
+          verified: true
+        },
+        {
+          id: 2,
+          userName: 'Trần Thị B',
+          avatar: 'https://i.pravatar.cc/150?img=2',
+          rating: 4,
+          date: '2024-01-10',
+          title: 'Đáng giá tiền',
+          content: 'Sản phẩm đẹp, chất lượng tốt. Màn hình sắc nét, âm thanh hay. Chỉ có điều pin hơi yếu một chút khi chơi game nặng.',
+          helpful: 18,
+          verified: true
+        },
+        {
+          id: 3,
+          userName: 'Lê Minh C',
+          avatar: 'https://i.pravatar.cc/150?img=3',
+          rating: 5,
+          date: '2024-01-08',
+          title: 'Xuất sắc!',
+          content: 'Thiết kế đẹp, cầm nắm chắc chắn. Hiệu năng mạnh mẽ, đa nhiệm tốt. Camera selfie rất đẹp, phù hợp cho các bạn trẻ.',
+          helpful: 31,
+          verified: false
+        },
+        {
+          id: 4,
+          userName: 'Phạm Thị D',
+          avatar: 'https://i.pravatar.cc/150?img=4',
+          rating: 4,
+          date: '2024-01-05',
+          title: 'Hài lòng',
+          content: 'Giao hàng nhanh, đóng gói cẩn thận. Máy hoạt động ổn định, không bị lag. Giá cả hợp lý so với chất lượng.',
+          helpful: 15,
+          verified: true
+        },
+        {
+          id: 5,
+          userName: 'Hoàng Văn E',
+          avatar: 'https://i.pravatar.cc/150?img=5',
+          rating: 3,
+          date: '2024-01-02',
+          title: 'Tạm ổn',
+          content: 'Sản phẩm đúng như mô tả. Tuy nhiên cảm giác hơi nặng và dày. Camera ban đêm chưa thực sự ấn tượng.',
+          helpful: 8,
+          verified: false
+        }
+      ]
     };
   },
   computed: {
@@ -45,10 +91,7 @@ export default {
       return [...new Set(this.variants.map((v) => v.bo_nho_trong_dung_luong))].sort();
     },
     uniqueColors() {
-      return [...new Set(this.variants.map((v) => v.mau_sac))].map((name) => ({
-        name,
-        hex: this.colorMap[name] || '#ccc',
-      }));
+      return [...new Set(this.variants.map((v) => v.mau_sac))];
     },
     availableMemories() {
       return [
@@ -91,7 +134,8 @@ export default {
         this.variants = [];
         this.selectedVariant = {};
         this.similarProducts = [];
-        this.fetchProductDetails(newSpId)
+        this.fetchColorMapping()
+          .then(() => this.fetchProductDetails(newSpId))
           .then(() => this.fetchSimilarProducts())
           .then(() => {
             this.$nextTick(() => {
@@ -108,6 +152,7 @@ export default {
     const sanPhamId = this.$route.query.sp_id;
     if (sanPhamId) {
       this.isLoading = true;
+      await this.fetchColorMapping(); // Fetch colors first
       await this.fetchProductDetails(sanPhamId);
       await this.fetchSimilarProducts();
       this.$nextTick(() => {
@@ -117,6 +162,22 @@ export default {
     }
   },
   methods: {
+    async fetchColorMapping() {
+      try {
+        const response = await this.$axios.get('/api/mau-sac/all');
+        this.colorMap = {};
+        if (response.data && Array.isArray(response.data)) {
+          response.data.forEach(color => {
+            if (color.mauSac && color.maMau && !color.deleted) {
+              this.colorMap[color.mauSac] = color.maMau;
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching color mapping:', error);
+        this.colorMap = {};
+      }
+    },
     async fetchProductDetails(sanPhamId) {
   try {
     this.isLoading = true;
@@ -284,6 +345,17 @@ export default {
     handleImageError(event) {
       console.error('Image failed to load:', event.target.src);
       event.target.src = '/assets/images/placeholder.jpg';
+    },
+    formatReviewDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('vi-VN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    },
+    renderStars(rating) {
+      return Array.from({ length: 5 }, (_, i) => i < rating);
     },
     initializeOwlCarousel() {
       if (process.client) {
