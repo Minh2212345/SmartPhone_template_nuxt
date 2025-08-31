@@ -162,14 +162,6 @@
                     </div>
                   </div>
 
-                  <!-- Remove Button -->
-                  <div class="flex-shrink-0">
-                    <button class="p-3 text-red-500 rounded-xl border-2 border-red-200 bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 hover:border-red-300 hover:text-red-600 hover:scale-105 hover:shadow-lg hover:shadow-red-500/25 transform transition-all duration-300 relative overflow-hidden group"
-                      @click="removeItem(index)" title="Xóa sản phẩm">
-                      <div class="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <i class="las la-trash text-3xl relative z-10 group-hover:animate-bounce"></i>
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -467,89 +459,143 @@ export default {
     async updateQuantity(index, newQuantity) {
       const item = this.cartItems[index];
       try {
-        if (newQuantity > item.soLuong) { // Increment quantity
-          const chiTietGioHangDTO = {
-            chiTietSanPhamId: item.chiTietSanPhamId,
-            maImel: '', // No IMEI for adding a generic instance
-            soLuong: 1, // Always add one item at a time
-            idPhieuGiamGia: item.idPhieuGiamGia || null,
-          };
-          await axios.post(`http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`, chiTietGioHangDTO);
+        if (newQuantity <= 0) {
+          // Nếu số lượng <= 0, xóa toàn bộ sản phẩm
+          await this.removeItem(index);
+          return;
+        }
+
+        if (newQuantity > item.soLuong) { 
+          // Tăng số lượng: thêm từng sản phẩm một
+          const quantityDiff = newQuantity - item.soLuong;
+          for (let i = 0; i < quantityDiff; i++) {
+            const chiTietGioHangDTO = {
+              chiTietSanPhamId: item.chiTietSanPhamId,
+              maImel: '', 
+              soLuong: 1, 
+              idPhieuGiamGia: item.idPhieuGiamGia || null,
+            };
+            await axios.post(`http://localhost:8080/api/client/gio-hang/them?idHD=${this.invoiceId}`, chiTietGioHangDTO);
+          }
+          
           this.$refs.toastNotification?.addToast({
             type: 'success',
-            message: 'Đã thêm 1 sản phẩm!',
+            message: `Đã thêm ${quantityDiff} sản phẩm!`,
             isLoading: false,
-            duration: 3000,
+            duration: 2000,
           });
-        } else if (newQuantity < item.soLuong) { // Decrement quantity
-          // To decrement, we need to remove one instance of this product.
-          // The backend's xoaSanPhamKhoiGioHang removes one instance if maImel is empty.
-          await axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
-            params: {
-              idHD: this.invoiceId,
-              spId: item.chiTietSanPhamId,
-              maImel: '', // Remove one generic instance
-            },
-          });
+        } else if (newQuantity < item.soLuong) { 
+          // Giảm số lượng: gọi API xóa từng sản phẩm một
+          const quantityDiff = item.soLuong - newQuantity;
+          for (let i = 0; i < quantityDiff; i++) {
+            await axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
+              params: {
+                idHD: this.invoiceId,
+                spId: item.chiTietSanPhamId,
+                maImel: item.maImel || null,
+              },
+            });
+          }
+          
           this.$refs.toastNotification?.addToast({
             type: 'success',
-            message: 'Đã xóa 1 sản phẩm!',
+            message: `Đã giảm ${quantityDiff} sản phẩm!`,
             isLoading: false,
-            duration: 3000,
+            duration: 2000,
           });
         }
-        // After adding/removing, re-fetch the cart to update the UI
+        
+        // Cập nhật lại giỏ hàng từ server để đảm bảo đồng bộ
         await this.fetchCart();
+        
         // Emit cart update event to sync with navbar
         emitCartUpdate();
       } catch (error) {
         this.handleError(error, 'Lỗi khi cập nhật số lượng');
       }
     },
-    async removeItem(index) {
+    async removeAllQuantity(index) {
+      const item = this.cartItems[index];
       try {
-        const item = this.cartItems[index];
+        // Gọi API xóa từng sản phẩm một cho đến khi hết
+        for (let i = 0; i < item.soLuong; i++) {
+          await axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
+            params: {
+              idHD: this.invoiceId,
+              spId: item.chiTietSanPhamId,
+              maImel: item.maImel || null,
+            },
+          });
+        }
+        
+        this.$refs.toastNotification?.addToast({
+          type: 'success',
+          message: `Đã xóa tất cả ${item.soLuong} sản phẩm khỏi giỏ hàng!`,
+          isLoading: false,
+          duration: 2000,
+        });
+        
+        await this.fetchCart();
+        emitCartUpdate();
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi xóa tất cả sản phẩm');
+      }
+    },
+
+    async removeOneQuantity(index) {
+      const item = this.cartItems[index];
+      try {
         await axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
           params: {
             idHD: this.invoiceId,
             spId: item.chiTietSanPhamId,
-            maImel: item.maImel,
+            maImel: item.maImel || null,
           },
         });
-        // Gọi fetchCart để cập nhật giỏ ngay lập tức
-        await this.fetchCart();
-        // Emit cart update event to sync with navbar
-        emitCartUpdate();
+        
         this.$refs.toastNotification?.addToast({
           type: 'success',
-          message: `Đã xóa sản phẩm "${item.tenSanPham}" khỏi giỏ hàng!`,
-          duration: 3000,
+          message: 'Đã xóa 1 sản phẩm khỏi giỏ hàng!',
+          isLoading: false,
+          duration: 2000,
         });
+        
+        await this.fetchCart();
+        emitCartUpdate();
       } catch (error) {
         this.handleError(error, 'Lỗi khi xóa sản phẩm');
       }
     },
+
+    async removeItem(index) {
+      // Sử dụng removeAllQuantity để xóa hết
+      await this.removeAllQuantity(index);
+    },
     async removeSelected() {
       try {
-        const promises = this.selectedItems.map(item =>
-          axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
-            params: {
-              idHD: this.invoiceId,
-              spId: item.chiTietSanPhamId,
-              maImel: item.maImel,
-            },
-          })
-        );
-        await Promise.all(promises);
-        // Gọi fetchCart để cập nhật giỏ ngay lập tức
-        await this.fetchCart();
-        // Emit cart update event to sync with navbar
-        emitCartUpdate();
+        // Xóa tất cả số lượng của từng sản phẩm đã chọn
+        for (const item of this.selectedItems) {
+          // Gọi API xóa từng sản phẩm một cho đến khi hết số lượng
+          for (let i = 0; i < item.soLuong; i++) {
+            await axios.delete(`http://localhost:8080/api/client/gio-hang/xoa`, {
+              params: {
+                idHD: this.invoiceId,
+                spId: item.chiTietSanPhamId,
+                maImel: item.maImel || null,
+              },
+            });
+          }
+        }
+        
         this.$refs.toastNotification?.addToast({
           type: 'success',
-          message: 'Đã xóa các sản phẩm đã chọn!',
-          duration: 3000,
+          message: `Đã xóa tất cả ${this.selectedItems.length} sản phẩm đã chọn!`,
+          isLoading: false,
+          duration: 2000,
         });
+        
+        await this.fetchCart();
+        emitCartUpdate();
       } catch (error) {
         this.handleError(error, 'Lỗi khi xóa các sản phẩm đã chọn');
       }
