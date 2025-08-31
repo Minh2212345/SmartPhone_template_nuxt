@@ -108,6 +108,7 @@
 <script>
 import axios from 'axios';
 import mitt from 'mitt';
+import { onCartUpdate, offCartUpdate } from '~/utils/eventBus.js';
 import ToastNotification from '~/components/base/ToastNotification.vue';
 
 const emitter = mitt();
@@ -130,6 +131,7 @@ export default {
     this.updateLoginStatus();
     this.fetchCartItemCount();
     emitter.on('loginStatusChanged', this.handleLoginStatusChange);
+    onCartUpdate(this.handleCartUpdate);
     this.$router.afterEach(() => {
       this.updateLoginStatus();
     });
@@ -138,6 +140,7 @@ export default {
   },
   beforeDestroy() {
     emitter.off('loginStatusChanged', this.handleLoginStatusChange);
+    offCartUpdate(this.handleCartUpdate);
     document.removeEventListener('click', this.handleClickOutside);
   },
   methods: {
@@ -166,6 +169,10 @@ export default {
     handleLoginStatusChange({ isLoggedIn, customerName }) {
       this.isLoggedIn = isLoggedIn;
       this.customerName = customerName || 'Khách';
+    },
+    handleCartUpdate() {
+      // Refresh cart count when cart is updated
+      this.fetchCartItemCount();
     },
     toggleUserDropdown() {
       this.isUserDropdownOpen = !this.isUserDropdownOpen;
@@ -201,14 +208,13 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding: 1rem 0;
 }
 
 .container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1300px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
@@ -218,14 +224,21 @@ export default {
 }
 
 .logo-img {
-  height: 110px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  height: 120px;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3)) 
+          drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))
+          drop-shadow(0 0 25px rgba(255, 255, 255, 0.6))
+          drop-shadow(0 0 35px rgba(19, 173, 117, 0.4));
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .logo-img:hover {
   transform: scale(1.05);
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.4)) 
+          drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3))
+          drop-shadow(0 0 40px rgba(255, 255, 255, 0.8))
+          drop-shadow(0 0 50px rgba(19, 173, 117, 0.6))
+          drop-shadow(0 0 60px rgba(59, 130, 246, 0.3));
 }
 
 .nav-links {
@@ -237,7 +250,7 @@ export default {
 .nav-link {
   color: #ffffff;
   font-family: 'Inter', sans-serif;
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   font-weight: 500;
   text-decoration: none;
   padding: 0.5rem 1rem;
@@ -290,7 +303,7 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -303,7 +316,7 @@ export default {
 .user-name {
   color: #ffffff;
   font-family: 'Inter', sans-serif;
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -366,7 +379,7 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -374,7 +387,7 @@ export default {
   margin: 0;
   color: #1f2937;
   font-family: 'Inter', sans-serif;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-weight: 600;
 }
 
@@ -382,7 +395,7 @@ export default {
   margin: 0.25rem 0 0 0;
   color: #6b7280;
   font-family: 'Inter', sans-serif;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 400;
 }
 
@@ -403,7 +416,7 @@ export default {
   padding: 0.75rem 1rem;
   color: #374151;
   font-family: 'Inter', sans-serif;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 500;
   text-decoration: none;
   border-radius: 8px;
@@ -477,7 +490,7 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
@@ -490,7 +503,7 @@ export default {
 .login-title {
   color: #ffffff;
   font-family: 'Inter', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -498,7 +511,7 @@ export default {
 .login-subtitle {
   color: rgba(255, 255, 255, 0.8);
   font-family: 'Inter', sans-serif;
-  font-size: 0.95rem;
+  font-size: 1.0rem;
   font-weight: 400;
 }
 
@@ -529,7 +542,7 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   box-shadow: 0 4px 12px rgba(4, 120, 87, 0.3);
 }
 
@@ -560,7 +573,7 @@ export default {
 .cart-title {
   color: #ffffff;
   font-family: 'Inter', sans-serif;
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -568,7 +581,7 @@ export default {
 .cart-subtitle {
   color: rgba(255, 255, 255, 0.8);
   font-family: 'Inter', sans-serif;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 400;
 }
 

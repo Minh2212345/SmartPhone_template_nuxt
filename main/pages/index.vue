@@ -17,14 +17,14 @@
                   </div>
                   <div class="container intro-content text-left py-10 position-relative">
                     <div class="row justify-content-end">
-                      <div class="col-auto col-sm-7 col-md-6 col-lg-5">
+                      <div class="col-auto col-sm-9 col-md-7 col-lg-6">
                         <div class="hero-badge badge-new">
                           <i class="fas fa-star"></i>
                           <span>Mới nhất</span>
                         </div>
                         <h3 class="intro-subtitle text-white font-semibold text-xl mb-2">Siêu phẩm 2024</h3>
-                        <h2 class="intro-title text-5xl font-bold text-white mb-4">iPhone 15 Pro Max</h2>
-                        <div class="feature-highlights mb-4">
+                        <h2 class="intro-title text-5xl font-bold text-white mb-2">iPhone 15 Pro Max</h2>
+                        <div class="feature-highlights mb-2">
                           <div class="feature-item">
                             <i class="fas fa-microchip"></i>
                             <span>Chip A17 Pro</span>
@@ -34,8 +34,8 @@
                             <span>Camera 48MP</span>
                           </div>
                         </div>
-                        <div class="intro-price mt-4 mb-6">
-                          <span class="intro-old-price text-gray-300 line-through text-lg mr-2">34.990.000 VND</span>
+                        <div class="intro-price mt-2 mb-2">
+                          <span class="intro-old-price text-white opacity-60 line-through text-lg mr-2">34.990.000 VND</span>
                           <span class="text-white text-3xl font-bold">32.990.000 VND</span>
                         </div>
                         <div class="hero-buttons">
@@ -52,7 +52,7 @@
                     </div>
                   </div>
                 </div>
-                <!-- Samsung Galaxy S24 Ultra Slide -->
+                <!-- iPhone 14 Pro Slide -->
                 <div class="intro-slide hero-slide-2" style="background-image: url('/assets/images/demos/demo-4/banners/banner-5.webp')">
                   <div class="hero-gradient-overlay"></div>
                   <div class="floating-phone phone-2">
@@ -60,25 +60,26 @@
                   </div>
                   <div class="container intro-content text-left py-10 position-relative">
                     <div class="row justify-content-end">
-                      <div class="col-auto col-sm-7 col-md-6 col-lg-5">
+                      <div class="col-auto col-sm-9 col-md-7 col-lg-6">
                         <div class="hero-badge badge-ai">
-                          <i class="fas fa-brain"></i>
-                          <span>Galaxy AI</span>
+                          <i class="fas fa-camera"></i>
+                          <span>Pro Camera</span>
                         </div>
-                        <h3 class="intro-subtitle text-white font-semibold text-xl mb-2">Trí tuệ nhân tạo</h3>
-                        <h2 class="intro-title text-5xl font-bold text-white mb-4">Galaxy S24 Ultra</h2>
-                        <div class="feature-highlights mb-4">
+                        <h3 class="intro-subtitle text-white font-semibold text-xl mb-2">Nhiếp ảnh chuyên nghiệp</h3>
+                        <h2 class="intro-title text-5xl font-bold text-white mb-2">iPhone 14 Pro</h2>
+                        <div class="feature-highlights mb-2">
                           <div class="feature-item">
-                            <i class="fas fa-magic"></i>
-                            <span>Galaxy AI</span>
+                            <i class="fas fa-camera"></i>
+                            <span>Camera 48MP</span>
                           </div>
                           <div class="feature-item">
-                            <i class="fas fa-pen"></i>
-                            <span>S Pen tích hợp</span>
+                            <i class="fas fa-video"></i>
+                            <span>ProRes Video</span>
                           </div>
                         </div>
-                        <div class="intro-price mt-4 mb-6">
-                          <span class="text-white text-3xl font-bold">29.990.000 VND</span>
+                        <div class="intro-price mt-2 mb-2">
+                          <span class="intro-old-price text-white opacity-60 line-through text-lg mr-2">27.990.000 VND</span>
+                          <span class="text-white text-3xl font-bold">24.990.000 VND</span>
                         </div>
                         <div class="hero-buttons">
                           <a href="category.html" class="btn btn-hero-primary">
@@ -94,7 +95,7 @@
                     </div>
                   </div>
                 </div>
-                <!-- OPPO Find X7 Ultra Slide -->
+                <!-- iPhone 13 Slide -->
                 <div class="intro-slide hero-slide-3" style="background-image: url('/assets/images/demos/demo-4/banners/banner-6.webp')">
                   <div class="hero-gradient-overlay"></div>
                   <div class="floating-phone phone-3">
@@ -102,25 +103,26 @@
                   </div>
                   <div class="container intro-content text-left py-10 position-relative">
                     <div class="row justify-content-end">
-                      <div class="col-auto col-sm-7 col-md-6 col-lg-5">
+                      <div class="col-auto col-sm-9 col-md-7 col-lg-6">
                         <div class="hero-badge badge-camera">
-                          <i class="fas fa-camera"></i>
-                          <span>Hasselblad</span>
+                          <i class="fas fa-bolt"></i>
+                          <span>A15 Bionic</span>
                         </div>
-                        <h3 class="intro-subtitle text-white font-semibold text-xl mb-2">Nhiếp ảnh chuyên nghiệp</h3>
-                        <h2 class="intro-title text-5xl font-bold text-white mb-4">OPPO Find X7 Ultra</h2>
-                        <div class="feature-highlights mb-4">
+                        <h3 class="intro-subtitle text-white font-semibold text-xl mb-2">Hiệu năng vượt trội</h3>
+                        <h2 class="intro-title text-5xl font-bold text-white mb-2">iPhone 13</h2>
+                        <div class="feature-highlights mb-2">
                           <div class="feature-item">
-                            <i class="fas fa-camera-retro"></i>
-                            <span>Hasselblad</span>
+                            <i class="fas fa-microchip"></i>
+                            <span>A15 Bionic</span>
                           </div>
                           <div class="feature-item">
-                            <i class="fas fa-eye"></i>
-                            <span>Zoom 120x</span>
+                            <i class="fas fa-battery-full"></i>
+                            <span>Pin 19h</span>
                           </div>
                         </div>
-                        <div class="intro-price mt-4 mb-6">
-                          <span class="text-white text-3xl font-bold">24.990.000 VND</span>
+                        <div class="intro-price mt-2 mb-2">
+                          <span class="intro-old-price text-white opacity-60 line-through text-lg mr-2">22.990.000 VND</span>
+                          <span class="text-white text-3xl font-bold">19.990.000 VND</span>
                         </div>
                         <div class="hero-buttons">
                           <a href="category.html" class="btn btn-hero-primary">
@@ -209,42 +211,29 @@
           </div>
           <div class="filter-tabs">
             <div class="tab-group" role="tablist">
-              <a id="new-all-link" class="filter-tab active" data-toggle="tab" href="#new-all-tab" role="tab">
-                <i class="fas fa-th-large"></i>
+              <a class="filter-tab" :class="{ active: selectedNewProductsFilter === null }"
+                @click.prevent="filterNewProducts(null)" role="tab">
                 <span>All</span>
               </a>
-              <a id="new-tv-link" class="filter-tab" data-toggle="tab" href="#new-tv-tab" role="tab">
-                <i class="fab fa-apple"></i>
+              <a class="filter-tab" :class="{ active: selectedNewProductsFilter === 1 }"
+                @click.prevent="filterNewProducts(1)" role="tab">
                 <span>iPhone</span>
               </a>
-              <a id="new-computers-link" class="filter-tab" data-toggle="tab" href="#new-computers-tab" role="tab">
-                <i class="fas fa-mobile-alt"></i>
+              <a class="filter-tab" :class="{ active: selectedNewProductsFilter === 2 }"
+                @click.prevent="filterNewProducts(2)" role="tab">
                 <span>Samsung</span>
               </a>
-              <a id="new-phones-link" class="filter-tab" data-toggle="tab" href="#new-phones-tab" role="tab">
-                <i class="fas fa-smartphone"></i>
+              <a class="filter-tab" :class="{ active: selectedNewProductsFilter === 4 }"
+                @click.prevent="filterNewProducts(4)" role="tab">
                 <span>OPPO</span>
               </a>
             </div>
           </div>
         </div>
-        <div class="tab-content tab-content-carousel">
-          <div id="new-all-tab" class="tab-pane p-0 fade show active" role="tabpanel" aria-labelledby="new-all-link">
-            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
-              data-owl-options='{
-                "nav": false,
-                "dots": true,
-                "margin": 20,
-                "loop": false,
-                "responsive": {
-                  "0": { "items": 1 },
-                  "480": { "items": 2 },
-                  "768": { "items": 3 },
-                  "992": { "items": 4 },
-                  "1200": { "items": 5, "nav": true, "dots": false }
-                }
-              }'>
-              <div v-for="product in newProducts" :key="product.id" class="modern-product-card">
+        <div class="products">
+          <div class="row">
+            <div v-for="product in displayedNewProducts" :key="product.id" class="col-12 col-sm-6 col-md-4 col-lg-5th">
+              <div class="modern-product-card">
                 <div class="product-card-inner">
                   <figure class="product-media">
                     <div class="product-labels">
@@ -294,141 +283,25 @@
               </div>
             </div>
           </div>
-          <!-- Other tabs (iPhone, Samsung, OPPO) follow similar structure -->
-          <div id="new-tv-tab" class="tab-pane p-0 fade" role="tabpanel" aria-labelledby="new-tv-link">
-            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
-              data-owl-options='{
-                "nav": false,
-                "dots": true,
-                "margin": 20,
-                "loop": false,
-                "responsive": {
-                  "0": { "items": 1 },
-                  "480": { "items": 2 },
-                  "768": { "items": 3 },
-                  "992": { "items": 4 },
-                  "1200": { "items": 5, "nav": true, "dots": false }
-                }
-              }'>
-              <div v-for="product in iPhoneProducts" :key="product.id"
-                class="product product-7 text-center rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
-                <figure class="product-media relative">
-                  <span v-if="isNewProduct(product)" class="product-label label-new">Mới</span>
-                  <NuxtLink :to="`/product-page?sp_id=${product.id}`">
-                    <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
-                      class="product-image w-full h-auto object-cover rounded-t-lg" />
-                  </NuxtLink>
-                  <div class="product-action-vertical absolute top-4 right-4">
-                    <NuxtLink to="/compare-page"
-                      class="btn-product-icon btn-compare p-2 bg-white rounded-full shadow-sm hover:bg-gray-100"
-                      title="So sánh">
-                      <span class="sr-only">So sánh</span>
-                      <i class="icon-compare"></i>
-                    </NuxtLink>
-                  </div>
-                </figure>
-                <div class="product-body p-4">
-                  <div class="product-cat text-base text-gray-700">
-                    <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
-                  </div>
-                  <h3 class="product-title text-lg font-semibold text-gray-800 mt-2">
-                    <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
-                  </h3>
-                  <div class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
-                  }} VND</div>
-                </div>
-              </div>
+          <!-- New Products Pagination -->
+          <div class="pagination-controls" v-if="getTotalNewProductsPages() > 1">
+            <button 
+              @click="prevNewProductsPage" 
+              :disabled="newProductsCurrentPage === 1"
+              class="pagination-btn prev-btn">
+              <i class="fas fa-chevron-left"></i>
+              <span>Trước</span>
+            </button>
+            <div class="pagination-info">
+              <span>Trang {{ newProductsCurrentPage }} / {{ getTotalNewProductsPages() }}</span>
             </div>
-          </div>
-          <div id="new-computers-tab" class="tab-pane p-0 fade" role="tabpanel" aria-labelledby="new-computers-link">
-            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
-              data-owl-options='{
-                "nav": false,
-                "dots": true,
-                "margin": 20,
-                "loop": false,
-                "responsive": {
-                  "0": { "items": 1 },
-                  "480": { "items": 2 },
-                  "768": { "items": 3 },
-                  "992": { "items": 4 },
-                  "1200": { "items": 5, "nav": true, "dots": false }
-                }
-              }'>
-              <div v-for="product in samsungProducts" :key="product.id"
-                class="product product-7 text-center rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
-                <figure class="product-media relative">
-                  <span v-if="isNewProduct(product)" class="product-label label-new">Mới</span>
-                  <NuxtLink :to="`/product-page?sp_id=${product.id}`">
-                    <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
-                      class="product-image w-full h-auto object-cover rounded-t-lg" />
-                  </NuxtLink>
-                  <div class="product-action-vertical absolute top-4 right-4">
-                    <NuxtLink to="/compare-page"
-                      class="btn-product-icon btn-compare p-2 bg-white rounded-full shadow-sm hover:bg-gray-100"
-                      title="So sánh">
-                      <span class="sr-only">So sánh</span>
-                      <i class="icon-compare"></i>
-                    </NuxtLink>
-                  </div>
-                </figure>
-                <div class="product-body p-4">
-                  <div class="product-cat text-base text-gray-700">
-                    <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
-                  </div>
-                  <h3 class="product-title text-lg font-semibold text-gray-800 mt-2">
-                    <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
-                  </h3>
-                  <div class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
-                  }} VND</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="new-phones-tab" class="tab-pane p-0 fade" role="tabpanel" aria-labelledby="new-phones-link">
-            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
-              data-owl-options='{
-                "nav": false,
-                "dots": true,
-                "margin": 20,
-                "loop": false,
-                "responsive": {
-                  "0": { "items": 1 },
-                  "480": { "items": 2 },
-                  "768": { "items": 3 },
-                  "992": { "items": 4 },
-                  "1200": { "items": 5, "nav": true, "dots": false }
-                }
-              }'>
-              <div v-for="product in oppoProducts" :key="product.id"
-                class="product product-7 text-center rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
-                <figure class="product-media relative">
-                  <span v-if="isNewProduct(product)" class="product-label label-new">Mới</span>
-                  <NuxtLink :to="`/product-page?sp_id=${product.id}`">
-                    <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
-                      class="product-image w-full h-auto object-cover rounded-t-lg" />
-                  </NuxtLink>
-                  <div class="product-action-vertical absolute top-4 right-4">
-                    <NuxtLink to="/compare-page"
-                      class="btn-product-icon btn-compare p-2 bg-white rounded-full shadow-sm hover:bg-gray-100"
-                      title="So sánh">
-                      <span class="sr-only">So sánh</span>
-                      <i class="icon-compare"></i>
-                    </NuxtLink>
-                  </div>
-                </figure>
-                <div class="product-body p-4">
-                  <div class="product-cat text-base text-gray-700">
-                    <a href="#">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</a>
-                  </div>
-                  <h3 class="product-title text-lg font-semibold text-gray-800 mt-2">
-                    <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
-                  </h3>
-                  <div class="product-price text-xl font-medium text-gray-900 mt-2">{{ formatPrice(product.giaBan || 0)
-                  }} VND</div>
-                </div>
-              </div>
-            </div>
+            <button 
+              @click="nextNewProductsPage" 
+              :disabled="newProductsCurrentPage >= getTotalNewProductsPages()"
+              class="pagination-btn next-btn">
+              <span>Tiếp</span>
+              <i class="fas fa-chevron-right"></i>
+            </button>
           </div>
         </div>
         <hr class="my-6 border-gray-200" />
@@ -443,143 +316,28 @@
           </div>
           <div class="filter-tabs">
             <div class="tab-group" role="tablist">
-              <a id="trending-all-link" class="filter-tab active" data-toggle="tab" href="#trending-all-tab" role="tab">
-                <i class="fas fa-fire"></i>
+              <a class="filter-tab" :class="{ active: selectedTrendingFilter === null }"
+                @click.prevent="filterTrendingProducts(null)" role="tab">
                 <span>All</span>
               </a>
-              <a id="trending-tv-link" class="filter-tab" data-toggle="tab" href="#trending-tv-tab" role="tab">
-                <i class="fab fa-apple"></i>
+              <a class="filter-tab" :class="{ active: selectedTrendingFilter === 1 }"
+                @click.prevent="filterTrendingProducts(1)" role="tab">
                 <span>iPhone</span>
               </a>
-              <a id="trending-computers-link" class="filter-tab" data-toggle="tab" href="#trending-computers-tab" role="tab">
-                <i class="fas fa-mobile-alt"></i>
+              <a class="filter-tab" :class="{ active: selectedTrendingFilter === 2 }"
+                @click.prevent="filterTrendingProducts(2)" role="tab">
                 <span>Samsung</span>
               </a>
-              <a id="trending-phones-link" class="filter-tab" data-toggle="tab" href="#trending-phones-tab" role="tab">
-                <i class="fas fa-smartphone"></i>
+              <a class="filter-tab" :class="{ active: selectedTrendingFilter === 4 }"
+                @click.prevent="filterTrendingProducts(4)" role="tab">
                 <span>OPPO</span>
               </a>
-            </div>
-          </div>
-        </div>
-        <div class="tab-content tab-content-carousel">
-          <div id="trending-all-tab" class="tab-pane p-0 fade show active" role="tabpanel"
-            aria-labelledby="trending-all-link">
-            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
-              data-owl-options='{
-                "nav": false,
-                "dots": true,
-                "margin": 20,
-                "loop": false,
-                "responsive": {
-                  "0": { "items": 1 },
-                  "480": { "items": 2 },
-                  "768": { "items": 3 },
-                  "992": { "items": 4 },
-                  "1200": { "items": 5, "nav": true, "dots": false }
-                }
-              }'>
-              <div v-for="product in trendingSaleProducts" :key="product.id" class="modern-product-card">
-                <div class="product-card-inner">
-                  <figure class="product-media">
-                    <div class="product-labels">
-                      <span v-if="isNewProduct(product)" class="product-label label-new">
-                        <i class="fas fa-star"></i>
-                        <span>Mới</span>
-                      </span>
-                      <span v-if="product.hasDiscount" class="product-label label-discount">
-                        <i class="fas fa-tag"></i>
-                        <span v-if="product.loaiGiamGiaApDung === 'Phần trăm' && product.giamPhanTram > 0">Giảm {{
-                          product.giamPhanTram }}%</span>
-                        <span v-else-if="product.loaiGiamGiaApDung === 'Tiền mặt' && product.giamToiDa > 0">Giảm {{
-                          formatPrice(product.giamToiDa) }} VND</span>
-                      </span>
-                    </div>
-                    <div class="product-image-wrapper">
-                      <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
-                        class="product-image" />
-                    </div>
-                    <div class="floating-actions">
-                      <button class="action-btn wishlist-btn" title="Yêu thích">
-                        <i class="fas fa-heart"></i>
-                      </button>
-                      <NuxtLink to="/compare-page" class="action-btn compare-btn" title="So sánh">
-                        <i class="fas fa-balance-scale"></i>
-                      </NuxtLink>
-                      <NuxtLink :to="`/product-page?sp_id=${product.id}`" class="action-btn quickview-btn" title="Xem nhanh">
-                        <i class="fas fa-eye"></i>
-                      </NuxtLink>
-                    </div>
-                  </figure>
-                  <div class="product-info">
-                    <div class="product-brand">
-                      <span class="brand-badge">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</span>
-                    </div>
-                    <h3 class="product-name">
-                      <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
-                    </h3>
-                    <div class="product-rating">
-                      <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                      </div>
-                      <span class="rating-text">(4.8)</span>
-                    </div>
-                    <div class="product-price">
-                      <span v-if="product.hasDiscount" class="old-price">{{ formatPrice(product.giaBan || 0) }} VND</span>
-                      <span class="current-price">{{ formatPrice(product.giaSauKhiGiam || product.giaBan || 0) }} VND</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <hr class="my-6 border-gray-200" />
-      </div>
-
-      <!-- Recommended Products -->
-      <div class="container for-you mb-6">
-        <div class="section-header mb-6">
-          <div class="section-title-wrapper">
-            <h2 class="section-title">Sản phẩm gợi ý</h2>
-            <p class="section-subtitle">Được chọn lọc dành riêng cho bạn</p>
-          </div>
-          <div class="filter-tabs">
-            <div class="tab-group" role="tablist">
-              <a id="recommended-all-link" class="filter-tab" :class="{ active: selectedManufacturer === null }"
-                @click.prevent="filterRecommendedProducts(null)" role="tab">
-                <i class="fas fa-magic"></i>
-                <span>All</span>
-              </a>
-              <a id="recommended-iphone-link" class="filter-tab" :class="{ active: selectedManufacturer === 1 }"
-                @click.prevent="filterRecommendedProducts(1)" role="tab">
-                <i class="fab fa-apple"></i>
-                <span>iPhone</span>
-              </a>
-              <a id="recommended-samsung-link" class="filter-tab" :class="{ active: selectedManufacturer === 2 }"
-                @click.prevent="filterRecommendedProducts(2)" role="tab">
-                <i class="fas fa-mobile-alt"></i>
-                <span>Samsung</span>
-              </a>
-              <a id="recommended-oppo-link" class="filter-tab" :class="{ active: selectedManufacturer === 4 }"
-                @click.prevent="filterRecommendedProducts(4)" role="tab">
-                <i class="fas fa-smartphone"></i>
-                <span>OPPO</span>
-              </a>
-              <NuxtLink to="/category-4cols" class="view-more-btn">
-                <span>Xem thêm</span>
-                <i class="fas fa-arrow-right"></i>
-              </NuxtLink>
             </div>
           </div>
         </div>
         <div class="products">
-          <div class="row justify-content-center">
-              <div v-for="product in recommendedProducts" :key="product.id" class="col-6 col-md-4 col-lg-3 col-xl-2">
+          <div class="row">
+            <div v-for="product in displayedTrendingProducts" :key="product.id" class="col-12 col-sm-6 col-md-4 col-lg-5th">
               <div class="modern-product-card">
                 <div class="product-card-inner">
                   <figure class="product-media">
@@ -637,6 +395,143 @@
                 </div>
               </div>
             </div>
+          </div>
+          <!-- Trending Products Pagination -->
+          <div class="pagination-controls" v-if="getTotalTrendingPages() > 1">
+            <button 
+              @click="prevTrendingPage" 
+              :disabled="trendingCurrentPage === 1"
+              class="pagination-btn prev-btn">
+              <i class="fas fa-chevron-left"></i>
+              <span>Trước</span>
+            </button>
+            <div class="pagination-info">
+              <span>Trang {{ trendingCurrentPage }} / {{ getTotalTrendingPages() }}</span>
+            </div>
+            <button 
+              @click="nextTrendingPage" 
+              :disabled="trendingCurrentPage >= getTotalTrendingPages()"
+              class="pagination-btn next-btn">
+              <span>Tiếp</span>
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+        <hr class="my-6 border-gray-200" />
+      </div>
+
+      <!-- Recommended Products -->
+      <div class="container for-you mb-6">
+        <div class="section-header mb-6">
+          <div class="section-title-wrapper">
+            <h2 class="section-title">Sản phẩm gợi ý</h2>
+            <p class="section-subtitle">Được chọn lọc dành riêng cho bạn</p>
+          </div>
+          <div class="filter-tabs">
+            <div class="tab-group" role="tablist">
+              <a id="recommended-all-link" class="filter-tab" :class="{ active: selectedManufacturer === null }"
+                @click.prevent="filterRecommendedProducts(null)" role="tab">
+                <span>All</span>
+              </a>
+              <a id="recommended-iphone-link" class="filter-tab" :class="{ active: selectedManufacturer === 1 }"
+                @click.prevent="filterRecommendedProducts(1)" role="tab">
+                <span>iPhone</span>
+              </a>
+              <a id="recommended-samsung-link" class="filter-tab" :class="{ active: selectedManufacturer === 2 }"
+                @click.prevent="filterRecommendedProducts(2)" role="tab">>
+                <span>Samsung</span>
+              </a>
+              <a id="recommended-oppo-link" class="filter-tab" :class="{ active: selectedManufacturer === 4 }"
+                @click.prevent="filterRecommendedProducts(4)" role="tab">
+                <span>OPPO</span>
+              </a>
+              <NuxtLink to="/category-4cols" class="view-more-btn">
+                <span>Xem thêm</span>
+                <i class="fas fa-arrow-right"></i>
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+        <div class="products">
+          <div class="row">
+              <div v-for="product in paginatedRecommendedProducts" :key="product.id" class="col-12 col-sm-6 col-md-4 col-lg-5th">
+              <div class="modern-product-card">
+                <div class="product-card-inner">
+                  <figure class="product-media">
+                    <div class="product-labels">
+                      <span v-if="isNewProduct(product)" class="product-label label-new">
+                        <i class="fas fa-star"></i>
+                        <span>Mới</span>
+                      </span>
+                      <span v-if="product.hasDiscount" class="product-label label-discount">
+                        <i class="fas fa-tag"></i>
+                        <span v-if="product.loaiGiamGiaApDung === 'Phần trăm' && product.giamPhanTram > 0">Giảm {{
+                          product.giamPhanTram }}%</span>
+                        <span v-else-if="product.loaiGiamGiaApDung === 'Tiền mặt' && product.giamToiDa > 0">Giảm {{
+                          formatPrice(product.giamToiDa) }} VND</span>
+                      </span>
+                    </div>
+                    <div class="product-image-wrapper">
+                      <img :src="product.imageUrl || '/assets/images/placeholder.jpg'" alt="Product image"
+                        class="product-image" />
+                    </div>
+                    <div class="floating-actions">
+                      <button class="action-btn wishlist-btn" title="Yêu thích">
+                        <i class="fas fa-heart"></i>
+                      </button>
+                      <NuxtLink to="/compare-page" class="action-btn compare-btn" title="So sánh">
+                        <i class="fas fa-balance-scale"></i>
+                      </NuxtLink>
+                      <NuxtLink :to="`/product-page?sp_id=${product.id}`" class="action-btn quickview-btn" title="Xem nhanh">
+                        <i class="fas fa-eye"></i>
+                      </NuxtLink>
+                    </div>
+                  </figure>
+                  <div class="product-info">
+                    <div class="product-brand">
+                      <span class="brand-badge">{{ manufacturerMap[product.tenNhaSanXuat] || product.tenNhaSanXuat || 'Unknown' }}</span>
+                    </div>
+                    <h3 class="product-name">
+                      <NuxtLink :to="`/product-page?sp_id=${product.id}`">{{ product.tenSanPham }}</NuxtLink>
+                    </h3>
+                    <div class="product-rating">
+                      <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                      </div>
+                      <span class="rating-text">(4.8)</span>
+                    </div>
+                    <div class="product-price">
+                      <span v-if="product.hasDiscount" class="old-price">{{ formatPrice(product.giaBan || 0) }} VND</span>
+                      <span class="current-price">{{ formatPrice(product.giaSauKhiGiam || product.giaBan || 0) }} VND</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Recommended Products Pagination -->
+          <div class="pagination-controls" v-if="getTotalRecommendedPages() > 1">
+            <button 
+              @click="prevRecommendedPage" 
+              :disabled="recommendedCurrentPage === 1"
+              class="pagination-btn prev-btn">
+              <i class="fas fa-chevron-left"></i>
+              <span>Trước</span>
+            </button>
+            <div class="pagination-info">
+              <span>Trang {{ recommendedCurrentPage }} / {{ getTotalRecommendedPages() }}</span>
+            </div>
+            <button 
+              @click="nextRecommendedPage" 
+              :disabled="recommendedCurrentPage >= getTotalRecommendedPages()"
+              class="pagination-btn next-btn">
+              <span>Tiếp</span>
+              <i class="fas fa-chevron-right"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -718,7 +613,7 @@ export default IndexPage
   color: #4a5568;
   font-size: 2rem;
   font-weight: 500;
-  border-radius: 50px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -779,6 +674,7 @@ export default IndexPage
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(255, 255, 255, 0.8);
@@ -974,8 +870,8 @@ export default IndexPage
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%);
   color: white;
   padding: 0.4rem 1rem;
-  border-radius: 25px;
-  font-size: 1.75rem;
+  border-radius: 10px;
+  font-size: 1.45rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -1098,7 +994,7 @@ export default IndexPage
 }
 
 .current-price {
-  font-size: 2.4rem;
+  font-size: 2rem;
   font-weight: 800;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%);
   -webkit-background-clip: text;
@@ -1311,6 +1207,85 @@ export default IndexPage
   border-radius: 0.75rem;
 }
 
+/* Container and Layout Optimizations */
+.container {
+  max-width: 1400px !important;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Custom 5-column layout */
+@media (min-width: 992px) {
+  .col-lg-5th {
+    flex: 0 0 20%;
+    max-width: 20%;
+    position: relative;
+    width: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+}
+
+.products .row {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.products .row > [class*="col-"] {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* Enhanced Product Card Sizing */
+.modern-product-card {
+  margin-bottom: 2rem;
+  perspective: 1000px;
+  min-height: 450px;
+}
+
+.product-card-inner {
+  min-height: 450px;
+  max-width: none;
+}
+
+.product-image-wrapper {
+  min-height: 220px;
+  aspect-ratio: 1;
+}
+
+.product-info {
+  padding: 1.8rem;
+  min-height: 200px;
+}
+
+.product-name {
+  font-size: 2.2rem;
+  line-height: 1.2;
+  margin: 1rem 0;
+}
+
+.product-price {
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+
+.current-price {
+  font-size: 2.2rem;
+}
+
+.old-price {
+  font-size: 1.8rem;
+}
+
+.brand-badge {
+  font-size: 1.6rem;
+  padding: 0.5rem 1.2rem;
+}
+
+.rating-text {
+  font-size: 2rem;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1199.98px) {
   .section-header {
@@ -1325,6 +1300,222 @@ export default IndexPage
   
   .tab-group {
     justify-content: center;
+  }
+  
+  .container {
+    max-width: 1200px !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .container {
+    max-width: 960px !important;
+  }
+  
+  .modern-product-card {
+    min-height: 400px;
+  }
+  
+  .product-card-inner {
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .container {
+    max-width: 720px !important;
+  }
+  
+  .modern-product-card {
+    min-height: 380px;
+  }
+  
+  .product-card-inner {
+    min-height: 380px;
+  }
+  
+  .product-name {
+    font-size: 2rem;
+  }
+  
+  .current-price {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .container {
+    max-width: 540px !important;
+  }
+  
+  .products .row {
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+  
+  .products .row > [class*="col-"] {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+/* Pagination Controls Styling */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
+  backdrop-filter: blur(15px);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 16px rgba(0, 0, 0, 0.04);
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border: none;
+  background: linear-gradient(135deg, rgba(19, 173, 117, 0.9) 0%, rgba(15, 138, 95, 0.9) 100%);
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(19, 173, 117, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pagination-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.pagination-btn:hover::before {
+  left: 100%;
+}
+
+.pagination-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(19, 173, 117, 0.4), 0 4px 12px rgba(15, 138, 95, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.pagination-btn:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.pagination-btn:disabled {
+  background: linear-gradient(135deg, rgba(156, 163, 175, 0.6) 0%, rgba(107, 114, 128, 0.6) 100%);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.pagination-btn:disabled:hover {
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-btn:disabled::before {
+  display: none;
+}
+
+.pagination-btn i {
+  font-size: 1.4rem;
+  transition: transform 0.3s ease;
+}
+
+.pagination-btn:hover i {
+  transform: scale(1.2);
+}
+
+.prev-btn:hover i {
+  transform: translateX(-3px) scale(1.2);
+}
+
+.next-btn:hover i {
+  transform: translateX(3px) scale(1.2);
+}
+
+.pagination-info {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+  border-radius: 12px;
+  border: 2px solid rgba(59, 130, 246, 0.15);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.pagination-info span {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive Pagination */
+@media (max-width: 767.98px) {
+  .pagination-controls {
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1.5rem 1rem;
+  }
+  
+  .pagination-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.4rem;
+    gap: 0.5rem;
+  }
+  
+  .pagination-btn span {
+    display: none;
+  }
+  
+  .pagination-info span {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .pagination-controls {
+    gap: 0.8rem;
+    padding: 1rem 0.5rem;
+  }
+  
+  .pagination-btn {
+    padding: 0.7rem 1rem;
+    font-size: 1.2rem;
+  }
+  
+  .pagination-info {
+    padding: 0.8rem 1.5rem;
+  }
+  
+  .pagination-info span {
+    font-size: 1.4rem;
   }
 }
 
@@ -1438,8 +1629,10 @@ export default IndexPage
 }
 
 .intro-price .intro-old-price {
-  color: rgba(255, 255, 255, 0.7);
+  color: white;
   font-size: 2.125rem;
+  opacity: 0.6;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .intro-price .text-white {
@@ -1479,6 +1672,19 @@ export default IndexPage
   color: #e6f3ff;
 }
 
+/* Enhanced text shadows for better readability on dark backgrounds */
+.intro-subtitle {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.intro-title {
+  text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.8), 2px 2px 6px rgba(0, 0, 0, 0.6);
+  background: white;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: white;
+  background-clip: text;
+}
+
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
@@ -1499,19 +1705,21 @@ export default IndexPage
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: white;
   font-size: 1.95rem;
   font-weight: 500;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
 }
 
 .feature-item i {
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 .feature-highlig.hero-buttons {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
   margin-top: 2rem;
 }
 
@@ -1552,9 +1760,8 @@ export default IndexPage
 .btn-hero-primary {
   background: linear-gradient(135deg, #13ad75, #0f8a5f) !important;
   color: white !important;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 0.5rem;
   font-weight: 600;
   text-decoration: none;
   display: inline-flex;
@@ -1573,8 +1780,7 @@ export default IndexPage
 .btn-hero-secondary {
   background: rgba(255, 255, 255, 0.15) !important;
   color: white !important;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  padding: 0.75rem 1.5rem;
+  padding: 0.85rem 1.5rem;
   border-radius: 0.5rem;
   font-weight: 600;
   transition: all 0.3s ease;

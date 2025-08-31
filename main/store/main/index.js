@@ -10,6 +10,19 @@ export default {
       trendingSaleProducts: [],
       recommendedProducts: [],
       selectedManufacturer: null, // Track the selected manufacturer for recommended products
+      selectedNewProductsFilter: null, // Track the selected filter for new products
+      selectedTrendingFilter: null, // Track the selected filter for trending products
+      displayedNewProducts: [], // Currently displayed new products
+      displayedTrendingProducts: [], // Currently displayed trending products
+      // Pagination for new products
+      newProductsCurrentPage: 1,
+      newProductsPerPage: 5,
+      // Pagination for trending products  
+      trendingCurrentPage: 1,
+      trendingPerPage: 5,
+      // Pagination for recommended products
+      recommendedCurrentPage: 1,
+      recommendedPerPage: 5,
       manufacturerMap: {
         1: 'Apple',
         2: 'Samsung',
@@ -155,12 +168,48 @@ async fetchRecommendedProducts(idNhaSanXuat) {
     this.recommendedProducts = [];
   }
 },
-    async filterRecommendedProducts(idNhaSanXuat) {
-      this.selectedManufacturer = idNhaSanXuat;
-      await this.fetchRecommendedProducts(idNhaSanXuat);
+async filterRecommendedProducts(idNhaSanXuat) {
+  this.selectedManufacturer = idNhaSanXuat;
+  await this.fetchRecommendedProducts(idNhaSanXuat);
+},
+    async filterNewProducts(idNhaSanXuat) {
+      this.selectedNewProductsFilter = idNhaSanXuat;
+      this.newProductsCurrentPage = 1; // Reset to first page when filtering
+      let allProducts = [];
+      if (idNhaSanXuat === null) {
+        allProducts = this.newProducts;
+      } else if (idNhaSanXuat === 1) {
+        allProducts = this.iPhoneProducts;
+      } else if (idNhaSanXuat === 2) {
+        allProducts = this.samsungProducts;
+      } else if (idNhaSanXuat === 4) {
+        allProducts = this.oppoProducts;
+      }
+      this.displayedNewProducts = this.paginateArray(allProducts, this.newProductsCurrentPage, this.newProductsPerPage);
+    },
+    async filterTrendingProducts(idNhaSanXuat) {
+      this.selectedTrendingFilter = idNhaSanXuat;
+      this.trendingCurrentPage = 1; // Reset to first page when filtering
+      let allProducts = [];
+      // Filter trending products based on manufacturer
+      if (idNhaSanXuat === null) {
+        allProducts = this.trendingSaleProducts;
+      } else {
+        allProducts = this.trendingSaleProducts.filter(
+          product => product.tenNhaSanXuat === idNhaSanXuat || 
+          (this.manufacturerMap[product.tenNhaSanXuat] && 
+           Object.keys(this.manufacturerMap).find(key => 
+             parseInt(key) === idNhaSanXuat && 
+             this.manufacturerMap[key] === product.tenNhaSanXuat
+           ))
+        );
+      }
+      this.displayedTrendingProducts = this.paginateArray(allProducts, this.trendingCurrentPage, this.trendingPerPage);
     },
     populateSections() {
-      // No need to filter here since data is fetched separately for each tab
+      // Initialize displayed products with pagination
+      this.displayedNewProducts = this.paginateArray(this.newProducts, this.newProductsCurrentPage, this.newProductsPerPage);
+      this.displayedTrendingProducts = this.paginateArray(this.trendingSaleProducts, this.trendingCurrentPage, this.trendingPerPage);
     },
     isNewProduct(product) {
       if (!product.createdAt) return false;
@@ -207,5 +256,123 @@ async fetchRecommendedProducts(idNhaSanXuat) {
         });
       }
     },
+    // Pagination utility methods
+    paginateArray(array, currentPage, itemsPerPage) {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      return array.slice(startIndex, endIndex);
+    },
+    // New Products Pagination
+    nextNewProductsPage() {
+      const totalPages = this.getTotalNewProductsPages();
+      if (this.newProductsCurrentPage < totalPages) {
+        this.newProductsCurrentPage++;
+        this.updateNewProductsPagination();
+      }
+    },
+    prevNewProductsPage() {
+      if (this.newProductsCurrentPage > 1) {
+        this.newProductsCurrentPage--;
+        this.updateNewProductsPagination();
+      }
+    },
+    updateNewProductsPagination() {
+      let allProducts = [];
+      if (this.selectedNewProductsFilter === null) {
+        allProducts = this.newProducts;
+      } else if (this.selectedNewProductsFilter === 1) {
+        allProducts = this.iPhoneProducts;
+      } else if (this.selectedNewProductsFilter === 2) {
+        allProducts = this.samsungProducts;
+      } else if (this.selectedNewProductsFilter === 4) {
+        allProducts = this.oppoProducts;
+      }
+      this.displayedNewProducts = this.paginateArray(allProducts, this.newProductsCurrentPage, this.newProductsPerPage);
+    },
+    getTotalNewProductsPages() {
+      let allProducts = [];
+      if (this.selectedNewProductsFilter === null) {
+        allProducts = this.newProducts;
+      } else if (this.selectedNewProductsFilter === 1) {
+        allProducts = this.iPhoneProducts;
+      } else if (this.selectedNewProductsFilter === 2) {
+        allProducts = this.samsungProducts;
+      } else if (this.selectedNewProductsFilter === 4) {
+        allProducts = this.oppoProducts;
+      }
+      return Math.ceil(allProducts.length / this.newProductsPerPage);
+    },
+    // Trending Products Pagination
+    nextTrendingPage() {
+      const totalPages = this.getTotalTrendingPages();
+      if (this.trendingCurrentPage < totalPages) {
+        this.trendingCurrentPage++;
+        this.updateTrendingPagination();
+      }
+    },
+    prevTrendingPage() {
+      if (this.trendingCurrentPage > 1) {
+        this.trendingCurrentPage--;
+        this.updateTrendingPagination();
+      }
+    },
+    updateTrendingPagination() {
+      let allProducts = [];
+      if (this.selectedTrendingFilter === null) {
+        allProducts = this.trendingSaleProducts;
+      } else {
+        allProducts = this.trendingSaleProducts.filter(
+          product => product.tenNhaSanXuat === this.selectedTrendingFilter || 
+          (this.manufacturerMap[product.tenNhaSanXuat] && 
+           Object.keys(this.manufacturerMap).find(key => 
+             parseInt(key) === this.selectedTrendingFilter && 
+             this.manufacturerMap[key] === product.tenNhaSanXuat
+           ))
+        );
+      }
+      this.displayedTrendingProducts = this.paginateArray(allProducts, this.trendingCurrentPage, this.trendingPerPage);
+    },
+    getTotalTrendingPages() {
+      let allProducts = [];
+      if (this.selectedTrendingFilter === null) {
+        allProducts = this.trendingSaleProducts;
+      } else {
+        allProducts = this.trendingSaleProducts.filter(
+          product => product.tenNhaSanXuat === this.selectedTrendingFilter || 
+          (this.manufacturerMap[product.tenNhaSanXuat] && 
+           Object.keys(this.manufacturerMap).find(key => 
+             parseInt(key) === this.selectedTrendingFilter && 
+             this.manufacturerMap[key] === product.tenNhaSanXuat
+           ))
+        );
+      }
+      return Math.ceil(allProducts.length / this.trendingPerPage);
+    },
+    // Recommended Products Pagination
+    nextRecommendedPage() {
+      const totalPages = this.getTotalRecommendedPages();
+      if (this.recommendedCurrentPage < totalPages) {
+        this.recommendedCurrentPage++;
+        this.updateRecommendedPagination();
+      }
+    },
+    prevRecommendedPage() {
+      if (this.recommendedCurrentPage > 1) {
+        this.recommendedCurrentPage--;
+        this.updateRecommendedPagination();
+      }
+    },
+    updateRecommendedPagination() {
+      // This will be called after fetchRecommendedProducts
+      // The recommendedProducts array is already filtered by manufacturer
+    },
+    getTotalRecommendedPages() {
+      return Math.ceil(this.recommendedProducts.length / this.recommendedPerPage);
+    },
   },
+  computed: {
+    paginatedRecommendedProducts() {
+      return this.paginateArray(this.recommendedProducts, this.recommendedCurrentPage, this.recommendedPerPage);
+    }
+  }
 };

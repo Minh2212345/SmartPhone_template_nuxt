@@ -251,12 +251,13 @@
                     <div class="filter-colors">
                       <a
                         v-for="color in uniqueColors"
-                        :key="color"
-                        :style="{ background: getColorCode(color) }"
-                        :class="{ selected: selectedColors.includes(color) }"
-                        @click.prevent="toggleColor(color)"
+                        :key="color.id"
+                        :style="{ background: color.maMau || '#cccccc' }"
+                        :class="{ selected: selectedColors.includes(color.mauSac) }"
+                        @click.prevent="toggleColor(color.mauSac)"
+                        :title="color.mauSac"
                       >
-                        <span class="sr-only">{{ color }}</span>
+                        <span class="sr-only">{{ color.mauSac }}</span>
                       </a>
                     </div>
                   </div>
