@@ -236,50 +236,18 @@
               </div>
             </div>
 
-            <div v-if="discount > 0" class="bg-green-50 backdrop-blur-sm rounded-xl p-4 border border-green-200">
-              <div class="flex justify-between items-center">
-                <div class="flex items-center gap-2">
-                  <i class="las la-percentage text-green-600 text-xl"></i>
-                  <span class="text-2xl text-green-600 font-medium">Giảm giá:</span>
-                </div>
-                <span class="text-2xl font-bold text-green-600">-{{ formatPrice(discount) }}</span>
-              </div>
-            </div>
 
             <!-- Total -->
             <div class="bg-[#13ad75]/10 backdrop-blur-sm rounded-xl p-6 border border-[#13ad75]/30">
               <div class="flex justify-between items-center">
                 <span class="text-3xl font-bold text-gray-900">Tổng cộng:</span>
                 <span class="text-4xl font-bold bg-gradient-to-r from-[#13ad75] to-[#13ad75] bg-clip-text text-transparent">
-                  {{ formatPrice(selectedTotalPrice + shippingFee - discount) }}
+                  {{ formatPrice(selectedTotalPrice + shippingFee) }}
                 </span>
               </div>
             </div>
           </div>
 
-          <!-- Enhanced Discount Info -->
-          <div class="mb-2 p-6 bg-[#13ad75]/10 border border-[#13ad75]/30 rounded-2xl">
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 bg-[#13ad75] rounded-full flex items-center justify-center flex-shrink-0">
-                <i class="las la-info-circle text-white text-xl"></i>
-              </div>
-              <div>
-                <h4 class="font-semibold text-gray-800 mb-2 text-2xl">Thông tin ưu đãi</h4>
-                <p class="text-xl text-gray-700 leading-relaxed">
-                  <span v-if="cartItems.length >= 3" class="font-semibold text-green-600">
-                    🎉 Chúc mừng! Bạn được giảm {{ formatPrice(500000) }} khi mua từ 3 sản phẩm trở lên.
-                  </span>
-                  <span v-else-if="totalPrice >= 20000000" class="font-semibold text-green-600">
-                    🎉 Chúc mừng! Bạn được giảm {{ formatPrice(300000) }} khi tổng đơn hàng trên 20,000,000 VNĐ.
-                  </span>
-                  <span v-else>
-                    Mua thêm <strong>{{ 3 - cartItems.length }} sản phẩm</strong> để được giảm <strong>500,000 VNĐ</strong> 
-                    hoặc đạt tổng đơn <strong>20,000,000 VNĐ</strong> để được giảm <strong>300,000 VNĐ</strong>!
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
 
           <!-- Checkout Button -->
           <NuxtLink to="/checkout-page" :class="[
@@ -338,11 +306,6 @@ export default {
     },
     selectedTotalPrice() {
       return this.selectedItems.reduce((total, item) => total + (item.tongTien || 0), 0);
-    },
-    discount() {
-      if (this.selectedItems.length >= 3) return 500000;
-      if (this.selectedTotalPrice >= 20000000) return 300000;
-      return 0;
     },
   },
   watch: {
