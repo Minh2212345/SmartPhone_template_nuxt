@@ -871,7 +871,7 @@ export default IndexPage
   color: white;
   padding: 0.4rem 1rem;
   border-radius: 10px;
-  font-size: 1.45rem;
+  font-size: 1.1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -887,7 +887,6 @@ export default IndexPage
 }
 
 .product-name {
-  font-size: 2rem;
   font-weight: 700;
   background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
   -webkit-background-clip: text;
@@ -914,6 +913,7 @@ export default IndexPage
   color: #1a202c;
   text-decoration: none;
   transition: color 0.3s ease;
+  font-size: 1.8rem;
 }
 
 .product-name a:hover {
@@ -938,7 +938,7 @@ export default IndexPage
 
 .stars i {
   color: #fbbf24;
-  font-size: 1.1rem;
+  font-size: 1rem;
   filter: drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3));
   transition: all 0.2s ease;
 }
@@ -949,7 +949,7 @@ export default IndexPage
 }
 
 .rating-text {
-  font-size: 1.875rem;
+  font-size: 1.075rem;
   color: #4a5568;
   font-weight: 600;
   background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
@@ -994,7 +994,7 @@ export default IndexPage
 }
 
 .current-price {
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: 800;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%);
   -webkit-background-clip: text;
@@ -1270,7 +1270,7 @@ export default IndexPage
 }
 
 .current-price {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
 }
 
 .old-price {
@@ -1278,12 +1278,12 @@ export default IndexPage
 }
 
 .brand-badge {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   padding: 0.5rem 1.2rem;
 }
 
 .rating-text {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 /* Responsive adjustments */

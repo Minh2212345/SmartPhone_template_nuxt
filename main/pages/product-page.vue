@@ -192,11 +192,11 @@
                           <span>Thêm vào giỏ hàng</span>
                           <div class="btn-shine"></div>
                         </button>
-                        <NuxtLink to="/cart-page" class="modern-btn secondary">
+                        <button class="modern-btn secondary" @click="buyNow">
                           <i class="fas fa-credit-card"></i>
                           <span>Mua ngay</span>
                           <div class="btn-shine"></div>
-                        </NuxtLink>
+                        </button>
                       </div>
                       <div class="secondary-actions">
                         <button class="secondary-btn">
@@ -698,23 +698,88 @@ export default {
         
         this.$refs.toastNotification?.addToast({
           type: 'success',
-          message: `Sản phẩm "${this.product.ten_san_pham}" đã được thêm vào giỏ hàng!`,
+          message: `Sản phẩm "${this.product.ten_san_pham}" đã được thêm vào giỏ hàng thành công!`,
           isLoading: false,
           duration: 3000,
         });
-
-        // Chuyển hướng đến cart-page với invoiceId
-        setTimeout(() => {
-          this.$router.push({
-            path: '/cart-page',
-            query: { invoiceId: invoiceId },
-          })
-        }, 3000)
       } catch (error) {
         console.error('Error adding to cart:', error)
         this.$refs.toastNotification?.addToast({
           type: 'error',
           message: 'Lỗi khi thêm sản phẩm vào giỏ hàng: ' + (error.response?.data?.message || error.message),
+          isLoading: false,
+          duration: 5000,
+        })
+      }
+    },
+
+    async buyNow() {
+      try {
+        if (!this.selectedVariant || !this.selectedVariant.ctsp_id) {
+          this.$refs.toastNotification?.addToast({
+            type: 'error',
+            message: 'Vui lòng chọn sản phẩm hợp lệ!',
+            isLoading: false,
+            duration: 5000,
+          })
+          return
+        }
+
+        const customerId = localStorage.getItem('customerId')
+        let invoiceId = localStorage.getItem('invoiceId')
+
+        // Kiểm tra trạng thái hóa đơn hiện tại
+        if (invoiceId) {
+          const isPending = await this.isPendingInvoice(invoiceId)
+          if (!isPending) {
+            localStorage.removeItem('invoiceId')
+            invoiceId = null
+          }
+        }
+
+        // Nếu không có hóa đơn hoặc hóa đơn không hợp lệ, tạo hóa đơn mới
+        if (!invoiceId) {
+          await this.createInvoice(customerId || null)
+          invoiceId = this.invoiceId
+        }
+
+        // Thêm sản phẩm vào giỏ hàng
+        for (let i = 0; i < this.quantity; i++) {
+          const chiTietGioHangDTO = {
+            chiTietSanPhamId: this.selectedVariant.ctsp_id,
+            maImel: null,
+            soLuong: 1,
+            idPhieuGiamGia: null,
+          };
+
+          await axios.post(
+            `http://localhost:8080/api/client/gio-hang/them?idHD=${invoiceId}`,
+            chiTietGioHangDTO
+          );
+        }
+
+        // Emit cart update event to sync with navbar
+        emitCartUpdate();
+        
+        this.$refs.toastNotification?.addToast({
+          type: 'success',
+          message: `Sản phẩm "${this.product.ten_san_pham}" đã được thêm vào giỏ hàng!`,
+          isLoading: false,
+          duration: 2000,
+        });
+
+        // Chuyển hướng đến cart-page ngay lập tức
+        setTimeout(() => {
+          this.$router.push({
+            path: '/cart-page',
+            query: { invoiceId: invoiceId },
+          })
+        }, 1000)
+      } catch (error) {
+        console.error('Error in buy now:', error)
+        this.$refs.toastNotification?.addToast({
+          type: 'error',
+          message: 'Lỗi khi mua sản phẩm: ' + (error.response?.data?.message || error.message),
           isLoading: false,
           duration: 5000,
         })
