@@ -184,35 +184,35 @@
                       </div>
                     </div>
 
-                    <!-- Action Buttons -->
-                    <div class="modern-action-section">
-                      <div class="action-buttons">
-                        <button class="modern-btn primary" @click="addToCart">
-                          <i class="fas fa-shopping-cart"></i>
-                          <span>Thêm vào giỏ hàng</span>
-                          <div class="btn-shine"></div>
-                        </button>
-                        <button class="modern-btn secondary" @click="buyNow">
-                          <i class="fas fa-credit-card"></i>
-                          <span>Mua ngay</span>
-                          <div class="btn-shine"></div>
-                        </button>
-                      </div>
-                      <div class="secondary-actions">
-                        <button class="secondary-btn">
-                          <i class="fas fa-heart"></i>
-                          <span>Yêu thích</span>
-                        </button>
-                        <NuxtLink to="/compare-page" class="secondary-btn">
-                          <i class="fas fa-balance-scale"></i>
-                          <span>So sánh</span>
-                        </NuxtLink>
-                        <button class="secondary-btn specs-btn" @click="toggleSidebar">
-                          <i class="fas fa-list-ul"></i>
-                          <span>Thông số chi tiết</span>
-                        </button>
-                      </div>
-                    </div>
+  <!-- Action Buttons -->
+  <div class="modern-action-section">
+    <div class="action-buttons">
+      <button class="modern-btn primary" :disabled="!isProductAvailable" @click="addToCart">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Thêm vào giỏ hàng</span>
+        <div class="btn-shine"></div>
+      </button>
+      <button class="modern-btn secondary" :disabled="!isProductAvailable" @click="buyNow">
+        <i class="fas fa-credit-card"></i>
+        <span>Mua ngay</span>
+        <div class="btn-shine"></div>
+      </button>
+    </div>
+    <div class="secondary-actions">
+      <button class="secondary-btn">
+        <i class="fas fa-heart"></i>
+        <span>Yêu thích</span>
+      </button>
+      <NuxtLink to="/compare-page" class="secondary-btn">
+        <i class="fas fa-balance-scale"></i>
+        <span>So sánh</span>
+      </NuxtLink>
+      <button class="secondary-btn specs-btn" @click="toggleSidebar">
+        <i class="fas fa-list-ul"></i>
+        <span>Thông số chi tiết</span>
+      </button>
+    </div>
+  </div>
 
                     <!-- Product Meta -->
                     <div class="modern-product-meta">
@@ -2871,5 +2871,18 @@ export default {
   50% {
     box-shadow: 0 15px 35px rgba(19, 173, 117, 0.3);
   }
+}
+
+.modern-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #ccc;
+  box-shadow: none;
+  transform: none;
+}
+
+.modern-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
 }
 </style>

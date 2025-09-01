@@ -97,7 +97,7 @@ export default {
       return [
         ...new Set(
           this.variants
-            .filter((v) => v.mau_sac === this.selectedVariant.mau_sac && (v.gia_ban != null && v.gia_ban > 0 || v.gia_sau_khi_giam != null && v.gia_sau_khi_giam > 0))
+            .filter((v) => v.mau_sac === this.selectedVariant.mau_sac)
             .map((v) => v.bo_nho_trong_dung_luong)
         ),
       ].sort();
@@ -152,7 +152,7 @@ export default {
     const sanPhamId = this.$route.query.sp_id;
     if (sanPhamId) {
       this.isLoading = true;
-      await this.fetchColorMapping(); // Fetch colors first
+      await this.fetchColorMapping();
       await this.fetchProductDetails(sanPhamId);
       await this.fetchSimilarProducts();
       this.$nextTick(() => {
@@ -179,29 +179,27 @@ export default {
       }
     },
     async fetchProductDetails(sanPhamId) {
-  try {
-    this.isLoading = true;
-    const response = await this.$axios.get('/api/chi-tiet-san-pham', {
-      params: { sanPhamId },
-    });
-    const variants = response.data;
-    if (variants.length > 0) {
-      this.product = variants[0];
-      this.variants = variants;
-      this.selectedVariant = variants.find(
-        (v) => (v.gia_ban != null && v.gia_ban > 0) || (v.gia_sau_khi_giam != null && v.gia_sau_khi_giam > 0)
-      ) || variants[0];
-    } else {
-      this.product = {};
-      this.variants = [];
-      this.selectedVariant = {};
-    }
-  } catch (error) {
-    console.error('Error fetching product details:', error.message);
-  } finally {
-    this.isLoading = false;
-  }
-},
+      try {
+        this.isLoading = true;
+        const response = await this.$axios.get('/api/chi-tiet-san-pham', {
+          params: { sanPhamId },
+        });
+        const variants = response.data;
+        if (variants.length > 0) {
+          this.product = variants[0];
+          this.variants = variants;
+          this.selectedVariant = variants[0]; // Select first variant regardless of price
+        } else {
+          this.product = {};
+          this.variants = [];
+          this.selectedVariant = {};
+        }
+      } catch (error) {
+        console.error('Error fetching product details:', error.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async fetchSimilarProducts() {
       try {
         const response = await this.$axios.get('/api/suggested-products');
@@ -223,21 +221,19 @@ export default {
       }
     },
     selectColor(color) {
-      if (!this.isProductAvailable) return;
       const variant = this.variants.find(
         (v) => v.mau_sac === color && v.bo_nho_trong_dung_luong === this.selectedVariant.bo_nho_trong_dung_luong
       ) || this.variants.find((v) => v.mau_sac === color);
-      if (variant && ((variant.gia_ban != null && variant.gia_ban > 0) || (variant.gia_sau_khi_giam != null && variant.gia_sau_khi_giam > 0))) {
+      if (variant) {
         this.selectedVariant = { ...variant, imel: variant.imel || null };
         console.log('Selected Variant after color change:', this.selectedVariant);
       }
     },
     selectMemory(memory) {
-      if (!this.isProductAvailable) return;
       const variant = this.variants.find(
         (v) => v.bo_nho_trong_dung_luong === memory && v.mau_sac === this.selectedVariant.mau_sac
       ) || this.variants.find((v) => v.bo_nho_trong_dung_luong === memory);
-      if (variant && ((variant.gia_ban != null && variant.gia_ban > 0) || (variant.gia_sau_khi_giam != null && variant.gia_sau_khi_giam > 0))) {
+      if (variant) {
         this.selectedVariant = { ...variant, imel: variant.imel || null };
         console.log('Selected Variant after memory change:', this.selectedVariant);
       }
@@ -264,13 +260,13 @@ export default {
       const variant =
         this.variants.find((v) => v.bo_nho_trong_dung_luong === memory && v.mau_sac === this.selectedVariant.mau_sac) ||
         this.variants.find((v) => v.bo_nho_trong_dung_luong === memory);
-      return variant && ((variant.gia_ban != null && variant.gia_ban > 0) || (variant.gia_sau_khi_giam != null && variant.gia_sau_khi_giam > 0));
+      return !!variant;
     },
     isColorAvailable(color) {
       const variant = this.variants.find(
         (v) => v.mau_sac === color && v.bo_nho_trong_dung_luong === this.selectedVariant.bo_nho_trong_dung_luong
       ) || this.variants.find((v) => v.mau_sac === color);
-      return variant && ((variant.gia_ban != null && variant.gia_ban > 0) || (variant.gia_sau_khi_giam != null && variant.gia_sau_khi_giam > 0));
+      return !!variant;
     },
     formatPrice(price) {
       return price != null && price > 0 ? Number(price).toLocaleString('vi-VN') : 'Liên hệ để đặt hàng';
@@ -291,7 +287,6 @@ export default {
         imel: this.selectedVariant.imel,
         totalItems: this.quantity,
       });
-      // Existing addToCart logic remains unchanged
     },
     async buyNow() {
       if (!this.isProductAvailable) {
