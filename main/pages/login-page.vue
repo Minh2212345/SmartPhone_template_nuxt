@@ -215,51 +215,51 @@ export default {
     },
     
     async handleRegister() {
-      // Kiểm tra email trống
-      if (!this.registerEmail) {
-        this.showToast('error', 'Vui lòng nhập địa chỉ email');
-        return;
-      }
-      
-      // Kiểm tra đồng ý chính sách
-      if (!this.agreePolicy) {
-        this.showToast('warning', 'Vui lòng đồng ý với chính sách bảo mật');
-        return;
-      }
-      
-      this.isRegistering = true;
-      
-      try {
-        // Gọi API đăng ký với chỉ email
-        const response = await axios.post('http://localhost:8080/tai-khoan/dang-ky-email', {
-          email: this.registerEmail,
-        });
-        
-        if (response.data && response.data.success) {
-          this.showToast('success', 'Đăng ký thành công! Thông tin tài khoản đã được gửi về email của bạn.');
-          
-          // Reset form
-          this.registerEmail = '';
-          this.agreePolicy = false;
-          
-          // Chuyển về tab đăng nhập sau 2 giây
-          setTimeout(() => {
-            this.switchTab('signin');
-          }, 2000);
-        } else {
-          this.showToast('error', response.data.message || 'Đăng ký thất bại');
-        }
-      } catch (error) {
-        console.error('Lỗi đăng ký:', error);
-        const errorMessage =
-          error.response?.data?.error ||
-          error.response?.data?.message ||
-          'Lỗi kết nối đến máy chủ';
-        this.showToast('error', errorMessage);
-      } finally {
-        this.isRegistering = false;
-      }
-    },
+  // Kiểm tra email trống
+  if (!this.registerEmail) {
+    this.showToast('error', 'Vui lòng nhập địa chỉ email');
+    return;
+  }
+
+  // Kiểm tra đồng ý chính sách
+  if (!this.agreePolicy) {
+    this.showToast('warning', 'Vui lòng đồng ý với chính sách bảo mật');
+    return;
+  }
+
+  this.isRegistering = true;
+
+  try {
+    // Gọi API đăng ký với query param thay vì body
+    const response = await axios.post(
+      `http://localhost:8080/tai-khoan/dang-ky-email?email=${encodeURIComponent(this.registerEmail)}`
+    );
+
+    if (response.data && response.data.success) {
+      this.showToast('success', 'Đăng ký thành công! Thông tin tài khoản đã được gửi về email của bạn.');
+
+      // Reset form
+      this.registerEmail = '';
+      this.agreePolicy = false;
+
+      // Chuyển về tab đăng nhập sau 2 giây
+      setTimeout(() => {
+        this.switchTab('signin');
+      }, 2000);
+    } else {
+      this.showToast('error', response.data.message || 'Đăng ký thất bại');
+    }
+  } catch (error) {
+    console.error('Lỗi đăng ký:', error);
+    const errorMessage =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      'Lỗi kết nối đến máy chủ';
+    this.showToast('error', errorMessage);
+  } finally {
+    this.isRegistering = false;
+  }
+}
   },
 };
 </script>
