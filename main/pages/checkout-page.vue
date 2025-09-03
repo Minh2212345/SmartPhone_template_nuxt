@@ -424,6 +424,23 @@
                         </div>
                       </div>
                     </div>
+                    <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/30 cursor-pointer hover:bg-white/70 hover:shadow-lg transition-all duration-300"
+                      :class="{ 'border-[#a3258e]/50 bg-[#a3258e]/10': paymentMethod === 'MOMO' }"
+                      @click="setPaymentMethod('MOMO')">
+                      <div class="flex items-center gap-4">
+                        <div class="w-6 h-6 rounded-full border-2 border-[#a3258e] flex items-center justify-center"
+                             :class="{ 'bg-[#a3258e]': paymentMethod === 'MOMO' }">
+                          <div v-if="paymentMethod === 'MOMO'" class="w-3 h-3 bg-white rounded-full"></div>
+                        </div>
+                        <div class="w-12 h-12 bg-[#a3258e]/20 rounded-xl flex items-center justify-center">
+                           <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="MoMo" class="h-8 w-8">
+                        </div>
+                        <div>
+                          <h4 class="text-2xl font-semibold text-gray-900">Thanh toán qua MoMo</h4>
+                          <p class="text-xl text-gray-600">Sử dụng ví điện tử MoMo để thanh toán</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="flex justify-between mt-2 pt-6 border-t border-white/30">
