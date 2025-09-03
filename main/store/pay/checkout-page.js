@@ -81,9 +81,40 @@ export default {
         }
       }
 
-      // Kiểm tra trạng thái thanh toán VNPay từ URL params
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has('vnp_TransactionStatus')) {
+
+      // Handle MoMo callback
+      if (urlParams.has('resultCode')) {
+        const resultCode = urlParams.get('resultCode');
+        if (resultCode === '0') {
+          const pendingHoaDon = JSON.parse(localStorage.getItem('pendingHoaDon') || '{}');
+          if (pendingHoaDon && pendingHoaDon.idHD && pendingHoaDon.hoaDonRequest) {
+            this.invoiceId = pendingHoaDon.idHD;
+            this.currentStep = 3;
+            this.showConfirmationModal = false;
+            this.isLoading = false;
+            this.$router.replace({ path: '/checkout-page', query: {} });
+            await this.submitForm(pendingHoaDon.hoaDonRequest);
+          } else {
+            console.error('Invalid pendingHoaDon for MoMo:', pendingHoaDon);
+            this.$refs.toastNotification.addToast({
+              type: 'error',
+              message: 'Không tìm thấy thông tin hóa đơn để hoàn tất thanh toán MoMo',
+              duration: 5000
+            });
+            this.$router.replace({ path: '/checkout-page', query: {} });
+          }
+        } else {
+          this.$refs.toastNotification.addToast({
+            type: 'error',
+            message: `Thanh toán MoMo thất bại. Lỗi: ${urlParams.get('message') || 'Unknown error'}`,
+            duration: 5000
+          });
+          this.$router.replace({ path: '/checkout-page', query: {} });
+        }
+      }
+      // Handle VNPay callback
+      else if (urlParams.has('vnp_TransactionStatus')) {
         const vnpayParams = Object.fromEntries(urlParams);
         console.log('VNPAY URL Params:', vnpayParams);
 
@@ -101,7 +132,7 @@ export default {
 
         try {
           console.log('Calling /api/payment/vnpay-payment with params:', vnpayParams);
-          const response = await retry(() => axios.get('http://localhost:8080/api/payment/vnpay-payment', {
+          const response = await retry(() => axios.get('http://localhost:8080/api/client/vnpay/return', {
             params: vnpayParams,
             timeout: 30000
           }));
@@ -111,18 +142,18 @@ export default {
             console.log('Retrieved pendingHoaDon:', pendingHoaDon);
             if (pendingHoaDon && pendingHoaDon.idHD && pendingHoaDon.hoaDonRequest) {
               this.invoiceId = pendingHoaDon.idHD;
-              
+
               // Set step to 3 (payment completed) and hide modal
               this.currentStep = 3;
               this.showConfirmationModal = false;
               this.isLoading = false;
-              
+
               // Clean up URL params without redirecting
               this.$router.replace({ path: '/checkout-page', query: {} });
-              
+
               // Submit the form and let submitForm handle the toast and redirect
               await this.submitForm(pendingHoaDon.hoaDonRequest);
-              
+
             } else {
               console.error('Invalid pendingHoaDon:', pendingHoaDon);
               this.$refs.toastNotification.addToast({
@@ -348,61 +379,16 @@ export default {
         }
       }
     },
-    // async submitForm(hoaDonRequest = null) {
-    //   try {
-    //     let loaiDon = this.deliveryMethod === 'delivery' ? 'online' : 'offline';
-    //     const customerId = localStorage.getItem('customerId');
-
-    //     // Ánh xạ paymentMethod sang phuongThucThanhToanId
-    //     const paymentMethodMap = {
-    //       'COD': 1, // Tiền mặt
-    //       'VNPay': 2 // Chuyển khoản
-    //     };
-    //     const phuongThucThanhToanId = paymentMethodMap[this.paymentMethod];
-
-    //     if (!phuongThucThanhToanId) {
-    //       this.showToast('error', 'Phương thức thanh toán không hợp lệ!');
-    //       return;
-    //     }
-
-    //     const requestBody = hoaDonRequest || {
-    //       idKhachHang: customerId ? parseInt(customerId) : 1,
-    //       tenKhachHang: this.delivery.ten,
-    //       soDienThoaiKhachHang: this.delivery.soDienThoai,
-    //       email: this.delivery.email,
-    //       diaChiKhachHang: {
-    //         diaChiCuThe: this.delivery.soNha,
-    //         phuong: this.delivery.phuong,
-    //         quan: this.delivery.quan,
-    //         thanhPho: this.delivery.thanhPho
-    //       },
-    //       loaiDon: loaiDon,
-    //       idPhieuGiamGia: this.appliedDiscount ? this.appliedDiscount.id : null,
-    //       hinhThucThanhToan: [{
-    //         phuongThucThanhToanId: phuongThucThanhToanId,
-    //         tienChuyenKhoan: this.paymentMethod === 'VNPay' ? this.order.total : 0,
-    //         tienMat: this.paymentMethod === 'COD' ? this.order.total : 0
-    //       }]
-    //     };
-
-    //     const response = await axios.post(`http://localhost:8080/api/client/thanh-toan/${this.invoiceId}`, requestBody);
-    //     this.showToast('success', `Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Bạn sẽ nhận được email thông báo chi tiết.`);
-    //     localStorage.removeItem('invoiceId');
-    //     this.invoiceId = null;
-    //     this.$router.push('/cart-page');
-    //   } catch (error) {
-    //     this.handleError(error, 'Lỗi khi thực hiện thanh toán');
-    //   }
-    // },
-
     async submitForm(hoaDonRequest = null) {
       this.isLoading = true;
       this.isProcessingPayment = true;
       this.emailSent = false;
       try {
-        const loaiDon = this.deliveryMethod === 'delivery' ? 'online' : 'offline';
-        const phuongThucThanhToanId = this.paymentMethod === 'VNPay' ? 2 : 1;
         const customerId = localStorage.getItem('customerId');
+        const paymentMethod = hoaDonRequest?.hinhThucThanhToan?.[0]?.phuongThucThanhToanId === 2 ? 'VNPay'
+          : hoaDonRequest?.hinhThucThanhToan?.[0]?.phuongThucThanhToanId === 3 ? 'MOMO'
+          : this.paymentMethod;
+
         const requestBody = hoaDonRequest || {
           idKhachHang: customerId ? parseInt(customerId) : 1,
           tenKhachHang: this.delivery.ten,
@@ -414,12 +400,12 @@ export default {
             quan: this.delivery.quan,
             thanhPho: this.delivery.thanhPho
           },
-          loaiDon: loaiDon,
+          loaiDon: this.deliveryMethod === 'delivery' ? 'online' : 'offline',
           idPhieuGiamGia: this.appliedDiscount ? this.appliedDiscount.id : null,
           hinhThucThanhToan: [{
-            phuongThucThanhToanId: phuongThucThanhToanId,
-            tienChuyenKhoan: this.paymentMethod === 'VNPay' ? this.order.total : 0,
-            tienMat: this.paymentMethod === 'COD' ? this.order.total : 0
+            phuongThucThanhToanId: paymentMethod === 'VNPay' ? 2 : (paymentMethod === 'MOMO' ? 3 : 1),
+            tienChuyenKhoan: (paymentMethod === 'VNPay' || paymentMethod === 'MOMO') ? this.order.total : 0,
+            tienMat: paymentMethod === 'COD' ? this.order.total : 0
           }]
         };
 
@@ -428,48 +414,49 @@ export default {
           timeout: 30000
         });
         console.log('Submit Response:', response.data);
-        
-        // Show processing toast
-        this.$refs.toastNotification.addToast({
-          type: 'info',
-          message: `⏳ Đang xử lý đơn hàng #${response.data.maHoaDon}... Vui lòng chờ email xác nhận.`,
-          duration: 3000
-        });
-        
-        // Send email notification
-        try {
-          await this.sendEmailNotification(response.data.id);
-          this.emailSent = true;
-          
-          // Show success toast after email sent
-          this.$refs.toastNotification.addToast({
-            type: 'success',
-            message: `🎉 Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Email thông báo đã được gửi.`,
-            duration: 4000
-          });
-          
-        } catch (emailError) {
-          console.error('Email sending failed:', emailError);
-          // Still show success but mention email issue
-          this.$refs.toastNotification.addToast({
-            type: 'warning',
-            message: `✅ Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Tuy nhiên có lỗi khi gửi email thông báo.`,
-            duration: 4000
-          });
-        }
-        
-        // Clear cart and update navbar
-        await this.clearCartAndUpdateNavbar();
-        
-        // Delay redirect to allow toast to show
+const orderId = response.data.id;
+
+this.$refs.toastNotification.addToast({
+  type: 'info',
+  message: `⏳ Đang xử lý đơn hàng #${response.data.maHoaDon}... Vui lòng chờ email xác nhận.`,
+  duration: 3000
+});
+
+// Send email notification
+try {
+  await this.sendEmailNotification(orderId);
+  this.emailSent = true;
+  
+  // Show success toast after email sent
+  this.$refs.toastNotification.addToast({
+    type: 'success',
+    message: `🎉 Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Email thông báo đã được gửi.`,
+    duration: 4000
+  });
+  
+} catch (emailError) {
+  console.error('Email sending failed:', emailError);
+  // Still show success but mention email issue
+  this.$refs.toastNotification.addToast({
+    type: 'warning',
+    message: `✅ Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Tuy nhiên có lỗi khi gửi email thông báo.`,
+    duration: 4000
+  });
+}
+
+// Clear cart and update navbar
+await this.clearCartAndUpdateNavbar();
+
+// Delay redirect to allow toast to show
+
         setTimeout(() => {
           localStorage.removeItem('invoiceId');
           localStorage.removeItem('pendingHoaDon');
           localStorage.removeItem('pendingInvoiceId');
           this.invoiceId = null;
-          this.$router.push('/order-page'); // Redirect to order page
-        }, 4000); // Wait 4 seconds before redirect
-        
+          this.$router.push(`/invoice-status?orderId=${orderId}`);
+        }, 4000);
+
       } catch (error) {
         console.error('Submit Error:', error);
         if (error.response) {
@@ -622,7 +609,7 @@ export default {
         duration: type === 'error' ? 5000 : 3000
       });
     },
-    
+
     removeToast(toastId) {
       const index = this.toasts.findIndex(toast => toast.id === toastId);
       if (index > -1) {
@@ -665,47 +652,59 @@ export default {
     async submitOrder() {
       this.isLoading = true;
       try {
+        const customerId = localStorage.getItem('customerId');
+        const hoaDonRequest = {
+          idKhachHang: customerId ? parseInt(customerId) : 1,
+          tenKhachHang: this.delivery.ten,
+          soDienThoaiKhachHang: this.delivery.soDienThoai,
+          email: this.delivery.email,
+          diaChiKhachHang: {
+            diaChiCuThe: this.delivery.soNha,
+            phuong: this.delivery.phuong,
+            quan: this.delivery.quan,
+            thanhPho: this.delivery.thanhPho
+          },
+          loaiDon: this.deliveryMethod === 'delivery' ? 'online' : 'offline',
+          idPhieuGiamGia: this.appliedDiscount ? this.appliedDiscount.id : null,
+          hinhThucThanhToan: [{
+            phuongThucThanhToanId: this.paymentMethod === 'VNPay' ? 2 : (this.paymentMethod === 'MOMO' ? 3 : 1),
+            tienChuyenKhoan: (this.paymentMethod === 'VNPay' || this.paymentMethod === 'MOMO') ? this.order.total : 0,
+            tienMat: this.paymentMethod === 'COD' ? this.order.total : 0
+          }]
+        };
+
+        const pendingHoaDon = { idHD: this.invoiceId, hoaDonRequest };
+        localStorage.setItem('pendingHoaDon', JSON.stringify(pendingHoaDon));
+
         if (this.paymentMethod === 'VNPay') {
           const params = new URLSearchParams();
           params.append('amount', this.order.total);
           params.append('orderInfo', `Thanh toan don hang #${this.invoiceId}`);
           params.append('invoiceId', this.invoiceId);
-          params.append('returnUrl', window.location.origin + '/checkout-page'); // Đảm bảo là /checkout-page
+          params.append('returnUrl', window.location.origin + '/checkout-page');
 
-          const customerId = localStorage.getItem('customerId');
-          const hoaDonRequest = {
-            idKhachHang: customerId ? parseInt(customerId) : 1,
-            tenKhachHang: this.delivery.ten,
-            soDienThoaiKhachHang: this.delivery.soDienThoai,
-            email: this.delivery.email,
-            diaChiKhachHang: {
-              diaChiCuThe: this.delivery.soNha,
-              phuong: this.delivery.phuong,
-              quan: this.delivery.quan,
-              thanhPho: this.delivery.thanhPho
-            },
-            loaiDon: this.deliveryMethod === 'delivery' ? 'online' : 'offline',
-            idPhieuGiamGia: this.appliedDiscount ? this.appliedDiscount.id : null,
-            hinhThucThanhToan: [{
-              phuongThucThanhToanId: 2,
-              tienChuyenKhoan: this.order.total,
-              tienMat: 0
-            }]
-          };
-
-          const pendingHoaDon = { idHD: this.invoiceId, hoaDonRequest };
-          console.log('Saving pendingHoaDon:', pendingHoaDon);
-          localStorage.setItem('pendingHoaDon', JSON.stringify(pendingHoaDon));
-
-          const response = await axios.post('http://localhost:8080/api/payment/create', params, {
+          const response = await axios.post('http://localhost:8080/api/client/vnpay/create', params, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
           });
+
           if (response.data) {
-            localStorage.setItem('pendingInvoiceId', this.invoiceId);
-            console.log('Redirecting to VNPay:', response.data);
             window.location.href = response.data;
           } else {
             throw new Error('Không nhận được URL thanh toán từ VNPAY!');
+          }
+        } else if (this.paymentMethod === 'MOMO') {
+          const params = new URLSearchParams();
+          params.append('amount', String(this.order.total));
+          params.append('orderInfo', `Thanh toan hoa don ${this.invoiceId}`);
+
+          const response = await axios.post('http://localhost:8080/api/client/momo/create-payment', params, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          });
+
+          if (response.data && response.data.payUrl) {
+            window.location.href = response.data.payUrl;
+          } else {
+            throw new Error('Không nhận được URL thanh toán từ MoMo!');
           }
         } else if (this.paymentMethod === 'COD') {
           this.showConfirmationModal = false;
