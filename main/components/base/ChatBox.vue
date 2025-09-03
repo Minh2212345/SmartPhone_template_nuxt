@@ -38,7 +38,7 @@
 
       <!-- Messages Area -->
       <div ref="chatMessages" class="chat-messages">
-        <div v-for="(message, index) in messages" :key="index" 
+        <div v-for="(message, index) in messages" :key="index"
              :class="['message-wrapper', message.sender]">
           <div class="message" :class="message.sender">
             <div class="message-content">
@@ -49,7 +49,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Typing indicator -->
         <div v-if="isTyping" class="message-wrapper received">
           <div class="message received typing-indicator">
@@ -85,16 +85,16 @@
         </div>
         <div class="chat-input">
           <div class="input-wrapper">
-            <input 
-              v-model="inputMessage" 
-              type="text" 
-              :placeholder="chatMode === 'ai' ? 'Nhập câu hỏi của bạn...' : 'Nhập tin nhắn...'" 
+            <input
+              v-model="inputMessage"
+              type="text"
+              :placeholder="chatMode === 'ai' ? 'Nhập câu hỏi của bạn...' : 'Nhập tin nhắn...'"
               @keyup.enter="sendMessage"
               :disabled="isSending"
               class="message-input"
             />
-            <button 
-              @click="sendMessage" 
+            <button
+              @click="sendMessage"
               :disabled="isSending || !inputMessage.trim()"
               class="send-button"
               :class="{ 'sending': isSending }"
@@ -151,22 +151,22 @@ export default {
       this.showChat = true;
       this.chatMode = 'ai';
       this.messages = [
-        { 
-          sender: 'received', 
-          text: 'Xin chào! Tôi có thể giúp gì cho bạn? 😊', 
-          type: 'text', 
-          time: new Date().toISOString() 
+        {
+          sender: 'received',
+          text: 'Xin chào! Tôi có thể giúp gì cho bạn? 😊',
+          type: 'text',
+          time: new Date().toISOString()
         },
       ];
-      
+
       axios.get(`http://localhost:8080/api/messages/${this.customerId}`)
         .then((res) => {
           this.messages = [
-            { 
-              sender: 'received', 
-              text: 'Xin chào! Tôi có thể giúp gì cho bạn? 😊', 
-              type: 'text', 
-              time: new Date().toISOString() 
+            {
+              sender: 'received',
+              text: 'Xin chào! Tôi có thể giúp gì cho bạn? 😊',
+              type: 'text',
+              time: new Date().toISOString()
             },
             ...res.data.filter((msg) => msg.type === 'text' && msg.sender === 'ai')
           ];
@@ -222,18 +222,15 @@ export default {
         alert('Vui lòng đăng nhập để gửi tin nhắn!');
         return;
       }
-      
+
       this.isSending = true;
-      
-      // Add user message immediately
+
       const userMessage = {
         sender: 'sent',
         text: this.inputMessage,
         type: 'text',
         time: new Date().toISOString(),
       };
-      this.messages.push(userMessage);
-      this.scrollToBottom();
 
       const message = {
         type: 'text',
@@ -260,6 +257,8 @@ export default {
       }
 
       if (this.chatMode === 'ai') {
+        this.messages.push(userMessage); // <-- chỉ push khi là AI
+        this.scrollToBottom();
         this.isTyping = true;
         try {
           const response = await axios.post('http://localhost:8080/api/chatbot', { message: this.inputMessage });
@@ -282,6 +281,7 @@ export default {
           });
         }
       } else if (this.stompClient && this.stompClient.connected) {
+        // Không push vào messages ở đây, chỉ gửi lên server
         this.stompClient.send(`/app/chat/customer/${this.customerId}`, JSON.stringify(message));
       } else {
         this.connectWebSocket();
@@ -753,7 +753,7 @@ export default {
     right: 0;
     border-radius: 0;
   }
-  
+
   .chat-button {
     bottom: 20px;
     right: 20px;

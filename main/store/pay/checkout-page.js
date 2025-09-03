@@ -9,6 +9,7 @@ export default {
         { label: 'Xác nhận đơn hàng' },
         { label: 'Thanh toán' }
       ],
+      showVoucherModal: false,
       activeTab: 0,
       deliveryMethod: 'delivery',
       discountCode: '',
@@ -200,6 +201,11 @@ export default {
       // chúng ta cần xóa lựa chọn địa chỉ hiện tại để đảm bảo đây là thao tác THÊM MỚI.
       if (newVal === 0) {
         this.clearSelectedAddress();
+      }
+    },
+    currentStep(newVal) {
+      if (newVal === 2) { // When navigating to the "Order Summary" step
+        this.applyBestDiscount();
       }
     }
   },
@@ -735,6 +741,45 @@ await this.clearCartAndUpdateNavbar();
         'Chọn phương thức thanh toán và hoàn tất đơn hàng'
       ];
       return descriptions[stepIndex] || '';
+    },
+    openVoucherModal() {
+      this.showVoucherModal = true;
+    },
+    onVoucherSelected(voucherCode) {
+      this.discountCode = voucherCode;
+      this.applyDiscount();
+      this.showVoucherModal = false; // Close modal after selection
+    },
+    async applyBestDiscount() {
+      try {
+        const customerId = localStorage.getItem('customerId');
+        const params = {
+          totalPrice: this.order.subtotal,
+        };
+        if (customerId) {
+          params.khachHangId = customerId;
+        }
+        const response = await axios.get('http://localhost:8080/api/phieu-giam-gia/best-applicable-voucher', { params });
+        const bestVoucher = response.data;
+
+        if (bestVoucher) {
+          this.discountCode = bestVoucher.ma;
+          this.applyDiscount();
+          this.$refs.toastNotification.addToast({
+            type: 'success',
+            message: `Đã áp dụng mã giảm giá tốt nhất: ${bestVoucher.tenPhieuGiamGia}!`, 
+            duration: 3000
+          });
+        } else {
+          this.$refs.toastNotification.addToast({
+            type: 'info',
+            message: 'Không tìm thấy mã giảm giá tốt nhất phù hợp.',
+            duration: 3000
+          });
+        }
+      } catch (error) {
+        this.handleError(error, 'Lỗi khi tự động áp dụng mã giảm giá tốt nhất');
+      }
     }
   }
 }
