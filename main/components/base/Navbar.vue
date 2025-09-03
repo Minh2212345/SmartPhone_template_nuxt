@@ -132,6 +132,10 @@ export default {
     this.fetchCartItemCount();
     emitter.on('loginStatusChanged', this.handleLoginStatusChange);
     onCartUpdate(this.handleCartUpdate);
+    
+    // Listen for cart updates from checkout page
+    this.$nuxt.$on('cart-updated', this.handleCartCleared);
+    
     this.$router.afterEach(() => {
       this.updateLoginStatus();
     });
@@ -141,6 +145,7 @@ export default {
   beforeDestroy() {
     emitter.off('loginStatusChanged', this.handleLoginStatusChange);
     offCartUpdate(this.handleCartUpdate);
+    this.$nuxt.$off('cart-updated', this.handleCartCleared);
     document.removeEventListener('click', this.handleClickOutside);
   },
   methods: {
@@ -173,6 +178,14 @@ export default {
     handleCartUpdate() {
       // Refresh cart count when cart is updated
       this.fetchCartItemCount();
+    },
+    
+    handleCartCleared() {
+      // Handle cart cleared event from checkout page
+      console.log('Cart cleared event received');
+      this.cartItemCount = 0;
+      this.invoiceId = null;
+      localStorage.removeItem('invoiceId');
     },
     toggleUserDropdown() {
       this.isUserDropdownOpen = !this.isUserDropdownOpen;

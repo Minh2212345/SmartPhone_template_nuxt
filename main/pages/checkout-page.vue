@@ -565,6 +565,45 @@
       <!-- Voucher Modal -->
       <VoucherModal :visible="showVoucherModal" :total-price="order.subtotal" :customer-id="customerId" @close="showVoucherModal = false" @voucher-selected="onVoucherSelected" />
 
+      <!-- Payment Processing Loading Overlay -->
+      <div v-if="isProcessingPayment" 
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60]">
+        <div class="bg-white/95 backdrop-blur-xl border border-white/30 shadow-2xl rounded-3xl p-8 max-w-md w-full mx-4 relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-r from-[#13ad75]/10 to-[#13ad75]/20"></div>
+          <div class="relative text-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-[#13ad75] to-[#13ad75] rounded-full flex items-center justify-center mx-auto mb-6">
+              <i class="las la-spinner la-spin text-3xl text-white"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Đang xử lý thanh toán</h3>
+            <div class="space-y-3 text-left">
+              <div class="flex items-center gap-3">
+                <div class="w-6 h-6 bg-[#13ad75] rounded-full flex items-center justify-center">
+                  <i class="las la-check text-white text-sm"></i>
+                </div>
+                <span class="text-lg text-gray-700">Xác nhận đơn hàng</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center"
+                     :class="emailSent ? 'bg-[#13ad75]' : 'bg-gray-300'">
+                  <i v-if="emailSent" class="las la-check text-white text-sm"></i>
+                  <i v-else class="las la-spinner la-spin text-gray-600 text-sm"></i>
+                </div>
+                <span class="text-lg" :class="emailSent ? 'text-gray-700' : 'text-gray-500'">
+                  Gửi email thông báo
+                </span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+                  <i class="las la-clock text-gray-600 text-sm"></i>
+                </div>
+                <span class="text-lg text-gray-500">Hoàn tất</span>
+              </div>
+            </div>
+            <p class="text-lg text-gray-600 mt-6">Vui lòng không đóng trang này...</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Toast Notifications -->
       <ToastNotification ref="toastNotification" />
     </div>
