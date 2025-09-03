@@ -362,6 +362,10 @@
                       @click="applyDiscount">
                       <i class="las la-tag mr-3"></i>Áp dụng
                     </button>
+                    <button class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-2xl hover:from-blue-600 hover:to-blue-800 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 text-xl"
+                      @click="openVoucherModal">
+                      <i class="las la-ticket-alt mr-3"></i>Chọn hoặc nhập mã
+                    </button>
                   </div>
                 </div>
                 <div class="flex justify-between mt-6 pt-4 border-t">
@@ -558,6 +562,9 @@
         </div>
       </div>
 
+      <!-- Voucher Modal -->
+      <VoucherModal :visible="showVoucherModal" :total-price="order.subtotal" :customer-id="customerId" @close="showVoucherModal = false" @voucher-selected="onVoucherSelected" />
+
       <!-- Toast Notifications -->
       <ToastNotification ref="toastNotification" />
     </div>
@@ -567,11 +574,13 @@
 <script>
 import checkoutLogic from '../store/pay/checkout-page'
 import ToastNotification from '../components/base/ToastNotification.vue'
+import VoucherModal from '../components/VoucherModal.vue'
 
 export default {
   ...checkoutLogic,
   components: {
-    ToastNotification
+    ToastNotification,
+    VoucherModal
   }
 }
 </script>
