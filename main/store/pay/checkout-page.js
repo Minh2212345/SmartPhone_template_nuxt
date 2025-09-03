@@ -16,6 +16,8 @@ export default {
       calculatedDiscount: 0,
       showConfirmationModal: false,
       isLoading: false,
+      isProcessingPayment: false,
+      emailSent: false,
       selectedStoreIndex: null,
       toasts: [],
       toastIdCounter: 0,
@@ -379,6 +381,8 @@ export default {
     },
     async submitForm(hoaDonRequest = null) {
       this.isLoading = true;
+      this.isProcessingPayment = true;
+      this.emailSent = false;
       try {
         const customerId = localStorage.getItem('customerId');
         const paymentMethod = hoaDonRequest?.hinhThucThanhToan?.[0]?.phuongThucThanhToanId === 2 ? 'VNPay'
@@ -410,14 +414,40 @@ export default {
           timeout: 30000
         });
         console.log('Submit Response:', response.data);
+const orderId = response.data.id;
 
-        const orderId = response.data.id;
+this.$refs.toastNotification.addToast({
+  type: 'info',
+  message: `⏳ Đang xử lý đơn hàng #${response.data.maHoaDon}... Vui lòng chờ email xác nhận.`,
+  duration: 3000
+});
 
-        this.$refs.toastNotification.addToast({
-          type: 'success',
-          message: `🎉 Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Bạn sẽ nhận được email thông báo chi tiết.`,
-          duration: 4000
-        });
+// Send email notification
+try {
+  await this.sendEmailNotification(orderId);
+  this.emailSent = true;
+  
+  // Show success toast after email sent
+  this.$refs.toastNotification.addToast({
+    type: 'success',
+    message: `🎉 Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Email thông báo đã được gửi.`,
+    duration: 4000
+  });
+  
+} catch (emailError) {
+  console.error('Email sending failed:', emailError);
+  // Still show success but mention email issue
+  this.$refs.toastNotification.addToast({
+    type: 'warning',
+    message: `✅ Đặt hàng thành công! Đơn hàng #${response.data.maHoaDon} đã được xác nhận. Tuy nhiên có lỗi khi gửi email thông báo.`,
+    duration: 4000
+  });
+}
+
+// Clear cart and update navbar
+await this.clearCartAndUpdateNavbar();
+
+// Delay redirect to allow toast to show
 
         setTimeout(() => {
           localStorage.removeItem('invoiceId');
@@ -444,8 +474,41 @@ export default {
         });
       } finally {
         this.isLoading = false;
+        this.isProcessingPayment = false;
       }
     },
+    
+    async sendEmailNotification(hoaDonId) {
+      try {
+        console.log('Sending email notification for invoice:', hoaDonId);
+        const response = await axios.post(`http://localhost:8080/api/email/send-invoice-status/${hoaDonId}`);
+        console.log('Email sent successfully:', response.data);
+        return response.data;
+      } catch (error) {
+        console.error('Failed to send email:', error);
+        throw error;
+      }
+    },
+    
+    async clearCartAndUpdateNavbar() {
+      try {
+        // Clear local cart data
+        localStorage.removeItem('invoiceId');
+        
+        // Emit event to update navbar cart count
+        this.$nuxt.$emit('cart-updated');
+        
+        // If there's a global cart store, update it
+        if (this.$store && this.$store.dispatch) {
+          await this.$store.dispatch('cart/clearCart');
+        }
+        
+        console.log('Cart cleared and navbar updated');
+      } catch (error) {
+        console.error('Error clearing cart:', error);
+      }
+    },
+    
     validateDelivery() {
       console.log('Validating delivery:', this.delivery);
       if (!this.delivery.ten) {
